@@ -1,0 +1,13 @@
+[
+  {
+    "name": "Menu principal",
+    "location": "header",
+    "items": [
+      {
+        "label": "Accueil",
+        "url": "/",
+        "order": 0
+      }
+    ]
+  }
+]

@@ -1,0 +1,58 @@
+{
+    "name": "E-commerce",
+    "slug": "ecommerce",
+    "version": "1.0.0",
+    "description": "Boutique en ligne complete avec produits, panier, commandes et coupons",
+    "author": {
+        "name": "ArtisanCMS"
+    },
+    "license": "MIT",
+    "requires": {
+        "cms": ">=1.0.0",
+        "php": ">=8.2"
+    },
+    "providers": [
+        "Ecommerce\\EcommerceServiceProvider"
+    ],
+    "blocks": [
+        "product-card",
+        "product-grid",
+        "cart-widget",
+        "checkout-form",
+        "featured-products"
+    ],
+    "routes": true,
+    "migrations": true,
+    "settings": {
+        "currency": {
+            "type": "string",
+            "label": "Devise",
+            "default": "EUR"
+        },
+        "currency_symbol": {
+            "type": "string",
+            "label": "Symbole devise",
+            "default": "\u20ac"
+        },
+        "tax_rate": {
+            "type": "number",
+            "label": "Taux de TVA (%)",
+            "default": 20
+        },
+        "free_shipping_threshold": {
+            "type": "number",
+            "label": "Livraison gratuite a partir de",
+            "default": 50
+        },
+        "shipping_cost": {
+            "type": "number",
+            "label": "Frais de livraison",
+            "default": 5.99
+        },
+        "store_name": {
+            "type": "string",
+            "label": "Nom de la boutique",
+            "default": "Ma Boutique"
+        }
+    }
+}

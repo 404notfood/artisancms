@@ -1,0 +1,25 @@
+{
+  "name": "Site vierge",
+  "slug": "blank",
+  "version": "1.0.0",
+  "description": "Page d'accueil vide, aucun contenu pré-rempli",
+  "category": "other",
+  "tags": ["blank", "empty", "starter"],
+  "author": {
+    "name": "ArtisanCMS",
+    "url": "https://artisancms.dev"
+  },
+  "license": "MIT",
+  "requires": {
+    "cms": ">=1.0.0",
+    "theme": "default",
+    "plugins": []
+  },
+  "pages_count": 1,
+  "posts_count": 0,
+  "data_files": {
+    "pages": "data/pages.json",
+    "menus": "data/menus.json",
+    "settings": "data/settings.json"
+  }
+}

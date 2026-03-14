@@ -1,0 +1,113 @@
+{
+    "name": "Restaurant",
+    "slug": "restaurant",
+    "version": "1.0.0",
+    "category": "restaurant",
+    "description": "Template restaurant avec menu, réservations et présentation.",
+    "author": "ArtisanCMS",
+    "pages": [
+        {
+            "id": "home",
+            "title": "Accueil",
+            "slug": "accueil",
+            "template": "home",
+            "meta_title": "Bienvenue au Restaurant",
+            "meta_description": "Découvrez notre cuisine et réservez votre table.",
+            "content": {
+                "blocks": [
+                    {
+                        "type": "hero-section",
+                        "id": "hero-1",
+                        "props": {
+                            "title": "Bienvenue au Restaurant",
+                            "subtitle": "Une expérience gastronomique unique au cœur de la ville.",
+                            "button_text": "Réserver une table",
+                            "button_url": "/reservation"
+                        }
+                    },
+                    {
+                        "type": "text-block",
+                        "id": "intro-1",
+                        "props": {
+                            "content": "<h2>Notre cuisine</h2><p>Des produits frais et locaux pour une cuisine authentique.</p>"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "id": "menu",
+            "title": "Notre Menu",
+            "slug": "menu",
+            "template": "default",
+            "meta_title": "Notre Menu",
+            "meta_description": "Découvrez notre carte et nos spécialités.",
+            "content": {
+                "blocks": [
+                    {
+                        "type": "text-block",
+                        "id": "menu-1",
+                        "props": {
+                            "content": "<h1>Notre Menu</h1><h2>Entrées</h2><p>Soupe du jour, Salade César, Tartare de saumon...</p><h2>Plats</h2><p>Filet mignon, Risotto aux champignons, Dorade grillée...</p><h2>Desserts</h2><p>Crème brûlée, Fondant au chocolat, Tarte tatin...</p>"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "id": "reservation",
+            "title": "Réservation",
+            "slug": "reservation",
+            "template": "default",
+            "meta_title": "Réserver une table",
+            "meta_description": "Réservez votre table en ligne.",
+            "content": {
+                "blocks": [
+                    {
+                        "type": "text-block",
+                        "id": "reservation-1",
+                        "props": {
+                            "content": "<h1>Réserver une table</h1><p>Contactez-nous au 01 23 45 67 89 ou par email pour réserver.</p>"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "id": "about",
+            "title": "Notre histoire",
+            "slug": "notre-histoire",
+            "template": "default",
+            "meta_title": "Notre histoire",
+            "meta_description": "L'histoire de notre restaurant.",
+            "content": {
+                "blocks": [
+                    {
+                        "type": "text-block",
+                        "id": "about-1",
+                        "props": {
+                            "content": "<h1>Notre histoire</h1><p>Fondé en 2010, notre restaurant propose une cuisine française revisitée.</p>"
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "menus": [
+        {
+            "name": "Navigation principale",
+            "slug": "main",
+            "location": "header",
+            "items": [
+                {"label": "Accueil", "page_id": "home", "order": 1},
+                {"label": "Menu", "page_id": "menu", "order": 2},
+                {"label": "Réservation", "page_id": "reservation", "order": 3},
+                {"label": "Notre histoire", "page_id": "about", "order": 4}
+            ]
+        }
+    ],
+    "settings": {
+        "site.name": "Le Gourmet",
+        "site.description": "Restaurant gastronomique français"
+    }
+}

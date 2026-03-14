@@ -1,0 +1,11 @@
+{
+    "name": "artisancms/ecommerce",
+    "description": "E-commerce plugin for ArtisanCMS",
+    "type": "artisancms-plugin",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Ecommerce\\": "src/"
+        }
+    }
+}

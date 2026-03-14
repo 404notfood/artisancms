@@ -1,0 +1,101 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Ecommerce;
+
+use Ecommerce\Models\Product;
+use Ecommerce\Observers\ProductStockObserver;
+use Ecommerce\Services\CartService;
+use Ecommerce\Services\CouponService;
+use Ecommerce\Services\CustomerService;
+use Ecommerce\Services\InvoiceService;
+use Ecommerce\Services\OrderService;
+use Ecommerce\Services\PaymentService;
+use Ecommerce\Services\ProductService;
+use Ecommerce\Services\ReviewService;
+use Ecommerce\Services\ShippingService;
+use Ecommerce\Services\StockService;
+use Ecommerce\Services\TaxService;
+use Ecommerce\Services\SalesReportService;
+use Ecommerce\Services\WishlistService;
+use Illuminate\Support\ServiceProvider;
+
+class EcommerceServiceProvider extends ServiceProvider
+{
+    /**
+     * Register any plugin services.
+     */
+    public function register(): void
+    {
+        $this->app->singleton(ProductService::class, function ($app): ProductService {
+            return new ProductService();
+        });
+
+        $this->app->singleton(CartService::class, function ($app): CartService {
+            return new CartService();
+        });
+
+        $this->app->singleton(OrderService::class, function ($app): OrderService {
+            return new OrderService(
+                $app->make(CartService::class),
+                $app->make(CouponService::class)
+            );
+        });
+
+        $this->app->singleton(CouponService::class, function ($app): CouponService {
+            return new CouponService();
+        });
+
+        $this->app->singleton(PaymentService::class, function ($app): PaymentService {
+            return new PaymentService();
+        });
+
+        $this->app->singleton(ShippingService::class, function ($app): ShippingService {
+            return new ShippingService();
+        });
+
+        $this->app->singleton(TaxService::class, function ($app): TaxService {
+            return new TaxService();
+        });
+
+        $this->app->singleton(InvoiceService::class, function ($app): InvoiceService {
+            return new InvoiceService();
+        });
+
+        $this->app->singleton(ReviewService::class, function ($app): ReviewService {
+            return new ReviewService();
+        });
+
+        $this->app->singleton(CustomerService::class, function ($app): CustomerService {
+            return new CustomerService();
+        });
+
+        $this->app->singleton(WishlistService::class, function ($app): WishlistService {
+            return new WishlistService();
+        });
+
+        $this->app->singleton(StockService::class, function ($app): StockService {
+            return new StockService();
+        });
+
+        $this->app->singleton(SalesReportService::class, function ($app): SalesReportService {
+            return new SalesReportService();
+        });
+    }
+
+    /**
+     * Bootstrap the E-commerce plugin.
+     */
+    public function boot(): void
+    {
+        $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
+
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'ecommerce');
+
+        // Register observers
+        Product::observe(ProductStockObserver::class);
+    }
+}

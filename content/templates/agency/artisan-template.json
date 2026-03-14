@@ -1,0 +1,133 @@
+{
+    "name": "Agence",
+    "slug": "agency",
+    "version": "1.0.0",
+    "category": "agency",
+    "description": "Template agence digitale avec portfolio, services et équipe.",
+    "author": "ArtisanCMS",
+    "pages": [
+        {
+            "id": "home",
+            "title": "Accueil",
+            "slug": "accueil",
+            "template": "home",
+            "meta_title": "Agence Digitale",
+            "meta_description": "Nous créons des expériences digitales exceptionnelles.",
+            "content": {
+                "blocks": [
+                    {
+                        "type": "hero-section",
+                        "id": "hero-1",
+                        "props": {
+                            "title": "Votre agence digitale",
+                            "subtitle": "Nous transformons vos idées en expériences numériques mémorables.",
+                            "button_text": "Voir nos réalisations",
+                            "button_url": "/portfolio"
+                        }
+                    },
+                    {
+                        "type": "text-block",
+                        "id": "services-intro",
+                        "props": {
+                            "content": "<h2>Nos services</h2><p>Design, développement et stratégie digitale pour propulser votre business.</p>"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "id": "services",
+            "title": "Services",
+            "slug": "services",
+            "template": "default",
+            "meta_title": "Nos services",
+            "meta_description": "Découvrez nos expertises : web, mobile, stratégie digitale.",
+            "content": {
+                "blocks": [
+                    {
+                        "type": "text-block",
+                        "id": "services-1",
+                        "props": {
+                            "content": "<h1>Nos services</h1><h2>Design UX/UI</h2><p>Des interfaces intuitives et esthétiques.</p><h2>Développement web</h2><p>Des sites et applications performants.</p><h2>Stratégie digitale</h2><p>Référencement, réseaux sociaux, campagnes.</p>"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "id": "portfolio",
+            "title": "Portfolio",
+            "slug": "portfolio",
+            "template": "default",
+            "meta_title": "Portfolio",
+            "meta_description": "Nos réalisations clients.",
+            "content": {
+                "blocks": [
+                    {
+                        "type": "text-block",
+                        "id": "portfolio-1",
+                        "props": {
+                            "content": "<h1>Nos réalisations</h1><p>Découvrez quelques-uns de nos projets récents.</p>"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "id": "about",
+            "title": "L'agence",
+            "slug": "l-agence",
+            "template": "default",
+            "meta_title": "L'agence",
+            "meta_description": "Notre équipe et nos valeurs.",
+            "content": {
+                "blocks": [
+                    {
+                        "type": "text-block",
+                        "id": "about-1",
+                        "props": {
+                            "content": "<h1>L'agence</h1><p>Une équipe passionnée dédiée à votre succès digital.</p>"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "id": "contact",
+            "title": "Contact",
+            "slug": "contact",
+            "template": "default",
+            "meta_title": "Contact",
+            "meta_description": "Parlons de votre projet.",
+            "content": {
+                "blocks": [
+                    {
+                        "type": "text-block",
+                        "id": "contact-1",
+                        "props": {
+                            "content": "<h1>Parlons de votre projet</h1><p>Contactez-nous pour démarrer votre aventure digitale.</p>"
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "menus": [
+        {
+            "name": "Navigation principale",
+            "slug": "main",
+            "location": "header",
+            "items": [
+                {"label": "Accueil", "page_id": "home", "order": 1},
+                {"label": "Services", "page_id": "services", "order": 2},
+                {"label": "Portfolio", "page_id": "portfolio", "order": 3},
+                {"label": "L'agence", "page_id": "about", "order": 4},
+                {"label": "Contact", "page_id": "contact", "order": 5}
+            ]
+        }
+    ],
+    "settings": {
+        "site.name": "Agence Digitale",
+        "site.description": "Votre partenaire digital de confiance"
+    }
+}

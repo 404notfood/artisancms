@@ -1,0 +1,86 @@
+{
+  "name": "AI Assistant",
+  "slug": "ai-assistant",
+  "version": "1.0.0",
+  "description": "AI-powered content generation, SEO optimization, and image alt text",
+  "author": {
+    "name": "ArtisanCMS",
+    "url": "https://artisancms.dev"
+  },
+  "license": "MIT",
+  "requires": {
+    "cms": ">=1.0.0",
+    "php": ">=8.2"
+  },
+  "dependencies": [],
+  "providers": ["AiAssistant\\AiAssistantServiceProvider"],
+  "blocks": [],
+  "routes": true,
+  "migrations": true,
+  "settings": {
+    "ai_driver": {
+      "type": "select",
+      "label": "Fournisseur IA",
+      "options": ["openai", "anthropic"],
+      "default": "openai"
+    },
+    "api_key": {
+      "type": "password",
+      "label": "Cle API",
+      "encrypted": true,
+      "default": ""
+    },
+    "model": {
+      "type": "select",
+      "label": "Modele",
+      "options": {
+        "openai": ["gpt-4o", "gpt-4o-mini"],
+        "anthropic": ["claude-sonnet-4-20250514", "claude-haiku-235-20241022"]
+      },
+      "default": "gpt-4o-mini"
+    },
+    "default_locale": {
+      "type": "string",
+      "label": "Langue par defaut pour la generation",
+      "default": "fr"
+    },
+    "monthly_token_limit": {
+      "type": "number",
+      "label": "Limite de tokens par mois (global)",
+      "default": 500000
+    },
+    "per_user_daily_token_limit": {
+      "type": "number",
+      "label": "Limite de tokens par utilisateur par jour",
+      "default": 50000
+    },
+    "temperature": {
+      "type": "range",
+      "label": "Temperature / creativite (0.0 = factuel, 1.0 = creatif)",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "default": 0.7
+    },
+    "enabled_features": {
+      "type": "checkboxes",
+      "label": "Fonctionnalites activees",
+      "options": ["generate", "improve", "seo", "alt_text", "translate", "summarize"],
+      "default": ["generate", "improve", "seo", "alt_text"]
+    }
+  },
+  "admin_pages": [
+    {
+      "title": "Assistant IA",
+      "slug": "ai-settings",
+      "icon": "sparkles",
+      "parent": "ai-assistant"
+    },
+    {
+      "title": "Utilisation",
+      "slug": "ai-usage",
+      "icon": "bar-chart-3",
+      "parent": "ai-assistant"
+    }
+  ]
+}

@@ -1,0 +1,252 @@
+import AdminLayout from '@/Layouts/AdminLayout';
+import { Head, Link, useForm } from '@inertiajs/react';
+import type { PageData } from '@/types/cms';
+
+interface PagesCreateProps {
+    parentPages: PageData[];
+}
+
+export default function PagesCreate({ parentPages }: PagesCreateProps) {
+    const { data, setData, post, processing, errors } = useForm({
+        title: '',
+        slug: '',
+        status: 'draft' as string,
+        access_level: 'public',
+        template: '',
+        meta_title: '',
+        meta_description: '',
+        parent_id: '' as string | number,
+        published_at: '',
+    });
+
+    function generateSlug(title: string): string {
+        return title
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/(^-|-$)/g, '');
+    }
+
+    function handleTitleChange(value: string) {
+        setData((prev) => ({
+            ...prev,
+            title: value,
+            slug: prev.slug === '' || prev.slug === generateSlug(prev.title) ? generateSlug(value) : prev.slug,
+        }));
+    }
+
+    function handleSubmit(e: React.FormEvent) {
+        e.preventDefault();
+        post('/admin/pages');
+    }
+
+    return (
+        <AdminLayout
+            header={
+                <div className="flex items-center gap-4">
+                    <Link href="/admin/pages" className="text-gray-500 hover:text-gray-700">
+                        <BackIcon />
+                    </Link>
+                    <h1 className="text-xl font-semibold text-gray-900">Nouvelle page</h1>
+                </div>
+            }
+        >
+            <Head title="Nouvelle page" />
+
+            <form onSubmit={handleSubmit} className="mx-auto max-w-3xl space-y-6">
+                {/* Main fields */}
+                <div className="rounded-lg border border-gray-200 bg-white p-6 space-y-4">
+                    <h2 className="text-lg font-medium text-gray-900">Informations</h2>
+
+                    <div>
+                        <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+                            Titre
+                        </label>
+                        <input
+                            id="title"
+                            type="text"
+                            value={data.title}
+                            onChange={(e) => handleTitleChange(e.target.value)}
+                            className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                            required
+                        />
+                        {errors.title && <p className="mt-1 text-sm text-red-600">{errors.title}</p>}
+                    </div>
+
+                    <div>
+                        <label htmlFor="slug" className="block text-sm font-medium text-gray-700">
+                            Slug
+                        </label>
+                        <input
+                            id="slug"
+                            type="text"
+                            value={data.slug}
+                            onChange={(e) => setData('slug', e.target.value)}
+                            className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                            required
+                        />
+                        {errors.slug && <p className="mt-1 text-sm text-red-600">{errors.slug}</p>}
+                    </div>
+
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <div>
+                            <label htmlFor="status" className="block text-sm font-medium text-gray-700">
+                                Statut
+                            </label>
+                            <select
+                                id="status"
+                                value={data.status}
+                                onChange={(e) => setData('status', e.target.value)}
+                                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                            >
+                                <option value="draft">Brouillon</option>
+                                <option value="published">Publie</option>
+                                <option value="scheduled">Planifie</option>
+                            </select>
+                            {errors.status && <p className="mt-1 text-sm text-red-600">{errors.status}</p>}
+                        </div>
+
+                        <div>
+                            <label htmlFor="template" className="block text-sm font-medium text-gray-700">
+                                Template
+                            </label>
+                            <select
+                                id="template"
+                                value={data.template}
+                                onChange={(e) => setData('template', e.target.value)}
+                                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                            >
+                                <option value="">Par défaut</option>
+                                <option value="full-width">Pleine largeur</option>
+                                <option value="sidebar">Avec barre latérale</option>
+                                <option value="landing">Landing page</option>
+                            </select>
+                            {errors.template && <p className="mt-1 text-sm text-red-600">{errors.template}</p>}
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <div>
+                            <label htmlFor="parent_id" className="block text-sm font-medium text-gray-700">
+                                Page parente
+                            </label>
+                            <select
+                                id="parent_id"
+                                value={data.parent_id}
+                                onChange={(e) => setData('parent_id', e.target.value ? Number(e.target.value) : '')}
+                                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                            >
+                                <option value="">Aucune (racine)</option>
+                                {parentPages.map((p) => (
+                                    <option key={p.id} value={p.id}>
+                                        {p.title}
+                                    </option>
+                                ))}
+                            </select>
+                            {errors.parent_id && <p className="mt-1 text-sm text-red-600">{errors.parent_id}</p>}
+                        </div>
+
+                        <div>
+                            <label htmlFor="published_at" className="block text-sm font-medium text-gray-700">
+                                Date de publication
+                            </label>
+                            <input
+                                id="published_at"
+                                type="datetime-local"
+                                value={data.published_at}
+                                onChange={(e) => setData('published_at', e.target.value)}
+                                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                            />
+                            {errors.published_at && <p className="mt-1 text-sm text-red-600">{errors.published_at}</p>}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Access Level */}
+                <div className="rounded-lg border border-gray-200 bg-white p-6 space-y-4">
+                    <h2 className="text-lg font-medium text-gray-900">Niveau d'acces</h2>
+                    <div>
+                        <label htmlFor="access_level" className="block text-sm font-medium text-gray-700">
+                            Qui peut voir cette page ?
+                        </label>
+                        <select
+                            id="access_level"
+                            value={data.access_level}
+                            onChange={(e) => setData('access_level', e.target.value)}
+                            className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                        >
+                            <option value="public">Public (tout le monde)</option>
+                            <option value="authenticated">Utilisateurs connectes uniquement</option>
+                            <option value="role:admin">Administrateurs uniquement</option>
+                            <option value="role:editor">Editeurs et administrateurs</option>
+                        </select>
+                        {errors.access_level && <p className="mt-1 text-sm text-red-600">{errors.access_level}</p>}
+                    </div>
+                </div>
+
+                {/* SEO */}
+                <div className="rounded-lg border border-gray-200 bg-white p-6 space-y-4">
+                    <h2 className="text-lg font-medium text-gray-900">SEO</h2>
+
+                    <div>
+                        <label htmlFor="meta_title" className="block text-sm font-medium text-gray-700">
+                            Meta titre
+                        </label>
+                        <input
+                            id="meta_title"
+                            type="text"
+                            value={data.meta_title}
+                            onChange={(e) => setData('meta_title', e.target.value)}
+                            className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                            maxLength={60}
+                        />
+                        <p className="mt-1 text-xs text-gray-500">{data.meta_title.length}/60 caractères</p>
+                        {errors.meta_title && <p className="mt-1 text-sm text-red-600">{errors.meta_title}</p>}
+                    </div>
+
+                    <div>
+                        <label htmlFor="meta_description" className="block text-sm font-medium text-gray-700">
+                            Meta description
+                        </label>
+                        <textarea
+                            id="meta_description"
+                            value={data.meta_description}
+                            onChange={(e) => setData('meta_description', e.target.value)}
+                            rows={3}
+                            className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                            maxLength={160}
+                        />
+                        <p className="mt-1 text-xs text-gray-500">{data.meta_description.length}/160 caractères</p>
+                        {errors.meta_description && <p className="mt-1 text-sm text-red-600">{errors.meta_description}</p>}
+                    </div>
+                </div>
+
+                {/* Actions */}
+                <div className="flex items-center justify-end gap-3">
+                    <Link
+                        href="/admin/pages"
+                        className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                    >
+                        Annuler
+                    </Link>
+                    <button
+                        type="submit"
+                        disabled={processing}
+                        className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 disabled:opacity-50 transition-colors"
+                    >
+                        {processing ? 'Enregistrement...' : 'Enregistrer'}
+                    </button>
+                </div>
+            </form>
+        </AdminLayout>
+    );
+}
+
+function BackIcon() {
+    return (
+        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+        </svg>
+    );
+}

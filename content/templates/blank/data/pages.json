@@ -1,0 +1,23 @@
+[
+  {
+    "title": "Accueil",
+    "slug": "accueil",
+    "status": "published",
+    "template": "default",
+    "content": {
+      "blocks": [
+        {
+          "type": "hero-section",
+          "props": {
+            "title": "Bienvenue sur votre nouveau site",
+            "subtitle": "Commencez à personnaliser votre site avec le Page Builder",
+            "alignment": "center"
+          },
+          "children": []
+        }
+      ]
+    },
+    "meta_title": "Accueil",
+    "meta_description": "Bienvenue sur notre site"
+  }
+]

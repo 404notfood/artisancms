@@ -1,0 +1,165 @@
+<?php
+
+return [
+    // General
+    'app_name' => 'ArtisanCMS',
+    'dashboard' => 'Tableau de bord',
+    'save' => 'Enregistrer',
+    'cancel' => 'Annuler',
+    'delete' => 'Supprimer',
+    'edit' => 'Modifier',
+    'create' => 'Créer',
+    'search' => 'Rechercher',
+    'filter' => 'Filtrer',
+    'actions' => 'Actions',
+    'confirm' => 'Confirmer',
+    'back' => 'Retour',
+    'yes' => 'Oui',
+    'no' => 'Non',
+    'loading' => 'Chargement...',
+    'no_results' => 'Aucun résultat',
+
+    // Auth
+    'login' => 'Connexion',
+    'logout' => 'Déconnexion',
+    'register' => 'Inscription',
+    'email' => 'Email',
+    'password' => 'Mot de passe',
+    'remember_me' => 'Se souvenir de moi',
+    'forgot_password' => 'Mot de passe oublié ?',
+
+    // Navigation
+    'nav' => [
+        'dashboard' => 'Tableau de bord',
+        'pages' => 'Pages',
+        'posts' => 'Articles',
+        'media' => 'Médias',
+        'menus' => 'Menus',
+        'taxonomies' => 'Taxonomies',
+        'categories' => 'Catégories',
+        'tags' => 'Étiquettes',
+        'plugins' => 'Plugins',
+        'themes' => 'Thèmes',
+        'settings' => 'Paramètres',
+        'users' => 'Utilisateurs',
+        'activity' => 'Journal d\'activité',
+    ],
+
+    // Pages
+    'pages' => [
+        'title' => 'Pages',
+        'create' => 'Nouvelle page',
+        'edit' => 'Modifier la page',
+        'delete_confirm' => 'Êtes-vous sûr de vouloir supprimer cette page ?',
+        'published' => 'Publiée',
+        'draft' => 'Brouillon',
+        'scheduled' => 'Planifiée',
+        'trash' => 'Corbeille',
+        'open_builder' => 'Ouvrir le Page Builder',
+    ],
+
+    // Posts
+    'posts' => [
+        'title' => 'Articles',
+        'create' => 'Nouvel article',
+        'edit' => 'Modifier l\'article',
+        'delete_confirm' => 'Êtes-vous sûr de vouloir supprimer cet article ?',
+        'published' => 'Publié',
+        'draft' => 'Brouillon',
+        'scheduled' => 'Planifié',
+        'featured_image' => 'Image à la une',
+        'excerpt' => 'Extrait',
+        'allow_comments' => 'Autoriser les commentaires',
+    ],
+
+    // Media
+    'media' => [
+        'title' => 'Médiathèque',
+        'upload' => 'Téléverser',
+        'drop_files' => 'Glissez-déposez vos fichiers ici',
+        'max_size' => 'Taille max : :size',
+        'delete_confirm' => 'Supprimer ce fichier ?',
+        'no_media' => 'Aucun média',
+        'alt_text' => 'Texte alternatif',
+        'caption' => 'Légende',
+    ],
+
+    // Menus
+    'menus' => [
+        'title' => 'Menus',
+        'create' => 'Nouveau menu',
+        'add_item' => 'Ajouter un élément',
+        'location' => 'Emplacement',
+        'item_label' => 'Libellé',
+        'item_url' => 'URL',
+    ],
+
+    // Settings
+    'settings' => [
+        'title' => 'Paramètres',
+        'general' => 'Général',
+        'seo' => 'SEO',
+        'mail' => 'Email',
+        'content' => 'Contenu',
+        'media' => 'Médias',
+        'maintenance' => 'Maintenance',
+        'saved' => 'Paramètres enregistrés.',
+        'site_name' => 'Nom du site',
+        'site_description' => 'Description du site',
+        'site_url' => 'URL du site',
+        'timezone' => 'Fuseau horaire',
+        'locale' => 'Langue',
+    ],
+
+    // Plugins
+    'plugins' => [
+        'title' => 'Plugins',
+        'activate' => 'Activer',
+        'deactivate' => 'Désactiver',
+        'install' => 'Installer',
+        'uninstall' => 'Désinstaller',
+        'activated' => 'Plugin activé.',
+        'deactivated' => 'Plugin désactivé.',
+    ],
+
+    // Themes
+    'themes' => [
+        'title' => 'Thèmes',
+        'activate' => 'Activer',
+        'active' => 'Actif',
+        'customize' => 'Personnaliser',
+    ],
+
+    // Installation
+    'install' => [
+        'title' => 'Installation d\'ArtisanCMS',
+        'welcome' => 'Bienvenue dans l\'installation d\'ArtisanCMS',
+        'step_stack' => 'Choix du stack',
+        'step_language' => 'Langue',
+        'step_requirements' => 'Prérequis',
+        'step_database' => 'Base de données',
+        'step_site' => 'Informations du site',
+        'step_admin' => 'Compte administrateur',
+        'step_install' => 'Installation',
+        'next' => 'Suivant',
+        'previous' => 'Précédent',
+        'installing' => 'Installation en cours...',
+        'success' => 'Installation réussie !',
+        'go_to_admin' => 'Accéder à l\'administration',
+    ],
+
+    // Status
+    'status' => [
+        'draft' => 'Brouillon',
+        'published' => 'Publié',
+        'scheduled' => 'Planifié',
+        'trash' => 'Corbeille',
+    ],
+
+    // Errors
+    'errors' => [
+        'unauthorized' => 'Action non autorisée.',
+        'not_found' => 'Ressource introuvable.',
+        'validation' => 'Les données soumises sont invalides.',
+    ],
+];

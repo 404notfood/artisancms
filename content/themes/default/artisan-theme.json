@@ -1,0 +1,40 @@
+{
+  "name": "Default Theme",
+  "slug": "default",
+  "version": "1.0.0",
+  "description": "Theme par defaut d ArtisanCMS - Moderne et responsive",
+  "author": {
+    "name": "ArtisanCMS",
+    "url": "https://artisancms.dev"
+  },
+  "license": "MIT",
+  "requires": { "cms": ">=1.0.0" },
+  "preview": "assets/images/preview.png",
+  "layouts": [
+    { "slug": "default", "name": "Par defaut", "regions": ["header", "content", "footer"] },
+    { "slug": "full-width", "name": "Pleine largeur", "regions": ["header", "content", "footer"] },
+    { "slug": "landing", "name": "Landing page", "regions": ["content"] }
+  ],
+  "menu_locations": [
+    { "slug": "header", "name": "Navigation principale" },
+    { "slug": "footer", "name": "Navigation pied de page" }
+  ],
+  "customization": {
+    "colors": {
+      "primary": { "label": "Couleur principale", "type": "color", "default": "#3b82f6" },
+      "secondary": { "label": "Couleur secondaire", "type": "color", "default": "#64748b" },
+      "accent": { "label": "Couleur accent", "type": "color", "default": "#f59e0b" },
+      "background": { "label": "Fond de page", "type": "color", "default": "#ffffff" },
+      "text": { "label": "Couleur du texte", "type": "color", "default": "#1e293b" }
+    },
+    "fonts": {
+      "heading": { "label": "Police des titres", "type": "font", "default": "Inter" },
+      "body": { "label": "Police du corps", "type": "font", "default": "Inter" }
+    },
+    "layout": {
+      "container_width": { "label": "Largeur max", "type": "select", "default": "1280px", "options": ["1024px", "1280px", "1440px", "100%"] },
+      "border_radius": { "label": "Arrondi", "type": "select", "default": "0.5rem", "options": ["0", "0.25rem", "0.5rem", "1rem"] }
+    }
+  },
+  "supports": ["dark_mode", "responsive"]
+}

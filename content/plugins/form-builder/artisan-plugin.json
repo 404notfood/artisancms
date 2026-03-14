@@ -1,0 +1,18 @@
+{
+    "name": "Form Builder",
+    "slug": "form-builder",
+    "version": "1.0.0",
+    "description": "Visual form builder with spam protection and CSV export",
+    "author": {
+        "name": "ArtisanCMS",
+        "url": "https://artisancms.dev"
+    },
+    "license": "MIT",
+    "requires": {
+        "cms": ">=1.0.0",
+        "php": ">=8.2"
+    },
+    "providers": ["FormBuilder\\FormBuilderServiceProvider"],
+    "routes": true,
+    "migrations": true
+}

@@ -1,0 +1,39 @@
+{
+    "name": "Contact Form",
+    "slug": "contact-form",
+    "version": "1.0.0",
+    "description": "Formulaire de contact avec notifications email",
+    "author": {
+        "name": "ArtisanCMS"
+    },
+    "license": "MIT",
+    "requires": {
+        "cms": ">=1.0.0",
+        "php": ">=8.2"
+    },
+    "providers": [
+        "ContactForm\\ContactFormServiceProvider"
+    ],
+    "blocks": [
+        "contact-form"
+    ],
+    "routes": true,
+    "migrations": true,
+    "settings": {
+        "recipient_email": {
+            "type": "string",
+            "label": "Email destinataire",
+            "default": ""
+        },
+        "success_message": {
+            "type": "string",
+            "label": "Message de succes",
+            "default": "Merci pour votre message !"
+        },
+        "honeypot_enabled": {
+            "type": "boolean",
+            "label": "Anti-spam honeypot",
+            "default": true
+        }
+    }
+}

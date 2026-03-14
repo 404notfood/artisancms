@@ -1,0 +1,40 @@
+{
+    "name": "SEO",
+    "slug": "seo",
+    "version": "1.0.0",
+    "description": "Optimisation SEO - meta tags, sitemap XML, Open Graph",
+    "author": {
+        "name": "ArtisanCMS"
+    },
+    "license": "MIT",
+    "requires": {
+        "cms": ">=1.0.0",
+        "php": ">=8.2"
+    },
+    "providers": [
+        "Seo\\SeoServiceProvider"
+    ],
+    "routes": true,
+    "settings": {
+        "site_title_separator": {
+            "type": "string",
+            "label": "Separateur de titre",
+            "default": " | "
+        },
+        "default_meta_description": {
+            "type": "string",
+            "label": "Meta description par defaut",
+            "default": ""
+        },
+        "generate_sitemap": {
+            "type": "boolean",
+            "label": "Generer le sitemap XML",
+            "default": true
+        },
+        "robots_txt": {
+            "type": "textarea",
+            "label": "Contenu robots.txt",
+            "default": "User-agent: *\nAllow: /"
+        }
+    }
+}

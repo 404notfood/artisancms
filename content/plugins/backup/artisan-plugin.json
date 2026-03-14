@@ -1,0 +1,18 @@
+{
+    "name": "Backup & Restore",
+    "slug": "backup",
+    "version": "1.0.0",
+    "description": "Automated backup and restore for database and media files",
+    "author": {
+        "name": "ArtisanCMS",
+        "url": "https://artisancms.dev"
+    },
+    "license": "MIT",
+    "requires": {
+        "cms": ">=1.0.0",
+        "php": ">=8.2"
+    },
+    "providers": ["Backup\\BackupServiceProvider"],
+    "routes": true,
+    "migrations": true
+}

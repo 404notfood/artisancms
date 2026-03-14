@@ -1,0 +1,94 @@
+{
+    "name": "Blog",
+    "slug": "blog",
+    "version": "1.0.0",
+    "category": "blog",
+    "description": "Template blog avec page d'accueil, liste des articles et page À propos.",
+    "author": "ArtisanCMS",
+    "pages": [
+        {
+            "id": "home",
+            "title": "Accueil",
+            "slug": "accueil",
+            "template": "home",
+            "meta_title": "Bienvenue sur notre blog",
+            "meta_description": "Découvrez nos derniers articles et actualités.",
+            "content": {
+                "blocks": [
+                    {
+                        "type": "hero-section",
+                        "id": "hero-1",
+                        "props": {
+                            "title": "Bienvenue sur notre blog",
+                            "subtitle": "Des articles passionnants sur des sujets qui vous intéressent.",
+                            "button_text": "Lire les articles",
+                            "button_url": "/blog"
+                        }
+                    },
+                    {
+                        "type": "text-block",
+                        "id": "intro-1",
+                        "props": {
+                            "content": "<p>Bienvenue sur notre espace de partage. Retrouvez ici nos réflexions, tutoriels et actualités.</p>"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "id": "about",
+            "title": "À propos",
+            "slug": "a-propos",
+            "template": "default",
+            "meta_title": "À propos",
+            "meta_description": "En savoir plus sur notre équipe et notre mission.",
+            "content": {
+                "blocks": [
+                    {
+                        "type": "text-block",
+                        "id": "about-1",
+                        "props": {
+                            "content": "<h1>À propos</h1><p>Nous sommes passionnés par le partage de connaissances.</p>"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "id": "contact",
+            "title": "Contact",
+            "slug": "contact",
+            "template": "default",
+            "meta_title": "Contact",
+            "meta_description": "Contactez-nous.",
+            "content": {
+                "blocks": [
+                    {
+                        "type": "text-block",
+                        "id": "contact-1",
+                        "props": {
+                            "content": "<h1>Contact</h1><p>N'hésitez pas à nous écrire.</p>"
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "menus": [
+        {
+            "name": "Navigation principale",
+            "slug": "main",
+            "location": "header",
+            "items": [
+                {"label": "Accueil", "page_id": "home", "order": 1},
+                {"label": "Articles", "url": "/blog", "order": 2},
+                {"label": "À propos", "page_id": "about", "order": 3},
+                {"label": "Contact", "page_id": "contact", "order": 4}
+            ]
+        }
+    ],
+    "settings": {
+        "site.name": "Mon Blog",
+        "site.description": "Un blog sur des sujets passionnants"
+    }
+}

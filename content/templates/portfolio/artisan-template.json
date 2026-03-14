@@ -1,0 +1,106 @@
+{
+    "name": "Portfolio",
+    "slug": "portfolio",
+    "version": "1.0.0",
+    "category": "portfolio",
+    "description": "Template portfolio créatif pour freelances et artistes.",
+    "author": "ArtisanCMS",
+    "pages": [
+        {
+            "id": "home",
+            "title": "Accueil",
+            "slug": "accueil",
+            "template": "home",
+            "meta_title": "Portfolio créatif",
+            "meta_description": "Designer & développeur freelance.",
+            "content": {
+                "blocks": [
+                    {
+                        "type": "hero-section",
+                        "id": "hero-1",
+                        "props": {
+                            "title": "Bonjour, je suis [Votre nom]",
+                            "subtitle": "Designer & Développeur Freelance. Je crée des expériences digitales uniques.",
+                            "button_text": "Voir mon travail",
+                            "button_url": "/projets"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "id": "projects",
+            "title": "Projets",
+            "slug": "projets",
+            "template": "default",
+            "meta_title": "Mes projets",
+            "meta_description": "Découvrez mes créations et réalisations.",
+            "content": {
+                "blocks": [
+                    {
+                        "type": "text-block",
+                        "id": "projects-1",
+                        "props": {
+                            "content": "<h1>Mes projets</h1><p>Voici une sélection de mes travaux récents.</p>"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "id": "about",
+            "title": "À propos",
+            "slug": "a-propos",
+            "template": "default",
+            "meta_title": "À propos de moi",
+            "meta_description": "Mon parcours et mes compétences.",
+            "content": {
+                "blocks": [
+                    {
+                        "type": "text-block",
+                        "id": "about-1",
+                        "props": {
+                            "content": "<h1>À propos de moi</h1><p>Passionné par le design et le code, je crée des solutions digitales sur mesure.</p><h2>Compétences</h2><p>Design UI/UX, HTML/CSS, JavaScript, React, PHP, Laravel.</p>"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "id": "contact",
+            "title": "Contact",
+            "slug": "contact",
+            "template": "default",
+            "meta_title": "Me contacter",
+            "meta_description": "Démarrons votre projet ensemble.",
+            "content": {
+                "blocks": [
+                    {
+                        "type": "text-block",
+                        "id": "contact-1",
+                        "props": {
+                            "content": "<h1>Travaillons ensemble</h1><p>Vous avez un projet ? Contactez-moi pour en discuter.</p>"
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "menus": [
+        {
+            "name": "Navigation principale",
+            "slug": "main",
+            "location": "header",
+            "items": [
+                {"label": "Accueil", "page_id": "home", "order": 1},
+                {"label": "Projets", "page_id": "projects", "order": 2},
+                {"label": "À propos", "page_id": "about", "order": 3},
+                {"label": "Contact", "page_id": "contact", "order": 4}
+            ]
+        }
+    ],
+    "settings": {
+        "site.name": "Mon Portfolio",
+        "site.description": "Designer & Développeur Freelance"
+    }
+}
