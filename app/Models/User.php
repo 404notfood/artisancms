@@ -29,6 +29,7 @@ class User extends Authenticatable
         'avatar',
         'bio',
         'preferences',
+        'email_verified_at',
     ];
 
     /**
@@ -112,7 +113,7 @@ class User extends Authenticatable
         // Check wildcard permissions (e.g., 'pages.*' matches 'pages.create')
         foreach ($permissions as $perm) {
             if (str_contains($perm, '*')) {
-                $pattern = str_replace('*', '.*', preg_quote($perm, '/'));
+                $pattern = str_replace('\*', '.*', preg_quote($perm, '/'));
                 if (preg_match('/^' . $pattern . '$/', $permission)) {
                     return true;
                 }

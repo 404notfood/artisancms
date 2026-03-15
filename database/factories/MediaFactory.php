@@ -40,7 +40,7 @@ class MediaFactory extends Factory
                 'height' => 1080,
             ],
             'thumbnails' => [],
-            'folder' => null,
+            'folder' => '/',
             'uploaded_by' => User::factory(),
         ];
     }
