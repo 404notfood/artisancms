@@ -29,6 +29,8 @@ class InjectBranding
             'color_accent' => $brandingData['brand_color_accent'],
             'show_credit' => $brandingData['brand_show_credit'],
             'footer_text' => $brandingData['brand_footer_text'],
+            'login_bg' => $brandingData['brand_login_bg'],
+            'login_message' => $brandingData['brand_login_message'],
             'css' => $this->branding->getCssVariables(),
         ]);
 
