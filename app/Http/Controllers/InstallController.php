@@ -226,6 +226,16 @@ class InstallController
 
     public function execute(Request $request)
     {
+        $step = $request->input('step');
+        $validSteps = array_keys(InstallerService::STEPS);
+
+        if (!$step || !in_array($step, $validSteps, true)) {
+            return response()->json([
+                'success' => false,
+                'message' => "Étape invalide : {$step}",
+            ], 422);
+        }
+
         $config = [
             'stack' => session('install.stack', 'laravel'),
             'locale' => session('install.locale', 'fr'),
@@ -244,9 +254,9 @@ class InstallController
             'admin_password' => session('install.admin_password', 'password'),
         ];
 
-        $result = $this->installer->install($config);
+        $result = $this->installer->runStep($step, $config);
 
-        if ($result['success']) {
+        if ($result['success'] && $step === 'finalize') {
             $request->session()->forget(
                 collect(session()->all())
                     ->keys()

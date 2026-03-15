@@ -38,86 +38,103 @@ class InstallerService
         return $this;
     }
 
-    public function install(array $config): array
+    public function runStep(string $stepName, array $config): array
     {
-        $errors = [];
-
-        try {
-            $this->step('env', function () use ($config) {
-                app(DatabaseConfigurator::class)->writeEnvConfig($config);
-                $this->updateEnv('APP_NAME', $config['site_name'] ?? 'ArtisanCMS');
-                $this->updateEnv('APP_URL', $config['site_url'] ?? 'http://localhost');
-                $this->updateEnv('APP_TIMEZONE', $config['timezone'] ?? 'UTC');
-                $this->updateEnv('APP_LOCALE', $config['locale'] ?? 'fr');
-                Artisan::call('config:clear');
-            });
-
-            $this->step('migrations', function () {
-                Artisan::call('migrate', ['--force' => true]);
-                $this->log[] = 'Migrations exécutées : ' . trim(Artisan::output());
-            });
-
-            $this->step('roles', function () {
-                $this->seedRoles();
-            });
-
-            $this->step('admin', function () use ($config) {
-                $this->createAdmin($config);
-            });
-
-            $this->step('settings', function () use ($config) {
-                $this->seedSettings($config);
-            });
-
-            $this->step('theme', function () {
-                $this->installDefaultTheme();
-            });
-
-            $this->step('blocks', function () {
-                $this->seedCoreBlocks();
-            });
-
-            $this->step('homepage', function () {
-                $this->createHomepage();
-            });
-
-            $this->step('directories', function () {
-                $this->createDirectories();
-            });
-
-            $this->step('finalize', function () use ($config) {
-                file_put_contents(storage_path('.installed'), json_encode([
-                    'version' => config('cms.version', '1.0.0'),
-                    'stack' => $config['stack'] ?? 'laravel',
-                    'installed_at' => now()->toIso8601String(),
-                    'php_version' => PHP_VERSION,
-                ]));
-
-                Artisan::call('config:clear');
-                Artisan::call('cache:clear');
-                Artisan::call('route:clear');
-                Artisan::call('view:clear');
-
-                if (empty(config('app.key')) || config('app.key') === 'base64:') {
-                    Artisan::call('key:generate', ['--force' => true]);
-                }
-
-                try {
-                    Artisan::call('storage:link');
-                } catch (\Throwable) {
-                    // Link may already exist
-                }
-            });
-        } catch (\Throwable $e) {
-            $errors[] = $e->getMessage();
-            $this->log[] = "ERREUR : {$e->getMessage()}";
+        if (!isset(self::STEPS[$stepName])) {
+            return ['success' => false, 'message' => "Étape inconnue : {$stepName}"];
         }
 
-        return [
-            'success' => empty($errors),
-            'log' => $this->log,
-            'errors' => $errors,
+        try {
+            match ($stepName) {
+                'env' => $this->stepEnv($config),
+                'migrations' => $this->stepMigrations($config),
+                'roles' => $this->seedRoles(),
+                'admin' => $this->createAdmin($config),
+                'settings' => $this->seedSettings($config),
+                'theme' => $this->installDefaultTheme(),
+                'blocks' => $this->seedCoreBlocks(),
+                'homepage' => $this->createHomepage(),
+                'directories' => $this->createDirectories(),
+                'finalize' => $this->stepFinalize($config),
+            };
+
+            return ['success' => true, 'message' => self::STEPS[$stepName]['label'] . ' terminé.'];
+        } catch (\Throwable $e) {
+            return ['success' => false, 'message' => $e->getMessage()];
+        }
+    }
+
+    private function stepEnv(array $config): void
+    {
+        app(DatabaseConfigurator::class)->writeEnvConfig($config);
+        $this->updateEnv('APP_NAME', $config['site_name'] ?? 'ArtisanCMS');
+        $this->updateEnv('APP_URL', $config['site_url'] ?? 'http://localhost');
+        $this->updateEnv('APP_TIMEZONE', $config['timezone'] ?? 'UTC');
+        $this->updateEnv('APP_LOCALE', $config['locale'] ?? 'fr');
+        Artisan::call('config:clear');
+    }
+
+    private function stepMigrations(array $config): void
+    {
+        // Reload DB config from the .env we just wrote
+        $dbConfig = [
+            'driver' => 'mysql',
+            'host' => $config['db_host'],
+            'port' => $config['db_port'],
+            'database' => $config['db_database'],
+            'username' => $config['db_username'],
+            'password' => $config['db_password'],
+            'prefix' => $config['db_prefix'] ?? '',
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
         ];
+        config(['database.connections.mysql' => array_merge(
+            config('database.connections.mysql'),
+            $dbConfig,
+        )]);
+        \Illuminate\Support\Facades\DB::purge('mysql');
+        \Illuminate\Support\Facades\DB::reconnect('mysql');
+
+        Artisan::call('migrate', ['--force' => true]);
+    }
+
+    private function stepFinalize(array $config): void
+    {
+        file_put_contents(storage_path('.installed'), json_encode([
+            'version' => config('cms.version', '1.0.0'),
+            'stack' => $config['stack'] ?? 'laravel',
+            'installed_at' => now()->toIso8601String(),
+            'php_version' => PHP_VERSION,
+        ]));
+
+        Artisan::call('config:clear');
+        Artisan::call('cache:clear');
+        Artisan::call('route:clear');
+        Artisan::call('view:clear');
+
+        if (empty(config('app.key')) || config('app.key') === 'base64:') {
+            Artisan::call('key:generate', ['--force' => true]);
+        }
+
+        try {
+            Artisan::call('storage:link');
+        } catch (\Throwable) {
+            // Link may already exist
+        }
+    }
+
+    public function install(array $config): array
+    {
+        $stepNames = array_keys(self::STEPS);
+
+        foreach ($stepNames as $stepName) {
+            $result = $this->runStep($stepName, $config);
+            if (!$result['success']) {
+                return $result;
+            }
+        }
+
+        return ['success' => true, 'message' => 'Installation terminée.'];
     }
 
     private function step(string $name, \Closure $action): void
