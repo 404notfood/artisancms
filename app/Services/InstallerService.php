@@ -66,11 +66,47 @@ class InstallerService
 
     private function stepEnv(array $config): void
     {
-        app(DatabaseConfigurator::class)->writeEnvConfig($config);
-        $this->updateEnv('APP_NAME', $config['site_name'] ?? 'ArtisanCMS');
-        $this->updateEnv('APP_URL', $config['site_url'] ?? 'http://localhost');
-        $this->updateEnv('APP_TIMEZONE', $config['timezone'] ?? 'UTC');
-        $this->updateEnv('APP_LOCALE', $config['locale'] ?? 'fr');
+        $envPath = base_path('.env');
+        $envContent = file_get_contents($envPath);
+
+        $replacements = [
+            'DB_CONNECTION' => 'mysql',
+            'DB_HOST' => $config['db_host'],
+            'DB_PORT' => (string) $config['db_port'],
+            'DB_DATABASE' => $config['db_database'],
+            'DB_USERNAME' => $config['db_username'],
+            'DB_PASSWORD' => $config['db_password'],
+            'APP_NAME' => str_contains($config['site_name'] ?? 'ArtisanCMS', ' ')
+                ? '"' . ($config['site_name'] ?? 'ArtisanCMS') . '"'
+                : ($config['site_name'] ?? 'ArtisanCMS'),
+            'APP_URL' => $config['site_url'] ?? 'http://localhost',
+            'APP_TIMEZONE' => $config['timezone'] ?? 'UTC',
+            'APP_LOCALE' => $config['locale'] ?? 'fr',
+        ];
+
+        if (!empty($config['db_prefix'])) {
+            $replacements['DB_PREFIX'] = $config['db_prefix'];
+        }
+
+        foreach ($replacements as $key => $value) {
+            if (preg_match("/^{$key}=.*/m", $envContent)) {
+                $envContent = preg_replace("/^{$key}=.*/m", "{$key}={$value}", $envContent);
+            } else {
+                $envContent .= "\n{$key}={$value}";
+            }
+        }
+
+        // Write to temp file then rename to avoid file locking issues (Vite watcher)
+        $tmpPath = $envPath . '.tmp';
+        file_put_contents($tmpPath, $envContent);
+        if (DIRECTORY_SEPARATOR === '\\') {
+            // Windows: rename fails if target exists, use copy + unlink
+            copy($tmpPath, $envPath);
+            @unlink($tmpPath);
+        } else {
+            rename($tmpPath, $envPath);
+        }
+
         Artisan::call('config:clear');
     }
 
@@ -388,6 +424,13 @@ class InstallerService
             $envContent .= "\n{$key}={$escapedValue}";
         }
 
-        file_put_contents($envPath, $envContent);
+        $tmpPath = $envPath . '.tmp';
+        file_put_contents($tmpPath, $envContent);
+        if (DIRECTORY_SEPARATOR === '\\') {
+            copy($tmpPath, $envPath);
+            @unlink($tmpPath);
+        } else {
+            rename($tmpPath, $envPath);
+        }
     }
 }

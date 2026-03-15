@@ -70,6 +70,10 @@ class DatabaseConfigurator
             'DB_PASSWORD' => $config['db_password'],
         ];
 
+        if (!empty($config['db_prefix'])) {
+            $replacements['DB_PREFIX'] = $config['db_prefix'];
+        }
+
         foreach ($replacements as $key => $value) {
             if (preg_match("/^{$key}=.*/m", $envContent)) {
                 $envContent = preg_replace(
@@ -82,15 +86,15 @@ class DatabaseConfigurator
             }
         }
 
-        if (!empty($config['db_prefix'])) {
-            if (preg_match("/^DB_PREFIX=.*/m", $envContent)) {
-                $envContent = preg_replace("/^DB_PREFIX=.*/m", "DB_PREFIX={$config['db_prefix']}", $envContent);
-            } else {
-                $envContent .= "\nDB_PREFIX={$config['db_prefix']}";
-            }
+        // Write to temp file then rename to avoid file locking issues (Vite watcher)
+        $tmpPath = $envPath . '.tmp';
+        file_put_contents($tmpPath, $envContent);
+        if (DIRECTORY_SEPARATOR === '\\') {
+            copy($tmpPath, $envPath);
+            @unlink($tmpPath);
+        } else {
+            rename($tmpPath, $envPath);
         }
-
-        file_put_contents($envPath, $envContent);
     }
 
     private function humanizeError(PDOException $e): string
