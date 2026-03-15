@@ -29,9 +29,15 @@ class MenuService
      */
     public function find(int $id): Menu
     {
-        return Menu::with(['rootItems.children' => function ($query): void {
+        $menu = Menu::with(['rootItems.children' => function ($query): void {
             $query->orderBy('order');
         }])->findOrFail($id);
+
+        // Map rootItems to items for frontend compatibility
+        $menu->setRelation('items', $menu->rootItems);
+        $menu->unsetRelation('rootItems');
+
+        return $menu;
     }
 
     /**
@@ -108,6 +114,23 @@ class MenuService
         CMS::fire('menu.items_synced', $menu);
 
         return $menu->fresh(['rootItems.children']) ?? $menu;
+    }
+
+    /**
+     * Add a single item to a menu.
+     *
+     * @param array<string, mixed> $data
+     */
+    public function addItem(Menu $menu, array $data): MenuItem
+    {
+        return MenuItem::create([
+            'menu_id' => $menu->id,
+            'label' => $data['label'],
+            'type' => $data['type'] ?? 'custom',
+            'url' => $data['url'] ?? null,
+            'target' => $data['target'] ?? '_self',
+            'order' => $data['order'] ?? $menu->items()->count(),
+        ]);
     }
 
     /**

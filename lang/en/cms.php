@@ -88,10 +88,18 @@ return [
     'menus' => [
         'title' => 'Menus',
         'create' => 'New Menu',
+        'created' => 'Menu created.',
+        'updated' => 'Menu updated.',
+        'deleted' => 'Menu deleted.',
         'add_item' => 'Add Item',
         'location' => 'Location',
         'item_label' => 'Label',
         'item_url' => 'URL',
+        'item_added' => 'Item added.',
+        'item_updated' => 'Item updated.',
+        'item_deleted' => 'Item deleted.',
+        'items_synced' => 'Menu items synced.',
+        'items_reordered' => 'Order updated.',
     ],
 
     // Widgets

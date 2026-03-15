@@ -1,6 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, Link, useForm, router } from '@inertiajs/react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { MenuData, MenuItemData, PageData, PostData } from '@/types/cms';
 
 interface MenusEditProps {
@@ -39,6 +39,11 @@ export default function MenusEdit({ menu, pages, posts }: MenusEditProps) {
     const [newItem, setNewItem] = useState<NewItemForm>(defaultNewItem);
     const [showAddItem, setShowAddItem] = useState(false);
 
+    // Sync items when Inertia reloads the page props
+    useEffect(() => {
+        setItems(menu.items ?? []);
+    }, [menu.items]);
+
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
         put(`/admin/menus/${menu.id}`);
@@ -73,7 +78,7 @@ export default function MenusEdit({ menu, pages, posts }: MenusEditProps) {
             target: newItem.target,
             order: items.length,
         }, {
-            preserveState: true,
+            preserveScroll: true,
             onSuccess: () => {
                 setNewItem(defaultNewItem);
                 setShowAddItem(false);
@@ -84,7 +89,7 @@ export default function MenusEdit({ menu, pages, posts }: MenusEditProps) {
     function handleUpdateItem(item: MenuItemData, updates: Partial<MenuItemData>) {
         const { children, ...payload } = { ...item, ...updates };
         router.put(`/admin/menus/${menu.id}/items/${item.id}`, payload as Record<string, string | number | boolean | null>, {
-            preserveState: true,
+            preserveScroll: true,
             onSuccess: () => setEditingItemId(null),
         });
     }
@@ -92,7 +97,7 @@ export default function MenusEdit({ menu, pages, posts }: MenusEditProps) {
     function handleDeleteItem(item: MenuItemData) {
         if (!confirm(`Supprimer l'élément "${item.label}" ?`)) return;
         router.delete(`/admin/menus/${menu.id}/items/${item.id}`, {
-            preserveState: true,
+            preserveScroll: true,
         });
     }
 
@@ -107,7 +112,7 @@ export default function MenusEdit({ menu, pages, posts }: MenusEditProps) {
         // Persist the new order
         const orderedIds = newItems.map((item, i) => ({ id: item.id, order: i }));
         router.put(`/admin/menus/${menu.id}/items/reorder`, { items: orderedIds }, {
-            preserveState: true,
+            preserveScroll: true,
         });
     }
 

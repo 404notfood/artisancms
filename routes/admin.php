@@ -95,7 +95,11 @@ Route::post('media/{media}/crop', [MediaController::class, 'crop'])->name('admin
 
 // Menus
 Route::resource('menus', MenuController::class)->names('admin.menus')->except(['show']);
-Route::put('menus/{menu}/items', [MenuController::class, 'syncItems'])->name('admin.menus.sync-items');
+Route::post('menus/{menu}/items', [MenuController::class, 'storeItem'])->name('admin.menus.items.store');
+Route::put('menus/{menu}/items/sync', [MenuController::class, 'syncItems'])->name('admin.menus.sync-items');
+Route::put('menus/{menu}/items/reorder', [MenuController::class, 'reorderItems'])->name('admin.menus.items.reorder');
+Route::put('menus/{menu}/items/{item}', [MenuController::class, 'updateItem'])->name('admin.menus.items.update');
+Route::delete('menus/{menu}/items/{item}', [MenuController::class, 'destroyItem'])->name('admin.menus.items.destroy');
 
 // Settings
 Route::get('settings', [SettingController::class, 'index'])->name('admin.settings.index');

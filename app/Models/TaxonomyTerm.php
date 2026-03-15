@@ -65,7 +65,7 @@ class TaxonomyTerm extends Model
      */
     public function pages(): MorphToMany
     {
-        return $this->morphedByMany(Page::class, 'termable', 'termables');
+        return $this->morphedByMany(Page::class, 'termable', 'termables', 'term_id');
     }
 
     /**
@@ -73,6 +73,6 @@ class TaxonomyTerm extends Model
      */
     public function posts(): MorphToMany
     {
-        return $this->morphedByMany(Post::class, 'termable', 'termables');
+        return $this->morphedByMany(Post::class, 'termable', 'termables', 'term_id');
     }
 }

@@ -88,10 +88,18 @@ return [
     'menus' => [
         'title' => 'Menus',
         'create' => 'Nouveau menu',
+        'created' => 'Menu créé.',
+        'updated' => 'Menu mis à jour.',
+        'deleted' => 'Menu supprimé.',
         'add_item' => 'Ajouter un élément',
         'location' => 'Emplacement',
         'item_label' => 'Libellé',
         'item_url' => 'URL',
+        'item_added' => 'Élément ajouté.',
+        'item_updated' => 'Élément mis à jour.',
+        'item_deleted' => 'Élément supprimé.',
+        'items_synced' => 'Éléments du menu synchronisés.',
+        'items_reordered' => 'Ordre mis à jour.',
     ],
 
     // Plugins
