@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
+import { current } from 'immer';
 import { nanoid } from 'nanoid';
 import type { BlockNode } from '@/types/cms';
 
@@ -122,6 +123,25 @@ function findParentInfo(
     return null;
 }
 
+// --- Internal helper to push history on a draft ---
+function _pushHistoryOnDraft(state: {
+    blocks: BlockNode[];
+    history: BlockNode[][];
+    historyIndex: number;
+}) {
+    const newHistory = state.history.slice(0, state.historyIndex + 1);
+    // Use current() to get plain JS from Immer draft, then structuredClone
+    const snapshot = structuredClone(current(state.blocks)) as BlockNode[];
+    newHistory.push(snapshot);
+
+    if (newHistory.length > MAX_HISTORY) {
+        newHistory.shift();
+    }
+
+    state.history = newHistory;
+    state.historyIndex = newHistory.length - 1;
+}
+
 // --- Store ---
 
 interface BuilderState {
@@ -195,6 +215,7 @@ export const useBuilderStore = create<BuilderState>()(
                 state.selectedBlockId = null;
                 state.hoveredBlockId = null;
                 state.isDirty = false;
+                // blocks here is a plain array (not a draft), safe to structuredClone
                 state.history = [structuredClone(blocks)];
                 state.historyIndex = 0;
             });
@@ -210,7 +231,7 @@ export const useBuilderStore = create<BuilderState>()(
             };
 
             set((state) => {
-                state.pushHistory();
+                _pushHistoryOnDraft(state);
                 const targetIndex = index ?? (parentId
                     ? (findBlockInTree(state.blocks, parentId)?.children?.length ?? 0)
                     : state.blocks.length);
@@ -226,7 +247,7 @@ export const useBuilderStore = create<BuilderState>()(
             set((state) => {
                 const block = findBlockInTree(state.blocks, id);
                 if (block) {
-                    state.pushHistory();
+                    _pushHistoryOnDraft(state);
                     Object.assign(block.props, props);
                     state.isDirty = true;
                 }
@@ -235,7 +256,7 @@ export const useBuilderStore = create<BuilderState>()(
 
         removeBlock: (id) => {
             set((state) => {
-                state.pushHistory();
+                _pushHistoryOnDraft(state);
                 removeBlockFromTree(state.blocks, id);
                 if (state.selectedBlockId === id) {
                     state.selectedBlockId = null;
@@ -252,10 +273,10 @@ export const useBuilderStore = create<BuilderState>()(
                 const block = findBlockInTree(state.blocks, id);
                 if (!block) return;
 
-                // Deep clone the block before removing so we preserve it
-                const blockClone = structuredClone(block) as BlockNode;
+                // Use current() to get plain JS from Immer draft before cloning
+                const blockClone = structuredClone(current(block)) as BlockNode;
 
-                state.pushHistory();
+                _pushHistoryOnDraft(state);
                 removeBlockFromTree(state.blocks, id);
                 insertBlockInTree(state.blocks, newParentId, newIndex, blockClone);
                 state.isDirty = true;
@@ -271,7 +292,7 @@ export const useBuilderStore = create<BuilderState>()(
             const parentInfo = findParentInfo(state.blocks, id);
 
             set((draft) => {
-                draft.pushHistory();
+                _pushHistoryOnDraft(draft);
                 const insertIndex = parentInfo ? parentInfo.index + 1 : draft.blocks.length;
                 insertBlockInTree(
                     draft.blocks,
@@ -289,6 +310,7 @@ export const useBuilderStore = create<BuilderState>()(
         copyBlock: (id) => {
             const block = findBlockInTree(get().blocks, id);
             if (!block) return;
+            // get().blocks is plain (not a draft), so structuredClone is safe here
             set((state) => {
                 state.clipboard = structuredClone(block) as BlockNode;
             });
@@ -301,7 +323,7 @@ export const useBuilderStore = create<BuilderState>()(
             const cloned = cloneBlockDeep(clipboard);
 
             set((state) => {
-                state.pushHistory();
+                _pushHistoryOnDraft(state);
                 insertBlockInTree(state.blocks, parentId, index, cloned);
                 state.selectedBlockId = cloned.id;
                 state.isDirty = true;
@@ -344,17 +366,7 @@ export const useBuilderStore = create<BuilderState>()(
 
         pushHistory: () => {
             set((state) => {
-                // Discard any future history entries (if we undid and then made a new change)
-                const newHistory = state.history.slice(0, state.historyIndex + 1);
-                newHistory.push(structuredClone(state.blocks) as BlockNode[]);
-
-                // Enforce max history size
-                if (newHistory.length > MAX_HISTORY) {
-                    newHistory.shift();
-                }
-
-                state.history = newHistory;
-                state.historyIndex = newHistory.length - 1;
+                _pushHistoryOnDraft(state);
             });
         },
 
@@ -362,7 +374,7 @@ export const useBuilderStore = create<BuilderState>()(
             set((state) => {
                 if (state.historyIndex > 0) {
                     state.historyIndex -= 1;
-                    state.blocks = structuredClone(state.history[state.historyIndex]) as BlockNode[];
+                    state.blocks = structuredClone(current(state.history)[state.historyIndex]) as BlockNode[];
                     state.selectedBlockId = null;
                     state.isDirty = true;
                 }
@@ -373,7 +385,7 @@ export const useBuilderStore = create<BuilderState>()(
             set((state) => {
                 if (state.historyIndex < state.history.length - 1) {
                     state.historyIndex += 1;
-                    state.blocks = structuredClone(state.history[state.historyIndex]) as BlockNode[];
+                    state.blocks = structuredClone(current(state.history)[state.historyIndex]) as BlockNode[];
                     state.selectedBlockId = null;
                     state.isDirty = true;
                 }

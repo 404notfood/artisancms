@@ -46,7 +46,7 @@ class SettingService
      * Supports 'group.key' format (e.g., 'site.name').
      * If the key does not contain a dot, the group defaults to 'general'.
      */
-    public function set(string $key, mixed $value, string $type = 'string'): Setting
+    public function set(string $key, mixed $value, ?string $type = null): Setting
     {
         $group = 'general';
         $settingKey = $key;
@@ -55,9 +55,15 @@ class SettingService
             [$group, $settingKey] = explode('.', $key, 2);
         }
 
+        // Preserve existing type if not explicitly provided
+        $updateData = ['value' => $value];
+        if ($type !== null) {
+            $updateData['type'] = $type;
+        }
+
         $setting = Setting::updateOrCreate(
             ['group' => $group, 'key' => $settingKey],
-            ['value' => $value, 'type' => $type],
+            $updateData,
         );
 
         $this->clearCache();

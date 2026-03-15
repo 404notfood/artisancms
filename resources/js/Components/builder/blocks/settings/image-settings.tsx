@@ -1,10 +1,19 @@
 import type { BlockSettingsProps } from '../block-registry';
+import MediaPickerButton from './media-picker-button';
 
 export default function ImageSettings({ block, onUpdate }: BlockSettingsProps) {
     return (
         <div className="space-y-4">
+            <MediaPickerButton
+                label="Image"
+                value={(block.props.src as string) || ''}
+                onChange={(url, alt) => {
+                    onUpdate({ src: url, ...(alt ? { alt } : {}) });
+                }}
+                placeholder="Choisir une image"
+            />
             <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">URL de l image</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">ou URL directe</label>
                 <input type="text" value={(block.props.src as string) || ''} onChange={(e) => onUpdate({ src: e.target.value })} className="w-full border rounded px-3 py-2 text-sm" placeholder="https://..." />
             </div>
             <div>

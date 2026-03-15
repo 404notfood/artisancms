@@ -4,6 +4,7 @@ export default function HeadingRenderer({ block }: BlockRendererProps) {
     const level = Number(block.props.level) || 2;
     const text = (block.props.text as string) || 'Titre';
     const alignment = (block.props.alignment as string) || 'left';
+    const color = (block.props.color as string) || undefined;
     const Tag = `h${level}` as keyof React.JSX.IntrinsicElements;
 
     const sizeClasses: Record<number, string> = {
@@ -16,7 +17,13 @@ export default function HeadingRenderer({ block }: BlockRendererProps) {
     };
 
     return (
-        <Tag className={sizeClasses[level] || sizeClasses[2]} style={{ textAlign: alignment as React.CSSProperties['textAlign'] }}>
+        <Tag
+            className={sizeClasses[level] || sizeClasses[2]}
+            style={{
+                textAlign: alignment as React.CSSProperties['textAlign'],
+                color,
+            }}
+        >
             {text}
         </Tag>
     );

@@ -24,9 +24,36 @@ class MediaController extends Controller
     /**
      * Display a paginated grid/list of media files.
      */
-    public function index(Request $request): Response
+    public function index(Request $request): Response|JsonResponse
     {
         $filters = $request->only(['search', 'mime_type', 'folder', 'sort_by', 'sort_dir', 'per_page']);
+
+        // JSON response for media picker (AJAX)
+        if ($request->wantsJson() || $request->has('json')) {
+            $query = Media::query()->orderByDesc('created_at');
+
+            if ($search = $request->input('search')) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('filename', 'like', "%{$search}%")
+                      ->orWhere('alt_text', 'like', "%{$search}%");
+                });
+            }
+
+            if ($type = $request->input('type')) {
+                $query->where('mime_type', 'like', "{$type}/%");
+            }
+
+            $media = $query->limit(40)->get()->map(fn (Media $m) => [
+                'id' => $m->id,
+                'url' => $m->url,
+                'alt' => $m->alt_text ?? '',
+                'filename' => $m->filename,
+                'mime_type' => $m->mime_type,
+                'thumbnail_url' => $m->url,
+            ]);
+
+            return response()->json($media);
+        }
 
         $media = $this->mediaService->all($filters);
 

@@ -54,14 +54,17 @@ class ErrorController extends Controller
     /**
      * Render the maintenance page with Inertia.
      */
-    public function maintenance(): Response
+    public function maintenance(): Response|\Illuminate\Http\RedirectResponse
     {
-        $expectedReturn = Setting::get('site.maintenance_until');
+        $settingService = app(\App\Services\SettingService::class);
+        $enabled = $settingService->get('maintenance.enabled');
+
+        if ($enabled !== '1' && $enabled !== 'true' && $enabled !== true) {
+            return redirect('/');
+        }
 
         return Inertia::render('Front/Maintenance', [
-            ...$this->frontData(),
-            'expectedReturn' => $expectedReturn,
-            'message' => Setting::get('site.maintenance_message'),
+            'message' => $settingService->get('maintenance.message', 'Le site est actuellement en maintenance. Merci de votre patience.'),
         ]);
     }
 

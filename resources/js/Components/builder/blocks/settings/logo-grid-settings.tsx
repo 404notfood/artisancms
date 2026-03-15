@@ -1,4 +1,5 @@
 import type { BlockSettingsProps } from '../block-registry';
+import MediaPickerButton from './media-picker-button';
 
 interface Logo {
     src: string;
@@ -78,12 +79,22 @@ export default function LogoGridSettings({ block, onUpdate }: BlockSettingsProps
                                     Supprimer
                                 </button>
                             </div>
+                            <MediaPickerButton
+                                label=""
+                                value={logo.src}
+                                onChange={(url, alt) => {
+                                    const newLogos = [...logos];
+                                    newLogos[i] = { ...newLogos[i], src: url, ...(alt ? { alt } : {}) };
+                                    onUpdate({ logos: newLogos });
+                                }}
+                                placeholder="Choisir un logo"
+                            />
                             <input
                                 type="text"
                                 value={logo.src}
                                 onChange={(e) => updateLogo(i, 'src', e.target.value)}
                                 className="w-full border rounded px-3 py-1.5 text-sm"
-                                placeholder="URL de l'image"
+                                placeholder="ou URL directe"
                             />
                             <input
                                 type="text"

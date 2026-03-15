@@ -94,6 +94,27 @@ return [
         'item_url' => 'URL',
     ],
 
+    // Widgets
+    'widgets' => [
+        'types' => [
+            'recent_posts' => 'Recent Posts',
+            'categories' => 'Categories',
+            'search' => 'Search',
+            'text' => 'Text',
+            'custom_html' => 'Custom HTML',
+            'archives' => 'Archives',
+            'tag_cloud' => 'Tag Cloud',
+        ],
+        'search_placeholder' => 'Search...',
+        'area_created' => 'Widget area created.',
+        'area_updated' => 'Widget area updated.',
+        'area_deleted' => 'Widget area deleted.',
+        'widget_added' => 'Widget added.',
+        'widget_updated' => 'Widget updated.',
+        'widget_deleted' => 'Widget deleted.',
+        'widgets_reordered' => 'Widgets reordered.',
+    ],
+
     // Settings
     'settings' => [
         'title' => 'Settings',
@@ -104,6 +125,7 @@ return [
         'media' => 'Media',
         'maintenance' => 'Maintenance',
         'saved' => 'Settings saved.',
+        'updated' => 'Settings saved.',
         'site_name' => 'Site Name',
         'site_description' => 'Site Description',
         'site_url' => 'Site URL',

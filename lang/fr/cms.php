@@ -94,23 +94,6 @@ return [
         'item_url' => 'URL',
     ],
 
-    // Settings
-    'settings' => [
-        'title' => 'Paramètres',
-        'general' => 'Général',
-        'seo' => 'SEO',
-        'mail' => 'Email',
-        'content' => 'Contenu',
-        'media' => 'Médias',
-        'maintenance' => 'Maintenance',
-        'saved' => 'Paramètres enregistrés.',
-        'site_name' => 'Nom du site',
-        'site_description' => 'Description du site',
-        'site_url' => 'URL du site',
-        'timezone' => 'Fuseau horaire',
-        'locale' => 'Langue',
-    ],
-
     // Plugins
     'plugins' => [
         'title' => 'Plugins',
@@ -146,6 +129,45 @@ return [
         'installing' => 'Installation en cours...',
         'success' => 'Installation réussie !',
         'go_to_admin' => 'Accéder à l\'administration',
+    ],
+
+    // Widgets
+    'widgets' => [
+        'types' => [
+            'recent_posts' => 'Articles récents',
+            'categories' => 'Catégories',
+            'search' => 'Recherche',
+            'text' => 'Texte',
+            'custom_html' => 'HTML personnalisé',
+            'archives' => 'Archives',
+            'tag_cloud' => 'Nuage de tags',
+        ],
+        'search_placeholder' => 'Rechercher...',
+        'area_created' => 'Zone de widgets créée.',
+        'area_updated' => 'Zone de widgets mise à jour.',
+        'area_deleted' => 'Zone de widgets supprimée.',
+        'widget_added' => 'Widget ajouté.',
+        'widget_updated' => 'Widget mis à jour.',
+        'widget_deleted' => 'Widget supprimé.',
+        'widgets_reordered' => 'Widgets réordonnés.',
+    ],
+
+    // Settings updated
+    'settings' => [
+        'title' => 'Paramètres',
+        'general' => 'Général',
+        'seo' => 'SEO',
+        'mail' => 'Email',
+        'content' => 'Contenu',
+        'media' => 'Médias',
+        'maintenance' => 'Maintenance',
+        'saved' => 'Paramètres enregistrés.',
+        'updated' => 'Paramètres enregistrés.',
+        'site_name' => 'Nom du site',
+        'site_description' => 'Description du site',
+        'site_url' => 'URL du site',
+        'timezone' => 'Fuseau horaire',
+        'locale' => 'Langue',
     ],
 
     // Status

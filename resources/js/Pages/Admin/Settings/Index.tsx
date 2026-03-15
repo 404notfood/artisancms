@@ -1,6 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, useForm } from '@inertiajs/react';
-import { useState } from 'react';
+import { Head, useForm, router } from '@inertiajs/react';
+import { useState, useRef } from 'react';
 import type { SettingData } from '@/types/cms';
 
 interface SettingsIndexProps {
@@ -42,7 +42,16 @@ export default function SettingsIndex({ settings }: SettingsIndexProps) {
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        put(`/admin/settings/${activeTab}`);
+        // Transform flat key/value pairs into the array format expected by the backend
+        // Prefix each key with the active tab group (e.g., "maintenance.enabled")
+        const settingsArray = Object.entries(data).map(([key, value]) => ({
+            key: `${activeTab}.${key}`,
+            value,
+        }));
+        router.put('/admin/settings', { settings: settingsArray } as any, {
+            preserveState: true,
+            preserveScroll: true,
+        });
     }
 
     function renderField(setting: SettingData) {
@@ -50,7 +59,8 @@ export default function SettingsIndex({ settings }: SettingsIndexProps) {
 
         switch (setting.type) {
             case 'boolean':
-            case 'toggle':
+            case 'toggle': {
+                const isChecked = value === '1' || value === 'true';
                 return (
                     <div key={setting.key} className="flex items-center justify-between py-3">
                         <div>
@@ -62,20 +72,21 @@ export default function SettingsIndex({ settings }: SettingsIndexProps) {
                             id={setting.key}
                             type="button"
                             role="switch"
-                            aria-checked={Boolean(value)}
-                            onClick={() => setData(setting.key, String(!value))}
+                            aria-checked={isChecked}
+                            onClick={() => setData(setting.key, isChecked ? '0' : '1')}
                             className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors ${
-                                value ? 'bg-indigo-600' : 'bg-gray-200'
+                                isChecked ? 'bg-indigo-600' : 'bg-gray-200'
                             }`}
                         >
                             <span
                                 className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition-transform ${
-                                    value ? 'translate-x-5' : 'translate-x-0'
+                                    isChecked ? 'translate-x-5' : 'translate-x-0'
                                 }`}
                             />
                         </button>
                     </div>
                 );
+            }
 
             case 'number':
                 return (
@@ -125,6 +136,16 @@ export default function SettingsIndex({ settings }: SettingsIndexProps) {
                             <option value="">Choisir...</option>
                         </select>
                     </div>
+                );
+
+            case 'image':
+                return (
+                    <ImageUploadField
+                        key={setting.key}
+                        settingKey={setting.key}
+                        value={value}
+                        onChange={(url) => setData(setting.key, url)}
+                    />
                 );
 
             default:
@@ -259,5 +280,115 @@ function MaintenanceIcon() {
         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M11.42 15.17l-5.1-5.1m0 0L11.42 4.97m-5.1 5.1h12.18M4.5 19.5h15" />
         </svg>
+    );
+}
+
+function ImageUploadField({
+    settingKey,
+    value,
+    onChange,
+}: {
+    settingKey: string;
+    value: string;
+    onChange: (url: string) => void;
+}) {
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [uploading, setUploading] = useState(false);
+    const [preview, setPreview] = useState<string>(value || '');
+
+    async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setUploading(true);
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+            const response = await fetch('/admin/media', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                },
+                body: formData,
+            });
+
+            const result = await response.json();
+
+            if (result.success && result.media) {
+                const url = result.media.url || result.media.path || '';
+                setPreview(url);
+                onChange(url);
+            }
+        } catch {
+            // Silently fail - user can retry
+        } finally {
+            setUploading(false);
+            if (fileInputRef.current) fileInputRef.current.value = '';
+        }
+    }
+
+    function handleRemove() {
+        setPreview('');
+        onChange('');
+    }
+
+    return (
+        <div className="py-3">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+                {formatLabel(settingKey)}
+            </label>
+
+            {preview ? (
+                <div className="flex items-start gap-4">
+                    <div className="relative group">
+                        <img
+                            src={preview}
+                            alt={formatLabel(settingKey)}
+                            className="h-20 w-20 rounded-lg border border-gray-200 object-contain bg-gray-50"
+                        />
+                        <button
+                            type="button"
+                            onClick={handleRemove}
+                            className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-white text-xs opacity-0 group-hover:opacity-100 transition-opacity"
+                            title="Supprimer"
+                        >
+                            &times;
+                        </button>
+                    </div>
+                    <button
+                        type="button"
+                        onClick={() => fileInputRef.current?.click()}
+                        disabled={uploading}
+                        className="rounded-lg border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                    >
+                        {uploading ? 'Envoi...' : 'Remplacer'}
+                    </button>
+                </div>
+            ) : (
+                <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={uploading}
+                    className="flex items-center gap-2 rounded-lg border-2 border-dashed border-gray-300 px-4 py-3 text-sm text-gray-500 hover:border-indigo-400 hover:text-indigo-600 transition-colors"
+                >
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                    </svg>
+                    {uploading ? 'Envoi en cours...' : 'Choisir une image'}
+                </button>
+            )}
+
+            <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="hidden"
+            />
+        </div>
     );
 }

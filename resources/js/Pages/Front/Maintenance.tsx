@@ -14,12 +14,12 @@ interface BrandingData {
 }
 
 interface MaintenanceProps {
-    menus: Record<string, MenuData>;
-    theme: {
+    menus?: Record<string, MenuData>;
+    theme?: {
         customizations: Record<string, string>;
         layouts: Array<{ slug: string; name: string }>;
     };
-    expectedReturn: string | null;
+    expectedReturn?: string | null;
     message: string | null;
 }
 
@@ -42,7 +42,7 @@ function formatExpectedReturn(dateString: string | null): string | null {
 
 export default function Maintenance({ expectedReturn, message }: MaintenanceProps) {
     const { branding } = usePage().props as { branding?: BrandingData; [key: string]: unknown };
-    const formattedReturn = formatExpectedReturn(expectedReturn);
+    const formattedReturn = formatExpectedReturn(expectedReturn ?? null);
 
     return (
         <>
