@@ -5,6 +5,7 @@ export interface BlockRendererProps {
     block: BlockNode;
     isSelected: boolean;
     isEditing: boolean;
+    onUpdate?: (props: Partial<BlockNode['props']>) => void;
     children?: React.ReactNode;
 }
 

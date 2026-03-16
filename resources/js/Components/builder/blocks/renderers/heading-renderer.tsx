@@ -1,6 +1,6 @@
 import type { BlockRendererProps } from '../block-registry';
 
-export default function HeadingRenderer({ block }: BlockRendererProps) {
+export default function HeadingRenderer({ block, isSelected, isEditing, onUpdate }: BlockRendererProps) {
     const level = Number(block.props.level) || 2;
     const text = (block.props.text as string) || 'Titre';
     const alignment = (block.props.alignment as string) || 'left';
@@ -15,6 +15,24 @@ export default function HeadingRenderer({ block }: BlockRendererProps) {
         5: 'text-lg font-medium',
         6: 'text-base font-medium',
     };
+
+    if (isEditing && isSelected && onUpdate) {
+        return (
+            <Tag
+                contentEditable
+                suppressContentEditableWarning
+                className={sizeClasses[level] || sizeClasses[2]}
+                style={{
+                    textAlign: alignment as React.CSSProperties['textAlign'],
+                    color,
+                    outline: 'none',
+                }}
+                onBlur={(e) => onUpdate({ text: (e.currentTarget as HTMLElement).textContent || '' })}
+            >
+                {text}
+            </Tag>
+        );
+    }
 
     return (
         <Tag

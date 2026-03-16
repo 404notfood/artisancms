@@ -1,15 +1,28 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useBuilderStore } from '@/stores/builder-store';
 import { getBlock, getBlocksByCategory } from './blocks/block-registry';
 import DraggableBlockItem from './draggable-block-item';
+import BlockBreadcrumb from './block-breadcrumb';
+import BlockTree from './block-tree';
+
+type TabId = 'blocks' | 'structure' | 'settings';
 
 export default function BuilderSidebar() {
-    const [activeTab, setActiveTab] = useState<'blocks' | 'settings'>('blocks');
+    const [activeTab, setActiveTab] = useState<TabId>('blocks');
     const { selectedBlockId, findBlock, updateBlock } = useBuilderStore();
+    const prevSelectedRef = useRef(selectedBlockId);
 
     const selectedBlock = selectedBlockId ? findBlock(selectedBlockId) : null;
     const entry = selectedBlock ? getBlock(selectedBlock.type) : null;
     const SettingsComponent = entry?.settings;
+
+    // Auto-switch to settings when a block is selected from the Blocks tab
+    useEffect(() => {
+        if (selectedBlockId && !prevSelectedRef.current && activeTab === 'blocks') {
+            setActiveTab('settings');
+        }
+        prevSelectedRef.current = selectedBlockId;
+    }, [selectedBlockId, activeTab]);
 
     const categories = [
         { key: 'layout', label: 'Mise en page' },
@@ -17,22 +30,25 @@ export default function BuilderSidebar() {
         { key: 'media', label: 'Media' },
     ];
 
+    const tabs: { id: TabId; label: string }[] = [
+        { id: 'blocks', label: 'Blocs' },
+        { id: 'structure', label: 'Structure' },
+        { id: 'settings', label: 'Proprietes' },
+    ];
+
     return (
         <div className="w-72 bg-white border-r flex flex-col shrink-0 h-full">
             {/* Tabs */}
             <div className="flex border-b shrink-0">
-                <button
-                    onClick={() => setActiveTab('blocks')}
-                    className={`flex-1 py-2.5 text-sm font-medium text-center transition-colors ${activeTab === 'blocks' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
-                >
-                    Blocs
-                </button>
-                <button
-                    onClick={() => setActiveTab('settings')}
-                    className={`flex-1 py-2.5 text-sm font-medium text-center transition-colors ${activeTab === 'settings' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
-                >
-                    Proprietes
-                </button>
+                {tabs.map((tab) => (
+                    <button
+                        key={tab.id}
+                        onClick={() => setActiveTab(tab.id)}
+                        className={`flex-1 py-2.5 text-sm font-medium text-center transition-colors ${activeTab === tab.id ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
+                    >
+                        {tab.label}
+                    </button>
+                ))}
             </div>
 
             {/* Content */}
@@ -46,8 +62,8 @@ export default function BuilderSidebar() {
                                 <div key={key}>
                                     <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">{label}</h3>
                                     <div className="space-y-1.5">
-                                        {blocks.map(([slug, entry]) => (
-                                            <DraggableBlockItem key={slug} slug={slug} label={entry.label} icon={entry.icon} />
+                                        {blocks.map(([slug, blockEntry]) => (
+                                            <DraggableBlockItem key={slug} slug={slug} label={blockEntry.label} icon={blockEntry.icon} />
                                         ))}
                                     </div>
                                 </div>
@@ -56,10 +72,13 @@ export default function BuilderSidebar() {
                     </div>
                 )}
 
+                {activeTab === 'structure' && <BlockTree />}
+
                 {activeTab === 'settings' && (
                     <>
                         {selectedBlock && SettingsComponent ? (
                             <div>
+                                <BlockBreadcrumb />
                                 <h3 className="text-sm font-semibold text-gray-800 mb-3">{entry?.label || selectedBlock.type}</h3>
                                 <SettingsComponent block={selectedBlock} onUpdate={(props) => updateBlock(selectedBlock.id, props)} />
                             </div>

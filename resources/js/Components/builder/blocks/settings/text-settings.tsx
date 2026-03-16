@@ -1,11 +1,16 @@
 import type { BlockSettingsProps } from '../block-registry';
+import TipTapEditor from '../../tiptap-editor';
 
 export default function TextSettings({ block, onUpdate }: BlockSettingsProps) {
     return (
         <div className="space-y-4">
             <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Contenu</label>
-                <textarea rows={6} value={(block.props.content as string) || ''} onChange={(e) => onUpdate({ content: e.target.value })} className="w-full border rounded px-3 py-2 text-sm font-mono" />
+                <TipTapEditor
+                    content={(block.props.content as string) || ''}
+                    onUpdate={(html) => onUpdate({ content: html })}
+                    placeholder="Saisissez votre texte..."
+                />
             </div>
             <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Alignement</label>

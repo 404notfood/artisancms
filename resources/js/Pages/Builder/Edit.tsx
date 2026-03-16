@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Head, router } from '@inertiajs/react';
 import { DndContext, DragOverlay, pointerWithin, DragStartEvent, DragEndEvent, useSensor, useSensors, PointerSensor } from '@dnd-kit/core';
-import { useBuilderStore } from '@/stores/builder-store';
+import { useBuilderStore, findParentInfo } from '@/stores/builder-store';
 import { registerCoreBlocks } from '@/Components/builder/blocks/register-core-blocks';
 import BuilderToolbar from '@/Components/builder/builder-toolbar';
 import BuilderCanvas from '@/Components/builder/builder-canvas';
 import BuilderSidebar from '@/Components/builder/builder-sidebar';
+import DeleteConfirmDialog from '@/Components/builder/delete-confirm-dialog';
 import type { PageData } from '@/types/cms';
 
 interface BuilderEditProps {
@@ -127,12 +128,55 @@ export default function BuilderEdit({ page }: BuilderEditProps) {
                 );
             }
 
-            // Delete or Backspace = remove selected block
-            if ((e.key === 'Delete' || e.key === 'Backspace') && !isEditableTarget(e.target)) {
-                const { selectedBlockId, removeBlock } = useBuilderStore.getState();
+            // Ctrl+C = Copy selected block
+            if (isCtrlOrCmd && e.key === 'c' && !isEditableTarget(e.target)) {
+                const { selectedBlockId, copyBlock } = useBuilderStore.getState();
                 if (selectedBlockId) {
                     e.preventDefault();
-                    removeBlock(selectedBlockId);
+                    copyBlock(selectedBlockId);
+                }
+            }
+
+            // Ctrl+V = Paste after selected block
+            if (isCtrlOrCmd && e.key === 'v' && !isEditableTarget(e.target)) {
+                const state = useBuilderStore.getState();
+                if (state.clipboard && state.selectedBlockId) {
+                    e.preventDefault();
+                    const info = findParentInfo(state.blocks, state.selectedBlockId);
+                    if (info) {
+                        state.pasteBlock(info.parentId, info.index + 1);
+                    }
+                }
+            }
+
+            // Ctrl+D = Duplicate selected block
+            if (isCtrlOrCmd && e.key === 'd' && !isEditableTarget(e.target)) {
+                const { selectedBlockId, duplicateBlock } = useBuilderStore.getState();
+                if (selectedBlockId) {
+                    e.preventDefault();
+                    duplicateBlock(selectedBlockId);
+                }
+            }
+
+            // Delete = open confirmation dialog, Shift+Delete = delete immediately
+            if (e.key === 'Delete' && !isEditableTarget(e.target)) {
+                const { selectedBlockId, setPendingDeleteId, removeBlock } = useBuilderStore.getState();
+                if (selectedBlockId) {
+                    e.preventDefault();
+                    if (e.shiftKey) {
+                        removeBlock(selectedBlockId);
+                    } else {
+                        setPendingDeleteId(selectedBlockId);
+                    }
+                }
+            }
+
+            // Backspace = open confirmation dialog (same as Delete)
+            if (e.key === 'Backspace' && !isEditableTarget(e.target)) {
+                const { selectedBlockId, setPendingDeleteId } = useBuilderStore.getState();
+                if (selectedBlockId) {
+                    e.preventDefault();
+                    setPendingDeleteId(selectedBlockId);
                 }
             }
 
@@ -181,6 +225,8 @@ export default function BuilderEdit({ page }: BuilderEditProps) {
                     ) : null}
                 </DragOverlay>
             </DndContext>
+
+            <DeleteConfirmDialog />
         </>
     );
 }
