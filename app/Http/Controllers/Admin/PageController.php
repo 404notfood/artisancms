@@ -120,11 +120,11 @@ class PageController extends Controller
     }
 
     /**
-     * Move a page to trash.
+     * Move a page to trash (alias for destroy).
      */
     public function trash(Page $page): RedirectResponse
     {
-        $page->update(['status' => 'trash']);
+        $this->pageService->delete($page);
 
         return redirect()
             ->back()

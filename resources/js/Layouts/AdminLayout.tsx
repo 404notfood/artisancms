@@ -17,6 +17,7 @@ import {
     FolderTree,
     Palette,
     Puzzle,
+    BookTemplate,
     Settings,
     Bell,
     LogOut,
@@ -94,6 +95,7 @@ const navigationDefs: NavGroupDef[] = [
         title: 'Apparence',
         items: [
             { label: 'Themes', href: '/admin/themes', icon: Palette },
+            { label: 'Templates', href: '/admin/templates', icon: BookTemplate },
             { label: 'Plugins', href: '/admin/plugins', icon: Puzzle },
         ],
     },

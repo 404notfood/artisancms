@@ -108,11 +108,95 @@ class TemplateService
     }
 
     /**
+     * Get template details for the selective install modal.
+     *
+     * @param string $slug Template slug
+     * @return array<string, mixed>|null Template details or null if not found
+     */
+    public function getTemplateDetails(string $slug): ?array
+    {
+        $templates = $this->discover();
+        $template = $templates[$slug] ?? null;
+
+        if ($template === null) {
+            return null;
+        }
+
+        $templatePath = $template['path'];
+        $templateData = $this->resolveTemplateData($template, $templatePath);
+
+        // Build pages summary
+        $pages = [];
+        foreach ($templateData['pages'] ?? [] as $page) {
+            $blocks = $page['content']['blocks'] ?? [];
+            $pages[] = [
+                'id' => $page['id'] ?? $page['slug'] ?? '',
+                'title' => $page['title'] ?? '',
+                'slug' => $page['slug'] ?? '',
+                'meta_description' => $page['meta_description'] ?? '',
+                'blocks_count' => $this->countBlocksRecursive($blocks),
+            ];
+        }
+
+        // Build menus summary
+        $menus = [];
+        foreach ($templateData['menus'] ?? [] as $menu) {
+            $menus[] = [
+                'name' => $menu['name'] ?? '',
+                'location' => $menu['location'] ?? 'header',
+                'items_count' => count($menu['items'] ?? []),
+            ];
+        }
+
+        // Check for settings and theme overrides
+        $hasSettings = !empty($templateData['settings']);
+        $overridesFile = $templatePath . '/' . ($template['theme_overrides'] ?? 'theme-overrides/settings.json');
+        $hasThemeOverrides = File::exists($overridesFile);
+
+        $themeSummary = null;
+        if ($hasThemeOverrides) {
+            $overrides = json_decode(File::get($overridesFile), true) ?? [];
+            $themeSummary = [
+                'primary_color' => $overrides['colors.primary'] ?? null,
+                'secondary_color' => $overrides['colors.secondary'] ?? null,
+                'font_heading' => $overrides['fonts.heading'] ?? null,
+                'font_body' => $overrides['fonts.body'] ?? null,
+            ];
+        }
+
+        return [
+            'pages' => $pages,
+            'menus' => $menus,
+            'has_settings' => $hasSettings,
+            'has_theme_overrides' => $hasThemeOverrides,
+            'theme_summary' => $themeSummary,
+        ];
+    }
+
+    /**
+     * Count blocks recursively (including children).
+     *
+     * @param array<int, array<string, mixed>> $blocks
+     */
+    protected function countBlocksRecursive(array $blocks): int
+    {
+        $count = 0;
+        foreach ($blocks as $block) {
+            $count++;
+            if (!empty($block['children'])) {
+                $count += $this->countBlocksRecursive($block['children']);
+            }
+        }
+        return $count;
+    }
+
+    /**
      * Install a full template (pages, posts, menus, media, settings).
+     * Supports selective installation via options.
      *
      * @param string $slug Template slug to install
      * @param int $userId ID of the user performing the install
-     * @param array<string, mixed> $options Installation options
+     * @param array<string, mixed> $options Installation options (pages, install_menus, install_settings, install_theme, overwrite)
      * @return array<string, mixed> Installation report
      *
      * @throws \RuntimeException If the template is not found
@@ -141,6 +225,34 @@ class TemplateService
         ];
 
         $overwrite = $options['overwrite'] ?? false;
+        $selectedPages = $options['pages'] ?? null; // null = all pages
+        $installMenus = $options['install_menus'] ?? true;
+        $installSettings = $options['install_settings'] ?? true;
+        $installTheme = $options['install_theme'] ?? true;
+
+        // Resolve data: inline manifest or external data files
+        $templateData = $this->resolveTemplateData($template, $templatePath);
+
+        // Filter pages if selective install
+        if (is_array($selectedPages)) {
+            $templateData['pages'] = array_filter(
+                $templateData['pages'] ?? [],
+                fn (array $page): bool => in_array(
+                    $page['id'] ?? $page['slug'] ?? '',
+                    $selectedPages,
+                    true,
+                ),
+            );
+            $templateData['pages'] = array_values($templateData['pages']);
+        }
+
+        // Clear menus/settings if not requested
+        if (!$installMenus) {
+            $templateData['menus'] = [];
+        }
+        if (!$installSettings) {
+            $templateData['settings'] = [];
+        }
 
         DB::beginTransaction();
 
@@ -149,22 +261,24 @@ class TemplateService
             $mediaMap = $this->importMedia($templatePath, $report);
 
             // 2. Import taxonomies
-            $this->importTaxonomies($templatePath, $report);
+            $this->importTaxonomiesFromData($templateData['taxonomies'] ?? [], $report);
 
-            // 3. Import pages
-            $this->importPages($templatePath, $userId, $mediaMap, $overwrite, $report);
+            // 3. Import pages (returns id→slug map for menu resolution)
+            $pageIdMap = $this->importPagesFromData($templateData['pages'] ?? [], $userId, $mediaMap, $overwrite, $report);
 
             // 4. Import posts
-            $this->importPosts($templatePath, $userId, $mediaMap, $overwrite, $report);
+            $this->importPostsFromData($templateData['posts'] ?? [], $userId, $mediaMap, $overwrite, $report);
 
             // 5. Import menus
-            $this->importMenus($templatePath, $overwrite, $report);
+            $this->importMenusFromData($templateData['menus'] ?? [], $pageIdMap, $overwrite, $report);
 
             // 6. Apply settings
-            $this->importSettings($templatePath, $overwrite, $report);
+            $this->importSettingsFromData($templateData['settings'] ?? [], $overwrite, $report);
 
-            // 7. Apply theme overrides
-            $this->applyThemeOverrides($templatePath, $template);
+            // 7. Apply theme overrides (only if requested)
+            if ($installTheme) {
+                $this->applyThemeOverrides($templatePath, $template);
+            }
 
             DB::commit();
 
@@ -442,7 +556,328 @@ class TemplateService
     }
 
     // -------------------------------------------------------
-    // Private import helpers
+    // Data resolution (inline manifest vs external files)
+    // -------------------------------------------------------
+
+    /**
+     * Resolve template data from inline manifest or external data files.
+     *
+     * @param array<string, mixed> $template Manifest data
+     * @return array<string, mixed> Resolved data with pages, menus, settings, posts, taxonomies
+     */
+    protected function resolveTemplateData(array $template, string $templatePath): array
+    {
+        $data = [
+            'pages' => [],
+            'menus' => [],
+            'settings' => [],
+            'posts' => [],
+            'taxonomies' => [],
+        ];
+
+        // Check if template uses inline data (pages/menus/settings at root level)
+        $hasInlineData = isset($template['pages']) || isset($template['menus']) || isset($template['settings']);
+
+        if ($hasInlineData) {
+            $data['pages'] = $template['pages'] ?? [];
+            $data['menus'] = $template['menus'] ?? [];
+            $data['settings'] = $template['settings'] ?? [];
+            $data['posts'] = $template['posts'] ?? [];
+            $data['taxonomies'] = $template['taxonomies'] ?? [];
+        } else {
+            // Load from external data files
+            $dataFiles = $template['data_files'] ?? [];
+
+            foreach (['pages', 'menus', 'settings', 'posts', 'taxonomies'] as $type) {
+                $file = $templatePath . '/' . ($dataFiles[$type] ?? "data/{$type}.json");
+                if (File::exists($file)) {
+                    $data[$type] = json_decode(File::get($file), true) ?? [];
+                }
+            }
+        }
+
+        return $data;
+    }
+
+    // -------------------------------------------------------
+    // Data-driven import methods
+    // -------------------------------------------------------
+
+    /**
+     * Import pages from resolved data array.
+     *
+     * @param array<int, array<string, mixed>> $pages
+     * @param array<string, mixed> $mediaMap
+     * @return array<string, string> Map of template page id => created slug
+     */
+    protected function importPagesFromData(
+        array $pages,
+        int $userId,
+        array $mediaMap,
+        bool $overwrite,
+        array &$report,
+    ): array {
+        $pageIdMap = [];
+
+        foreach ($pages as $pageData) {
+            $slug = $pageData['slug'] ?? Str::slug($pageData['title']);
+            $templateId = $pageData['id'] ?? $slug;
+
+            // Use withTrashed() because the DB unique constraint includes soft-deleted rows
+            $existingPage = Page::withTrashed()->where('slug', $slug)->first();
+
+            if ($existingPage !== null && !$overwrite) {
+                // Still record the mapping for menu resolution
+                $pageIdMap[$templateId] = $slug;
+                $report['skipped'][] = [
+                    'type' => 'page',
+                    'slug' => $slug,
+                    'reason' => 'Page existante (slug duplique)',
+                ];
+                continue;
+            }
+
+            $content = $this->replaceMediaReferences($pageData['content'] ?? [], $mediaMap);
+
+            $attributes = [
+                'title' => $pageData['title'],
+                'slug' => $slug,
+                'content' => $content,
+                'status' => $pageData['status'] ?? 'published',
+                'template' => $pageData['template'] ?? 'default',
+                'meta_title' => $pageData['meta_title'] ?? $pageData['title'],
+                'meta_description' => $pageData['meta_description'] ?? null,
+                'order' => $pageData['order'] ?? 0,
+                'created_by' => $userId,
+                'published_at' => now(),
+            ];
+
+            if ($existingPage !== null && $overwrite) {
+                // Restore if soft-deleted, then update
+                if ($existingPage->trashed()) {
+                    $existingPage->restore();
+                }
+                $existingPage->update($attributes);
+                $pageIdMap[$templateId] = $slug;
+            } else {
+                $attributes['slug'] = $this->ensureUniqueSlug($slug, Page::class);
+                Page::create($attributes);
+                $pageIdMap[$templateId] = $attributes['slug'];
+            }
+
+            if ($pageData['is_homepage'] ?? false) {
+                Setting::set('homepage_id', (string) Page::where('slug', $pageIdMap[$templateId])->value('id'));
+            }
+
+            $report['pages_created']++;
+        }
+
+        return $pageIdMap;
+    }
+
+    /**
+     * Import menus from resolved data array.
+     *
+     * @param array<int, array<string, mixed>> $menus
+     * @param array<string, string> $pageIdMap Map of template page id => slug
+     */
+    protected function importMenusFromData(
+        array $menus,
+        array $pageIdMap,
+        bool $overwrite,
+        array &$report,
+    ): void {
+        foreach ($menus as $menuData) {
+            $location = $menuData['location'] ?? 'header';
+            $existingMenu = Menu::where('location', $location)->first();
+
+            if ($existingMenu !== null) {
+                // Always replace menu items when install_menus is true
+                $existingMenu->items()->delete();
+                $menu = $existingMenu;
+                $menu->update(['name' => $menuData['name']]);
+            } else {
+                $menu = Menu::create([
+                    'name' => $menuData['name'],
+                    'slug' => Str::slug($menuData['name']),
+                    'location' => $location,
+                ]);
+            }
+
+            $this->createMenuItemsFromData($menu, $menuData['items'] ?? [], $pageIdMap, null);
+            $report['menus_created']++;
+        }
+    }
+
+    /**
+     * Recursively create menu items, resolving page_id references.
+     *
+     * @param array<int, array<string, mixed>> $items
+     * @param array<string, string> $pageIdMap
+     */
+    protected function createMenuItemsFromData(Menu $menu, array $items, array $pageIdMap, ?int $parentId): void
+    {
+        foreach ($items as $index => $itemData) {
+            $url = $itemData['url'] ?? '#';
+            $linkableId = null;
+            $linkableType = null;
+
+            // Resolve page_id (inline manifest format) or page_slug (data file format)
+            $pageRef = $itemData['page_id'] ?? $itemData['page_slug'] ?? null;
+            if ($pageRef !== null) {
+                // page_id maps to a template id → resolve to slug
+                $pageSlug = $pageIdMap[$pageRef] ?? $pageRef;
+                $page = Page::where('slug', $pageSlug)->first();
+                if ($page !== null) {
+                    $linkableId = $page->id;
+                    $linkableType = Page::class;
+                    $url = '/' . $page->slug;
+                }
+            }
+
+            $menuItem = MenuItem::create([
+                'menu_id' => $menu->id,
+                'parent_id' => $parentId,
+                'label' => $itemData['label'] ?? $itemData['title'] ?? '',
+                'type' => $linkableType !== null ? 'page' : 'url',
+                'url' => $url,
+                'linkable_id' => $linkableId,
+                'linkable_type' => $linkableType,
+                'target' => $itemData['target'] ?? '_self',
+                'order' => $itemData['order'] ?? $index,
+            ]);
+
+            if (!empty($itemData['children'])) {
+                $this->createMenuItemsFromData($menu, $itemData['children'], $pageIdMap, $menuItem->id);
+            }
+        }
+    }
+
+    /**
+     * Import settings from resolved data.
+     *
+     * @param array<string, mixed> $settings
+     */
+    protected function importSettingsFromData(array $settings, bool $overwrite, array &$report): void
+    {
+        foreach ($settings as $key => $value) {
+            if (is_array($value)) {
+                // Grouped: { "general": { "site_name": "..." } }
+                foreach ($value as $subKey => $subValue) {
+                    $fullKey = $key . '.' . $subKey;
+                    $existing = Setting::where('group', $key)->where('key', $subKey)->first();
+                    if ($existing !== null && !$overwrite) {
+                        continue;
+                    }
+                    Setting::set($fullKey, $subValue);
+                    $report['settings_applied']++;
+                }
+            } else {
+                // Flat with dot: "site.name" => "value"
+                if (str_contains($key, '.')) {
+                    [$group, $settingKey] = explode('.', $key, 2);
+                    $existing = Setting::where('group', $group)->where('key', $settingKey)->first();
+                } else {
+                    $existing = Setting::where('key', $key)->first();
+                }
+                if ($existing !== null && !$overwrite) {
+                    continue;
+                }
+                Setting::set($key, $value);
+                $report['settings_applied']++;
+            }
+        }
+    }
+
+    /**
+     * Import posts from resolved data.
+     *
+     * @param array<int, array<string, mixed>> $posts
+     * @param array<string, mixed> $mediaMap
+     */
+    protected function importPostsFromData(
+        array $posts,
+        int $userId,
+        array $mediaMap,
+        bool $overwrite,
+        array &$report,
+    ): void {
+        foreach ($posts as $postData) {
+            $slug = $postData['slug'] ?? Str::slug($postData['title']);
+            $existingPost = Post::withTrashed()->where('slug', $slug)->first();
+
+            if ($existingPost !== null && !$overwrite) {
+                $report['skipped'][] = ['type' => 'post', 'slug' => $slug, 'reason' => 'Article existant'];
+                continue;
+            }
+
+            $content = $this->replaceMediaReferences($postData['content'] ?? [], $mediaMap);
+            $featuredImage = isset($postData['featured_image'])
+                ? ($mediaMap[$postData['featured_image']] ?? $postData['featured_image'])
+                : null;
+
+            $attributes = [
+                'title' => $postData['title'],
+                'slug' => $slug,
+                'content' => $content,
+                'excerpt' => $postData['excerpt'] ?? null,
+                'status' => $postData['status'] ?? 'published',
+                'featured_image' => $featuredImage,
+                'created_by' => $userId,
+                'published_at' => now()->subDays(rand(1, 30)),
+            ];
+
+            if ($existingPost !== null && $overwrite) {
+                if ($existingPost->trashed()) {
+                    $existingPost->restore();
+                }
+                $existingPost->update($attributes);
+            } else {
+                $attributes['slug'] = $this->ensureUniqueSlug($slug, Post::class);
+                $post = Post::create($attributes);
+            }
+
+            if (isset($postData['taxonomies'])) {
+                $this->attachTaxonomies($existingPost ?? $post ?? null, $postData['taxonomies']);
+            }
+
+            $report['posts_created']++;
+        }
+    }
+
+    /**
+     * Import taxonomies from resolved data.
+     *
+     * @param array<int, array<string, mixed>> $taxonomies
+     */
+    protected function importTaxonomiesFromData(array $taxonomies, array &$report): void
+    {
+        foreach ($taxonomies as $taxonomyData) {
+            $taxonomy = Taxonomy::firstOrCreate(
+                ['slug' => $taxonomyData['slug']],
+                [
+                    'name' => $taxonomyData['name'],
+                    'type' => $taxonomyData['type'] ?? 'category',
+                    'description' => $taxonomyData['description'] ?? null,
+                ],
+            );
+
+            foreach ($taxonomyData['terms'] ?? [] as $termData) {
+                TaxonomyTerm::firstOrCreate(
+                    ['taxonomy_id' => $taxonomy->id, 'slug' => $termData['slug']],
+                    [
+                        'name' => $termData['name'],
+                        'description' => $termData['description'] ?? null,
+                        'order' => $termData['order'] ?? 0,
+                    ],
+                );
+                $report['taxonomies_created']++;
+            }
+        }
+    }
+
+    // -------------------------------------------------------
+    // Legacy file-based import helpers (kept for backward compat)
     // -------------------------------------------------------
 
     /**
@@ -886,7 +1321,15 @@ class TemplateService
         $originalSlug = $slug;
         $counter = 1;
 
-        while ($modelClass::where('slug', $slug)->exists()) {
+        // Use withTrashed() if the model supports SoftDeletes,
+        // because the DB unique constraint includes soft-deleted rows
+        $usesTrashed = method_exists($modelClass, 'withTrashed');
+
+        while (true) {
+            $query = $usesTrashed ? $modelClass::withTrashed() : $modelClass::query();
+            if (!$query->where('slug', $slug)->exists()) {
+                break;
+            }
             $slug = $originalSlug . '-' . $counter;
             $counter++;
         }

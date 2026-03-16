@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Services\TemplateService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -55,20 +56,46 @@ class TemplateController extends Controller
     }
 
     /**
-     * Install a template.
+     * Get template details (pages, menus, settings, theme) for selective install modal.
+     * GET /admin/templates/{slug}/pages
+     */
+    public function pages(string $slug): JsonResponse
+    {
+        $details = $this->templateService->getTemplateDetails($slug);
+
+        if ($details === null) {
+            abort(404);
+        }
+
+        return response()->json($details);
+    }
+
+    /**
+     * Install a template with selective options.
      * POST /admin/templates/{slug}/install
      */
     public function install(Request $request, string $slug): RedirectResponse
     {
         $validated = $request->validate([
             'overwrite' => ['sometimes', 'boolean'],
+            'pages' => ['sometimes', 'array'],
+            'pages.*' => ['string'],
+            'install_menus' => ['sometimes', 'boolean'],
+            'install_settings' => ['sometimes', 'boolean'],
+            'install_theme' => ['sometimes', 'boolean'],
         ]);
 
         try {
             $report = $this->templateService->install(
                 $slug,
                 (int) $request->user()->id,
-                ['overwrite' => $validated['overwrite'] ?? false],
+                [
+                    'overwrite' => $validated['overwrite'] ?? false,
+                    'pages' => $validated['pages'] ?? null,
+                    'install_menus' => $validated['install_menus'] ?? true,
+                    'install_settings' => $validated['install_settings'] ?? true,
+                    'install_theme' => $validated['install_theme'] ?? true,
+                ],
             );
 
             return redirect()

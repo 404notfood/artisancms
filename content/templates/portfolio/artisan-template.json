@@ -3,7 +3,7 @@
     "slug": "portfolio",
     "version": "1.0.0",
     "category": "portfolio",
-    "description": "Template portfolio créatif pour freelances et artistes.",
+    "description": "Template portfolio creatif pour freelances et artistes.",
     "author": "ArtisanCMS",
     "pages": [
         {
@@ -11,19 +11,140 @@
             "title": "Accueil",
             "slug": "accueil",
             "template": "home",
-            "meta_title": "Portfolio créatif",
-            "meta_description": "Designer & développeur freelance.",
+            "is_homepage": true,
+            "meta_title": "Portfolio - Designer & Developpeur Freelance",
+            "meta_description": "Designer et developpeur freelance. Decouvrez mes projets et competences.",
             "content": {
                 "blocks": [
                     {
-                        "type": "hero-section",
-                        "id": "hero-1",
+                        "type": "hero",
+                        "id": "pf-home-hero",
                         "props": {
-                            "title": "Bonjour, je suis [Votre nom]",
-                            "subtitle": "Designer & Développeur Freelance. Je crée des expériences digitales uniques.",
-                            "button_text": "Voir mon travail",
-                            "button_url": "/projets"
+                            "title": "Bonjour, je suis Alex Durand",
+                            "subtitle": "Designer & Developpeur Freelance. Je cree des experiences digitales uniques qui allient esthetique et performance.",
+                            "overlay": true,
+                            "ctaText": "Voir mes projets"
                         }
+                    },
+                    {
+                        "type": "section",
+                        "id": "pf-home-projects",
+                        "props": { "backgroundColor": "#ffffff", "paddingTop": 80, "paddingBottom": 60, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "heading",
+                                "id": "pf-home-projects-title",
+                                "props": { "text": "Projets recents", "level": 2, "alignment": "center", "color": "#1e293b" }
+                            },
+                            {
+                                "type": "text",
+                                "id": "pf-home-projects-sub",
+                                "props": { "content": "<p style='text-align:center;color:#64748b;max-width:500px;margin:0 auto'>Une selection de mes dernieres realisations.</p>" }
+                            },
+                            {
+                                "type": "spacer",
+                                "id": "pf-home-sp1",
+                                "props": { "height": 40 }
+                            },
+                            {
+                                "type": "grid",
+                                "id": "pf-home-projects-grid",
+                                "props": { "columns": 2, "gap": 32 },
+                                "children": [
+                                    {
+                                        "type": "text",
+                                        "id": "pf-home-proj1",
+                                        "props": { "content": "<p style='color:#7c3aed;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px'>Branding & Web</p><h3 style='color:#1e293b;margin-bottom:8px'>Atelier Lumiere</h3><p style='color:#64748b'>Identite visuelle complete et site vitrine pour un studio de photographie parisien. Direction artistique, logo, papeterie et site responsive.</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "pf-home-proj2",
+                                        "props": { "content": "<p style='color:#7c3aed;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px'>Application Web</p><h3 style='color:#1e293b;margin-bottom:8px'>TaskFlow Pro</h3><p style='color:#64748b'>Application SaaS de gestion de projets. Design UX/UI, prototypage et developpement frontend React avec un systeme de kanban drag & drop.</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "pf-home-proj3",
+                                        "props": { "content": "<p style='color:#7c3aed;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px'>E-commerce</p><h3 style='color:#1e293b;margin-bottom:8px'>Maison Verdure</h3><p style='color:#64748b'>Boutique en ligne de plantes d'interieur. Design epure, experience d'achat fluide et integration Stripe pour les paiements.</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "pf-home-proj4",
+                                        "props": { "content": "<p style='color:#7c3aed;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px'>Landing Page</p><h3 style='color:#1e293b;margin-bottom:8px'>CryptoVault</h3><p style='color:#64748b'>Landing page pour une startup fintech. Animations GSAP, design futuriste et optimisation des conversions avec A/B testing.</p>" }
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "section",
+                        "id": "pf-home-skills",
+                        "props": { "backgroundColor": "#f5f3ff", "paddingTop": 60, "paddingBottom": 60, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "heading",
+                                "id": "pf-home-skills-title",
+                                "props": { "text": "Competences", "level": 2, "alignment": "center", "color": "#1e293b" }
+                            },
+                            {
+                                "type": "spacer",
+                                "id": "pf-home-sp2",
+                                "props": { "height": 32 }
+                            },
+                            {
+                                "type": "grid",
+                                "id": "pf-home-skills-grid",
+                                "props": { "columns": 4, "gap": 24 },
+                                "children": [
+                                    {
+                                        "type": "text",
+                                        "id": "pf-home-skill1",
+                                        "props": { "content": "<h4 style='color:#7c3aed;text-align:center;margin-bottom:8px'>Design UI/UX</h4><p style='color:#64748b;text-align:center;font-size:0.875rem'>Figma, Adobe XD, prototypage, recherche utilisateur</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "pf-home-skill2",
+                                        "props": { "content": "<h4 style='color:#7c3aed;text-align:center;margin-bottom:8px'>Frontend</h4><p style='color:#64748b;text-align:center;font-size:0.875rem'>React, TypeScript, Tailwind CSS, Next.js</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "pf-home-skill3",
+                                        "props": { "content": "<h4 style='color:#7c3aed;text-align:center;margin-bottom:8px'>Backend</h4><p style='color:#64748b;text-align:center;font-size:0.875rem'>Laravel, Node.js, API REST, bases de donnees</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "pf-home-skill4",
+                                        "props": { "content": "<h4 style='color:#7c3aed;text-align:center;margin-bottom:8px'>Branding</h4><p style='color:#64748b;text-align:center;font-size:0.875rem'>Identite visuelle, direction artistique, motion design</p>" }
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "section",
+                        "id": "pf-home-cta",
+                        "props": { "backgroundColor": "#7c3aed", "paddingTop": 60, "paddingBottom": 60, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "heading",
+                                "id": "pf-home-cta-title",
+                                "props": { "text": "Un projet en tete ?", "level": 2, "alignment": "center", "color": "#ffffff" }
+                            },
+                            {
+                                "type": "text",
+                                "id": "pf-home-cta-text",
+                                "props": { "content": "<p style='text-align:center;color:#e9d5ff;max-width:500px;margin:0 auto'>Je suis disponible pour de nouveaux projets. Parlons de vos idees et donnons-leur vie ensemble.</p>" }
+                            },
+                            {
+                                "type": "spacer",
+                                "id": "pf-home-sp3",
+                                "props": { "height": 24 }
+                            },
+                            {
+                                "type": "button",
+                                "id": "pf-home-cta-btn",
+                                "props": { "text": "Me contacter", "variant": "secondary", "size": "lg" }
+                            }
+                        ]
                     }
                 ]
             }
@@ -33,35 +154,204 @@
             "title": "Projets",
             "slug": "projets",
             "template": "default",
-            "meta_title": "Mes projets",
-            "meta_description": "Découvrez mes créations et réalisations.",
+            "meta_title": "Mes projets - Portfolio",
+            "meta_description": "Decouvrez mes creations : branding, sites web, applications et plus encore.",
             "content": {
                 "blocks": [
                     {
-                        "type": "text-block",
-                        "id": "projects-1",
+                        "type": "hero",
+                        "id": "pf-proj-hero",
                         "props": {
-                            "content": "<h1>Mes projets</h1><p>Voici une sélection de mes travaux récents.</p>"
+                            "title": "Mes projets",
+                            "subtitle": "Chaque projet est une aventure. Voici une selection de mes realisations les plus marquantes.",
+                            "overlay": true
                         }
+                    },
+                    {
+                        "type": "section",
+                        "id": "pf-proj-list",
+                        "props": { "backgroundColor": "#ffffff", "paddingTop": 80, "paddingBottom": 80, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "grid",
+                                "id": "pf-proj-grid",
+                                "props": { "columns": 2, "gap": 40 },
+                                "children": [
+                                    {
+                                        "type": "text",
+                                        "id": "pf-proj-p1",
+                                        "props": { "content": "<p style='color:#7c3aed;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px'>Branding & Web</p><h3 style='color:#1e293b;margin-bottom:8px'>Atelier Lumiere</h3><p style='color:#64748b;margin-bottom:12px'>Identite visuelle complete et site vitrine pour un studio de photographie. Logo, papeterie, site responsive et strategie de contenu sur Instagram.</p><p style='color:#94a3b8;font-size:0.875rem'>Figma, React, Tailwind CSS, Framer Motion</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "pf-proj-p2",
+                                        "props": { "content": "<p style='color:#7c3aed;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px'>Application Web</p><h3 style='color:#1e293b;margin-bottom:8px'>TaskFlow Pro</h3><p style='color:#64748b;margin-bottom:12px'>Application SaaS de gestion de projets avec kanban, timeline, rapports et collaboration en temps reel. 5000+ utilisateurs actifs.</p><p style='color:#94a3b8;font-size:0.875rem'>React, TypeScript, dnd-kit, WebSockets, PostgreSQL</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "pf-proj-p3",
+                                        "props": { "content": "<p style='color:#7c3aed;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px'>E-commerce</p><h3 style='color:#1e293b;margin-bottom:8px'>Maison Verdure</h3><p style='color:#64748b;margin-bottom:12px'>Boutique en ligne de plantes d'interieur avec systeme d'abonnement mensuel. +120% de CA en 6 mois apres refonte.</p><p style='color:#94a3b8;font-size:0.875rem'>Next.js, Stripe, Prisma, Tailwind CSS</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "pf-proj-p4",
+                                        "props": { "content": "<p style='color:#7c3aed;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px'>Landing Page</p><h3 style='color:#1e293b;margin-bottom:8px'>CryptoVault</h3><p style='color:#64748b;margin-bottom:12px'>Landing page haute conversion pour une startup fintech. Animations cinematographiques et copywriting persuasif. Taux de conversion 8.5%.</p><p style='color:#94a3b8;font-size:0.875rem'>GSAP, Three.js, Vite, Analytics</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "pf-proj-p5",
+                                        "props": { "content": "<p style='color:#7c3aed;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px'>Application Mobile</p><h3 style='color:#1e293b;margin-bottom:8px'>FitCoach</h3><p style='color:#64748b;margin-bottom:12px'>Application de coaching sportif personnalise avec programmes adaptatifs, suivi de progression et communaute integree.</p><p style='color:#94a3b8;font-size:0.875rem'>React Native, Firebase, Chart.js, Push Notifications</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "pf-proj-p6",
+                                        "props": { "content": "<p style='color:#7c3aed;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px'>Design System</p><h3 style='color:#1e293b;margin-bottom:8px'>NexaUI</h3><p style='color:#64748b;margin-bottom:12px'>Design system complet pour une scale-up tech. 80+ composants, tokens, documentation interactive et plugins Figma.</p><p style='color:#94a3b8;font-size:0.875rem'>Figma, Storybook, React, CSS Variables</p>" }
+                                    }
+                                ]
+                            }
+                        ]
                     }
                 ]
             }
         },
         {
             "id": "about",
-            "title": "À propos",
+            "title": "A propos",
             "slug": "a-propos",
             "template": "default",
-            "meta_title": "À propos de moi",
-            "meta_description": "Mon parcours et mes compétences.",
+            "meta_title": "A propos de moi - Portfolio",
+            "meta_description": "Mon parcours, mes competences et ma philosophie de travail.",
             "content": {
                 "blocks": [
                     {
-                        "type": "text-block",
-                        "id": "about-1",
+                        "type": "hero",
+                        "id": "pf-about-hero",
                         "props": {
-                            "content": "<h1>À propos de moi</h1><p>Passionné par le design et le code, je crée des solutions digitales sur mesure.</p><h2>Compétences</h2><p>Design UI/UX, HTML/CSS, JavaScript, React, PHP, Laravel.</p>"
+                            "title": "A propos de moi",
+                            "subtitle": "Passionne par le design et le code depuis toujours.",
+                            "overlay": true
                         }
+                    },
+                    {
+                        "type": "section",
+                        "id": "pf-about-bio",
+                        "props": { "backgroundColor": "#ffffff", "paddingTop": 80, "paddingBottom": 60, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "heading",
+                                "id": "pf-about-bio-title",
+                                "props": { "text": "Mon parcours", "level": 2, "color": "#1e293b" }
+                            },
+                            {
+                                "type": "spacer",
+                                "id": "pf-about-sp1",
+                                "props": { "height": 16 }
+                            },
+                            {
+                                "type": "text",
+                                "id": "pf-about-bio-text",
+                                "props": { "content": "<p style='color:#475569;font-size:1.1rem;line-height:1.8'>Je m'appelle Alex Durand, designer et developpeur freelance base a Lyon. Apres une formation en design graphique et un master en interaction design, j'ai travaille 5 ans en agence avant de me lancer en independant.</p><p style='color:#475569;font-size:1.1rem;line-height:1.8;margin-top:16px'>Ma force : une double competence design et developpement qui me permet de concevoir et realiser des projets de bout en bout, sans friction entre les etapes. Je pense en composants, je designe en systemes et je code avec soin.</p>" }
+                            }
+                        ]
+                    },
+                    {
+                        "type": "section",
+                        "id": "pf-about-exp",
+                        "props": { "backgroundColor": "#f5f3ff", "paddingTop": 60, "paddingBottom": 60, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "heading",
+                                "id": "pf-about-exp-title",
+                                "props": { "text": "Experience", "level": 2, "color": "#1e293b" }
+                            },
+                            {
+                                "type": "spacer",
+                                "id": "pf-about-sp2",
+                                "props": { "height": 24 }
+                            },
+                            {
+                                "type": "text",
+                                "id": "pf-about-exp-text",
+                                "props": { "content": "<p style='color:#475569;margin-bottom:20px'><strong style='color:#1e293b'>Freelance — Designer & Developpeur</strong><br/><span style='color:#7c3aed'>2021 - Aujourd'hui</span><br/>Projets web et mobile pour startups, PME et grands comptes. Plus de 40 projets livres.</p><p style='color:#475569;margin-bottom:20px'><strong style='color:#1e293b'>Agence Digitale Pixelcraft — Lead Designer</strong><br/><span style='color:#7c3aed'>2018 - 2021</span><br/>Direction artistique, management d'equipe design (4 personnes), mise en place du design system.</p><p style='color:#475569'><strong style='color:#1e293b'>Studio Web Neon — Designer & Integrateur</strong><br/><span style='color:#7c3aed'>2016 - 2018</span><br/>Design d'interfaces, integration frontend et collaboration avec les equipes back-end.</p>" }
+                            }
+                        ]
+                    },
+                    {
+                        "type": "section",
+                        "id": "pf-about-formation",
+                        "props": { "backgroundColor": "#ffffff", "paddingTop": 60, "paddingBottom": 80, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "heading",
+                                "id": "pf-about-formation-title",
+                                "props": { "text": "Formation", "level": 2, "color": "#1e293b" }
+                            },
+                            {
+                                "type": "spacer",
+                                "id": "pf-about-sp3",
+                                "props": { "height": 24 }
+                            },
+                            {
+                                "type": "text",
+                                "id": "pf-about-formation-text",
+                                "props": { "content": "<p style='color:#475569;margin-bottom:20px'><strong style='color:#1e293b'>Master Interaction Design</strong><br/><span style='color:#7c3aed'>Ecole de Design Nantes, 2016</span><br/>Conception d'interfaces, ergonomie cognitive, design de services et prototypage.</p><p style='color:#475569'><strong style='color:#1e293b'>Licence Design Graphique</strong><br/><span style='color:#7c3aed'>Universite Lyon 2, 2014</span><br/>Typographie, composition, identite visuelle et histoire de l'art.</p>" }
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": "services",
+            "title": "Services",
+            "slug": "services",
+            "template": "default",
+            "meta_title": "Mes services - Portfolio",
+            "meta_description": "Design UX/UI, developpement web, branding et consulting : decouvrez mes prestations.",
+            "content": {
+                "blocks": [
+                    {
+                        "type": "hero",
+                        "id": "pf-svc-hero",
+                        "props": {
+                            "title": "Mes services",
+                            "subtitle": "Des prestations sur mesure pour donner vie a vos projets digitaux.",
+                            "overlay": true
+                        }
+                    },
+                    {
+                        "type": "section",
+                        "id": "pf-svc-list",
+                        "props": { "backgroundColor": "#ffffff", "paddingTop": 80, "paddingBottom": 80, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "grid",
+                                "id": "pf-svc-grid",
+                                "props": { "columns": 2, "gap": 40 },
+                                "children": [
+                                    {
+                                        "type": "text",
+                                        "id": "pf-svc-s1",
+                                        "props": { "content": "<h3 style='color:#7c3aed;margin-bottom:12px'>Design UX/UI</h3><p style='color:#64748b;margin-bottom:12px'>Conception d'interfaces utilisateur intuitives et esthetiques. De la recherche utilisateur aux maquettes haute fidelite, en passant par les tests d'utilisabilite.</p><p style='color:#94a3b8;font-size:0.875rem'>A partir de 2 500 &euro;</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "pf-svc-s2",
+                                        "props": { "content": "<h3 style='color:#7c3aed;margin-bottom:12px'>Developpement Frontend</h3><p style='color:#64748b;margin-bottom:12px'>Integration pixel-perfect de vos maquettes avec les technologies les plus modernes. Code propre, performant et accessible.</p><p style='color:#94a3b8;font-size:0.875rem'>A partir de 3 000 &euro;</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "pf-svc-s3",
+                                        "props": { "content": "<h3 style='color:#7c3aed;margin-bottom:12px'>Identite Visuelle</h3><p style='color:#64748b;margin-bottom:12px'>Creation de logos, chartes graphiques et supports de communication. Une identite forte et coherente pour votre marque.</p><p style='color:#94a3b8;font-size:0.875rem'>A partir de 1 500 &euro;</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "pf-svc-s4",
+                                        "props": { "content": "<h3 style='color:#7c3aed;margin-bottom:12px'>Consulting & Audit</h3><p style='color:#64748b;margin-bottom:12px'>Audit UX de votre produit existant, recommandations strategiques et accompagnement de vos equipes pour monter en competence.</p><p style='color:#94a3b8;font-size:0.875rem'>A partir de 800 &euro; / jour</p>" }
+                                    }
+                                ]
+                            }
+                        ]
                     }
                 ]
             }
@@ -71,16 +361,42 @@
             "title": "Contact",
             "slug": "contact",
             "template": "default",
-            "meta_title": "Me contacter",
-            "meta_description": "Démarrons votre projet ensemble.",
+            "meta_title": "Me contacter - Portfolio",
+            "meta_description": "Demarrons votre projet ensemble. Contactez-moi pour un devis gratuit.",
             "content": {
                 "blocks": [
                     {
-                        "type": "text-block",
-                        "id": "contact-1",
+                        "type": "hero",
+                        "id": "pf-contact-hero",
                         "props": {
-                            "content": "<h1>Travaillons ensemble</h1><p>Vous avez un projet ? Contactez-moi pour en discuter.</p>"
+                            "title": "Travaillons ensemble",
+                            "subtitle": "Vous avez un projet ? Parlons-en autour d'un cafe (ou en visio).",
+                            "overlay": true
                         }
+                    },
+                    {
+                        "type": "section",
+                        "id": "pf-contact-info",
+                        "props": { "backgroundColor": "#ffffff", "paddingTop": 80, "paddingBottom": 80, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "grid",
+                                "id": "pf-contact-grid",
+                                "props": { "columns": 2, "gap": 48 },
+                                "children": [
+                                    {
+                                        "type": "text",
+                                        "id": "pf-contact-details",
+                                        "props": { "content": "<h2 style='color:#1e293b;margin-bottom:24px'>Coordonnees</h2><p style='color:#475569;margin-bottom:16px'><strong>Email</strong><br/>alex@alexdurand.design</p><p style='color:#475569;margin-bottom:16px'><strong>Telephone</strong><br/>06 12 34 56 78</p><p style='color:#475569;margin-bottom:16px'><strong>Localisation</strong><br/>Lyon, France<br/><em>Disponible en remote partout en France</em></p><p style='color:#475569'><strong>Reseaux</strong><br/>Dribbble : dribbble.com/alexdurand<br/>GitHub : github.com/alexdurand<br/>LinkedIn : linkedin.com/in/alexdurand</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "pf-contact-process",
+                                        "props": { "content": "<h2 style='color:#1e293b;margin-bottom:24px'>Comment ca se passe ?</h2><p style='color:#475569;margin-bottom:16px'><strong style='color:#7c3aed'>1. Premier contact</strong><br/>Decrivez-moi votre projet par email. Je vous reponds sous 24h pour planifier un appel.</p><p style='color:#475569;margin-bottom:16px'><strong style='color:#7c3aed'>2. Decouverte</strong><br/>On echange sur vos besoins, votre budget et vos delais. Je vous envoie un devis detaille gratuit.</p><p style='color:#475569;margin-bottom:16px'><strong style='color:#7c3aed'>3. Collaboration</strong><br/>On avance ensemble avec des points reguliers. Vous validez chaque etape avant de passer a la suivante.</p><p style='color:#475569'><strong style='color:#7c3aed'>4. Livraison</strong><br/>Je vous livre le projet final avec documentation et formation si necessaire.</p>" }
+                                    }
+                                ]
+                            }
+                        ]
                     }
                 ]
             }
@@ -94,13 +410,14 @@
             "items": [
                 {"label": "Accueil", "page_id": "home", "order": 1},
                 {"label": "Projets", "page_id": "projects", "order": 2},
-                {"label": "À propos", "page_id": "about", "order": 3},
-                {"label": "Contact", "page_id": "contact", "order": 4}
+                {"label": "Services", "page_id": "services", "order": 3},
+                {"label": "A propos", "page_id": "about", "order": 4},
+                {"label": "Contact", "page_id": "contact", "order": 5}
             ]
         }
     ],
     "settings": {
-        "site.name": "Mon Portfolio",
-        "site.description": "Designer & Développeur Freelance"
+        "site.name": "Alex Durand",
+        "site.description": "Designer & Developpeur Freelance"
     }
 }

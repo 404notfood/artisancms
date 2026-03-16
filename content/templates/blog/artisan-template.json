@@ -3,7 +3,7 @@
     "slug": "blog",
     "version": "1.0.0",
     "category": "blog",
-    "description": "Template blog avec page d'accueil, liste des articles et page À propos.",
+    "description": "Template blog avec page d'accueil, articles et page A propos.",
     "author": "ArtisanCMS",
     "pages": [
         {
@@ -11,45 +11,207 @@
             "title": "Accueil",
             "slug": "accueil",
             "template": "home",
-            "meta_title": "Bienvenue sur notre blog",
-            "meta_description": "Découvrez nos derniers articles et actualités.",
+            "is_homepage": true,
+            "meta_title": "Mon Blog - Reflexions et decouvertes",
+            "meta_description": "Decouvrez nos derniers articles sur le developpement web, le design et la tech.",
             "content": {
                 "blocks": [
                     {
-                        "type": "hero-section",
-                        "id": "hero-1",
+                        "type": "hero",
+                        "id": "blog-home-hero",
                         "props": {
-                            "title": "Bienvenue sur notre blog",
-                            "subtitle": "Des articles passionnants sur des sujets qui vous intéressent.",
-                            "button_text": "Lire les articles",
-                            "button_url": "/blog"
+                            "title": "Reflexions, tutoriels et decouvertes",
+                            "subtitle": "Un espace de partage sur le developpement web, le design et les technologies qui faconnent le numerique.",
+                            "overlay": true,
+                            "ctaText": "Lire les articles"
                         }
                     },
                     {
-                        "type": "text-block",
-                        "id": "intro-1",
-                        "props": {
-                            "content": "<p>Bienvenue sur notre espace de partage. Retrouvez ici nos réflexions, tutoriels et actualités.</p>"
-                        }
+                        "type": "section",
+                        "id": "blog-home-recent",
+                        "props": { "backgroundColor": "#ffffff", "paddingTop": 80, "paddingBottom": 60, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "heading",
+                                "id": "blog-home-recent-title",
+                                "props": { "text": "Articles recents", "level": 2, "alignment": "center", "color": "#1e293b" }
+                            },
+                            {
+                                "type": "text",
+                                "id": "blog-home-recent-sub",
+                                "props": { "content": "<p style='text-align:center;color:#64748b;max-width:500px;margin:0 auto'>Les dernieres publications a ne pas manquer.</p>" }
+                            },
+                            {
+                                "type": "spacer",
+                                "id": "blog-home-sp1",
+                                "props": { "height": 40 }
+                            },
+                            {
+                                "type": "grid",
+                                "id": "blog-home-articles",
+                                "props": { "columns": 2, "gap": 32 },
+                                "children": [
+                                    {
+                                        "type": "text",
+                                        "id": "blog-home-art1",
+                                        "props": { "content": "<p style='color:#059669;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px'>Developpement</p><h3 style='color:#1e293b;margin-bottom:8px'>Les nouveautes de React 19 qui changent tout</h3><p style='color:#64748b;margin-bottom:12px'>React 19 introduit les Server Components, les Actions et un nouveau compilateur. Tour d'horizon des fonctionnalites qui vont transformer notre facon de developper.</p><p style='color:#94a3b8;font-size:0.875rem'>15 mars 2026 &middot; 8 min de lecture</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "blog-home-art2",
+                                        "props": { "content": "<p style='color:#059669;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px'>Design</p><h3 style='color:#1e293b;margin-bottom:8px'>Guide complet du design system en 2026</h3><p style='color:#64748b;margin-bottom:12px'>Comment construire un design system coherent et evolutif pour votre equipe. Tokens, composants, documentation et gouvernance.</p><p style='color:#94a3b8;font-size:0.875rem'>12 mars 2026 &middot; 12 min de lecture</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "blog-home-art3",
+                                        "props": { "content": "<p style='color:#059669;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px'>Performance</p><h3 style='color:#1e293b;margin-bottom:8px'>Optimiser les Core Web Vitals de A a Z</h3><p style='color:#64748b;margin-bottom:12px'>LCP, INP, CLS : comprendre et ameliorer les metriques de performance qui comptent pour Google et vos utilisateurs.</p><p style='color:#94a3b8;font-size:0.875rem'>8 mars 2026 &middot; 10 min de lecture</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "blog-home-art4",
+                                        "props": { "content": "<p style='color:#059669;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px'>Tutoriel</p><h3 style='color:#1e293b;margin-bottom:8px'>Creer une API REST avec Laravel et Sanctum</h3><p style='color:#64748b;margin-bottom:12px'>Pas a pas pour construire une API RESTful securisee avec Laravel, Sanctum et les bonnes pratiques d'architecture.</p><p style='color:#94a3b8;font-size:0.875rem'>5 mars 2026 &middot; 15 min de lecture</p>" }
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "section",
+                        "id": "blog-home-categories",
+                        "props": { "backgroundColor": "#f0fdf4", "paddingTop": 60, "paddingBottom": 60, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "heading",
+                                "id": "blog-home-cat-title",
+                                "props": { "text": "Explorer par categorie", "level": 2, "alignment": "center", "color": "#1e293b" }
+                            },
+                            {
+                                "type": "spacer",
+                                "id": "blog-home-sp2",
+                                "props": { "height": 32 }
+                            },
+                            {
+                                "type": "grid",
+                                "id": "blog-home-cat-grid",
+                                "props": { "columns": 3, "gap": 24 },
+                                "children": [
+                                    {
+                                        "type": "text",
+                                        "id": "blog-home-cat1",
+                                        "props": { "content": "<h3 style='color:#059669;text-align:center;margin-bottom:8px'>Developpement</h3><p style='color:#64748b;text-align:center'>React, Laravel, TypeScript, Node.js et les meilleures pratiques de code.</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "blog-home-cat2",
+                                        "props": { "content": "<h3 style='color:#059669;text-align:center;margin-bottom:8px'>Design</h3><p style='color:#64748b;text-align:center'>UX/UI, design systems, Figma, accessibilite et tendances visuelles.</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "blog-home-cat3",
+                                        "props": { "content": "<h3 style='color:#059669;text-align:center;margin-bottom:8px'>Tech & Outils</h3><p style='color:#64748b;text-align:center'>DevOps, IA, outils de productivite et veille technologique.</p>" }
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "section",
+                        "id": "blog-home-newsletter",
+                        "props": { "backgroundColor": "#059669", "paddingTop": 60, "paddingBottom": 60, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "heading",
+                                "id": "blog-home-nl-title",
+                                "props": { "text": "Restez informe", "level": 2, "alignment": "center", "color": "#ffffff" }
+                            },
+                            {
+                                "type": "text",
+                                "id": "blog-home-nl-text",
+                                "props": { "content": "<p style='text-align:center;color:#d1fae5;max-width:500px;margin:0 auto'>Recevez nos derniers articles directement dans votre boite mail. Pas de spam, que du contenu de qualite.</p>" }
+                            }
+                        ]
                     }
                 ]
             }
         },
         {
             "id": "about",
-            "title": "À propos",
+            "title": "A propos",
             "slug": "a-propos",
             "template": "default",
-            "meta_title": "À propos",
-            "meta_description": "En savoir plus sur notre équipe et notre mission.",
+            "meta_title": "A propos - Mon Blog",
+            "meta_description": "En savoir plus sur l'auteur et la mission de ce blog.",
             "content": {
                 "blocks": [
                     {
-                        "type": "text-block",
-                        "id": "about-1",
+                        "type": "hero",
+                        "id": "blog-about-hero",
                         "props": {
-                            "content": "<h1>À propos</h1><p>Nous sommes passionnés par le partage de connaissances.</p>"
+                            "title": "A propos",
+                            "subtitle": "Quelques mots sur l'auteur et la raison d'etre de ce blog.",
+                            "overlay": true
                         }
+                    },
+                    {
+                        "type": "section",
+                        "id": "blog-about-bio",
+                        "props": { "backgroundColor": "#ffffff", "paddingTop": 80, "paddingBottom": 60, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "heading",
+                                "id": "blog-about-bio-title",
+                                "props": { "text": "Qui suis-je ?", "level": 2, "color": "#1e293b" }
+                            },
+                            {
+                                "type": "spacer",
+                                "id": "blog-about-sp1",
+                                "props": { "height": 16 }
+                            },
+                            {
+                                "type": "text",
+                                "id": "blog-about-bio-text",
+                                "props": { "content": "<p style='color:#475569;font-size:1.1rem;line-height:1.8'>Developpeur web passionne depuis plus de 10 ans, je partage ici mes decouvertes, mes reflexions et mes retours d'experience sur les technologies web modernes.</p><p style='color:#475569;font-size:1.1rem;line-height:1.8;margin-top:16px'>Apres des annees en agence puis en startup, je travaille desormais en freelance. Ce blog est ne du desir de transmettre et d'echanger avec la communaute des developpeurs francophones.</p><p style='color:#475569;font-size:1.1rem;line-height:1.8;margin-top:16px'>Mon objectif : des articles clairs, pratiques et bien illustres. Que vous soyez debutant ou senior, vous trouverez ici de quoi enrichir votre pratique quotidienne.</p>" }
+                            }
+                        ]
+                    },
+                    {
+                        "type": "section",
+                        "id": "blog-about-skills",
+                        "props": { "backgroundColor": "#f0fdf4", "paddingTop": 60, "paddingBottom": 80, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "heading",
+                                "id": "blog-about-skills-title",
+                                "props": { "text": "Mes domaines d'expertise", "level": 2, "alignment": "center", "color": "#1e293b" }
+                            },
+                            {
+                                "type": "spacer",
+                                "id": "blog-about-sp2",
+                                "props": { "height": 32 }
+                            },
+                            {
+                                "type": "grid",
+                                "id": "blog-about-skills-grid",
+                                "props": { "columns": 3, "gap": 32 },
+                                "children": [
+                                    {
+                                        "type": "text",
+                                        "id": "blog-about-sk1",
+                                        "props": { "content": "<h3 style='color:#059669;text-align:center;margin-bottom:12px'>Frontend</h3><p style='color:#64748b;text-align:center'>React, TypeScript, Next.js, Tailwind CSS, tests unitaires et d'integration.</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "blog-about-sk2",
+                                        "props": { "content": "<h3 style='color:#059669;text-align:center;margin-bottom:12px'>Backend</h3><p style='color:#64748b;text-align:center'>Laravel, Node.js, API REST et GraphQL, bases de donnees, architecture logicielle.</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "blog-about-sk3",
+                                        "props": { "content": "<h3 style='color:#059669;text-align:center;margin-bottom:12px'>DevOps & Outils</h3><p style='color:#64748b;text-align:center'>Docker, CI/CD, monitoring, performance web, outils de productivite.</p>" }
+                                    }
+                                ]
+                            }
+                        ]
                     }
                 ]
             }
@@ -59,16 +221,76 @@
             "title": "Contact",
             "slug": "contact",
             "template": "default",
-            "meta_title": "Contact",
-            "meta_description": "Contactez-nous.",
+            "meta_title": "Contact - Mon Blog",
+            "meta_description": "Contactez-moi pour des questions, des collaborations ou des suggestions d'articles.",
             "content": {
                 "blocks": [
                     {
-                        "type": "text-block",
-                        "id": "contact-1",
+                        "type": "hero",
+                        "id": "blog-contact-hero",
                         "props": {
-                            "content": "<h1>Contact</h1><p>N'hésitez pas à nous écrire.</p>"
+                            "title": "Me contacter",
+                            "subtitle": "Une question, une suggestion d'article ou un projet de collaboration ? Ecrivez-moi.",
+                            "overlay": true
                         }
+                    },
+                    {
+                        "type": "section",
+                        "id": "blog-contact-info",
+                        "props": { "backgroundColor": "#ffffff", "paddingTop": 80, "paddingBottom": 60, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "grid",
+                                "id": "blog-contact-grid",
+                                "props": { "columns": 2, "gap": 48 },
+                                "children": [
+                                    {
+                                        "type": "text",
+                                        "id": "blog-contact-details",
+                                        "props": { "content": "<h2 style='color:#1e293b;margin-bottom:24px'>Coordonnees</h2><p style='color:#475569;margin-bottom:16px'><strong>Email</strong><br/>contact@mon-blog.fr</p><p style='color:#475569;margin-bottom:16px'><strong>Reseaux sociaux</strong><br/>Twitter : @monblog<br/>GitHub : github.com/monblog<br/>LinkedIn : linkedin.com/in/monblog</p><p style='color:#475569'><strong>Temps de reponse</strong><br/>Je reponds generalement sous 48 heures.</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "blog-contact-collab",
+                                        "props": { "content": "<h2 style='color:#1e293b;margin-bottom:24px'>Collaborations</h2><p style='color:#475569;margin-bottom:16px'>Je suis ouvert aux propositions de :</p><ul style='color:#475569'><li style='margin-bottom:8px'><strong>Articles invites</strong> — Vous souhaitez publier sur ce blog ? Proposez-moi votre sujet.</li><li style='margin-bottom:8px'><strong>Relecture technique</strong> — Je peux relire vos articles techniques avant publication.</li><li style='margin-bottom:8px'><strong>Conferences et meetups</strong> — Disponible pour des talks sur le dev web.</li><li><strong>Consulting</strong> — Missions freelance en developpement web.</li></ul>" }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": "legal",
+            "title": "Mentions legales",
+            "slug": "mentions-legales",
+            "template": "default",
+            "meta_title": "Mentions legales - Mon Blog",
+            "meta_description": "Mentions legales et politique de confidentialite.",
+            "content": {
+                "blocks": [
+                    {
+                        "type": "section",
+                        "id": "blog-legal-section",
+                        "props": { "backgroundColor": "#ffffff", "paddingTop": 60, "paddingBottom": 80, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "heading",
+                                "id": "blog-legal-title",
+                                "props": { "text": "Mentions legales", "level": 1, "color": "#1e293b" }
+                            },
+                            {
+                                "type": "spacer",
+                                "id": "blog-legal-sp1",
+                                "props": { "height": 24 }
+                            },
+                            {
+                                "type": "text",
+                                "id": "blog-legal-text",
+                                "props": { "content": "<h2 style='color:#1e293b;margin-bottom:12px;margin-top:24px'>Editeur du site</h2><p style='color:#475569;margin-bottom:24px'>Ce site est edite par [Votre nom], auto-entrepreneur.<br/>Adresse : [Votre adresse]<br/>Email : contact@mon-blog.fr<br/>SIRET : [Votre SIRET]</p><h2 style='color:#1e293b;margin-bottom:12px'>Hebergement</h2><p style='color:#475569;margin-bottom:24px'>Ce site est heberge par [Nom de l'hebergeur]<br/>Adresse : [Adresse de l'hebergeur]</p><h2 style='color:#1e293b;margin-bottom:12px'>Propriete intellectuelle</h2><p style='color:#475569;margin-bottom:24px'>L'ensemble des contenus (textes, images, code) de ce site sont la propriete de l'editeur, sauf mention contraire. Toute reproduction est interdite sans autorisation prealable.</p><h2 style='color:#1e293b;margin-bottom:12px'>Donnees personnelles</h2><p style='color:#475569;margin-bottom:24px'>Ce site ne collecte aucune donnee personnelle sans votre consentement. Les cookies utilises sont strictement necessaires au fonctionnement du site. Conformement au RGPD, vous disposez d'un droit d'acces, de rectification et de suppression de vos donnees.</p><h2 style='color:#1e293b;margin-bottom:12px'>Responsabilite</h2><p style='color:#475569'>L'editeur s'efforce de fournir des informations exactes et a jour, mais ne saurait etre tenu responsable d'erreurs ou d'omissions. Les liens externes ne sont pas sous notre controle.</p>" }
+                            }
+                        ]
                     }
                 ]
             }
@@ -82,13 +304,13 @@
             "items": [
                 {"label": "Accueil", "page_id": "home", "order": 1},
                 {"label": "Articles", "url": "/blog", "order": 2},
-                {"label": "À propos", "page_id": "about", "order": 3},
+                {"label": "A propos", "page_id": "about", "order": 3},
                 {"label": "Contact", "page_id": "contact", "order": 4}
             ]
         }
     ],
     "settings": {
         "site.name": "Mon Blog",
-        "site.description": "Un blog sur des sujets passionnants"
+        "site.description": "Un blog sur le developpement web et le design"
     }
 }

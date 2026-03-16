@@ -1,7 +1,11 @@
 import type { BlockRendererProps } from '../block-registry';
 
-export default function SpacerRenderer({ block }: BlockRendererProps) {
+export default function SpacerRenderer({ block, isEditing }: BlockRendererProps) {
     const height = Number(block.props.height) || 40;
+
+    if (!isEditing) {
+        return <div style={{ height: `${height}px` }} />;
+    }
 
     return (
         <div className="w-full relative flex items-center justify-center" style={{ height: `${height}px` }}>

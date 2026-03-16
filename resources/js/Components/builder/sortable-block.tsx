@@ -1,17 +1,21 @@
+import React, { useState } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { useBuilderStore } from '@/stores/builder-store';
 import { getBlock } from './blocks/block-registry';
+import { getBlockColorScheme } from './block-colors';
 import type { BlockNode } from '@/types/cms';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { GripVertical, Copy, Trash2 } from 'lucide-react';
+import { GripVertical, ChevronUp, ChevronDown, Copy, CopyPlus, Trash2 } from 'lucide-react';
+import BlockContextMenu from './block-context-menu';
 
 interface SortableBlockProps {
     block: BlockNode;
 }
 
 export default function SortableBlock({ block }: SortableBlockProps) {
-    const { selectedBlockId, hoveredBlockId, selectBlock, setHoveredBlock, duplicateBlock, removeBlock } = useBuilderStore();
+    const { selectedBlockId, hoveredBlockId, selectBlock, setHoveredBlock, duplicateBlock, copyBlock, moveBlockUp, moveBlockDown, setPendingDeleteId, isDragging: storeDragging } = useBuilderStore();
+    const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
     const isSelected = selectedBlockId === block.id;
     const isHovered = hoveredBlockId === block.id;
 
@@ -29,6 +33,7 @@ export default function SortableBlock({ block }: SortableBlockProps) {
     const entry = getBlock(block.type);
     const Renderer = entry?.renderer;
     const hasChildren = block.type === 'section' || block.type === 'grid';
+    const colors = getBlockColorScheme(entry?.category ?? 'content');
 
     const childContent = hasChildren && block.children?.length ? (
         <SortableContext items={block.children.map((c) => c.id)} strategy={verticalListSortingStrategy}>
@@ -40,14 +45,30 @@ export default function SortableBlock({ block }: SortableBlockProps) {
         </SortableContext>
     ) : undefined;
 
+    const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+        // Only select this block if the click target is within this block's
+        // own content, not within a child SortableBlock (which handles its own click).
+        const target = e.target as HTMLElement;
+        const thisNode = e.currentTarget as HTMLElement;
+
+        // Find the closest sortable-block ancestor of the click target
+        const closestBlock = target.closest('[data-block-id]');
+        // If the closest block is this one, select it; otherwise let the child handle it
+        if (closestBlock === thisNode) {
+            e.stopPropagation();
+            selectBlock(block.id);
+        }
+    };
+
     return (
         <div
             ref={setNodeRef}
             style={style}
-            className={`relative group rounded transition-all ${isSelected ? 'ring-2 ring-blue-500' : isHovered ? 'ring-1 ring-blue-300' : 'ring-1 ring-transparent hover:ring-gray-200'}`}
-            onClick={(e) => { e.stopPropagation(); selectBlock(block.id); }}
-            onMouseEnter={() => setHoveredBlock(block.id)}
-            onMouseLeave={() => setHoveredBlock(null)}
+            data-block-id={block.id}
+            className={`relative group/block rounded transition-all ${isSelected ? 'ring-2 ring-blue-500' : isHovered ? 'ring-1 ring-blue-300' : 'ring-1 ring-transparent hover:ring-gray-200'}`}
+            onClick={handleClick}
+            onMouseEnter={(e) => { e.stopPropagation(); setHoveredBlock(block.id); }}
+            onMouseLeave={(e) => { e.stopPropagation(); setHoveredBlock(null); }}
         >
             {/* Actions toolbar */}
             {(isSelected || isHovered) && (
@@ -72,7 +93,7 @@ export default function SortableBlock({ block }: SortableBlockProps) {
             )}
 
             {/* Renderer */}
-            <div className="pointer-events-none">
+            <div>
                 {Renderer ? <Renderer block={block} isSelected={isSelected} isEditing={false}>{childContent}</Renderer> : (
                     <div className="bg-gray-50 border border-dashed p-4 text-center text-gray-400 text-sm">Bloc inconnu: {block.type}</div>
                 )}

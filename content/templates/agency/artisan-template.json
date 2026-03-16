@@ -3,7 +3,7 @@
     "slug": "agency",
     "version": "1.0.0",
     "category": "agency",
-    "description": "Template agence digitale avec portfolio, services et équipe.",
+    "description": "Template agence digitale avec portfolio, services et equipe.",
     "author": "ArtisanCMS",
     "pages": [
         {
@@ -11,26 +11,135 @@
             "title": "Accueil",
             "slug": "accueil",
             "template": "home",
-            "meta_title": "Agence Digitale",
-            "meta_description": "Nous créons des expériences digitales exceptionnelles.",
+            "is_homepage": true,
+            "meta_title": "Agence Digitale - Votre partenaire numerique",
+            "meta_description": "Nous creons des experiences digitales exceptionnelles pour propulser votre business.",
             "content": {
                 "blocks": [
                     {
-                        "type": "hero-section",
-                        "id": "hero-1",
+                        "type": "hero",
+                        "id": "ag-home-hero",
                         "props": {
-                            "title": "Votre agence digitale",
-                            "subtitle": "Nous transformons vos idées en expériences numériques mémorables.",
-                            "button_text": "Voir nos réalisations",
-                            "button_url": "/portfolio"
+                            "title": "Transformons vos idees en experiences digitales",
+                            "subtitle": "Agence de design et developpement web. Nous accompagnons les entreprises ambitieuses dans leur transformation numerique depuis 2015.",
+                            "overlay": true,
+                            "ctaText": "Decouvrir nos services"
                         }
                     },
                     {
-                        "type": "text-block",
-                        "id": "services-intro",
-                        "props": {
-                            "content": "<h2>Nos services</h2><p>Design, développement et stratégie digitale pour propulser votre business.</p>"
-                        }
+                        "type": "section",
+                        "id": "ag-home-services",
+                        "props": { "backgroundColor": "#f8fafc", "paddingTop": 80, "paddingBottom": 80, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "heading",
+                                "id": "ag-home-services-title",
+                                "props": { "text": "Nos expertises", "level": 2, "alignment": "center", "color": "#1e293b" }
+                            },
+                            {
+                                "type": "text",
+                                "id": "ag-home-services-sub",
+                                "props": { "content": "<p style='text-align:center;color:#64748b;max-width:600px;margin:0 auto'>Des solutions sur mesure pour repondre a vos enjeux digitaux les plus complexes.</p>", "alignment": "center" }
+                            },
+                            {
+                                "type": "spacer",
+                                "id": "ag-home-sp1",
+                                "props": { "height": 40 }
+                            },
+                            {
+                                "type": "grid",
+                                "id": "ag-home-services-grid",
+                                "props": { "columns": 3, "gap": 32 },
+                                "children": [
+                                    {
+                                        "type": "text",
+                                        "id": "ag-home-svc1",
+                                        "props": { "content": "<h3 style='color:#4f46e5;margin-bottom:12px'>Design UX/UI</h3><p style='color:#475569'>Nous concevons des interfaces intuitives et esthetiques qui placent l'utilisateur au centre. Recherche utilisateur, wireframes, prototypes et design systems complets.</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "ag-home-svc2",
+                                        "props": { "content": "<h3 style='color:#4f46e5;margin-bottom:12px'>Developpement Web</h3><p style='color:#475569'>Applications web performantes et evolutives. Sites vitrine, e-commerce, applications metier — nous maitrisons les technologies modernes pour des projets robustes.</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "ag-home-svc3",
+                                        "props": { "content": "<h3 style='color:#4f46e5;margin-bottom:12px'>Strategie Digitale</h3><p style='color:#475569'>Referencement naturel, campagnes publicitaires, reseaux sociaux et analytics. Une approche data-driven pour maximiser votre retour sur investissement.</p>" }
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "section",
+                        "id": "ag-home-stats",
+                        "props": { "backgroundColor": "#4f46e5", "paddingTop": 60, "paddingBottom": 60, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "heading",
+                                "id": "ag-home-stats-title",
+                                "props": { "text": "Notre impact en chiffres", "level": 2, "alignment": "center", "color": "#ffffff" }
+                            },
+                            {
+                                "type": "spacer",
+                                "id": "ag-home-sp2",
+                                "props": { "height": 32 }
+                            },
+                            {
+                                "type": "grid",
+                                "id": "ag-home-stats-grid",
+                                "props": { "columns": 4, "gap": 24 },
+                                "children": [
+                                    {
+                                        "type": "text",
+                                        "id": "ag-home-stat1",
+                                        "props": { "content": "<h3 style='font-size:2.5rem;color:#ffffff;text-align:center;margin-bottom:4px'>150+</h3><p style='color:#c7d2fe;text-align:center'>Projets realises</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "ag-home-stat2",
+                                        "props": { "content": "<h3 style='font-size:2.5rem;color:#ffffff;text-align:center;margin-bottom:4px'>98%</h3><p style='color:#c7d2fe;text-align:center'>Clients satisfaits</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "ag-home-stat3",
+                                        "props": { "content": "<h3 style='font-size:2.5rem;color:#ffffff;text-align:center;margin-bottom:4px'>12</h3><p style='color:#c7d2fe;text-align:center'>Experts passionnes</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "ag-home-stat4",
+                                        "props": { "content": "<h3 style='font-size:2.5rem;color:#ffffff;text-align:center;margin-bottom:4px'>8 ans</h3><p style='color:#c7d2fe;text-align:center'>D'experience</p>" }
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "section",
+                        "id": "ag-home-cta",
+                        "props": { "backgroundColor": "#f8fafc", "paddingTop": 80, "paddingBottom": 80, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "heading",
+                                "id": "ag-home-cta-title",
+                                "props": { "text": "Pret a lancer votre projet ?", "level": 2, "alignment": "center", "color": "#1e293b" }
+                            },
+                            {
+                                "type": "text",
+                                "id": "ag-home-cta-text",
+                                "props": { "content": "<p style='text-align:center;color:#64748b;max-width:500px;margin:0 auto'>Discutons de vos objectifs et trouvons ensemble la meilleure solution pour votre entreprise.</p>" }
+                            },
+                            {
+                                "type": "spacer",
+                                "id": "ag-home-sp3",
+                                "props": { "height": 24 }
+                            },
+                            {
+                                "type": "button",
+                                "id": "ag-home-cta-btn",
+                                "props": { "text": "Nous contacter", "variant": "primary", "size": "lg" }
+                            }
+                        ]
                     }
                 ]
             }
@@ -40,16 +149,157 @@
             "title": "Services",
             "slug": "services",
             "template": "default",
-            "meta_title": "Nos services",
-            "meta_description": "Découvrez nos expertises : web, mobile, stratégie digitale.",
+            "meta_title": "Nos services - Agence Digitale",
+            "meta_description": "Decouvrez nos expertises : design UX/UI, developpement web, strategie digitale et accompagnement.",
             "content": {
                 "blocks": [
                     {
-                        "type": "text-block",
-                        "id": "services-1",
+                        "type": "hero",
+                        "id": "ag-svc-hero",
                         "props": {
-                            "content": "<h1>Nos services</h1><h2>Design UX/UI</h2><p>Des interfaces intuitives et esthétiques.</p><h2>Développement web</h2><p>Des sites et applications performants.</p><h2>Stratégie digitale</h2><p>Référencement, réseaux sociaux, campagnes.</p>"
+                            "title": "Des services adaptes a vos ambitions",
+                            "subtitle": "De la conception a la mise en ligne, nous vous accompagnons a chaque etape de votre projet digital.",
+                            "overlay": true,
+                            "ctaText": "Demander un devis"
                         }
+                    },
+                    {
+                        "type": "section",
+                        "id": "ag-svc-ux",
+                        "props": { "backgroundColor": "#ffffff", "paddingTop": 80, "paddingBottom": 60, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "heading",
+                                "id": "ag-svc-ux-title",
+                                "props": { "text": "Design UX/UI", "level": 2, "color": "#4f46e5" }
+                            },
+                            {
+                                "type": "divider",
+                                "id": "ag-svc-div1",
+                                "props": { "style": "solid", "color": "#4f46e5", "thickness": 3 }
+                            },
+                            {
+                                "type": "spacer",
+                                "id": "ag-svc-sp1",
+                                "props": { "height": 24 }
+                            },
+                            {
+                                "type": "text",
+                                "id": "ag-svc-ux-text",
+                                "props": { "content": "<p style='color:#475569;font-size:1.1rem'>Chaque projet commence par une comprehension approfondie de vos utilisateurs. Nous menons des recherches, creons des personas, puis concevons des interfaces qui allient esthetique et ergonomie.</p><ul style='color:#475569;margin-top:16px'><li>Audit UX et analyse concurrentielle</li><li>Wireframes et prototypes interactifs</li><li>Design system et charte graphique</li><li>Tests utilisateurs et iterations</li></ul>" }
+                            },
+                            {
+                                "type": "spacer",
+                                "id": "ag-svc-sp1b",
+                                "props": { "height": 16 }
+                            },
+                            {
+                                "type": "button",
+                                "id": "ag-svc-ux-btn",
+                                "props": { "text": "En savoir plus", "variant": "outline", "size": "md" }
+                            }
+                        ]
+                    },
+                    {
+                        "type": "section",
+                        "id": "ag-svc-dev",
+                        "props": { "backgroundColor": "#f8fafc", "paddingTop": 60, "paddingBottom": 60, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "heading",
+                                "id": "ag-svc-dev-title",
+                                "props": { "text": "Developpement Web", "level": 2, "color": "#4f46e5" }
+                            },
+                            {
+                                "type": "divider",
+                                "id": "ag-svc-div2",
+                                "props": { "style": "solid", "color": "#4f46e5", "thickness": 3 }
+                            },
+                            {
+                                "type": "spacer",
+                                "id": "ag-svc-sp2",
+                                "props": { "height": 24 }
+                            },
+                            {
+                                "type": "text",
+                                "id": "ag-svc-dev-text",
+                                "props": { "content": "<p style='color:#475569;font-size:1.1rem'>Nous developpons des applications web performantes avec les technologies les plus modernes. Chaque ligne de code est ecrite pour durer, evoluer et performer.</p><ul style='color:#475569;margin-top:16px'><li>Sites vitrine et corporate</li><li>Applications web sur mesure</li><li>E-commerce et marketplace</li><li>API et integrations tierces</li></ul>" }
+                            },
+                            {
+                                "type": "spacer",
+                                "id": "ag-svc-sp2b",
+                                "props": { "height": 16 }
+                            },
+                            {
+                                "type": "button",
+                                "id": "ag-svc-dev-btn",
+                                "props": { "text": "En savoir plus", "variant": "outline", "size": "md" }
+                            }
+                        ]
+                    },
+                    {
+                        "type": "section",
+                        "id": "ag-svc-strat",
+                        "props": { "backgroundColor": "#ffffff", "paddingTop": 60, "paddingBottom": 60, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "heading",
+                                "id": "ag-svc-strat-title",
+                                "props": { "text": "Strategie Digitale", "level": 2, "color": "#4f46e5" }
+                            },
+                            {
+                                "type": "divider",
+                                "id": "ag-svc-div3",
+                                "props": { "style": "solid", "color": "#4f46e5", "thickness": 3 }
+                            },
+                            {
+                                "type": "spacer",
+                                "id": "ag-svc-sp3",
+                                "props": { "height": 24 }
+                            },
+                            {
+                                "type": "text",
+                                "id": "ag-svc-strat-text",
+                                "props": { "content": "<p style='color:#475569;font-size:1.1rem'>Une presence digitale efficace ne s'improvise pas. Nous elaborons des strategies completes pour maximiser votre visibilite et convertir vos visiteurs en clients.</p><ul style='color:#475569;margin-top:16px'><li>SEO et referencement naturel</li><li>Campagnes Google Ads et Social Ads</li><li>Gestion des reseaux sociaux</li><li>Analytics et reporting</li></ul>" }
+                            },
+                            {
+                                "type": "spacer",
+                                "id": "ag-svc-sp3b",
+                                "props": { "height": 16 }
+                            },
+                            {
+                                "type": "button",
+                                "id": "ag-svc-strat-btn",
+                                "props": { "text": "En savoir plus", "variant": "outline", "size": "md" }
+                            }
+                        ]
+                    },
+                    {
+                        "type": "section",
+                        "id": "ag-svc-accomp",
+                        "props": { "backgroundColor": "#f8fafc", "paddingTop": 60, "paddingBottom": 80, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "heading",
+                                "id": "ag-svc-accomp-title",
+                                "props": { "text": "Accompagnement & Maintenance", "level": 2, "color": "#4f46e5" }
+                            },
+                            {
+                                "type": "divider",
+                                "id": "ag-svc-div4",
+                                "props": { "style": "solid", "color": "#4f46e5", "thickness": 3 }
+                            },
+                            {
+                                "type": "spacer",
+                                "id": "ag-svc-sp4",
+                                "props": { "height": 24 }
+                            },
+                            {
+                                "type": "text",
+                                "id": "ag-svc-accomp-text",
+                                "props": { "content": "<p style='color:#475569;font-size:1.1rem'>Nous ne vous laissons pas seul apres la livraison. Notre equipe reste a vos cotes pour faire evoluer votre projet et garantir ses performances dans le temps.</p><ul style='color:#475569;margin-top:16px'><li>Formation et transfert de competences</li><li>Maintenance corrective et evolutive</li><li>Hebergement et monitoring</li><li>Support technique reactif</li></ul>" }
+                            }
+                        ]
                     }
                 ]
             }
@@ -59,16 +309,72 @@
             "title": "Portfolio",
             "slug": "portfolio",
             "template": "default",
-            "meta_title": "Portfolio",
-            "meta_description": "Nos réalisations clients.",
+            "meta_title": "Portfolio - Nos realisations",
+            "meta_description": "Decouvrez nos projets recents : sites web, applications et strategies digitales.",
             "content": {
                 "blocks": [
                     {
-                        "type": "text-block",
-                        "id": "portfolio-1",
+                        "type": "hero",
+                        "id": "ag-port-hero",
                         "props": {
-                            "content": "<h1>Nos réalisations</h1><p>Découvrez quelques-uns de nos projets récents.</p>"
+                            "title": "Nos realisations",
+                            "subtitle": "Chaque projet est unique. Decouvrez comment nous avons aide nos clients a atteindre leurs objectifs.",
+                            "overlay": true
                         }
+                    },
+                    {
+                        "type": "section",
+                        "id": "ag-port-projects",
+                        "props": { "backgroundColor": "#f8fafc", "paddingTop": 80, "paddingBottom": 80, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "heading",
+                                "id": "ag-port-title",
+                                "props": { "text": "Projets recents", "level": 2, "alignment": "center", "color": "#1e293b" }
+                            },
+                            {
+                                "type": "spacer",
+                                "id": "ag-port-sp1",
+                                "props": { "height": 40 }
+                            },
+                            {
+                                "type": "grid",
+                                "id": "ag-port-grid1",
+                                "props": { "columns": 2, "gap": 32 },
+                                "children": [
+                                    {
+                                        "type": "text",
+                                        "id": "ag-port-p1",
+                                        "props": { "content": "<h3 style='color:#4f46e5;margin-bottom:8px'>E-commerce Maison Moderne</h3><p style='color:#64748b;margin-bottom:8px'>Refonte complete d'une boutique en ligne de mobilier contemporain. +180% de conversions en 6 mois.</p><p style='color:#94a3b8;font-size:0.875rem'>React, Laravel, Stripe, Algolia</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "ag-port-p2",
+                                        "props": { "content": "<h3 style='color:#4f46e5;margin-bottom:8px'>Application SaaS FinTrack</h3><p style='color:#64748b;margin-bottom:8px'>Plateforme de gestion financiere pour PME. Dashboard temps reel, rapports automatises et integrations bancaires.</p><p style='color:#94a3b8;font-size:0.875rem'>Vue.js, Node.js, PostgreSQL, Chart.js</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "ag-port-p3",
+                                        "props": { "content": "<h3 style='color:#4f46e5;margin-bottom:8px'>Site Vitrine Cabinet Dupont</h3><p style='color:#64748b;margin-bottom:8px'>Site premium pour un cabinet d'avocats parisien. Design elegant, performances optimales et SEO de pointe.</p><p style='color:#94a3b8;font-size:0.875rem'>WordPress, GSAP, Performance Web</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "ag-port-p4",
+                                        "props": { "content": "<h3 style='color:#4f46e5;margin-bottom:8px'>Marketplace ArtLocal</h3><p style='color:#64748b;margin-bottom:8px'>Plateforme mettant en relation artisans locaux et acheteurs. Systeme de commande, avis et paiement securise.</p><p style='color:#94a3b8;font-size:0.875rem'>React, Laravel, Stripe Connect, Maps</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "ag-port-p5",
+                                        "props": { "content": "<h3 style='color:#4f46e5;margin-bottom:8px'>Portail RH TalentHub</h3><p style='color:#64748b;margin-bottom:8px'>Intranet de gestion des ressources humaines pour une entreprise de 500 collaborateurs. Conges, notes de frais, evaluations.</p><p style='color:#94a3b8;font-size:0.875rem'>Next.js, Prisma, SSO, PDF Generation</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "ag-port-p6",
+                                        "props": { "content": "<h3 style='color:#4f46e5;margin-bottom:8px'>Application Mobile FoodExpress</h3><p style='color:#64748b;margin-bottom:8px'>Application de livraison de repas avec suivi en temps reel, paiement integre et programme de fidelite.</p><p style='color:#94a3b8;font-size:0.875rem'>React Native, Firebase, Stripe, Maps</p>" }
+                                    }
+                                ]
+                            }
+                        ]
                     }
                 ]
             }
@@ -78,16 +384,123 @@
             "title": "L'agence",
             "slug": "l-agence",
             "template": "default",
-            "meta_title": "L'agence",
-            "meta_description": "Notre équipe et nos valeurs.",
+            "meta_title": "L'agence - Notre equipe et nos valeurs",
+            "meta_description": "Decouvrez l'equipe passionnee derriere votre agence digitale de confiance.",
             "content": {
                 "blocks": [
                     {
-                        "type": "text-block",
-                        "id": "about-1",
+                        "type": "hero",
+                        "id": "ag-about-hero",
                         "props": {
-                            "content": "<h1>L'agence</h1><p>Une équipe passionnée dédiée à votre succès digital.</p>"
+                            "title": "Une equipe, une passion",
+                            "subtitle": "Depuis 2015, nous accompagnons les entreprises dans leur transformation digitale avec passion et expertise.",
+                            "overlay": true
                         }
+                    },
+                    {
+                        "type": "section",
+                        "id": "ag-about-story",
+                        "props": { "backgroundColor": "#ffffff", "paddingTop": 80, "paddingBottom": 60, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "heading",
+                                "id": "ag-about-story-title",
+                                "props": { "text": "Notre histoire", "level": 2, "color": "#1e293b" }
+                            },
+                            {
+                                "type": "spacer",
+                                "id": "ag-about-sp1",
+                                "props": { "height": 16 }
+                            },
+                            {
+                                "type": "text",
+                                "id": "ag-about-story-text",
+                                "props": { "content": "<p style='color:#475569;font-size:1.1rem;line-height:1.8'>Fondee en 2015 par deux passionnes du web, notre agence est nee de la conviction que chaque entreprise merite une presence digitale a la hauteur de ses ambitions. Au fil des annees, nous avons constitue une equipe pluridisciplinaire reunissant designers, developpeurs et strateges.</p><p style='color:#475569;font-size:1.1rem;line-height:1.8;margin-top:16px'>Aujourd'hui, nous accompagnons plus de 80 clients actifs, des startups innovantes aux grands groupes, avec la meme exigence de qualite et la meme passion pour le digital.</p>" }
+                            }
+                        ]
+                    },
+                    {
+                        "type": "section",
+                        "id": "ag-about-team",
+                        "props": { "backgroundColor": "#f8fafc", "paddingTop": 60, "paddingBottom": 60, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "heading",
+                                "id": "ag-about-team-title",
+                                "props": { "text": "Notre equipe", "level": 2, "alignment": "center", "color": "#1e293b" }
+                            },
+                            {
+                                "type": "spacer",
+                                "id": "ag-about-sp2",
+                                "props": { "height": 32 }
+                            },
+                            {
+                                "type": "grid",
+                                "id": "ag-about-team-grid",
+                                "props": { "columns": 4, "gap": 24 },
+                                "children": [
+                                    {
+                                        "type": "text",
+                                        "id": "ag-about-m1",
+                                        "props": { "content": "<h4 style='color:#1e293b;text-align:center;margin-bottom:4px'>Sophie Martin</h4><p style='color:#4f46e5;text-align:center;font-size:0.875rem;margin-bottom:8px'>Directrice Creative</p><p style='color:#64748b;text-align:center;font-size:0.875rem'>10 ans d'experience en design digital. Ancienne DA chez une agence parisienne renommee.</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "ag-about-m2",
+                                        "props": { "content": "<h4 style='color:#1e293b;text-align:center;margin-bottom:4px'>Thomas Bernard</h4><p style='color:#4f46e5;text-align:center;font-size:0.875rem;margin-bottom:8px'>Lead Developpeur</p><p style='color:#64748b;text-align:center;font-size:0.875rem'>Expert Laravel et React. Contributeur open source passionne par les architectures propres.</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "ag-about-m3",
+                                        "props": { "content": "<h4 style='color:#1e293b;text-align:center;margin-bottom:4px'>Julie Moreau</h4><p style='color:#4f46e5;text-align:center;font-size:0.875rem;margin-bottom:8px'>Strategiste Digitale</p><p style='color:#64748b;text-align:center;font-size:0.875rem'>Specialiste SEO et acquisition. Elle transforme les donnees en strategies de croissance concretes.</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "ag-about-m4",
+                                        "props": { "content": "<h4 style='color:#1e293b;text-align:center;margin-bottom:4px'>Marc Dubois</h4><p style='color:#4f46e5;text-align:center;font-size:0.875rem;margin-bottom:8px'>Chef de Projet</p><p style='color:#64748b;text-align:center;font-size:0.875rem'>Garant de la qualite et des delais. Il fait le lien entre les equipes et les clients avec rigueur.</p>" }
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "section",
+                        "id": "ag-about-values",
+                        "props": { "backgroundColor": "#ffffff", "paddingTop": 60, "paddingBottom": 80, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "heading",
+                                "id": "ag-about-values-title",
+                                "props": { "text": "Nos valeurs", "level": 2, "alignment": "center", "color": "#1e293b" }
+                            },
+                            {
+                                "type": "spacer",
+                                "id": "ag-about-sp3",
+                                "props": { "height": 32 }
+                            },
+                            {
+                                "type": "grid",
+                                "id": "ag-about-values-grid",
+                                "props": { "columns": 3, "gap": 32 },
+                                "children": [
+                                    {
+                                        "type": "text",
+                                        "id": "ag-about-v1",
+                                        "props": { "content": "<h3 style='color:#4f46e5;text-align:center;margin-bottom:12px'>Excellence</h3><p style='color:#64748b;text-align:center'>Nous visons la qualite dans chaque detail. Pas de compromis sur la performance, le design ou l'experience utilisateur.</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "ag-about-v2",
+                                        "props": { "content": "<h3 style='color:#4f46e5;text-align:center;margin-bottom:12px'>Transparence</h3><p style='color:#64748b;text-align:center'>Communication ouverte, reporting regulier et honnetete. Vous savez toujours ou en est votre projet.</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "ag-about-v3",
+                                        "props": { "content": "<h3 style='color:#4f46e5;text-align:center;margin-bottom:12px'>Innovation</h3><p style='color:#64748b;text-align:center'>Nous restons a la pointe des technologies et des tendances pour vous offrir des solutions modernes et perennes.</p>" }
+                                    }
+                                ]
+                            }
+                        ]
                     }
                 ]
             }
@@ -97,16 +510,42 @@
             "title": "Contact",
             "slug": "contact",
             "template": "default",
-            "meta_title": "Contact",
-            "meta_description": "Parlons de votre projet.",
+            "meta_title": "Contact - Parlons de votre projet",
+            "meta_description": "Contactez notre agence pour discuter de votre prochain projet digital.",
             "content": {
                 "blocks": [
                     {
-                        "type": "text-block",
-                        "id": "contact-1",
+                        "type": "hero",
+                        "id": "ag-contact-hero",
                         "props": {
-                            "content": "<h1>Parlons de votre projet</h1><p>Contactez-nous pour démarrer votre aventure digitale.</p>"
+                            "title": "Parlons de votre projet",
+                            "subtitle": "Nous sommes a votre ecoute pour transformer vos idees en realite digitale.",
+                            "overlay": true
                         }
+                    },
+                    {
+                        "type": "section",
+                        "id": "ag-contact-info",
+                        "props": { "backgroundColor": "#ffffff", "paddingTop": 80, "paddingBottom": 80, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "grid",
+                                "id": "ag-contact-grid",
+                                "props": { "columns": 2, "gap": 48 },
+                                "children": [
+                                    {
+                                        "type": "text",
+                                        "id": "ag-contact-details",
+                                        "props": { "content": "<h2 style='color:#1e293b;margin-bottom:24px'>Nos coordonnees</h2><p style='color:#475569;margin-bottom:16px'><strong>Adresse</strong><br/>42 rue de la Innovation<br/>75011 Paris, France</p><p style='color:#475569;margin-bottom:16px'><strong>Telephone</strong><br/>01 23 45 67 89</p><p style='color:#475569;margin-bottom:16px'><strong>Email</strong><br/>contact@agence-digitale.fr</p><p style='color:#475569'><strong>Horaires</strong><br/>Lundi - Vendredi : 9h00 - 18h00</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "ag-contact-approach",
+                                        "props": { "content": "<h2 style='color:#1e293b;margin-bottom:24px'>Notre approche</h2><p style='color:#475569;margin-bottom:16px'>Chaque projet commence par un echange pour comprendre vos besoins, vos objectifs et votre budget.</p><p style='color:#475569;margin-bottom:16px'><strong>1. Decouverte</strong> — Nous analysons votre marche et definissons ensemble la strategie.</p><p style='color:#475569;margin-bottom:16px'><strong>2. Proposition</strong> — Nous vous presentons une solution detaillee avec planning et budget.</p><p style='color:#475569;margin-bottom:16px'><strong>3. Realisation</strong> — Notre equipe donne vie a votre projet avec des points reguliers.</p><p style='color:#475569'><strong>4. Lancement</strong> — Mise en ligne, formation et suivi des performances.</p>" }
+                                    }
+                                ]
+                            }
+                        ]
                     }
                 ]
             }

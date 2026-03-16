@@ -3,7 +3,7 @@
     "slug": "restaurant",
     "version": "1.0.0",
     "category": "restaurant",
-    "description": "Template restaurant avec menu, réservations et présentation.",
+    "description": "Template restaurant avec menu, reservations et presentation.",
     "author": "ArtisanCMS",
     "pages": [
         {
@@ -11,26 +11,125 @@
             "title": "Accueil",
             "slug": "accueil",
             "template": "home",
-            "meta_title": "Bienvenue au Restaurant",
-            "meta_description": "Découvrez notre cuisine et réservez votre table.",
+            "is_homepage": true,
+            "meta_title": "Le Gourmet - Restaurant gastronomique",
+            "meta_description": "Decouvrez notre cuisine raffinee et reservez votre table dans notre restaurant au coeur de la ville.",
             "content": {
                 "blocks": [
                     {
-                        "type": "hero-section",
-                        "id": "hero-1",
+                        "type": "hero",
+                        "id": "rst-home-hero",
                         "props": {
-                            "title": "Bienvenue au Restaurant",
-                            "subtitle": "Une expérience gastronomique unique au cœur de la ville.",
-                            "button_text": "Réserver une table",
-                            "button_url": "/reservation"
+                            "title": "Une experience culinaire inoubliable",
+                            "subtitle": "Cuisine francaise raffinee, produits frais et locaux, dans un cadre elegant au coeur de la ville.",
+                            "overlay": true,
+                            "ctaText": "Reserver une table"
                         }
                     },
                     {
-                        "type": "text-block",
-                        "id": "intro-1",
-                        "props": {
-                            "content": "<h2>Notre cuisine</h2><p>Des produits frais et locaux pour une cuisine authentique.</p>"
-                        }
+                        "type": "section",
+                        "id": "rst-home-cuisine",
+                        "props": { "backgroundColor": "#fffbeb", "paddingTop": 80, "paddingBottom": 60, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "heading",
+                                "id": "rst-home-cuisine-title",
+                                "props": { "text": "Notre cuisine", "level": 2, "alignment": "center", "color": "#92400e" }
+                            },
+                            {
+                                "type": "text",
+                                "id": "rst-home-cuisine-sub",
+                                "props": { "content": "<p style='text-align:center;color:#78716c;max-width:600px;margin:0 auto;font-size:1.1rem'>Chaque plat raconte une histoire. Notre chef puise son inspiration dans les traditions francaises et les saveurs du monde pour creer une cuisine authentique et inventive.</p>" }
+                            },
+                            {
+                                "type": "spacer",
+                                "id": "rst-home-sp1",
+                                "props": { "height": 40 }
+                            },
+                            {
+                                "type": "grid",
+                                "id": "rst-home-specialites",
+                                "props": { "columns": 3, "gap": 32 },
+                                "children": [
+                                    {
+                                        "type": "text",
+                                        "id": "rst-home-spec1",
+                                        "props": { "content": "<h3 style='color:#d97706;text-align:center;margin-bottom:12px'>Produits Frais</h3><p style='color:#78716c;text-align:center'>Nous selectionnons chaque jour les meilleurs produits aupres de producteurs locaux. Du marche a votre assiette, la fraicheur est notre priorite.</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "rst-home-spec2",
+                                        "props": { "content": "<h3 style='color:#d97706;text-align:center;margin-bottom:12px'>Fait Maison</h3><p style='color:#78716c;text-align:center'>Du pain au dessert, tout est prepare dans notre cuisine. Notre equipe de 8 cuisiniers met son savoir-faire au service de votre plaisir.</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "rst-home-spec3",
+                                        "props": { "content": "<h3 style='color:#d97706;text-align:center;margin-bottom:12px'>Cave Selectionnee</h3><p style='color:#78716c;text-align:center'>Plus de 200 references de vins francais et internationaux. Notre sommelier vous guidera vers l'accord parfait pour sublimer votre repas.</p>" }
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "section",
+                        "id": "rst-home-cta",
+                        "props": { "backgroundColor": "#d97706", "paddingTop": 60, "paddingBottom": 60, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "heading",
+                                "id": "rst-home-cta-title",
+                                "props": { "text": "Reservez votre table", "level": 2, "alignment": "center", "color": "#ffffff" }
+                            },
+                            {
+                                "type": "text",
+                                "id": "rst-home-cta-text",
+                                "props": { "content": "<p style='text-align:center;color:#fef3c7;max-width:500px;margin:0 auto'>Pour une soiree romantique, un dejeuner d'affaires ou une celebration en famille, nous vous accueillons avec plaisir.</p>" }
+                            },
+                            {
+                                "type": "spacer",
+                                "id": "rst-home-sp2",
+                                "props": { "height": 20 }
+                            },
+                            {
+                                "type": "text",
+                                "id": "rst-home-cta-phone",
+                                "props": { "content": "<p style='text-align:center;color:#ffffff;font-size:1.5rem;font-weight:bold'>01 23 45 67 89</p>" }
+                            }
+                        ]
+                    },
+                    {
+                        "type": "section",
+                        "id": "rst-home-hours",
+                        "props": { "backgroundColor": "#1c1917", "paddingTop": 60, "paddingBottom": 60, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "heading",
+                                "id": "rst-home-hours-title",
+                                "props": { "text": "Horaires d'ouverture", "level": 2, "alignment": "center", "color": "#fef3c7" }
+                            },
+                            {
+                                "type": "spacer",
+                                "id": "rst-home-sp3",
+                                "props": { "height": 24 }
+                            },
+                            {
+                                "type": "grid",
+                                "id": "rst-home-hours-grid",
+                                "props": { "columns": 2, "gap": 32 },
+                                "children": [
+                                    {
+                                        "type": "text",
+                                        "id": "rst-home-hours1",
+                                        "props": { "content": "<h3 style='color:#d97706;text-align:center;margin-bottom:12px'>Dejeuner</h3><p style='color:#d6d3d1;text-align:center'>Mardi - Samedi<br/>12h00 - 14h30</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "rst-home-hours2",
+                                        "props": { "content": "<h3 style='color:#d97706;text-align:center;margin-bottom:12px'>Diner</h3><p style='color:#d6d3d1;text-align:center'>Mardi - Samedi<br/>19h00 - 22h30</p>" }
+                                    }
+                                ]
+                            }
+                        ]
                     }
                 ]
             }
@@ -40,35 +139,211 @@
             "title": "Notre Menu",
             "slug": "menu",
             "template": "default",
-            "meta_title": "Notre Menu",
-            "meta_description": "Découvrez notre carte et nos spécialités.",
+            "meta_title": "Notre Menu - Le Gourmet",
+            "meta_description": "Decouvrez notre carte : entrees, plats, desserts et notre selection de vins.",
             "content": {
                 "blocks": [
                     {
-                        "type": "text-block",
-                        "id": "menu-1",
+                        "type": "hero",
+                        "id": "rst-menu-hero",
                         "props": {
-                            "content": "<h1>Notre Menu</h1><h2>Entrées</h2><p>Soupe du jour, Salade César, Tartare de saumon...</p><h2>Plats</h2><p>Filet mignon, Risotto aux champignons, Dorade grillée...</p><h2>Desserts</h2><p>Crème brûlée, Fondant au chocolat, Tarte tatin...</p>"
+                            "title": "Notre carte",
+                            "subtitle": "Une cuisine de saison qui evolue au fil des arrivages et de l'inspiration de notre chef.",
+                            "overlay": true
                         }
+                    },
+                    {
+                        "type": "section",
+                        "id": "rst-menu-entrees",
+                        "props": { "backgroundColor": "#ffffff", "paddingTop": 60, "paddingBottom": 40, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "heading",
+                                "id": "rst-menu-entrees-title",
+                                "props": { "text": "Entrees", "level": 2, "color": "#d97706" }
+                            },
+                            {
+                                "type": "divider",
+                                "id": "rst-menu-div1",
+                                "props": { "style": "solid", "color": "#d97706", "thickness": 2 }
+                            },
+                            {
+                                "type": "spacer",
+                                "id": "rst-menu-sp1",
+                                "props": { "height": 20 }
+                            },
+                            {
+                                "type": "text",
+                                "id": "rst-menu-e1",
+                                "props": { "content": "<p style='color:#1c1917;font-size:1.05rem'><strong>Veloute de butternut et noisettes torrefiees</strong> <span style='color:#d97706;float:right'>14 &euro;</span></p><p style='color:#78716c;font-size:0.9rem;margin-bottom:16px'>Creme de courge, eclats de noisettes, huile de noix et croutons maison.</p><p style='color:#1c1917;font-size:1.05rem'><strong>Tartare de saumon aux agrumes</strong> <span style='color:#d97706;float:right'>18 &euro;</span></p><p style='color:#78716c;font-size:0.9rem;margin-bottom:16px'>Saumon Label Rouge, vinaigrette yuzu, avocat et graines de sesame.</p><p style='color:#1c1917;font-size:1.05rem'><strong>Salade de chevre chaud et miel de lavande</strong> <span style='color:#d97706;float:right'>15 &euro;</span></p><p style='color:#78716c;font-size:0.9rem'>Mesclun, crottin de Chavignol pane, miel de Provence, noix caramelisees.</p>" }
+                            }
+                        ]
+                    },
+                    {
+                        "type": "section",
+                        "id": "rst-menu-plats",
+                        "props": { "backgroundColor": "#fffbeb", "paddingTop": 40, "paddingBottom": 40, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "heading",
+                                "id": "rst-menu-plats-title",
+                                "props": { "text": "Plats", "level": 2, "color": "#d97706" }
+                            },
+                            {
+                                "type": "divider",
+                                "id": "rst-menu-div2",
+                                "props": { "style": "solid", "color": "#d97706", "thickness": 2 }
+                            },
+                            {
+                                "type": "spacer",
+                                "id": "rst-menu-sp2",
+                                "props": { "height": 20 }
+                            },
+                            {
+                                "type": "text",
+                                "id": "rst-menu-p1",
+                                "props": { "content": "<p style='color:#1c1917;font-size:1.05rem'><strong>Filet de boeuf, sauce au poivre</strong> <span style='color:#d97706;float:right'>32 &euro;</span></p><p style='color:#78716c;font-size:0.9rem;margin-bottom:16px'>Filet de boeuf Angus muri 30 jours, gratin dauphinois, legumes de saison.</p><p style='color:#1c1917;font-size:1.05rem'><strong>Risotto aux cepes et parmesan</strong> <span style='color:#d97706;float:right'>26 &euro;</span></p><p style='color:#78716c;font-size:0.9rem;margin-bottom:16px'>Riz carnaroli, cepes frais, copeaux de parmesan 24 mois, huile de truffe.</p><p style='color:#1c1917;font-size:1.05rem'><strong>Dorade royale grillee</strong> <span style='color:#d97706;float:right'>28 &euro;</span></p><p style='color:#78716c;font-size:0.9rem;margin-bottom:16px'>Filet de dorade, ecrasee de pommes de terre, beurre blanc aux herbes.</p><p style='color:#1c1917;font-size:1.05rem'><strong>Magret de canard au miel et epices</strong> <span style='color:#d97706;float:right'>29 &euro;</span></p><p style='color:#78716c;font-size:0.9rem'>Magret rose, jus au miel et quatre-epices, puree de patate douce.</p>" }
+                            }
+                        ]
+                    },
+                    {
+                        "type": "section",
+                        "id": "rst-menu-desserts",
+                        "props": { "backgroundColor": "#ffffff", "paddingTop": 40, "paddingBottom": 40, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "heading",
+                                "id": "rst-menu-desserts-title",
+                                "props": { "text": "Desserts", "level": 2, "color": "#d97706" }
+                            },
+                            {
+                                "type": "divider",
+                                "id": "rst-menu-div3",
+                                "props": { "style": "solid", "color": "#d97706", "thickness": 2 }
+                            },
+                            {
+                                "type": "spacer",
+                                "id": "rst-menu-sp3",
+                                "props": { "height": 20 }
+                            },
+                            {
+                                "type": "text",
+                                "id": "rst-menu-d1",
+                                "props": { "content": "<p style='color:#1c1917;font-size:1.05rem'><strong>Creme brulee a la vanille de Madagascar</strong> <span style='color:#d97706;float:right'>12 &euro;</span></p><p style='color:#78716c;font-size:0.9rem;margin-bottom:16px'>Creme onctueuse, vanille bourbon, caramel craquant.</p><p style='color:#1c1917;font-size:1.05rem'><strong>Fondant au chocolat noir Valrhona</strong> <span style='color:#d97706;float:right'>14 &euro;</span></p><p style='color:#78716c;font-size:0.9rem;margin-bottom:16px'>Coeur coulant, glace vanille maison, tuile dentelle.</p><p style='color:#1c1917;font-size:1.05rem'><strong>Tarte tatin aux pommes caramelisees</strong> <span style='color:#d97706;float:right'>13 &euro;</span></p><p style='color:#78716c;font-size:0.9rem'>Pommes fondantes, pate feuillettee beurree, creme fraiche d'Isigny.</p>" }
+                            }
+                        ]
+                    },
+                    {
+                        "type": "section",
+                        "id": "rst-menu-boissons",
+                        "props": { "backgroundColor": "#1c1917", "paddingTop": 40, "paddingBottom": 60, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "heading",
+                                "id": "rst-menu-boissons-title",
+                                "props": { "text": "Boissons", "level": 2, "color": "#d97706" }
+                            },
+                            {
+                                "type": "divider",
+                                "id": "rst-menu-div4",
+                                "props": { "style": "solid", "color": "#d97706", "thickness": 2 }
+                            },
+                            {
+                                "type": "spacer",
+                                "id": "rst-menu-sp4",
+                                "props": { "height": 20 }
+                            },
+                            {
+                                "type": "text",
+                                "id": "rst-menu-b1",
+                                "props": { "content": "<p style='color:#fef3c7;font-size:1.05rem'><strong>Vins au verre</strong> <span style='color:#d97706;float:right'>a partir de 8 &euro;</span></p><p style='color:#a8a29e;font-size:0.9rem;margin-bottom:16px'>Selection tournante de 6 vins au verre, rouges, blancs et roses.</p><p style='color:#fef3c7;font-size:1.05rem'><strong>Cocktails maison</strong> <span style='color:#d97706;float:right'>14 &euro;</span></p><p style='color:#a8a29e;font-size:0.9rem;margin-bottom:16px'>Creations de notre barman : Gourmet Spritz, Lavande Sour, Basilic Smash.</p><p style='color:#fef3c7;font-size:1.05rem'><strong>Eaux et softs</strong> <span style='color:#d97706;float:right'>4 - 6 &euro;</span></p><p style='color:#a8a29e;font-size:0.9rem'>Eaux minerales, limonades artisanales, jus de fruits frais presses.</p>" }
+                            }
+                        ]
                     }
                 ]
             }
         },
         {
             "id": "reservation",
-            "title": "Réservation",
+            "title": "Reservation",
             "slug": "reservation",
             "template": "default",
-            "meta_title": "Réserver une table",
-            "meta_description": "Réservez votre table en ligne.",
+            "meta_title": "Reservation - Le Gourmet",
+            "meta_description": "Reservez votre table au restaurant Le Gourmet. Capacite 60 couverts.",
             "content": {
                 "blocks": [
                     {
-                        "type": "text-block",
-                        "id": "reservation-1",
+                        "type": "hero",
+                        "id": "rst-resa-hero",
                         "props": {
-                            "content": "<h1>Réserver une table</h1><p>Contactez-nous au 01 23 45 67 89 ou par email pour réserver.</p>"
+                            "title": "Reservez votre table",
+                            "subtitle": "Pour un moment d'exception, reservez des maintenant votre table au Gourmet.",
+                            "overlay": true,
+                            "ctaText": "Appeler maintenant"
                         }
+                    },
+                    {
+                        "type": "section",
+                        "id": "rst-resa-info",
+                        "props": { "backgroundColor": "#ffffff", "paddingTop": 80, "paddingBottom": 60, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "grid",
+                                "id": "rst-resa-grid",
+                                "props": { "columns": 2, "gap": 48 },
+                                "children": [
+                                    {
+                                        "type": "text",
+                                        "id": "rst-resa-practical",
+                                        "props": { "content": "<h2 style='color:#92400e;margin-bottom:24px'>Informations pratiques</h2><p style='color:#475569;margin-bottom:16px'><strong>Par telephone</strong><br/>Appelez-nous au <strong>01 23 45 67 89</strong><br/>Nous sommes disponibles du mardi au samedi, de 10h a 22h.</p><p style='color:#475569;margin-bottom:16px'><strong>Par email</strong><br/>reservation@le-gourmet.fr<br/>Nous vous repondons sous 2 heures.</p><p style='color:#475569'><strong>Adresse</strong><br/>15 rue des Saveurs<br/>75006 Paris, France</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "rst-resa-details",
+                                        "props": { "content": "<h2 style='color:#92400e;margin-bottom:24px'>Bon a savoir</h2><p style='color:#475569;margin-bottom:16px'><strong>Capacite</strong><br/>60 couverts en salle principale<br/>20 couverts en terrasse (avril - octobre)<br/>Salon prive jusqu'a 14 personnes.</p><p style='color:#475569;margin-bottom:16px'><strong>Groupes</strong><br/>Pour les reservations de plus de 8 personnes, merci de nous contacter au moins 48h a l'avance.</p><p style='color:#475569'><strong>Evenements prives</strong><br/>Nous accueillons vos evenements : anniversaires, seminaires, mariages. Menu et decoration sur mesure.</p>" }
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "section",
+                        "id": "rst-resa-hours",
+                        "props": { "backgroundColor": "#fffbeb", "paddingTop": 60, "paddingBottom": 60, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "heading",
+                                "id": "rst-resa-hours-title",
+                                "props": { "text": "Nos horaires", "level": 2, "alignment": "center", "color": "#92400e" }
+                            },
+                            {
+                                "type": "spacer",
+                                "id": "rst-resa-sp1",
+                                "props": { "height": 24 }
+                            },
+                            {
+                                "type": "grid",
+                                "id": "rst-resa-hours-grid",
+                                "props": { "columns": 3, "gap": 32 },
+                                "children": [
+                                    {
+                                        "type": "text",
+                                        "id": "rst-resa-h1",
+                                        "props": { "content": "<h4 style='color:#d97706;text-align:center;margin-bottom:8px'>Dejeuner</h4><p style='color:#78716c;text-align:center'>Mardi - Samedi<br/>12h00 - 14h30<br/><em>Dernier service 14h00</em></p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "rst-resa-h2",
+                                        "props": { "content": "<h4 style='color:#d97706;text-align:center;margin-bottom:8px'>Diner</h4><p style='color:#78716c;text-align:center'>Mardi - Samedi<br/>19h00 - 22h30<br/><em>Dernier service 22h00</em></p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "rst-resa-h3",
+                                        "props": { "content": "<h4 style='color:#d97706;text-align:center;margin-bottom:8px'>Brunch dominical</h4><p style='color:#78716c;text-align:center'>Dimanche<br/>11h00 - 15h00<br/><em>Sur reservation uniquement</em></p>" }
+                                    }
+                                ]
+                            }
+                        ]
                     }
                 ]
             }
@@ -78,16 +353,210 @@
             "title": "Notre histoire",
             "slug": "notre-histoire",
             "template": "default",
-            "meta_title": "Notre histoire",
-            "meta_description": "L'histoire de notre restaurant.",
+            "meta_title": "Notre histoire - Le Gourmet",
+            "meta_description": "Decouvrez l'histoire du restaurant Le Gourmet, notre chef et notre philosophie culinaire.",
             "content": {
                 "blocks": [
                     {
-                        "type": "text-block",
-                        "id": "about-1",
+                        "type": "hero",
+                        "id": "rst-about-hero",
                         "props": {
-                            "content": "<h1>Notre histoire</h1><p>Fondé en 2010, notre restaurant propose une cuisine française revisitée.</p>"
+                            "title": "Notre histoire",
+                            "subtitle": "Depuis 2010, une passion pour la gastronomie francaise et le plaisir de recevoir.",
+                            "overlay": true
                         }
+                    },
+                    {
+                        "type": "section",
+                        "id": "rst-about-story",
+                        "props": { "backgroundColor": "#ffffff", "paddingTop": 80, "paddingBottom": 60, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "heading",
+                                "id": "rst-about-story-title",
+                                "props": { "text": "L'aventure Le Gourmet", "level": 2, "color": "#92400e" }
+                            },
+                            {
+                                "type": "spacer",
+                                "id": "rst-about-sp1",
+                                "props": { "height": 16 }
+                            },
+                            {
+                                "type": "text",
+                                "id": "rst-about-story-text",
+                                "props": { "content": "<p style='color:#475569;font-size:1.1rem;line-height:1.8'>Le Gourmet est ne en 2010 de la passion de deux amis : Pierre, chef cuisinier forme aupres des plus grands, et Marie, passionnee d'hospitalite et de service. Leur reve commun : creer un lieu ou la gastronomie francaise se vit au quotidien, dans un cadre chaleureux et sans chichi.</p><p style='color:#475569;font-size:1.1rem;line-height:1.8;margin-top:16px'>Installe dans une ancienne boulangerie du 6eme arrondissement, le restaurant a su garder l'authenticite de ses murs en pierre tout en offrant un confort moderne. En 15 ans, Le Gourmet est devenu une adresse incontournable du quartier, fidele a ses valeurs de qualite, de generosite et de convivialite.</p>" }
+                            }
+                        ]
+                    },
+                    {
+                        "type": "section",
+                        "id": "rst-about-chef",
+                        "props": { "backgroundColor": "#fffbeb", "paddingTop": 60, "paddingBottom": 60, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "heading",
+                                "id": "rst-about-chef-title",
+                                "props": { "text": "Notre chef", "level": 2, "alignment": "center", "color": "#92400e" }
+                            },
+                            {
+                                "type": "spacer",
+                                "id": "rst-about-sp2",
+                                "props": { "height": 16 }
+                            },
+                            {
+                                "type": "text",
+                                "id": "rst-about-chef-text",
+                                "props": { "content": "<p style='text-align:center;color:#475569;font-size:1.1rem;max-width:700px;margin:0 auto;line-height:1.8'>Pierre Lefebvre a grandi dans une famille ou la cuisine etait un art de vivre. Apres un apprentissage chez les freres Troisgros et des annees passees dans des etoiles Michelin a travers l'Europe, il a choisi de revenir a l'essentiel : une cuisine sincere, gourmande et ancrancee dans les saisons.</p><p style='text-align:center;color:#475569;font-size:1.1rem;max-width:700px;margin:0 auto;line-height:1.8;margin-top:16px'>Sa philosophie est simple : des produits exceptionnels, des cuissons maitrisees et des assaisonnements justes. Pas de superflu, que du gout.</p>" }
+                            }
+                        ]
+                    },
+                    {
+                        "type": "section",
+                        "id": "rst-about-values",
+                        "props": { "backgroundColor": "#ffffff", "paddingTop": 60, "paddingBottom": 80, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "heading",
+                                "id": "rst-about-values-title",
+                                "props": { "text": "Nos engagements", "level": 2, "alignment": "center", "color": "#92400e" }
+                            },
+                            {
+                                "type": "spacer",
+                                "id": "rst-about-sp3",
+                                "props": { "height": 32 }
+                            },
+                            {
+                                "type": "grid",
+                                "id": "rst-about-values-grid",
+                                "props": { "columns": 3, "gap": 32 },
+                                "children": [
+                                    {
+                                        "type": "text",
+                                        "id": "rst-about-v1",
+                                        "props": { "content": "<h3 style='color:#d97706;text-align:center;margin-bottom:12px'>Circuit court</h3><p style='color:#78716c;text-align:center'>90% de nos produits proviennent de producteurs situes a moins de 100 km. Nous privilegions le bio et le raisonne.</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "rst-about-v2",
+                                        "props": { "content": "<h3 style='color:#d97706;text-align:center;margin-bottom:12px'>Anti-gaspillage</h3><p style='color:#78716c;text-align:center'>Nous travaillons les produits dans leur integralite et adaptons nos portions. Les surplus sont redistribues a une association locale.</p>" }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "id": "rst-about-v3",
+                                        "props": { "content": "<h3 style='color:#d97706;text-align:center;margin-bottom:12px'>Fait maison</h3><p style='color:#78716c;text-align:center'>Du pain au ketchup, tout est prepare dans notre cuisine. Aucun produit industriel, aucun additif, que du fait maison.</p>" }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": "gallery",
+            "title": "Galerie",
+            "slug": "galerie",
+            "template": "default",
+            "meta_title": "Galerie - Le Gourmet",
+            "meta_description": "Decouvrez notre restaurant en images : la salle, la terrasse, nos plats et notre equipe.",
+            "content": {
+                "blocks": [
+                    {
+                        "type": "hero",
+                        "id": "rst-gal-hero",
+                        "props": {
+                            "title": "Notre univers en images",
+                            "subtitle": "Plongez dans l'ambiance du Gourmet a travers notre galerie photo.",
+                            "overlay": true
+                        }
+                    },
+                    {
+                        "type": "section",
+                        "id": "rst-gal-salle",
+                        "props": { "backgroundColor": "#ffffff", "paddingTop": 80, "paddingBottom": 40, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "heading",
+                                "id": "rst-gal-salle-title",
+                                "props": { "text": "Notre salle", "level": 2, "alignment": "center", "color": "#92400e" }
+                            },
+                            {
+                                "type": "text",
+                                "id": "rst-gal-salle-sub",
+                                "props": { "content": "<p style='text-align:center;color:#78716c;max-width:600px;margin:0 auto'>Un cadre elegant et chaleureux, melant pierres apparentes, bois et luminaires contemporains.</p>" }
+                            },
+                            {
+                                "type": "spacer",
+                                "id": "rst-gal-sp1",
+                                "props": { "height": 32 }
+                            },
+                            {
+                                "type": "grid",
+                                "id": "rst-gal-salle-grid",
+                                "props": { "columns": 3, "gap": 16 },
+                                "children": [
+                                    {
+                                        "type": "image",
+                                        "id": "rst-gal-img1",
+                                        "props": { "src": "", "alt": "Salle principale du restaurant", "objectFit": "cover" }
+                                    },
+                                    {
+                                        "type": "image",
+                                        "id": "rst-gal-img2",
+                                        "props": { "src": "", "alt": "Detail decoration interieure", "objectFit": "cover" }
+                                    },
+                                    {
+                                        "type": "image",
+                                        "id": "rst-gal-img3",
+                                        "props": { "src": "", "alt": "Bar et comptoir", "objectFit": "cover" }
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "section",
+                        "id": "rst-gal-plats",
+                        "props": { "backgroundColor": "#fffbeb", "paddingTop": 40, "paddingBottom": 40, "paddingLeft": 40, "paddingRight": 40 },
+                        "children": [
+                            {
+                                "type": "heading",
+                                "id": "rst-gal-plats-title",
+                                "props": { "text": "Nos plats", "level": 2, "alignment": "center", "color": "#92400e" }
+                            },
+                            {
+                                "type": "text",
+                                "id": "rst-gal-plats-sub",
+                                "props": { "content": "<p style='text-align:center;color:#78716c;max-width:600px;margin:0 auto'>Chaque assiette est une oeuvre. Decouvrez les creations de notre chef Pierre Lefebvre.</p>" }
+                            },
+                            {
+                                "type": "spacer",
+                                "id": "rst-gal-sp2",
+                                "props": { "height": 32 }
+                            },
+                            {
+                                "type": "grid",
+                                "id": "rst-gal-plats-grid",
+                                "props": { "columns": 3, "gap": 16 },
+                                "children": [
+                                    {
+                                        "type": "image",
+                                        "id": "rst-gal-img4",
+                                        "props": { "src": "", "alt": "Entree du jour", "objectFit": "cover" }
+                                    },
+                                    {
+                                        "type": "image",
+                                        "id": "rst-gal-img5",
+                                        "props": { "src": "", "alt": "Plat signature", "objectFit": "cover" }
+                                    },
+                                    {
+                                        "type": "image",
+                                        "id": "rst-gal-img6",
+                                        "props": { "src": "", "alt": "Dessert maison", "objectFit": "cover" }
+                                    }
+                                ]
+                            }
+                        ]
                     }
                 ]
             }
@@ -101,13 +570,14 @@
             "items": [
                 {"label": "Accueil", "page_id": "home", "order": 1},
                 {"label": "Menu", "page_id": "menu", "order": 2},
-                {"label": "Réservation", "page_id": "reservation", "order": 3},
-                {"label": "Notre histoire", "page_id": "about", "order": 4}
+                {"label": "Reservation", "page_id": "reservation", "order": 3},
+                {"label": "Notre histoire", "page_id": "about", "order": 4},
+                {"label": "Galerie", "page_id": "gallery", "order": 5}
             ]
         }
     ],
     "settings": {
         "site.name": "Le Gourmet",
-        "site.description": "Restaurant gastronomique français"
+        "site.description": "Restaurant gastronomique francais"
     }
 }

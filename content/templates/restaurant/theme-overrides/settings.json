@@ -1,0 +1,10 @@
+{
+    "colors.primary": "#d97706",
+    "colors.secondary": "#b45309",
+    "colors.accent": "#f59e0b",
+    "fonts.heading": "Playfair Display",
+    "fonts.body": "Lato",
+    "global_styles.button_style": "rounded",
+    "header.sticky": true,
+    "footer.copyright_text": "\u00a9 {year} {site_name}. Tous droits reserves."
+}

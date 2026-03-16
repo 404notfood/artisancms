@@ -1,0 +1,10 @@
+{
+    "colors.primary": "#7c3aed",
+    "colors.secondary": "#6d28d9",
+    "colors.accent": "#a78bfa",
+    "fonts.heading": "Poppins",
+    "fonts.body": "Inter",
+    "global_styles.button_style": "rounded",
+    "header.sticky": true,
+    "footer.copyright_text": "\u00a9 {year} {site_name}. Tous droits reserves."
+}

@@ -73,17 +73,22 @@ class MediaService
         // Fallback: plain file store (non-image or optimizer failure)
         if ($path === null) {
             $filename = "{$basename}.{$extension}";
-            if ($file->isValid() && $file->getRealPath() !== false && file_exists($file->getRealPath())) {
-                $path = $file->storeAs($folder, $filename, $disk);
-            } else {
-                // File temp has been consumed – store from the original path
-                $tempPath = $file->getPathname();
-                if ($tempPath && file_exists($tempPath)) {
-                    $path = Storage::disk($disk)->putFileAs($folder, $file, $filename);
-                } else {
-                    throw new \RuntimeException("Upload failed: temporary file no longer available for {$originalName}");
-                }
+            $storagePath = $folder . '/' . $filename;
+
+            // Try getRealPath first, then getPathname
+            $sourcePath = $file->getRealPath();
+            if ($sourcePath === false || $sourcePath === '' || !file_exists($sourcePath)) {
+                $sourcePath = $file->getPathname();
             }
+
+            if ($sourcePath && $sourcePath !== '' && file_exists($sourcePath)) {
+                Storage::disk($disk)->put($storagePath, fopen($sourcePath, 'r'));
+            } else {
+                // Last resort: read content directly
+                Storage::disk($disk)->put($storagePath, $file->getContent());
+            }
+
+            $path = $storagePath;
         }
 
         $filename = basename((string)$path);

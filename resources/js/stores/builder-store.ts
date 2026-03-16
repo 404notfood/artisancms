@@ -102,7 +102,7 @@ export function flattenTree(blocks: BlockNode[]): BlockNode[] {
  * Find the parent block and the index of a given block within its parent's children.
  * Returns null if the block is at root level or not found.
  */
-function findParentInfo(
+export function findParentInfo(
     blocks: BlockNode[],
     id: string,
 ): { parentId: string | null; index: number } | null {
@@ -155,6 +155,7 @@ interface BuilderState {
     historyIndex: number;
     isDirty: boolean;
     clipboard: BlockNode | null;
+    pendingDeleteId: string | null;
 
     // Block operations
     setBlocks: (blocks: BlockNode[]) => void;
@@ -170,6 +171,10 @@ interface BuilderState {
     duplicateBlock: (id: string) => string | null;
     copyBlock: (id: string) => void;
     pasteBlock: (parentId: string | null, index: number) => string | null;
+    moveBlockUp: (id: string) => void;
+    moveBlockDown: (id: string) => void;
+    setPendingDeleteId: (id: string | null) => void;
+    confirmDelete: () => void;
 
     // Selection
     selectBlock: (id: string | null) => void;
@@ -206,6 +211,7 @@ export const useBuilderStore = create<BuilderState>()(
         historyIndex: 0,
         isDirty: false,
         clipboard: null,
+        pendingDeleteId: null,
 
         // Block operations
 
@@ -330,6 +336,69 @@ export const useBuilderStore = create<BuilderState>()(
             });
 
             return cloned.id;
+        },
+
+        moveBlockUp: (id) => {
+            const state = get();
+            const info = findParentInfo(state.blocks, id);
+            if (!info || info.index === 0) return;
+
+            set((draft) => {
+                _pushHistoryOnDraft(draft);
+                const siblings = info.parentId
+                    ? findBlockInTree(draft.blocks, info.parentId)!.children!
+                    : draft.blocks;
+                const temp = siblings[info.index];
+                siblings[info.index] = siblings[info.index - 1];
+                siblings[info.index - 1] = temp;
+                draft.isDirty = true;
+            });
+        },
+
+        moveBlockDown: (id) => {
+            const state = get();
+            const info = findParentInfo(state.blocks, id);
+            if (!info) return;
+
+            const siblings = info.parentId
+                ? findBlockInTree(state.blocks, info.parentId)?.children ?? []
+                : state.blocks;
+            if (info.index >= siblings.length - 1) return;
+
+            set((draft) => {
+                _pushHistoryOnDraft(draft);
+                const draftSiblings = info.parentId
+                    ? findBlockInTree(draft.blocks, info.parentId)!.children!
+                    : draft.blocks;
+                const temp = draftSiblings[info.index];
+                draftSiblings[info.index] = draftSiblings[info.index + 1];
+                draftSiblings[info.index + 1] = temp;
+                draft.isDirty = true;
+            });
+        },
+
+        setPendingDeleteId: (id) => {
+            set((state) => {
+                state.pendingDeleteId = id;
+            });
+        },
+
+        confirmDelete: () => {
+            const { pendingDeleteId } = get();
+            if (!pendingDeleteId) return;
+
+            set((state) => {
+                _pushHistoryOnDraft(state);
+                removeBlockFromTree(state.blocks, pendingDeleteId);
+                if (state.selectedBlockId === pendingDeleteId) {
+                    state.selectedBlockId = null;
+                }
+                if (state.hoveredBlockId === pendingDeleteId) {
+                    state.hoveredBlockId = null;
+                }
+                state.pendingDeleteId = null;
+                state.isDirty = true;
+            });
         },
 
         // Selection

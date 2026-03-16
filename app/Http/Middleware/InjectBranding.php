@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Middleware;
 
 use App\Services\BrandingService;
+use App\Services\SettingService;
 use Closure;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -14,6 +15,7 @@ class InjectBranding
 {
     public function __construct(
         private readonly BrandingService $branding,
+        private readonly SettingService $settings,
     ) {}
 
     public function handle(Request $request, Closure $next): Response
@@ -22,9 +24,9 @@ class InjectBranding
 
         Inertia::share('branding', [
             'name' => $brandingData['brand_name'],
-            'logo' => $brandingData['brand_logo'],
+            'logo' => $brandingData['brand_logo'] ?? $this->settings->get('site_logo'),
             'logo_dark' => $brandingData['brand_logo_dark'],
-            'favicon' => $brandingData['brand_favicon'],
+            'favicon' => $brandingData['brand_favicon'] ?? $this->settings->get('site_favicon'),
             'color_primary' => $brandingData['brand_color_primary'],
             'color_accent' => $brandingData['brand_color_accent'],
             'show_credit' => $brandingData['brand_show_credit'],

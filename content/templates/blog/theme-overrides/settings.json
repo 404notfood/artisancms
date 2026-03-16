@@ -1,0 +1,10 @@
+{
+    "colors.primary": "#059669",
+    "colors.secondary": "#047857",
+    "colors.accent": "#10b981",
+    "fonts.heading": "Merriweather",
+    "fonts.body": "Source Sans Pro",
+    "global_styles.button_style": "rounded",
+    "header.sticky": true,
+    "footer.copyright_text": "\u00a9 {year} {site_name}. Tous droits reserves."
+}

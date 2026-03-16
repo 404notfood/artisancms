@@ -26,6 +26,9 @@ class PageService
 
         if (isset($filters['status']) && $filters['status'] !== '') {
             $query->where('status', $filters['status']);
+        } else {
+            // "Tout" exclut la corbeille
+            $query->where('status', '!=', 'trash');
         }
 
         if (isset($filters['search']) && $filters['search'] !== '') {
@@ -102,33 +105,33 @@ class PageService
     }
 
     /**
-     * Soft delete a page.
+     * Move a page to trash (set status to 'trash').
      */
     public function delete(Page $page): bool
     {
         CMS::fire('page.deleting', $page);
 
-        $deleted = (bool) $page->delete();
+        $page->update(['status' => 'trash']);
 
-        if ($deleted) {
-            CMS::fire('page.deleted', $page);
-        }
+        CMS::fire('page.deleted', $page);
 
-        return $deleted;
+        return true;
     }
 
     /**
-     * Restore a soft-deleted page.
+     * Restore a trashed page (set status back to 'draft').
      */
     public function restore(Page $page): bool
     {
-        $restored = $page->restore();
-
-        if ($restored) {
-            CMS::fire('page.restored', $page);
+        if ($page->trashed()) {
+            $page->restore();
         }
 
-        return (bool) $restored;
+        $page->update(['status' => 'draft']);
+
+        CMS::fire('page.restored', $page);
+
+        return true;
     }
 
     /**

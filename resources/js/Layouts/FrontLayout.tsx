@@ -142,11 +142,11 @@ function NavItem({ item, textColor }: { item: MenuItemData; textColor?: string }
 
 // ─── Header ─────────────────────────────────────────────────────────────────
 
-function Header({ menu, customizations }: { menu?: MenuData; customizations: Record<string, string | boolean> }) {
+function Header({ menu, customizations, brandingLogo }: { menu?: MenuData; customizations: Record<string, string | boolean>; brandingLogo?: string }) {
     const { cms } = usePage().props as { cms?: { name: string; version: string }; [key: string]: unknown };
     const siteName = cms?.name || 'ArtisanCMS';
 
-    const logoUrl = c(customizations, 'header.logo_url');
+    const logoUrl = c(customizations, 'header.logo_url') || brandingLogo || '';
     const height = c(customizations, 'header.height', '64px');
     const headerStyle = c(customizations, 'header.style', 'solid');
     const sticky = b(customizations, 'header.sticky', true);
@@ -306,13 +306,16 @@ function Footer({ menu, customizations }: { menu?: MenuData; customizations: Rec
 // ─── Layout ─────────────────────────────────────────────────────────────────
 
 export default function FrontLayout({ children, menus, theme }: FrontLayoutProps) {
+    const { branding } = usePage().props as { branding?: { logo?: string; favicon?: string; name?: string }; [key: string]: unknown };
     const customizations = (theme.customizations || {}) as Record<string, string | boolean>;
     const cssVariables = buildCssVariables(customizations);
     const googleFontsUrl = getGoogleFontsUrl(customizations);
+    const favicon = branding?.favicon;
 
     return (
         <div className="flex min-h-screen flex-col" style={cssVariables as React.CSSProperties}>
             <Head>
+                {favicon && <link rel="icon" href={favicon} />}
                 <link rel="alternate" type="application/rss+xml" title={`${c(customizations, 'general.site_name', 'ArtisanCMS')} - Flux RSS`} href="/feed" />
                 {googleFontsUrl && (
                     <>
@@ -322,7 +325,7 @@ export default function FrontLayout({ children, menus, theme }: FrontLayoutProps
                     </>
                 )}
             </Head>
-            <Header menu={menus.header} customizations={customizations} />
+            <Header menu={menus.header} customizations={customizations} brandingLogo={branding?.logo} />
             <div className="flex-1">{children}</div>
             <Footer menu={menus.footer} customizations={customizations} />
         </div>

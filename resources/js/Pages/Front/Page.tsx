@@ -22,13 +22,20 @@ export default function FrontPage({ page, menus, theme }: FrontPageProps) {
                 )}
             </Head>
             <main>
-                {page.content?.map((block) => (
-                    <BlockRenderer key={block.id} block={block} />
-                )) || (
-                    <div className="container py-20 text-center text-gray-400">
-                        Cette page n&apos;a pas encore de contenu.
-                    </div>
-                )}
+                {(() => {
+                    const blocks = Array.isArray(page.content)
+                        ? page.content
+                        : (page.content as { blocks?: unknown[] })?.blocks;
+                    return blocks && blocks.length > 0
+                        ? blocks.map((block: { id: string; [key: string]: unknown }) => (
+                            <BlockRenderer key={block.id} block={block} />
+                        ))
+                        : (
+                            <div className="container py-20 text-center text-gray-400">
+                                Cette page n&apos;a pas encore de contenu.
+                            </div>
+                        );
+                })()}
             </main>
         </FrontLayout>
     );

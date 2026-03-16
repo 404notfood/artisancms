@@ -153,6 +153,7 @@ Route::post('branding/reset', [BrandingController::class, 'reset'])->name('admin
 Route::get('templates', [TemplateController::class, 'index'])->name('admin.templates.index');
 Route::post('templates/export', [TemplateController::class, 'export'])->name('admin.templates.export');
 Route::get('templates/{slug}/preview', [TemplateController::class, 'preview'])->name('admin.templates.preview');
+Route::get('templates/{slug}/pages', [TemplateController::class, 'pages'])->name('admin.templates.pages');
 Route::post('templates/{slug}/install', [TemplateController::class, 'install'])->name('admin.templates.install');
 
 // AI Assistant

@@ -32,6 +32,11 @@ class Media extends Model
     /**
      * @var list<string>
      */
+    protected $appends = ['url'];
+
+    /**
+     * @var list<string>
+     */
     protected $fillable = [
         'filename',
         'original_filename',
