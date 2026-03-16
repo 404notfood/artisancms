@@ -1,12 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, router, usePage } from '@inertiajs/react';
-import { useState } from 'react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import type { FlashMessages } from '@/types/cms';
-
-interface ThemeCustomization {
-    colors?: Record<string, string>;
-    fonts?: Record<string, string>;
-}
 
 interface ThemeItem {
     slug: string;
@@ -15,32 +9,14 @@ interface ThemeItem {
     description: string;
     author: string;
     active: boolean;
-    customization: ThemeCustomization;
-    active_customizations: Record<string, unknown>;
 }
 
 interface ThemesIndexProps {
     themes: ThemeItem[];
 }
 
-const FONT_OPTIONS = [
-    { value: 'Inter, sans-serif', label: 'Inter' },
-    { value: 'Roboto, sans-serif', label: 'Roboto' },
-    { value: 'Open Sans, sans-serif', label: 'Open Sans' },
-    { value: 'Lato, sans-serif', label: 'Lato' },
-    { value: 'Montserrat, sans-serif', label: 'Montserrat' },
-    { value: 'Poppins, sans-serif', label: 'Poppins' },
-    { value: 'Playfair Display, serif', label: 'Playfair Display' },
-    { value: 'Merriweather, serif', label: 'Merriweather' },
-    { value: 'Georgia, serif', label: 'Georgia' },
-    { value: 'system-ui, sans-serif', label: 'System UI' },
-];
-
 export default function ThemesIndex({ themes }: ThemesIndexProps) {
     const { flash } = usePage().props as unknown as { flash: FlashMessages };
-    const [customizingSlug, setCustomizingSlug] = useState<string | null>(null);
-    const [customizations, setCustomizations] = useState<Record<string, unknown>>({});
-    const [saving, setSaving] = useState(false);
 
     function handleActivate(slug: string) {
         router.post(`/admin/themes/${slug}/activate`, {}, {
@@ -48,41 +24,10 @@ export default function ThemesIndex({ themes }: ThemesIndexProps) {
         });
     }
 
-    function openCustomizer(theme: ThemeItem) {
-        setCustomizingSlug(theme.slug);
-        setCustomizations(theme.active_customizations ?? {});
-    }
-
-    function closeCustomizer() {
-        setCustomizingSlug(null);
-        setCustomizations({});
-    }
-
-    function handleCustomizationChange(key: string, value: string) {
-        setCustomizations((prev) => ({ ...prev, [key]: value }));
-    }
-
-    function handleSaveCustomizations() {
-        if (!customizingSlug) return;
-        setSaving(true);
-        router.put(`/admin/themes/${customizingSlug}/customize`, {
-            customizations: JSON.stringify(customizations),
-        } as Record<string, string>, {
-            preserveScroll: true,
-            onFinish: () => {
-                setSaving(false);
-                closeCustomizer();
-            },
-        });
-    }
-
-    const customizingTheme = themes.find((t) => t.slug === customizingSlug);
-
     return (
         <AdminLayout header={<h1 className="text-xl font-semibold text-gray-900">Themes</h1>}>
             <Head title="Themes" />
 
-            {/* Flash message */}
             {flash.success && (
                 <div className="mb-6 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
                     {flash.success}
@@ -106,7 +51,6 @@ export default function ThemesIndex({ themes }: ThemesIndexProps) {
                                 theme.active ? 'border-indigo-300 ring-2 ring-indigo-100' : 'border-gray-200'
                             }`}
                         >
-                            {/* Theme preview placeholder */}
                             <div className="flex h-40 items-center justify-center rounded-t-lg bg-gradient-to-br from-gray-100 to-gray-50">
                                 <ThemePreviewIcon />
                             </div>
@@ -139,13 +83,12 @@ export default function ThemesIndex({ themes }: ThemesIndexProps) {
 
                                 <div className="mt-4 flex items-center gap-2">
                                     {theme.active ? (
-                                        <button
-                                            type="button"
-                                            onClick={() => openCustomizer(theme)}
-                                            className="flex-1 rounded-lg border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 transition-colors hover:bg-gray-50"
+                                        <Link
+                                            href={`/admin/themes/${theme.slug}/customize`}
+                                            className="flex-1 rounded-lg border border-gray-300 px-3 py-1.5 text-center text-xs font-medium text-gray-700 transition-colors hover:bg-gray-50"
                                         >
                                             Personnaliser
-                                        </button>
+                                        </Link>
                                     ) : (
                                         <button
                                             type="button"
@@ -161,127 +104,8 @@ export default function ThemesIndex({ themes }: ThemesIndexProps) {
                     ))}
                 </div>
             )}
-
-            {/* Customization panel (slide-over) */}
-            {customizingTheme && (
-                <>
-                    <div
-                        className="fixed inset-0 z-40 bg-black/50"
-                        onClick={closeCustomizer}
-                    />
-                    <div className="fixed inset-y-0 right-0 z-50 w-full max-w-md overflow-y-auto bg-white shadow-xl">
-                        <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
-                            <h2 className="text-lg font-semibold text-gray-900">
-                                Personnaliser : {customizingTheme.name}
-                            </h2>
-                            <button
-                                type="button"
-                                onClick={closeCustomizer}
-                                className="rounded-lg p-1 text-gray-400 hover:text-gray-600"
-                            >
-                                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
-                        </div>
-
-                        <div className="space-y-6 p-6">
-                            {/* Colors */}
-                            {customizingTheme.customization.colors &&
-                                Object.keys(customizingTheme.customization.colors).length > 0 && (
-                                    <div>
-                                        <h3 className="mb-3 text-sm font-medium text-gray-900">Couleurs</h3>
-                                        <div className="space-y-3">
-                                            {Object.entries(customizingTheme.customization.colors).map(
-                                                ([key, defaultValue]) => (
-                                                    <div key={key} className="flex items-center gap-3">
-                                                        <input
-                                                            type="color"
-                                                            value={String((customizations as Record<string, string>)[key] ?? defaultValue)}
-                                                            onChange={(e) => handleCustomizationChange(key, e.target.value)}
-                                                            className="h-8 w-8 shrink-0 cursor-pointer rounded border border-gray-300"
-                                                        />
-                                                        <label className="text-sm text-gray-700">
-                                                            {formatCustomizationLabel(key)}
-                                                        </label>
-                                                    </div>
-                                                ),
-                                            )}
-                                        </div>
-                                    </div>
-                                )}
-
-                            {/* Fonts */}
-                            {customizingTheme.customization.fonts &&
-                                Object.keys(customizingTheme.customization.fonts).length > 0 && (
-                                    <div>
-                                        <h3 className="mb-3 text-sm font-medium text-gray-900">Polices</h3>
-                                        <div className="space-y-3">
-                                            {Object.entries(customizingTheme.customization.fonts).map(
-                                                ([key, defaultValue]) => (
-                                                    <div key={key}>
-                                                        <label className="mb-1 block text-sm text-gray-700">
-                                                            {formatCustomizationLabel(key)}
-                                                        </label>
-                                                        <select
-                                                            value={String((customizations as Record<string, string>)[key] ?? defaultValue)}
-                                                            onChange={(e) => handleCustomizationChange(key, e.target.value)}
-                                                            className="block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                                                        >
-                                                            {FONT_OPTIONS.map((font) => (
-                                                                <option key={font.value} value={font.value}>
-                                                                    {font.label}
-                                                                </option>
-                                                            ))}
-                                                        </select>
-                                                    </div>
-                                                ),
-                                            )}
-                                        </div>
-                                    </div>
-                                )}
-
-                            {/* No customization options */}
-                            {(!customizingTheme.customization.colors ||
-                                Object.keys(customizingTheme.customization.colors).length === 0) &&
-                                (!customizingTheme.customization.fonts ||
-                                    Object.keys(customizingTheme.customization.fonts).length === 0) && (
-                                    <p className="py-8 text-center text-sm text-gray-500">
-                                        Ce theme ne propose pas d'options de personnalisation.
-                                    </p>
-                                )}
-                        </div>
-
-                        <div className="border-t border-gray-200 px-6 py-4">
-                            <div className="flex items-center justify-end gap-3">
-                                <button
-                                    type="button"
-                                    onClick={closeCustomizer}
-                                    className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-                                >
-                                    Annuler
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={handleSaveCustomizations}
-                                    disabled={saving}
-                                    className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 disabled:opacity-50"
-                                >
-                                    {saving ? 'Enregistrement...' : 'Enregistrer'}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </>
-            )}
         </AdminLayout>
     );
-}
-
-function formatCustomizationLabel(key: string): string {
-    return key
-        .replace(/[-_]/g, ' ')
-        .replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
 function ThemeEmptyIcon() {

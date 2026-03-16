@@ -20,20 +20,79 @@
     { "slug": "footer", "name": "Navigation pied de page" }
   ],
   "customization": {
+    "header": {
+      "logo_url": { "label": "Logo", "type": "image", "default": "" },
+      "height": { "label": "Hauteur du header", "type": "select", "default": "64px", "options": ["48px", "56px", "64px", "72px", "80px"] },
+      "style": { "label": "Style", "type": "select", "default": "solid", "options": ["solid", "transparent", "gradient"] },
+      "sticky": { "label": "Header fixe", "type": "boolean", "default": true },
+      "background_color": { "label": "Couleur de fond", "type": "color", "default": "#ffffff" },
+      "text_color": { "label": "Couleur du texte", "type": "color", "default": "#1e293b" },
+      "menu_alignment": { "label": "Alignement du menu", "type": "select", "default": "right", "options": ["left", "center", "right"] },
+      "mobile_menu_style": { "label": "Menu mobile", "type": "select", "default": "hamburger", "options": ["hamburger", "slide", "fullscreen"] },
+      "cta_text": { "label": "Texte du bouton CTA", "type": "text", "default": "" },
+      "cta_url": { "label": "URL du bouton CTA", "type": "text", "default": "" },
+      "cta_style": { "label": "Style du CTA", "type": "select", "default": "primary", "options": ["primary", "secondary", "outline"] }
+    },
+    "footer": {
+      "layout": { "label": "Style du footer", "type": "select", "default": "simple", "options": ["simple", "columns", "minimal"] },
+      "columns": { "label": "Nombre de colonnes", "type": "select", "default": "3", "options": ["2", "3", "4"] },
+      "background_color": { "label": "Couleur de fond", "type": "color", "default": "#f8fafc" },
+      "text_color": { "label": "Couleur du texte", "type": "color", "default": "#64748b" },
+      "copyright_text": { "label": "Texte copyright", "type": "text", "default": "\u00a9 {year} {site_name}. Tous droits reserves." },
+      "show_social_links": { "label": "Afficher les liens sociaux", "type": "boolean", "default": false },
+      "social_facebook": { "label": "Facebook URL", "type": "text", "default": "" },
+      "social_twitter": { "label": "Twitter / X URL", "type": "text", "default": "" },
+      "social_instagram": { "label": "Instagram URL", "type": "text", "default": "" },
+      "social_linkedin": { "label": "LinkedIn URL", "type": "text", "default": "" },
+      "social_youtube": { "label": "YouTube URL", "type": "text", "default": "" },
+      "show_powered_by": { "label": "Afficher Propulse par ArtisanCMS", "type": "boolean", "default": true }
+    },
     "colors": {
       "primary": { "label": "Couleur principale", "type": "color", "default": "#3b82f6" },
       "secondary": { "label": "Couleur secondaire", "type": "color", "default": "#64748b" },
       "accent": { "label": "Couleur accent", "type": "color", "default": "#f59e0b" },
       "background": { "label": "Fond de page", "type": "color", "default": "#ffffff" },
-      "text": { "label": "Couleur du texte", "type": "color", "default": "#1e293b" }
+      "text": { "label": "Couleur du texte", "type": "color", "default": "#1e293b" },
+      "link": { "label": "Couleur des liens", "type": "color", "default": "#3b82f6" },
+      "link_hover": { "label": "Liens au survol", "type": "color", "default": "#2563eb" },
+      "success": { "label": "Succes", "type": "color", "default": "#22c55e" },
+      "warning": { "label": "Avertissement", "type": "color", "default": "#f59e0b" },
+      "error": { "label": "Erreur", "type": "color", "default": "#ef4444" }
     },
     "fonts": {
       "heading": { "label": "Police des titres", "type": "font", "default": "Inter" },
-      "body": { "label": "Police du corps", "type": "font", "default": "Inter" }
+      "body": { "label": "Police du corps", "type": "font", "default": "Inter" },
+      "base_size": { "label": "Taille de base", "type": "select", "default": "16px", "options": ["14px", "15px", "16px", "17px", "18px"] },
+      "h1_size": { "label": "Taille H1", "type": "text", "default": "2.5rem" },
+      "h2_size": { "label": "Taille H2", "type": "text", "default": "2rem" },
+      "h3_size": { "label": "Taille H3", "type": "text", "default": "1.5rem" },
+      "h4_size": { "label": "Taille H4", "type": "text", "default": "1.25rem" },
+      "h5_size": { "label": "Taille H5", "type": "text", "default": "1.125rem" },
+      "h6_size": { "label": "Taille H6", "type": "text", "default": "1rem" },
+      "line_height": { "label": "Interligne", "type": "select", "default": "1.6", "options": ["1.4", "1.5", "1.6", "1.7", "1.8"] },
+      "letter_spacing": { "label": "Espacement lettres", "type": "select", "default": "0", "options": ["-0.025em", "0", "0.025em", "0.05em", "0.1em"] }
     },
     "layout": {
       "container_width": { "label": "Largeur max", "type": "select", "default": "1280px", "options": ["1024px", "1280px", "1440px", "100%"] },
-      "border_radius": { "label": "Arrondi", "type": "select", "default": "0.5rem", "options": ["0", "0.25rem", "0.5rem", "1rem"] }
+      "border_radius": { "label": "Arrondi", "type": "select", "default": "0.5rem", "options": ["0", "0.25rem", "0.5rem", "1rem"] },
+      "spacing_scale": { "label": "Echelle espacement", "type": "select", "default": "1", "options": ["0.75", "0.875", "1", "1.125", "1.25"] },
+      "sidebar_position": { "label": "Position sidebar", "type": "select", "default": "right", "options": ["left", "right", "none"] },
+      "content_width": { "label": "Largeur contenu", "type": "select", "default": "65ch", "options": ["55ch", "60ch", "65ch", "70ch", "75ch", "100%"] }
+    },
+    "ecommerce": {
+      "product_card_style": { "label": "Style carte produit", "type": "select", "default": "card", "options": ["card", "minimal", "overlay"] },
+      "products_per_row": { "label": "Produits par ligne", "type": "select", "default": "3", "options": ["2", "3", "4"] },
+      "image_aspect_ratio": { "label": "Ratio images", "type": "select", "default": "4/3", "options": ["1/1", "4/3", "3/2", "16/9"] },
+      "show_quick_view": { "label": "Vue rapide", "type": "boolean", "default": true },
+      "show_add_to_cart": { "label": "Bouton ajouter au panier", "type": "boolean", "default": true },
+      "price_display": { "label": "Affichage du prix", "type": "select", "default": "inline", "options": ["inline", "below", "hidden"] },
+      "sale_badge_style": { "label": "Style badge promo", "type": "select", "default": "ribbon", "options": ["ribbon", "circle", "tag"] }
+    },
+    "global_styles": {
+      "button_style": { "label": "Style des boutons", "type": "select", "default": "rounded", "options": ["square", "rounded", "pill"] },
+      "card_style": { "label": "Style des cartes", "type": "select", "default": "shadow", "options": ["flat", "shadow", "bordered"] },
+      "shadow_intensity": { "label": "Intensite des ombres", "type": "select", "default": "medium", "options": ["none", "light", "medium", "strong"] },
+      "enable_animations": { "label": "Activer les animations", "type": "boolean", "default": true }
     }
   },
   "supports": ["dark_mode", "responsive"]

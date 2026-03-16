@@ -24,7 +24,7 @@ class ImageOptimizer
         $originalExtension = strtolower($file->getClientOriginalExtension());
         if (in_array($originalExtension, ['svg', 'gif'])) {
             $path = "{$basePath}.{$originalExtension}";
-            Storage::disk('public')->putFileAs('', $file, $path);
+            $this->storeUploadedFile($file, $path);
             $results['original'] = $path;
             $results['metadata'] = [
                 'width' => null,
@@ -39,7 +39,7 @@ class ImageOptimizer
 
         if (!extension_loaded('gd')) {
             $path = "{$basePath}.{$originalExtension}";
-            Storage::disk('public')->putFileAs('', $file, $path);
+            $this->storeUploadedFile($file, $path);
             $results['original'] = $path;
             $results['metadata'] = [
                 'width' => null,
@@ -52,10 +52,15 @@ class ImageOptimizer
             return $results;
         }
 
-        $sourceImage = $this->createFromFile($file->getRealPath(), $file->getMimeType());
+        $realPath = $file->getRealPath();
+        if ($realPath === false || $realPath === '') {
+            $realPath = $file->getPathname();
+        }
+
+        $sourceImage = $this->createFromFile($realPath, $file->getMimeType());
         if (!$sourceImage) {
             $path = "{$basePath}.{$originalExtension}";
-            Storage::disk('public')->putFileAs('', $file, $path);
+            $this->storeUploadedFile($file, $path);
             $results['original'] = $path;
             $results['metadata'] = [
                 'width' => null,
@@ -253,5 +258,28 @@ class ImageOptimizer
         $data = ob_get_clean();
 
         Storage::disk('public')->put($path, $data);
+    }
+
+    /**
+     * Store an uploaded file to the public disk, handling Windows/MSYS path issues.
+     */
+    private function storeUploadedFile(UploadedFile $file, string $path): void
+    {
+        $realPath = $file->getRealPath();
+
+        if ($realPath !== false && $realPath !== '' && file_exists($realPath)) {
+            Storage::disk('public')->put($path, fopen($realPath, 'r'));
+            return;
+        }
+
+        // Fallback: try getPathname
+        $pathname = $file->getPathname();
+        if ($pathname !== '' && file_exists($pathname)) {
+            Storage::disk('public')->put($path, fopen($pathname, 'r'));
+            return;
+        }
+
+        // Last resort: read content
+        Storage::disk('public')->put($path, $file->getContent());
     }
 }

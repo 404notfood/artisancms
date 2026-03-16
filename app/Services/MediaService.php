@@ -10,6 +10,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -37,7 +38,10 @@ class MediaService
         $path = null;
 
         // For rasterized images: run through optimizer
-        if (str_starts_with($mimeType, 'image/') && !in_array($mimeType, ['image/svg+xml', 'image/gif'])) {
+        $isOptimizableImage = str_starts_with($mimeType, 'image/')
+            && !in_array($mimeType, ['image/svg+xml', 'image/gif']);
+
+        if ($isOptimizableImage && $file->isValid() && $file->getRealPath() !== false) {
             try {
                 $result = $this->optimizer->process($file, "{$folder}/{$basename}");
 
@@ -57,8 +61,11 @@ class MediaService
                         $thumbnails[$key] = $value;
                     }
                 }
-            } catch (\Throwable) {
-                // Fallback to simple store
+            } catch (\Throwable $e) {
+                Log::warning('Image optimizer failed, using fallback upload', [
+                    'file' => $originalName,
+                    'error' => $e->getMessage(),
+                ]);
                 $path = null;
             }
         }
@@ -66,7 +73,17 @@ class MediaService
         // Fallback: plain file store (non-image or optimizer failure)
         if ($path === null) {
             $filename = "{$basename}.{$extension}";
-            $path = $file->storeAs($folder, $filename, $disk);
+            if ($file->isValid() && $file->getRealPath() !== false && file_exists($file->getRealPath())) {
+                $path = $file->storeAs($folder, $filename, $disk);
+            } else {
+                // File temp has been consumed – store from the original path
+                $tempPath = $file->getPathname();
+                if ($tempPath && file_exists($tempPath)) {
+                    $path = Storage::disk($disk)->putFileAs($folder, $file, $filename);
+                } else {
+                    throw new \RuntimeException("Upload failed: temporary file no longer available for {$originalName}");
+                }
+            }
         }
 
         $filename = basename((string)$path);

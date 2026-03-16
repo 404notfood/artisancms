@@ -146,6 +146,55 @@ class ThemeManager
     }
 
     /**
+     * CSS variable prefix per section.
+     */
+    private const SECTION_PREFIXES = [
+        'colors' => '--color-',
+        'fonts' => '--font-',
+        'layout' => '--',
+        'header' => '--header-',
+        'footer' => '--footer-',
+        'ecommerce' => '--ecommerce-',
+        'global_styles' => '--global-',
+    ];
+
+    /**
+     * Field types that should NOT produce CSS variables.
+     */
+    private const NON_CSS_TYPES = ['boolean', 'image', 'text'];
+
+    /**
+     * Semantic mappings for values that need CSS transformation.
+     */
+    private const SEMANTIC_MAPPINGS = [
+        'spacing_scale' => [
+            '0.75' => '0.75',
+            '0.875' => '0.875',
+            '1' => '1',
+            '1.125' => '1.125',
+            '1.25' => '1.25',
+        ],
+        'shadow_intensity' => [
+            'none' => 'none',
+            'light' => '0 1px 3px 0 rgb(0 0 0 / 0.05)',
+            'medium' => '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+            'strong' => '0 10px 15px -3px rgb(0 0 0 / 0.15)',
+        ],
+        'button_style' => [
+            'square' => '0',
+            'rounded' => '0.375rem',
+            'pill' => '9999px',
+        ],
+        'letter_spacing' => [
+            '-0.025em' => '-0.025em',
+            '0' => '0',
+            '0.025em' => '0.025em',
+            '0.05em' => '0.05em',
+            '0.1em' => '0.1em',
+        ],
+    ];
+
+    /**
      * Generate CSS custom properties from the active theme's customizations.
      * Merges manifest defaults with DB-stored customization overrides.
      */
@@ -165,28 +214,40 @@ class ThemeManager
 
         $variables = [];
 
-        // Colors
-        foreach ($customization['colors'] ?? [] as $key => $definition) {
-            $value = $overrides['colors'][$key] ?? $definition['default'] ?? null;
-            if ($value !== null) {
-                $variables["--color-{$key}"] = $value;
+        foreach ($customization as $section => $fields) {
+            if (!is_array($fields)) {
+                continue;
             }
-        }
 
-        // Fonts
-        foreach ($customization['fonts'] ?? [] as $key => $definition) {
-            $value = $overrides['fonts'][$key] ?? $definition['default'] ?? null;
-            if ($value !== null) {
-                $variables["--font-{$key}"] = $value;
-            }
-        }
+            $prefix = self::SECTION_PREFIXES[$section] ?? "--{$section}-";
 
-        // Layout
-        foreach ($customization['layout'] ?? [] as $key => $definition) {
-            $cssKey = str_replace('_', '-', $key);
-            $value = $overrides['layout'][$key] ?? $definition['default'] ?? null;
-            if ($value !== null) {
-                $variables["--{$cssKey}"] = $value;
+            foreach ($fields as $key => $definition) {
+                if (!is_array($definition)) {
+                    continue;
+                }
+
+                $fieldType = $definition['type'] ?? 'text';
+                if (in_array($fieldType, self::NON_CSS_TYPES, true)) {
+                    continue;
+                }
+
+                $dotKey = "{$section}.{$key}";
+                $value = $overrides[$dotKey]
+                    ?? $overrides[$section][$key]
+                    ?? $definition['default']
+                    ?? null;
+
+                if ($value === null || $value === '') {
+                    continue;
+                }
+
+                // Apply semantic mappings
+                if (isset(self::SEMANTIC_MAPPINGS[$key][$value])) {
+                    $value = self::SEMANTIC_MAPPINGS[$key][$value];
+                }
+
+                $cssKey = $prefix . str_replace('_', '-', $key);
+                $variables[$cssKey] = (string) $value;
             }
         }
 
@@ -201,6 +262,47 @@ class ThemeManager
         );
 
         return ":root {\n" . implode("\n", $lines) . "\n}";
+    }
+
+    /**
+     * Get all customization values (including non-CSS like booleans, text, images).
+     * Used to pass raw config to the frontend.
+     *
+     * @return array<string, mixed>
+     */
+    public function getAllCustomizations(?string $slug = null): array
+    {
+        $theme = $slug
+            ? CmsTheme::where('slug', $slug)->first()
+            : $this->getActive();
+
+        if ($theme === null) {
+            return [];
+        }
+
+        $config = $this->getThemeConfig($theme->slug);
+        $customization = $config['customization'] ?? [];
+        $overrides = is_array($theme->customizations) ? $theme->customizations : [];
+
+        $result = [];
+
+        foreach ($customization as $section => $fields) {
+            if (!is_array($fields)) {
+                continue;
+            }
+            foreach ($fields as $key => $definition) {
+                if (!is_array($definition)) {
+                    continue;
+                }
+                $dotKey = "{$section}.{$key}";
+                $result[$dotKey] = $overrides[$dotKey]
+                    ?? $overrides[$section][$key]
+                    ?? $definition['default']
+                    ?? '';
+            }
+        }
+
+        return $result;
     }
 
     /**

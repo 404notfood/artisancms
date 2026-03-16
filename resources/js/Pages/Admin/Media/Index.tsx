@@ -36,14 +36,39 @@ export default function MediaIndex({ media, filters }: MediaIndexProps) {
     function handleUpload(files: FileList | null) {
         if (!files || files.length === 0) return;
 
-        const formData = new FormData();
-        Array.from(files).forEach((file) => {
-            formData.append('files[]', file);
-        });
+        const csrfToken = document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]')?.content || '';
+        let completed = 0;
+        const total = files.length;
 
-        router.post('/admin/media', formData, {
-            forceFormData: true,
-            preserveState: true,
+        Array.from(files).forEach((file) => {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            fetch('/admin/media', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json',
+                },
+            })
+                .then((res) => {
+                    if (!res.ok) throw new Error(`Upload failed: ${res.status}`);
+                    return res.json();
+                })
+                .then(() => {
+                    completed++;
+                    if (completed === total) {
+                        router.reload({ only: ['media'] });
+                    }
+                })
+                .catch((err) => {
+                    console.error('Upload error:', err);
+                    completed++;
+                    if (completed === total) {
+                        router.reload({ only: ['media'] });
+                    }
+                });
         });
     }
 
