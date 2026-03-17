@@ -155,6 +155,7 @@ interface BuilderState {
     historyIndex: number;
     isDirty: boolean;
     clipboard: BlockNode | null;
+    styleClipboard: Record<string, unknown> | null;
     pendingDeleteId: string | null;
 
     // Block operations
@@ -171,6 +172,8 @@ interface BuilderState {
     duplicateBlock: (id: string) => string | null;
     copyBlock: (id: string) => void;
     pasteBlock: (parentId: string | null, index: number) => string | null;
+    copyStyles: (id: string) => void;
+    pasteStyles: (id: string) => void;
     moveBlockUp: (id: string) => void;
     moveBlockDown: (id: string) => void;
     setPendingDeleteId: (id: string | null) => void;
@@ -211,6 +214,7 @@ export const useBuilderStore = create<BuilderState>()(
         historyIndex: 0,
         isDirty: false,
         clipboard: null,
+        styleClipboard: null,
         pendingDeleteId: null,
 
         // Block operations
@@ -336,6 +340,33 @@ export const useBuilderStore = create<BuilderState>()(
             });
 
             return cloned.id;
+        },
+
+        copyStyles: (id) => {
+            const block = findBlockInTree(get().blocks, id);
+            if (!block) return;
+            // Extract style-related props (exclude content like text, src, items, etc.)
+            const styleKeys = ['backgroundColor', 'color', 'fontSize', 'fontWeight', 'textAlign', 'padding', 'paddingTop', 'paddingBottom', 'paddingLeft', 'paddingRight', 'margin', 'borderRadius', 'border', 'shadow', 'animation', 'width', 'height', 'maxWidth', 'opacity'];
+            const styles: Record<string, unknown> = {};
+            for (const key of styleKeys) {
+                if (block.props[key] !== undefined) {
+                    styles[key] = structuredClone(block.props[key]);
+                }
+            }
+            set((state) => { state.styleClipboard = styles; });
+        },
+
+        pasteStyles: (id) => {
+            const { styleClipboard } = get();
+            if (!styleClipboard || Object.keys(styleClipboard).length === 0) return;
+            set((state) => {
+                const block = findBlockInTree(state.blocks, id);
+                if (block) {
+                    _pushHistoryOnDraft(state);
+                    Object.assign(block.props, styleClipboard);
+                    state.isDirty = true;
+                }
+            });
         },
 
         moveBlockUp: (id) => {

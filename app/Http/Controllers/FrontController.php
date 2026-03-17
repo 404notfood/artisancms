@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Models\AnnouncementBar;
 use App\Models\Page;
 use App\Models\Menu;
 use App\Models\Post;
+use App\Models\Setting;
 use App\Models\PreviewToken;
 use App\CMS\Themes\ThemeManager;
+use App\Services\DesignTokenService;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -16,13 +19,22 @@ class FrontController extends Controller
 {
     public function __construct(
         private readonly ThemeManager $themeManager,
+        private readonly DesignTokenService $designTokenService,
     ) {}
 
     public function home(): Response
     {
-        $page = Page::where('slug', 'home')
-            ->where('status', 'published')
-            ->first();
+        $homepageId = Setting::where('key', 'homepage_id')
+            ->orderByDesc('id')
+            ->value('value');
+
+        $page = null;
+
+        if ($homepageId) {
+            $page = Page::where('id', (int) $homepageId)
+                ->where('status', 'published')
+                ->first();
+        }
 
         if (!$page) {
             $page = Page::where('status', 'published')
@@ -93,6 +105,8 @@ class FrontController extends Controller
         $theme = $this->themeManager->getActive();
         $themeConfig = $theme ? $this->themeManager->getThemeConfig($theme->slug) : [];
 
+        $announcement = AnnouncementBar::current()->first();
+
         return Inertia::render('Front/Page', [
             'page' => $page,
             'menus' => $menus,
@@ -100,6 +114,8 @@ class FrontController extends Controller
                 'customizations' => $theme?->customizations ?? $this->getDefaultCustomizations($themeConfig),
                 'layouts' => $themeConfig['layouts'] ?? [],
             ],
+            'designTokensCss' => $this->designTokenService->generateCssVariables(),
+            'announcement' => $announcement,
         ]);
     }
 

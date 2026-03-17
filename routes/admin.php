@@ -29,6 +29,12 @@ use App\Http\Controllers\Admin\PopupController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RedirectController;
 use App\Http\Controllers\Admin\WebhookController;
+use App\Http\Controllers\Admin\BlockPatternController;
+use App\Http\Controllers\Admin\PluginSettingsController;
+use App\Http\Controllers\Admin\DesignTokenController;
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\SystemController;
+use App\Http\Controllers\Admin\UpdateController;
 use App\Http\Controllers\Admin\WidgetController;
 use Illuminate\Support\Facades\Route;
 
@@ -88,10 +94,15 @@ Route::resource('users', UserController::class)->names('admin.users');
 // Media
 Route::get('media', [MediaController::class, 'index'])->name('admin.media.index');
 Route::post('media', [MediaController::class, 'store'])->name('admin.media.store');
+Route::get('media/folders', [MediaController::class, 'folders'])->name('admin.media.folders');
+Route::get('media/orphans', [MediaController::class, 'orphans'])->name('admin.media.orphans');
+Route::get('media/stock-search', [MediaController::class, 'stockSearch'])->name('admin.media.stock-search');
+Route::post('media/stock-download', [MediaController::class, 'stockDownload'])->name('admin.media.stock-download');
 Route::get('media/{media}', [MediaController::class, 'show'])->name('admin.media.show');
 Route::put('media/{media}', [MediaController::class, 'update'])->name('admin.media.update');
 Route::delete('media/{media}', [MediaController::class, 'destroy'])->name('admin.media.destroy');
 Route::post('media/{media}/crop', [MediaController::class, 'crop'])->name('admin.media.crop');
+Route::post('media/{media}/replace', [MediaController::class, 'replace'])->name('admin.media.replace');
 
 // Menus
 Route::resource('menus', MenuController::class)->names('admin.menus')->except(['show']);
@@ -126,6 +137,8 @@ Route::put('themes/{slug}/customize', [ThemeController::class, 'customize'])->na
 Route::get('plugins', [PluginController::class, 'index'])->name('admin.plugins.index');
 Route::post('plugins/{slug}/enable', [PluginController::class, 'enable'])->name('admin.plugins.enable');
 Route::post('plugins/{slug}/disable', [PluginController::class, 'disable'])->name('admin.plugins.disable');
+Route::get('plugins/{slug}/settings', [PluginSettingsController::class, 'show'])->name('admin.plugins.settings');
+Route::put('plugins/{slug}/settings', [PluginSettingsController::class, 'update'])->name('admin.plugins.settings.update');
 
 // Email Templates
 Route::get('email-templates', [EmailTemplateController::class, 'index'])->name('admin.email-templates.index');
@@ -224,3 +237,37 @@ Route::delete('newsletter/{subscriber}', [NewsletterController::class, 'destroy'
 
 // Popups
 Route::resource('popups', PopupController::class)->names('admin.popups')->except(['show']);
+
+// Design Tokens (Style Book)
+Route::get('design-tokens', [DesignTokenController::class, 'index'])->name('admin.design-tokens.index');
+Route::post('design-tokens', [DesignTokenController::class, 'store'])->name('admin.design-tokens.store');
+Route::put('design-tokens/{designToken}', [DesignTokenController::class, 'update'])->name('admin.design-tokens.update');
+Route::delete('design-tokens/{designToken}', [DesignTokenController::class, 'destroy'])->name('admin.design-tokens.destroy');
+Route::post('design-tokens/seed-defaults', [DesignTokenController::class, 'seedDefaults'])->name('admin.design-tokens.seed');
+Route::get('design-tokens/css', [DesignTokenController::class, 'css'])->name('admin.design-tokens.css');
+
+// System (Sessions, Health Check)
+Route::get('system/sessions', [SystemController::class, 'sessions'])->name('admin.system.sessions');
+Route::delete('system/sessions/{session}', [SystemController::class, 'destroySession'])->name('admin.system.sessions.destroy');
+Route::post('system/sessions/logout-all', [SystemController::class, 'logoutAllSessions'])->name('admin.system.sessions.logout-all');
+Route::get('system/health', [SystemController::class, 'healthCheck'])->name('admin.system.health');
+
+// Updates & Error Recovery
+Route::get('updates', [UpdateController::class, 'index'])->name('admin.updates.index');
+Route::get('updates/check', [UpdateController::class, 'check'])->name('admin.updates.check');
+Route::post('updates/safe-mode', [UpdateController::class, 'toggleSafeMode'])->name('admin.updates.safe-mode');
+Route::post('updates/recovery-token', [UpdateController::class, 'generateRecoveryToken'])->name('admin.updates.recovery-token');
+
+// Roles (Settings)
+Route::get('settings/roles', [RoleController::class, 'index'])->name('admin.roles.index');
+Route::get('settings/roles/create', [RoleController::class, 'create'])->name('admin.roles.create');
+Route::post('settings/roles', [RoleController::class, 'store'])->name('admin.roles.store');
+Route::get('settings/roles/{role}/edit', [RoleController::class, 'edit'])->name('admin.roles.edit');
+Route::put('settings/roles/{role}', [RoleController::class, 'update'])->name('admin.roles.update');
+Route::delete('settings/roles/{role}', [RoleController::class, 'destroy'])->name('admin.roles.destroy');
+
+// Block Patterns (JSON API for builder)
+Route::get('block-patterns', [BlockPatternController::class, 'index'])->name('admin.block-patterns.index');
+Route::post('block-patterns', [BlockPatternController::class, 'store'])->name('admin.block-patterns.store');
+Route::put('block-patterns/{blockPattern}', [BlockPatternController::class, 'update'])->name('admin.block-patterns.update');
+Route::delete('block-patterns/{blockPattern}', [BlockPatternController::class, 'destroy'])->name('admin.block-patterns.destroy');

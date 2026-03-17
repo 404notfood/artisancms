@@ -4,8 +4,9 @@ import { getBlock, getBlocksByCategory } from './blocks/block-registry';
 import DraggableBlockItem from './draggable-block-item';
 import BlockBreadcrumb from './block-breadcrumb';
 import BlockTree from './block-tree';
+import PatternLibrary from './pattern-library';
 
-type TabId = 'blocks' | 'structure' | 'settings';
+type TabId = 'blocks' | 'structure' | 'settings' | 'patterns';
 
 export default function BuilderSidebar() {
     const [activeTab, setActiveTab] = useState<TabId>('blocks');
@@ -28,12 +29,16 @@ export default function BuilderSidebar() {
         { key: 'layout', label: 'Mise en page' },
         { key: 'content', label: 'Contenu' },
         { key: 'media', label: 'Media' },
+        { key: 'interactive', label: 'Interactif' },
+        { key: 'marketing', label: 'Marketing' },
+        { key: 'data', label: 'Donnees' },
     ];
 
     const tabs: { id: TabId; label: string }[] = [
         { id: 'blocks', label: 'Blocs' },
         { id: 'structure', label: 'Structure' },
         { id: 'settings', label: 'Proprietes' },
+        { id: 'patterns', label: 'Patterns' },
     ];
 
     return (
@@ -73,6 +78,8 @@ export default function BuilderSidebar() {
                 )}
 
                 {activeTab === 'structure' && <BlockTree />}
+
+                {activeTab === 'patterns' && <PatternLibrary />}
 
                 {activeTab === 'settings' && (
                     <>

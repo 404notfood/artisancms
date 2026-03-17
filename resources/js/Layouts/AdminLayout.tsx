@@ -2,6 +2,8 @@ import { Link, usePage, router } from '@inertiajs/react';
 import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 import type { SharedProps } from '@/types/cms';
+import CommandPalette from '@/Components/admin/command-palette';
+import { ErrorBoundary } from '@/Components/error-boundary';
 import {
     LayoutDashboard,
     LayoutGrid,
@@ -95,6 +97,7 @@ const navigationDefs: NavGroupDef[] = [
         title: 'Apparence',
         items: [
             { label: 'Themes', href: '/admin/themes', icon: Palette },
+            { label: 'Style Book', href: '/admin/design-tokens', icon: Palette },
             { label: 'Templates', href: '/admin/templates', icon: BookTemplate },
             { label: 'Plugins', href: '/admin/plugins', icon: Puzzle },
         ],
@@ -672,11 +675,16 @@ export default function AdminLayout({ header, children }: AdminLayoutProps) {
                 </header>
 
                 {/* Page content */}
-                <main className="p-4 lg:p-8">{children}</main>
+                <main className="p-4 lg:p-8">
+                    <ErrorBoundary>{children}</ErrorBoundary>
+                </main>
             </div>
 
             {/* Flash toasts */}
             <FlashToasts flash={flash} />
+
+            {/* Command Palette (Ctrl+K) */}
+            <CommandPalette />
         </div>
     );
 }

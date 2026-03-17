@@ -15,3 +15,58 @@
 .tiptap-inline .ProseMirror {
     outline: none;
 }
+
+/* ─── Builder Animations ────────────────────────────────────────────────── */
+@keyframes cms-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+@keyframes cms-slide-up {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes cms-slide-down {
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes cms-slide-left {
+    from { opacity: 0; transform: translateX(30px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+@keyframes cms-slide-right {
+    from { opacity: 0; transform: translateX(-30px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+@keyframes cms-zoom-in {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+@keyframes cms-zoom-out {
+    from { opacity: 0; transform: scale(1.1); }
+    to { opacity: 1; transform: scale(1); }
+}
+@keyframes cms-rotate {
+    from { opacity: 0; transform: rotate(-10deg); }
+    to { opacity: 1; transform: rotate(0); }
+}
+@keyframes cms-bounce {
+    0%, 100% { opacity: 1; transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+@keyframes cms-flip {
+    from { opacity: 0; transform: perspective(600px) rotateY(90deg); }
+    to { opacity: 1; transform: perspective(600px) rotateY(0); }
+}
+
+.cms-animate {
+    animation-fill-mode: both;
+}
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+    .cms-animate {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}

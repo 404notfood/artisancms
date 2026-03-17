@@ -2,12 +2,16 @@ import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, router } from '@inertiajs/react';
 import { useState, useRef } from 'react';
 import type { MediaData, PaginatedResponse } from '@/types/cms';
+import { MediaFolderTree } from '@/Components/admin/media-folder-tree';
+import { ImageEditor } from '@/Components/admin/image-editor';
+import { StockPhotoSearch } from '@/Components/admin/stock-photo-search';
 
 interface MediaIndexProps {
     media: PaginatedResponse<MediaData>;
     filters: {
         type?: string;
         search?: string;
+        folder?: string;
     };
 }
 
@@ -18,19 +22,28 @@ const typeFilters = [
     { label: 'Vidéos', value: 'video' },
 ];
 
+type SidePanel = 'details' | 'stock' | 'editor';
+
 export default function MediaIndex({ media, filters }: MediaIndexProps) {
     const [search, setSearch] = useState(filters.search ?? '');
     const [selectedMedia, setSelectedMedia] = useState<MediaData | null>(null);
     const [isDragging, setIsDragging] = useState(false);
+    const [currentFolder, setCurrentFolder] = useState(filters.folder ?? '');
+    const [sidePanel, setSidePanel] = useState<SidePanel>('details');
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     function handleSearch(e: React.FormEvent) {
         e.preventDefault();
-        router.get('/admin/media', { search, type: filters.type }, { preserveState: true });
+        router.get('/admin/media', { search, type: filters.type, folder: currentFolder }, { preserveState: true });
     }
 
     function handleTypeChange(type: string) {
-        router.get('/admin/media', { type, search: filters.search }, { preserveState: true });
+        router.get('/admin/media', { type, search: filters.search, folder: currentFolder }, { preserveState: true });
+    }
+
+    function handleFolderChange(folder: string) {
+        setCurrentFolder(folder);
+        router.get('/admin/media', { folder, type: filters.type, search: filters.search }, { preserveState: true });
     }
 
     function handleUpload(files: FileList | null) {
@@ -43,6 +56,7 @@ export default function MediaIndex({ media, filters }: MediaIndexProps) {
         Array.from(files).forEach((file) => {
             const formData = new FormData();
             formData.append('file', file);
+            if (currentFolder) formData.append('folder', currentFolder);
 
             fetch('/admin/media', {
                 method: 'POST',
@@ -148,7 +162,7 @@ export default function MediaIndex({ media, filters }: MediaIndexProps) {
                     />
                 </div>
 
-                {/* Filters + Search */}
+                {/* Filters + Search + Stock Photos toggle */}
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div className="flex gap-1">
                         {typeFilters.map((filter) => (
@@ -164,6 +178,20 @@ export default function MediaIndex({ media, filters }: MediaIndexProps) {
                                 {filter.label}
                             </button>
                         ))}
+                        <div className="mx-2 w-px bg-gray-200" />
+                        <button
+                            onClick={() => {
+                                setSidePanel('stock');
+                                setSelectedMedia(null);
+                            }}
+                            className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+                                sidePanel === 'stock'
+                                    ? 'bg-emerald-100 text-emerald-700'
+                                    : 'text-gray-600 hover:bg-gray-100'
+                            }`}
+                        >
+                            Stock Photos
+                        </button>
                     </div>
 
                     <form onSubmit={handleSearch} className="flex gap-2">
@@ -184,6 +212,12 @@ export default function MediaIndex({ media, filters }: MediaIndexProps) {
                 </div>
 
                 <div className="flex gap-6">
+                    {/* Folder sidebar */}
+                    <MediaFolderTree
+                        currentFolder={currentFolder}
+                        onSelectFolder={handleFolderChange}
+                    />
+
                     {/* Grid */}
                     <div className="flex-1">
                         {media.data.length === 0 ? (
@@ -196,7 +230,10 @@ export default function MediaIndex({ media, filters }: MediaIndexProps) {
                                 {media.data.map((item) => (
                                     <button
                                         key={item.id}
-                                        onClick={() => setSelectedMedia(item)}
+                                        onClick={() => {
+                                            setSelectedMedia(item);
+                                            setSidePanel('details');
+                                        }}
                                         className={`group relative overflow-hidden rounded-lg border bg-white transition-all hover:shadow-md ${
                                             selectedMedia?.id === item.id
                                                 ? 'border-indigo-500 ring-2 ring-indigo-200'
@@ -248,6 +285,7 @@ export default function MediaIndex({ media, filters }: MediaIndexProps) {
                                                     page: p,
                                                     type: filters.type ?? '',
                                                     search: filters.search ?? '',
+                                                    folder: currentFolder,
                                                 }, { preserveState: true })
                                             }
                                             className={`rounded px-3 py-1 text-sm ${
@@ -264,8 +302,41 @@ export default function MediaIndex({ media, filters }: MediaIndexProps) {
                         )}
                     </div>
 
-                    {/* Detail panel */}
-                    {selectedMedia && (
+                    {/* Right side panel */}
+                    {sidePanel === 'stock' && (
+                        <div className="hidden w-80 shrink-0 rounded-lg border border-gray-200 bg-white p-4 lg:block">
+                            <div className="flex items-center justify-between mb-4">
+                                <h3 className="text-sm font-medium text-gray-900">Stock Photos</h3>
+                                <button
+                                    onClick={() => setSidePanel('details')}
+                                    className="text-gray-400 hover:text-gray-600"
+                                >
+                                    <CloseIcon />
+                                </button>
+                            </div>
+                            <StockPhotoSearch
+                                onSelect={() => {
+                                    router.reload({ only: ['media'] });
+                                }}
+                            />
+                        </div>
+                    )}
+
+                    {sidePanel === 'editor' && selectedMedia && isImage(selectedMedia.mime_type) && (
+                        <div className="hidden w-96 shrink-0 rounded-lg border border-gray-200 bg-white p-4 lg:block">
+                            <ImageEditor
+                                mediaId={selectedMedia.id}
+                                imageUrl={selectedMedia.url}
+                                onSave={() => {
+                                    router.reload({ only: ['media'] });
+                                    setSidePanel('details');
+                                }}
+                                onCancel={() => setSidePanel('details')}
+                            />
+                        </div>
+                    )}
+
+                    {sidePanel === 'details' && selectedMedia && (
                         <div className="hidden w-80 shrink-0 rounded-lg border border-gray-200 bg-white p-4 lg:block">
                             <div className="flex items-center justify-between mb-4">
                                 <h3 className="text-sm font-medium text-gray-900">Détails du fichier</h3>
@@ -336,10 +407,18 @@ export default function MediaIndex({ media, filters }: MediaIndexProps) {
                             </div>
 
                             {/* Actions */}
-                            <div className="mt-4 flex gap-2">
+                            <div className="mt-4 space-y-2">
+                                {isImage(selectedMedia.mime_type) && (
+                                    <button
+                                        onClick={() => setSidePanel('editor')}
+                                        className="w-full rounded-lg border border-indigo-300 px-3 py-2 text-sm font-medium text-indigo-700 hover:bg-indigo-50 transition-colors"
+                                    >
+                                        Recadrer / Remplacer
+                                    </button>
+                                )}
                                 <button
                                     onClick={() => handleDelete(selectedMedia)}
-                                    className="flex-1 rounded-lg border border-red-300 px-3 py-2 text-sm font-medium text-red-700 hover:bg-red-50 transition-colors"
+                                    className="w-full rounded-lg border border-red-300 px-3 py-2 text-sm font-medium text-red-700 hover:bg-red-50 transition-colors"
                                 >
                                     Supprimer
                                 </button>

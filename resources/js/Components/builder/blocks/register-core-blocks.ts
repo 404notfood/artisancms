@@ -80,6 +80,12 @@ import TimelineSettings from './settings/timeline-settings';
 import EmbedSettings from './settings/embed-settings';
 import FormBlockSettings from './settings/form-block-settings';
 
+// Batch 3 - TOC & Shape Divider
+import TocRenderer from './renderers/toc-renderer';
+import TocSettings from './settings/toc-settings';
+import ShapeDividerRenderer from './renderers/shape-divider-renderer';
+import ShapeDividerSettings from './settings/shape-divider-settings';
+
 let registered = false;
 
 export function registerCoreBlocks() {
@@ -376,5 +382,23 @@ export function registerCoreBlocks() {
         label: 'Formulaire',
         icon: 'ClipboardList',
         category: 'data',
+    });
+
+    // ---- Batch 3: TOC & Shape Divider ----
+
+    registerBlock('toc', {
+        renderer: TocRenderer,
+        settings: TocSettings,
+        label: 'Table des matieres',
+        icon: 'ListOrdered',
+        category: 'content',
+    });
+
+    registerBlock('shape-divider', {
+        renderer: ShapeDividerRenderer,
+        settings: ShapeDividerSettings,
+        label: 'Separateur SVG',
+        icon: 'Waves',
+        category: 'layout',
     });
 }

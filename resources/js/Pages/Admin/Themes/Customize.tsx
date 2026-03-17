@@ -176,16 +176,16 @@ export default function Customize({ theme, schema, values }: CustomizeProps) {
                         </nav>
                     </div>
 
-                    {/* Content */}
-                    <div className="flex-1 overflow-y-auto p-6">
-                        <div className="mb-6 flex items-center gap-3">
+                    {/* Settings */}
+                    <div className="w-80 shrink-0 overflow-y-auto border-r border-gray-200 p-5">
+                        <div className="mb-4 flex items-center gap-3">
                             <SectionIcon className="h-5 w-5 text-indigo-500" />
-                            <h2 className="text-lg font-semibold text-gray-900">
+                            <h2 className="text-base font-semibold text-gray-900">
                                 {SECTION_META[activeSection]?.label || activeSection}
                             </h2>
                         </div>
 
-                        <div className="max-w-2xl space-y-5">
+                        <div className="space-y-4">
                             {Object.entries(sectionFields).map(([key, definition]) => {
                                 const dotKey = `${activeSection}.${key}`;
                                 const value = data[dotKey] ?? definition.default;
@@ -207,6 +207,57 @@ export default function Customize({ theme, schema, values }: CustomizeProps) {
                                     Aucune option disponible pour cette section.
                                 </p>
                             )}
+                        </div>
+                    </div>
+
+                    {/* Live Preview iframe */}
+                    <div className="flex-1 bg-gray-100 relative">
+                        <iframe
+                            src="/"
+                            className="w-full h-full border-0"
+                            title="Live preview"
+                            ref={(el) => {
+                                if (!el) return;
+                                // Inject CSS variables into iframe on data change
+                                try {
+                                    const doc = el.contentDocument;
+                                    if (!doc) return;
+                                    let style = doc.getElementById('theme-preview-vars');
+                                    if (!style) {
+                                        style = doc.createElement('style');
+                                        style.id = 'theme-preview-vars';
+                                        doc.head.appendChild(style);
+                                    }
+                                    const vars = Object.entries(data)
+                                        .filter(([, v]) => typeof v === 'string' && v !== '')
+                                        .map(([k, v]) => {
+                                            const dotIdx = k.indexOf('.');
+                                            if (dotIdx === -1) return '';
+                                            const section = k.substring(0, dotIdx);
+                                            const key = k.substring(dotIdx + 1);
+                                            const prefixes: Record<string, string> = {
+                                                colors: '--color-',
+                                                fonts: '--font-',
+                                                layout: '--',
+                                                header: '--header-',
+                                                footer: '--footer-',
+                                                global_styles: '--global-',
+                                            };
+                                            const prefix = prefixes[section];
+                                            if (!prefix) return '';
+                                            if (String(v).startsWith('/') || String(v).startsWith('http')) return '';
+                                            return `${prefix}${key.replace(/_/g, '-')}: ${v};`;
+                                        })
+                                        .filter(Boolean)
+                                        .join('\n  ');
+                                    style.textContent = `:root {\n  ${vars}\n}`;
+                                } catch {
+                                    // Cross-origin or not loaded yet
+                                }
+                            }}
+                        />
+                        <div className="absolute bottom-3 right-3 bg-white/80 backdrop-blur-sm rounded-lg px-3 py-1.5 text-xs text-gray-500 shadow-sm border">
+                            Apercu en direct
                         </div>
                     </div>
                 </div>

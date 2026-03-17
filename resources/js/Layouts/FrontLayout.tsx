@@ -1,6 +1,7 @@
 import { Head, Link, usePage } from '@inertiajs/react';
 import type { MenuData, MenuItemData } from '@/types/cms';
 import type { ReactNode } from 'react';
+import { AnnouncementBar } from '@/Components/front/announcement-bar';
 
 interface FrontLayoutProps {
     children: ReactNode;
@@ -306,7 +307,7 @@ function Footer({ menu, customizations }: { menu?: MenuData; customizations: Rec
 // ─── Layout ─────────────────────────────────────────────────────────────────
 
 export default function FrontLayout({ children, menus, theme }: FrontLayoutProps) {
-    const { branding } = usePage().props as { branding?: { logo?: string; favicon?: string; name?: string }; [key: string]: unknown };
+    const { branding, designTokensCss, announcement } = usePage().props as { branding?: { logo?: string; favicon?: string; name?: string }; designTokensCss?: string; announcement?: { id: number; message: string; link_text?: string; link_url?: string; bg_color: string; text_color: string; position: 'top' | 'bottom'; dismissible: boolean } | null; [key: string]: unknown };
     const customizations = (theme.customizations || {}) as Record<string, string | boolean>;
     const cssVariables = buildCssVariables(customizations);
     const googleFontsUrl = getGoogleFontsUrl(customizations);
@@ -316,6 +317,7 @@ export default function FrontLayout({ children, menus, theme }: FrontLayoutProps
         <div className="flex min-h-screen flex-col" style={cssVariables as React.CSSProperties}>
             <Head>
                 {favicon && <link rel="icon" href={favicon} />}
+                {designTokensCss && <style>{designTokensCss}</style>}
                 <link rel="alternate" type="application/rss+xml" title={`${c(customizations, 'general.site_name', 'ArtisanCMS')} - Flux RSS`} href="/feed" />
                 {googleFontsUrl && (
                     <>
@@ -325,9 +327,15 @@ export default function FrontLayout({ children, menus, theme }: FrontLayoutProps
                     </>
                 )}
             </Head>
+            {announcement && announcement.position === 'top' && (
+                <AnnouncementBar announcement={announcement} />
+            )}
             <Header menu={menus.header} customizations={customizations} brandingLogo={branding?.logo} />
             <div className="flex-1">{children}</div>
             <Footer menu={menus.footer} customizations={customizations} />
+            {announcement && announcement.position === 'bottom' && (
+                <AnnouncementBar announcement={announcement} />
+            )}
         </div>
     );
 }

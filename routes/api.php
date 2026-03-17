@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\Admin\SystemController;
 use App\Http\Controllers\Api\BuilderApiController;
 use App\Http\Controllers\Api\MediaApiController;
+use App\Http\Controllers\Api\SearchApiController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -55,3 +57,12 @@ Route::prefix('admin')
         Route::post('pages/reorder', [BuilderApiController::class, 'reorderPages'])
             ->name('api.admin.pages.reorder');
     });
+
+// Search API (front-end autocomplete)
+Route::get('search', [SearchApiController::class, 'search'])
+    ->middleware('web')
+    ->name('api.search');
+
+// Health check (public endpoint)
+Route::get('/health', [SystemController::class, 'healthCheckApi'])
+    ->name('api.health');
