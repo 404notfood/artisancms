@@ -105,7 +105,11 @@ class FrontController extends Controller
         $theme = $this->themeManager->getActive();
         $themeConfig = $theme ? $this->themeManager->getThemeConfig($theme->slug) : [];
 
-        $announcement = AnnouncementBar::current()->first();
+        try {
+            $announcement = AnnouncementBar::current()->first();
+        } catch (\Throwable) {
+            $announcement = null;
+        }
 
         return Inertia::render('Front/Page', [
             'page' => $page,
