@@ -284,6 +284,12 @@ class TemplateService
             // 8. Apply custom typography and colors
             $this->applyCustomTypographyAndColors($options, $template);
 
+            // 8b. Apply advanced typography config (presets + scale)
+            $this->applyTypographyConfig($options, $template);
+
+            // 8c. Apply animation config
+            $this->applyAnimationConfig($options, $template);
+
             // 9. Create legal pages if requested
             if ($options['include_legal_pages'] ?? false) {
                 $legalResult = $this->legalPageService->createLegalPages($userId, [

@@ -199,6 +199,51 @@ class LegalPageService
     }
 
     // -------------------------------------------------------
+    // Helpers
+    // -------------------------------------------------------
+
+    /**
+     * Convert plain text (with \n line breaks and **bold** markers) to HTML.
+     */
+    private function textToHtml(string $text): string
+    {
+        // Bold markers **…** → <strong>
+        $text = preg_replace('/\*\*(.+?)\*\*/', '<strong>$1</strong>', $text) ?? $text;
+
+        // Split into paragraphs by double newline
+        $paragraphs = preg_split('/\n{2,}/', trim($text)) ?? [trim($text)];
+
+        $html = '';
+        foreach ($paragraphs as $paragraph) {
+            $paragraph = trim($paragraph);
+            if ($paragraph === '') {
+                continue;
+            }
+
+            // If paragraph looks like a bullet list (lines starting with •)
+            $lines = explode("\n", $paragraph);
+            $isList = count($lines) > 1 && str_starts_with(ltrim($lines[0]), '•');
+
+            if ($isList) {
+                $html .= '<ul>';
+                foreach ($lines as $line) {
+                    $line = ltrim(ltrim($line), '•');
+                    if ($line !== '') {
+                        $html .= '<li>' . nl2br(trim($line)) . '</li>';
+                    }
+                }
+                $html .= '</ul>';
+            } else {
+                // Single-newline line breaks within a paragraph
+                $inner = implode('<br>', array_map('trim', $lines));
+                $html .= '<p>' . $inner . '</p>';
+            }
+        }
+
+        return $html;
+    }
+
+    // -------------------------------------------------------
     // Block tree builder
     // -------------------------------------------------------
 
@@ -217,7 +262,7 @@ class LegalPageService
                 'id' => Str::uuid()->toString(),
                 'type' => 'heading',
                 'props' => [
-                    'content' => $section[0],
+                    'text'  => $section[0],
                     'level' => 2,
                 ],
                 'children' => [],
@@ -226,7 +271,7 @@ class LegalPageService
                 'id' => Str::uuid()->toString(),
                 'type' => 'text',
                 'props' => [
-                    'content' => $section[1],
+                    'content' => $this->textToHtml($section[1]),
                 ],
                 'children' => [],
             ];
@@ -235,10 +280,15 @@ class LegalPageService
         return [
             'blocks' => [
                 [
-                    'id' => Str::uuid()->toString(),
-                    'type' => 'section',
+                    'id'    => Str::uuid()->toString(),
+                    'type'  => 'section',
                     'props' => [
-                        'padding' => 'large',
+                        'paddingTop'    => 64,
+                        'paddingBottom' => 80,
+                        'paddingLeft'   => 24,
+                        'paddingRight'  => 24,
+                        'maxWidth'      => 800,
+                        'centered'      => true,
                     ],
                     'children' => $children,
                 ],
