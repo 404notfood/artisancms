@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Services\LegalPageService;
 use App\Services\TemplateService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -16,6 +17,7 @@ class TemplateController extends Controller
 {
     public function __construct(
         private readonly TemplateService $templateService,
+        private readonly LegalPageService $legalPageService,
     ) {}
 
     /**
@@ -83,6 +85,12 @@ class TemplateController extends Controller
             'install_menus' => ['sometimes', 'boolean'],
             'install_settings' => ['sometimes', 'boolean'],
             'install_theme' => ['sometimes', 'boolean'],
+            'heading_font' => ['sometimes', 'nullable', 'string', 'max:100'],
+            'body_font' => ['sometimes', 'nullable', 'string', 'max:100'],
+            'primary_color' => ['sometimes', 'nullable', 'regex:/^#[0-9A-Fa-f]{6}$/'],
+            'heading_color' => ['sometimes', 'nullable', 'regex:/^#[0-9A-Fa-f]{6}$/'],
+            'text_color' => ['sometimes', 'nullable', 'regex:/^#[0-9A-Fa-f]{6}$/'],
+            'include_legal_pages' => ['sometimes', 'boolean'],
         ]);
 
         try {
@@ -95,6 +103,12 @@ class TemplateController extends Controller
                     'install_menus' => $validated['install_menus'] ?? true,
                     'install_settings' => $validated['install_settings'] ?? true,
                     'install_theme' => $validated['install_theme'] ?? true,
+                    'heading_font' => $validated['heading_font'] ?? null,
+                    'body_font' => $validated['body_font'] ?? null,
+                    'primary_color' => $validated['primary_color'] ?? null,
+                    'heading_color' => $validated['heading_color'] ?? null,
+                    'text_color' => $validated['text_color'] ?? null,
+                    'include_legal_pages' => $validated['include_legal_pages'] ?? false,
                 ],
             );
 

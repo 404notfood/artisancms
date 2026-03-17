@@ -24,8 +24,9 @@ class TemplateService
 {
     protected string $templatesPath;
 
-    public function __construct()
-    {
+    public function __construct(
+        protected readonly LegalPageService $legalPageService,
+    ) {
         $this->templatesPath = base_path('content/templates');
     }
 
@@ -278,6 +279,19 @@ class TemplateService
             // 7. Apply theme overrides (only if requested)
             if ($installTheme) {
                 $this->applyThemeOverrides($templatePath, $template);
+            }
+
+            // 8. Apply custom typography and colors
+            $this->applyCustomTypographyAndColors($options, $template);
+
+            // 9. Create legal pages if requested
+            if ($options['include_legal_pages'] ?? false) {
+                $legalResult = $this->legalPageService->createLegalPages($userId, [
+                    'overwrite' => $overwrite,
+                    'add_to_footer_menu' => true,
+                ]);
+                $report['legal_pages_created'] = count($legalResult['created']);
+                $report['legal_pages_skipped'] = count($legalResult['skipped']);
             }
 
             DB::commit();
@@ -1278,6 +1292,57 @@ class TemplateService
         if ($theme !== null) {
             $theme->update(['customizations' => $overrides]);
         }
+    }
+
+    // -------------------------------------------------------
+    // Typography & Colors customization
+    // -------------------------------------------------------
+
+    /**
+     * Apply custom typography and colors to the active theme's customizations.
+     *
+     * @param array<string, mixed> $options Options containing heading_font, body_font, primary_color, heading_color, text_color
+     * @param array<string, mixed> $template Template manifest data
+     */
+    protected function applyCustomTypographyAndColors(array $options, array $template): void
+    {
+        $customizations = [];
+
+        if (!empty($options['heading_font'])) {
+            $customizations['fonts.heading'] = $options['heading_font'];
+        }
+        if (!empty($options['body_font'])) {
+            $customizations['fonts.body'] = $options['body_font'];
+        }
+        if (!empty($options['primary_color'])) {
+            $customizations['colors.primary'] = $options['primary_color'];
+        }
+        if (!empty($options['heading_color'])) {
+            $customizations['colors.heading'] = $options['heading_color'];
+        }
+        if (!empty($options['text_color'])) {
+            $customizations['colors.text'] = $options['text_color'];
+        }
+
+        if (empty($customizations)) {
+            return;
+        }
+
+        $themeSlug = $template['requires']['theme'] ?? 'default';
+        $theme = CmsTheme::where('slug', $themeSlug)->first();
+
+        if ($theme === null) {
+            // Try the active theme as fallback
+            $theme = CmsTheme::where('active', true)->first();
+        }
+
+        if ($theme === null) {
+            return;
+        }
+
+        $existing = $theme->customizations ?? [];
+        $merged = array_merge($existing, $customizations);
+        $theme->update(['customizations' => $merged]);
     }
 
     // -------------------------------------------------------
