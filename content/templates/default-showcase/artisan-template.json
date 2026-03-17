@@ -1,0 +1,586 @@
+{
+  "name": "Default Showcase",
+  "slug": "default-showcase",
+  "version": "1.0.0",
+  "category": "showcase",
+  "description": "Template vitrine d'ArtisanCMS — démontre l'ensemble des blocs disponibles : hero, features, compteurs, FAQ accordion, témoignages, pricing, timeline et CTA.",
+  "author": "ArtisanCMS",
+  "preview": "assets/images/preview.png",
+  "theme": "default",
+  "compatible_themes": [
+    "default",
+    "lumiere",
+    "noir"
+  ],
+  "suggested_theme": "default",
+  "pages": [
+    {
+      "id": "home",
+      "title": "Accueil",
+      "slug": "accueil",
+      "template": "home",
+      "is_homepage": true,
+      "meta_title": "ArtisanCMS — Le CMS nouvelle génération",
+      "meta_description": "ArtisanCMS réunit un page builder visuel, des thèmes premium et un écosystème de plugins dans une plateforme ultra-rapide.",
+      "content": {
+        "blocks": [
+          {
+            "type": "section",
+            "id": "sec-home-hero",
+            "props": {
+              "backgroundColor": "#0f172a",
+              "paddingTop": 0,
+              "paddingBottom": 0,
+              "paddingLeft": 0,
+              "paddingRight": 0
+            },
+            "children": [
+              {
+                "type": "custom-html",
+                "id": "hero-html",
+                "props": {
+                  "html": "<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin><link href=\"https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap\" rel=\"stylesheet\"><style>.showcase-hero{font-family:&#39;Inter&#39;,sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 24px 60px;text-align:center;background:#0f172a;position:relative;overflow:hidden}.showcase-hero::before{content:\"\";position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:900px;height:900px;background:radial-gradient(circle,rgba(124,58,237,0.18) 0%,transparent 70%);pointer-events:none}.hero-badge{display:inline-block;background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.4);color:#a78bfa;font-size:0.75rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;padding:7px 18px;border-radius:100px;margin-bottom:32px}.hero-title{font-family:&#39;Syne&#39;,sans-serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:800;line-height:1.08;color:#f8fafc;margin-bottom:28px;letter-spacing:-0.02em}.hero-title span{background:linear-gradient(135deg,#7c3aed,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.hero-sub{font-size:clamp(1rem,2vw,1.25rem);color:#94a3b8;line-height:1.75;max-width:640px;margin:0 auto 48px}.hero-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:80px}.btn-primary{display:inline-block;background:#7c3aed;color:#fff;padding:15px 32px;border-radius:8px;font-weight:700;text-decoration:none;font-size:1rem;letter-spacing:0.01em;box-shadow:0 0 32px rgba(124,58,237,0.35)}.btn-outline{display:inline-block;background:transparent;border:1.5px solid rgba(255,255,255,0.2);color:#e2e8f0;padding:15px 32px;border-radius:8px;font-weight:600;text-decoration:none;font-size:1rem}.hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid rgba(255,255,255,0.08);padding-top:48px;width:100%;max-width:700px}.hero-stat-item{padding:0 24px;border-right:1px solid rgba(255,255,255,0.08)}.hero-stat-item:last-child{border-right:none}.hero-stat-value{font-family:&#39;Syne&#39;,sans-serif;font-size:1.75rem;font-weight:800;color:#fff;margin-bottom:4px}.hero-stat-label{font-size:0.8rem;color:#64748b;letter-spacing:0.05em}</style><div class=\"showcase-hero\"><span class=\"hero-badge\">&#9734; Le CMS nouvelle g&#233;n&#233;ration</span><h1 class=\"hero-title\">Cr&#233;ez des sites<br><span>extraordinaires.</span></h1><p class=\"hero-sub\">ArtisanCMS r&#233;unit un page builder visuel, des th&#232;mes premium et un &#233;cosyst&#232;me de plugins dans une plateforme ultra-rapide.</p><div class=\"hero-btns\"><a href=\"#features\" class=\"btn-primary\">D&#233;couvrir le builder &#8594;</a><a href=\"#themes\" class=\"btn-outline\">Voir les th&#232;mes</a></div><div class=\"hero-stats\"><div class=\"hero-stat-item\"><div class=\"hero-stat-value\">8+</div><div class=\"hero-stat-label\">Th&#232;mes</div></div><div class=\"hero-stat-item\"><div class=\"hero-stat-value\">50+</div><div class=\"hero-stat-label\">Blocs</div></div><div class=\"hero-stat-item\"><div class=\"hero-stat-value\">&#8734;</div><div class=\"hero-stat-label\">Plugins</div></div><div class=\"hero-stat-item\"><div class=\"hero-stat-value\">100%</div><div class=\"hero-stat-label\">Open source</div></div></div></div>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "sec-features",
+            "props": {
+              "backgroundColor": "#ffffff",
+              "paddingTop": 100,
+              "paddingBottom": 100,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 1080,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "feat-label",
+                "props": {
+                  "content": "<p style='text-align:center;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#7c3aed;margin-bottom:12px'>Fonctionnalit&#233;s</p>"
+                }
+              },
+              {
+                "type": "heading",
+                "id": "feat-title",
+                "props": {
+                  "text": "Tout ce dont vous avez besoin",
+                  "level": 2,
+                  "alignment": "center",
+                  "color": "#0f172a"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "feat-sp1",
+                "props": {
+                  "height": 12
+                }
+              },
+              {
+                "type": "text",
+                "id": "feat-sub",
+                "props": {
+                  "content": "<p style='text-align:center;color:#64748b;font-size:1.125rem;line-height:1.7;max-width:580px;margin:0 auto'>50+ blocs pr&#234;ts &#224; l&#39;emploi, organis&#233;s en cat&#233;gories pour construire n&#39;importe quel type de site.</p>"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "feat-sp2",
+                "props": {
+                  "height": 64
+                }
+              },
+              {
+                "type": "grid",
+                "id": "feat-grid",
+                "props": {
+                  "columns": 3,
+                  "gap": 24
+                },
+                "children": [
+                  {
+                    "type": "text",
+                    "id": "feat-card-1",
+                    "props": {
+                      "content": "<div style='padding:32px;background:#f8fafc;border-radius:16px;border:1px solid #e2e8f0;height:100%'><div style='width:48px;height:48px;background:linear-gradient(135deg,#7c3aed,#4f46e5);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:20px'><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='3' width='7' height='7'/><rect x='14' y='3' width='7' height='7'/><rect x='14' y='14' width='7' height='7'/><rect x='3' y='14' width='7' height='7'/></svg></div><h3 style='color:#0f172a;font-size:1.05rem;font-weight:700;margin-bottom:10px'>Page Builder</h3><p style='color:#64748b;line-height:1.7;font-size:0.9rem'>Drag &amp; drop intuitif, sections imbriqu&#233;es, responsive editing en temps r&#233;el.</p></div>"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "id": "feat-card-2",
+                    "props": {
+                      "content": "<div style='padding:32px;background:#f8fafc;border-radius:16px;border:1px solid #e2e8f0;height:100%'><div style='width:48px;height:48px;background:linear-gradient(135deg,#0ea5e9,#06b6d4);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:20px'><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='3'/><path d='M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14'/></svg></div><h3 style='color:#0f172a;font-size:1.05rem;font-weight:700;margin-bottom:10px'>Th&#232;mes Premium</h3><p style='color:#64748b;line-height:1.7;font-size:0.9rem'>8 th&#232;mes inclus, personnalisation no-code compl&#232;te via CSS variables.</p></div>"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "id": "feat-card-3",
+                    "props": {
+                      "content": "<div style='padding:32px;background:#f8fafc;border-radius:16px;border:1px solid #e2e8f0;height:100%'><div style='width:48px;height:48px;background:linear-gradient(135deg,#10b981,#059669);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:20px'><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M20.24 12.24a6 6 0 00-8.49-8.49L5 10.5V19h8.5z'/><line x1='16' y1='8' x2='2' y2='22'/><line x1='17.5' y1='15' x2='9' y2='15'/></svg></div><h3 style='color:#0f172a;font-size:1.05rem;font-weight:700;margin-bottom:10px'>Plugins</h3><p style='color:#64748b;line-height:1.7;font-size:0.9rem'>Architecture extensible, marketplace de plugins, hook system Laravel.</p></div>"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "id": "feat-card-4",
+                    "props": {
+                      "content": "<div style='padding:32px;background:#f8fafc;border-radius:16px;border:1px solid #e2e8f0;height:100%'><div style='width:48px;height:48px;background:linear-gradient(135deg,#f59e0b,#d97706);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:20px'><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 20h9'/><path d='M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z'/></svg></div><h3 style='color:#0f172a;font-size:1.05rem;font-weight:700;margin-bottom:10px'>&#201;diteur Riche</h3><p style='color:#64748b;line-height:1.7;font-size:0.9rem'>TipTap int&#233;gr&#233;, blocs de contenu, typographie avanc&#233;e et formatage complet.</p></div>"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "id": "feat-card-5",
+                    "props": {
+                      "content": "<div style='padding:32px;background:#f8fafc;border-radius:16px;border:1px solid #e2e8f0;height:100%'><div style='width:48px;height:48px;background:linear-gradient(135deg,#ec4899,#be185d);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:20px'><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='5' y='2' width='14' height='20' rx='2' ry='2'/><line x1='12' y1='18' x2='12.01' y2='18'/></svg></div><h3 style='color:#0f172a;font-size:1.05rem;font-weight:700;margin-bottom:10px'>100% Responsive</h3><p style='color:#64748b;line-height:1.7;font-size:0.9rem'>&#201;dition desktop, tablette et mobile en temps r&#233;el dans le builder.</p></div>"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "id": "feat-card-6",
+                    "props": {
+                      "content": "<div style='padding:32px;background:linear-gradient(135deg,#7c3aed,#4338ca);border-radius:16px;height:100%'><div style='width:48px;height:48px;background:rgba(255,255,255,0.15);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:20px'><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polygon points='13 2 3 14 12 14 11 22 21 10 12 10 13 2'/></svg></div><h3 style='color:#fff;font-size:1.05rem;font-weight:700;margin-bottom:10px'>Ultra Rapide</h3><p style='color:rgba(255,255,255,0.75);line-height:1.7;font-size:0.9rem'>Cache intelligent, build optimis&#233;, score Lighthouse 100 out of the box.</p></div>"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "sec-counters",
+            "props": {
+              "backgroundColor": "#7c3aed",
+              "paddingTop": 72,
+              "paddingBottom": 72,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 900,
+              "centered": true
+            },
+            "children": [
+              {
+                "id": "counters-block",
+                "type": "counter",
+                "props": {
+                  "columns": 4,
+                  "align": "center",
+                  "items": [
+                    {
+                      "value": 50,
+                      "suffix": "+",
+                      "prefix": "",
+                      "label": "Blocs disponibles"
+                    },
+                    {
+                      "value": 8,
+                      "suffix": "",
+                      "prefix": "",
+                      "label": "Thèmes premium"
+                    },
+                    {
+                      "value": 99,
+                      "suffix": "%",
+                      "prefix": "",
+                      "label": "Open source"
+                    },
+                    {
+                      "value": 1,
+                      "suffix": "min",
+                      "prefix": "",
+                      "label": "Pour installer"
+                    }
+                  ],
+                  "valueColor": "#ffffff",
+                  "labelColor": "rgba(255,255,255,0.65)"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "sec-faq",
+            "props": {
+              "backgroundColor": "#f8fafc",
+              "paddingTop": 80,
+              "paddingBottom": 80,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 760,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "faq-label",
+                "props": {
+                  "content": "<p style='text-align:center;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#7c3aed;margin-bottom:12px'>FAQ</p>"
+                }
+              },
+              {
+                "type": "heading",
+                "id": "faq-title",
+                "props": {
+                  "text": "Questions fréquentes",
+                  "level": 2,
+                  "alignment": "center",
+                  "color": "#0f172a"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "faq-sp1",
+                "props": {
+                  "height": 48
+                }
+              },
+              {
+                "type": "accordion",
+                "id": "faq-block",
+                "props": {
+                  "items": [
+                    {
+                      "title": "ArtisanCMS est-il vraiment gratuit ?",
+                      "content": "Oui, ArtisanCMS est 100% open source et gratuit. Vous pouvez l'installer sur votre propre serveur sans aucun frais de licence. Des plans Pro et Agency sont disponibles pour des fonctionnalités avancées et un support prioritaire."
+                    },
+                    {
+                      "title": "Ai-je besoin de compétences techniques pour utiliser ArtisanCMS ?",
+                      "content": "Non ! Le mode no-code est conçu pour que tout le monde puisse créer et gérer son site sans écrire une seule ligne de code. Le page builder drag & drop et les thèmes personnalisables permettent de construire des sites professionnels visuellement."
+                    },
+                    {
+                      "title": "Puis-je migrer mon site WordPress vers ArtisanCMS ?",
+                      "content": "Oui ! ArtisanCMS propose un outil d'import WordPress qui lit les fichiers WXR (XML) et convertit automatiquement les blocs Gutenberg en blocs ArtisanCMS. Les médias sont téléchargés automatiquement."
+                    },
+                    {
+                      "title": "Quels hébergeurs sont compatibles ?",
+                      "content": "ArtisanCMS fonctionne sur n'importe quel hébergement PHP + MySQL, y compris les hébergements mutualisés (o2switch, OVH, LWS, Infomaniak). Vous avez besoin de PHP 8.2+ et MySQL 8.0+. Un VPS ou serveur dédié est recommandé pour les sites à fort trafic."
+                    },
+                    {
+                      "title": "Comment fonctionnent les plugins et thèmes ?",
+                      "content": "Les plugins et thèmes suivent une architecture inspirée de WordPress mais moderne : chaque plugin est un Laravel Service Provider avec un manifeste JSON. Ils peuvent étendre le CMS via un système de hooks et filters, enregistrer de nouveaux blocs, routes ou pages admin."
+                    }
+                  ],
+                  "style": "default"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "sec-testimonials",
+            "props": {
+              "backgroundColor": "#0f172a",
+              "paddingTop": 80,
+              "paddingBottom": 80,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 1080,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "testi-label",
+                "props": {
+                  "content": "<p style='text-align:center;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#a78bfa;margin-bottom:12px'>Témoignages</p>"
+                }
+              },
+              {
+                "type": "heading",
+                "id": "testi-title",
+                "props": {
+                  "text": "Ce qu'ils en disent",
+                  "level": 2,
+                  "alignment": "center",
+                  "color": "#ffffff"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "testi-sp1",
+                "props": {
+                  "height": 48
+                }
+              },
+              {
+                "type": "testimonials",
+                "id": "testi-block",
+                "props": {
+                  "items": [
+                    {
+                      "name": "Marie Leconte",
+                      "role": "CEO",
+                      "company": "Lumina Studio",
+                      "content": "ArtisanCMS a transformé notre façon de créer des sites clients. Le page builder est aussi puissant qu'Elementor mais infiniment plus rapide. Nos temps de chargement ont baissé de 60%.",
+                      "rating": 5
+                    },
+                    {
+                      "name": "Thomas Garnier",
+                      "role": "Développeur Freelance",
+                      "company": "Garnier Digital",
+                      "content": "Enfin un CMS conçu pour les développeurs freelance ! L'architecture Laravel est propre, les plugins sont simples à créer et le système de thèmes est très flexible. Je ne reviens plus à WordPress.",
+                      "rating": 5
+                    },
+                    {
+                      "name": "Sophie Andrieu",
+                      "role": "Directrice Marketing",
+                      "company": "Nexo Group",
+                      "content": "L'équipe marketing gère maintenant le site en autonomie totale. Le builder no-code est intuitif, les modifications sont instantanées et le support est excellent. On a réduit nos dépendances à l'agence de 80%.",
+                      "rating": 5
+                    }
+                  ],
+                  "layout": "grid",
+                  "columns": 3,
+                  "colorScheme": "dark"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "sec-pricing",
+            "props": {
+              "backgroundColor": "#ffffff",
+              "paddingTop": 80,
+              "paddingBottom": 80,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 1080,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "pricing-label",
+                "props": {
+                  "content": "<p style='text-align:center;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#7c3aed;margin-bottom:12px'>Tarifs</p>"
+                }
+              },
+              {
+                "type": "heading",
+                "id": "pricing-title",
+                "props": {
+                  "text": "Plans simples et transparents",
+                  "level": 2,
+                  "alignment": "center",
+                  "color": "#0f172a"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "pricing-sp1",
+                "props": {
+                  "height": 12
+                }
+              },
+              {
+                "type": "text",
+                "id": "pricing-sub",
+                "props": {
+                  "content": "<p style='text-align:center;color:#64748b;font-size:1.1rem;line-height:1.7;max-width:520px;margin:0 auto'>Commencez gratuitement. Passez au supérieur quand vous êtes prêt.</p>"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "pricing-sp2",
+                "props": {
+                  "height": 56
+                }
+              },
+              {
+                "type": "pricing-table",
+                "id": "pricing-block",
+                "props": {
+                  "currency": "€",
+                  "plans": [
+                    {
+                      "name": "Free",
+                      "price": "0",
+                      "period": "mois",
+                      "description": "Pour démarrer et tester ArtisanCMS",
+                      "features": [
+                        "5 pages",
+                        "3 thèmes inclus",
+                        "50+ blocs",
+                        "1 utilisateur",
+                        "Support communauté"
+                      ],
+                      "cta_text": "Démarrer gratuitement",
+                      "cta_url": "#",
+                      "highlighted": false
+                    },
+                    {
+                      "name": "Pro",
+                      "price": "19",
+                      "period": "mois",
+                      "description": "Pour les freelances et petites agences",
+                      "features": [
+                        "Pages illimitées",
+                        "8 thèmes premium",
+                        "Tous les blocs",
+                        "5 utilisateurs",
+                        "Plugins officiels inclus",
+                        "Support prioritaire"
+                      ],
+                      "cta_text": "Essayer 14 jours gratuit",
+                      "cta_url": "#",
+                      "highlighted": true
+                    },
+                    {
+                      "name": "Agency",
+                      "price": "49",
+                      "period": "mois",
+                      "description": "Pour les agences et grandes équipes",
+                      "features": [
+                        "Sites illimités",
+                        "Thèmes illimités",
+                        "Utilisateurs illimités",
+                        "White-labeling complet",
+                        "Multi-site",
+                        "Support dédié + SLA"
+                      ],
+                      "cta_text": "Contacter l’équipe",
+                      "cta_url": "#",
+                      "highlighted": false
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "sec-timeline",
+            "props": {
+              "backgroundColor": "#f8fafc",
+              "paddingTop": 80,
+              "paddingBottom": 80,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 800,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "timeline-label",
+                "props": {
+                  "content": "<p style='text-align:center;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#7c3aed;margin-bottom:12px'>Comment ça marche</p>"
+                }
+              },
+              {
+                "type": "heading",
+                "id": "timeline-title",
+                "props": {
+                  "text": "Votre site en 4 étapes",
+                  "level": 2,
+                  "alignment": "center",
+                  "color": "#0f172a"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "timeline-sp1",
+                "props": {
+                  "height": 48
+                }
+              },
+              {
+                "type": "timeline",
+                "id": "timeline-block",
+                "props": {
+                  "style": "left",
+                  "lineColor": "#7c3aed",
+                  "events": [
+                    {
+                      "date": "Étape 1",
+                      "title": "Installation en 2 minutes",
+                      "content": "Clonez le repository, lancez php artisan cms:install et votre CMS est opérationnel. Pas de configuration complexe."
+                    },
+                    {
+                      "date": "Étape 2",
+                      "title": "Choisissez votre thème",
+                      "content": "Sélectionnez parmi 8 thèmes premium inclus. Personnalisez couleurs, typographie et branding en quelques clics."
+                    },
+                    {
+                      "date": "Étape 3",
+                      "title": "Construisez vos pages",
+                      "content": "Utilisez le page builder drag & drop. Plus de 50 blocs disponibles, aucune ligne de code requise."
+                    },
+                    {
+                      "date": "Étape 4",
+                      "title": "Publiez et croissez",
+                      "content": "Publiez votre site, ajoutez des plugins : SEO, e-commerce, newsletter, analytics et bien plus encore."
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "sec-cta",
+            "props": {
+              "backgroundColor": "#1e1b4b",
+              "paddingTop": 100,
+              "paddingBottom": 100,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 800,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "custom-html",
+                "id": "cta-html",
+                "props": {
+                  "html": "<style>.cta-wrap{background:linear-gradient(135deg,#1e1b4b,#312e81);padding:80px 40px;border-radius:24px;text-align:center;position:relative;overflow:hidden}.cta-wrap::before{content:\"\";position:absolute;top:-80px;right:-80px;width:300px;height:300px;background:radial-gradient(circle,rgba(124,58,237,0.25) 0%,transparent 70%)}.cta-wrap::after{content:\"\";position:absolute;bottom:-60px;left:-60px;width:240px;height:240px;background:radial-gradient(circle,rgba(59,130,246,0.2) 0%,transparent 70%)}.cta-eyebrow{display:inline-block;background:rgba(167,139,250,0.15);border:1px solid rgba(167,139,250,0.3);color:#a78bfa;font-size:0.75rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;padding:6px 16px;border-radius:100px;margin-bottom:28px;position:relative}.cta-h2{font-size:clamp(1.75rem,4vw,3rem);font-weight:800;color:#fff;line-height:1.15;margin-bottom:20px;position:relative}.cta-p{color:#a5b4fc;font-size:1.1rem;line-height:1.7;margin-bottom:44px;position:relative}.cta-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;position:relative}.cta-btn-main{display:inline-block;background:#7c3aed;color:#fff;padding:16px 36px;border-radius:8px;font-weight:700;text-decoration:none;font-size:1rem;box-shadow:0 0 40px rgba(124,58,237,0.4)}.cta-btn-sec{display:inline-block;background:transparent;border:1.5px solid rgba(255,255,255,0.25);color:#e0e7ff;padding:16px 36px;border-radius:8px;font-weight:600;text-decoration:none;font-size:1rem}</style><div class=\"cta-wrap\"><span class=\"cta-eyebrow\">Commencez maintenant</span><h2 class=\"cta-h2\">Prêt à construire<br>votre site ?</h2><p class=\"cta-p\">Gratuit, open source, aucune carte de crédit requise.<br>Installation en 2 minutes sur votre propre serveur.</p><div class=\"cta-btns\"><a href=\"#\" class=\"cta-btn-main\">Télécharger ArtisanCMS &#8594;</a><a href=\"#\" class=\"cta-btn-sec\">Voir la documentation</a></div></div>"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "menus": [
+    {
+      "name": "Navigation principale",
+      "location": "header",
+      "items": [
+        {
+          "label": "Accueil",
+          "url": "/",
+          "order": 1
+        },
+        {
+          "label": "Fonctionnalités",
+          "url": "#features",
+          "order": 2
+        },
+        {
+          "label": "Tarifs",
+          "url": "#pricing",
+          "order": 3
+        },
+        {
+          "label": "FAQ",
+          "url": "#faq",
+          "order": 4
+        }
+      ]
+    }
+  ],
+  "settings": {
+    "site_name": "ArtisanCMS",
+    "site_tagline": "Le CMS nouvelle génération",
+    "site_description": "ArtisanCMS réunit un page builder visuel, des thèmes premium et un écosystème de plugins dans une plateforme ultra-rapide.",
+    "primary_color": "#7c3aed",
+    "secondary_color": "#3b82f6",
+    "font_heading": "Syne",
+    "font_body": "Inter"
+  }
+}

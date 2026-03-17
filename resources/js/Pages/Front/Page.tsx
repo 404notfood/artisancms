@@ -1,28 +1,35 @@
 import { Head } from '@inertiajs/react';
 import type { PageData, MenuData } from '@/types/cms';
 import FrontLayout from '@/Layouts/FrontLayout';
+import SidebarLayout from '@/Layouts/SidebarLayout';
 import BlockRenderer from '@/Components/front/block-renderer';
 
 interface FrontPageProps {
     page: PageData;
     menus: Record<string, MenuData>;
     theme: {
+        slug?: string;
         customizations: Record<string, string>;
         layouts: Array<{ slug: string; name: string }>;
+        supports?: string[];
     };
 }
 
 const LEGAL_SLUGS = ['mentions-legales', 'politique-de-confidentialite', 'politique-de-cookies'];
 
+/** Themes that use the sidebar layout */
+const SIDEBAR_THEMES = ['studio'];
+
 export default function FrontPage({ page, menus, theme }: FrontPageProps) {
     const isLegal = LEGAL_SLUGS.includes(page.slug ?? '');
+    const useSidebar = theme.slug ? SIDEBAR_THEMES.includes(theme.slug) : (theme.supports ?? []).includes('sidebar');
 
     const blocks = Array.isArray(page.content)
         ? page.content
         : (page.content as { blocks?: unknown[] })?.blocks;
 
-    return (
-        <FrontLayout menus={menus} theme={theme}>
+    const content = (
+        <>
             <Head>
                 <title>{page.meta_title || page.title}</title>
                 {page.meta_description && (
@@ -30,7 +37,6 @@ export default function FrontPage({ page, menus, theme }: FrontPageProps) {
                 )}
             </Head>
             <main>
-                {/* Hero header for legal pages */}
                 {isLegal && (
                     <div className="border-b border-gray-100 bg-gray-50">
                         <div className="mx-auto max-w-[800px] px-6 py-12">
@@ -67,6 +73,12 @@ export default function FrontPage({ page, menus, theme }: FrontPageProps) {
                     }
                 </div>
             </main>
-        </FrontLayout>
+        </>
     );
+
+    if (useSidebar) {
+        return <SidebarLayout menus={menus} theme={theme}>{content}</SidebarLayout>;
+    }
+
+    return <FrontLayout menus={menus} theme={theme}>{content}</FrontLayout>;
 }

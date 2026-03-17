@@ -115,8 +115,10 @@ class FrontController extends Controller
             'page' => $page,
             'menus' => $menus,
             'theme' => [
+                'slug' => $theme?->slug ?? 'default',
                 'customizations' => $theme ? $this->themeManager->getAllCustomizations($theme->slug) : [],
                 'layouts' => $themeConfig['layouts'] ?? [],
+                'supports' => $themeConfig['supports'] ?? [],
             ],
             'designTokensCss' => $this->designTokenService->generateCssVariables(),
             'announcement' => $announcement,

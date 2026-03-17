@@ -226,6 +226,7 @@ class TemplateService
         ];
 
         $overwrite = $options['overwrite'] ?? false;
+        $resetExisting = $options['reset_existing'] ?? false;
         $selectedPages = $options['pages'] ?? null; // null = all pages
         $installMenus = $options['install_menus'] ?? true;
         $installSettings = $options['install_settings'] ?? true;
@@ -258,6 +259,13 @@ class TemplateService
         DB::beginTransaction();
 
         try {
+            // 0. Reset existing pages/menus if requested
+            if ($resetExisting) {
+                Page::whereNotNull('id')->forceDelete();
+                Menu::whereNotNull('id')->delete();
+                MenuItem::whereNotNull('id')->delete();
+            }
+
             // 1. Import media first (pages reference them)
             $mediaMap = $this->importMedia($templatePath, $report);
 
@@ -1403,8 +1411,8 @@ class TemplateService
                 ], JSON_THROW_ON_ERROR);
 
                 \App\Models\DesignToken::updateOrCreate(
-                    ['group' => $tokenGroup, 'name' => $tokenName],
-                    ['value' => $tokenValue, 'type' => 'typography'],
+                    ['category' => $tokenGroup, 'name' => $tokenName],
+                    ['slug' => $tokenGroup . '-' . $tokenName, 'value' => $tokenValue],
                 );
             }
 

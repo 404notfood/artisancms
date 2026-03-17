@@ -40,6 +40,7 @@ import CheckoutFormRenderer from '@/Components/builder/blocks/renderers/checkout
 import FeaturedProductsRenderer from '@/Components/builder/blocks/renderers/featured-products-renderer';
 import TocRenderer from '@/Components/builder/blocks/renderers/toc-renderer';
 import ShapeDividerRenderer from '@/Components/builder/blocks/renderers/shape-divider-renderer';
+import CustomHtmlRenderer from '@/Components/builder/blocks/renderers/custom-html-renderer';
 import AnimateOnScroll from './animate-on-scroll';
 import type { BlockRendererProps } from '@/Components/builder/blocks/block-registry';
 import type { ComponentType } from 'react';
@@ -121,6 +122,7 @@ const rendererMap: Record<string, ComponentType<BlockRendererProps>> = {
     'featured-products': FeaturedProductsRenderer,
     toc: TocRenderer,
     'shape-divider': ShapeDividerRenderer,
+    'custom-html': CustomHtmlRenderer,
 };
 
 interface BlockRendererComponentProps {

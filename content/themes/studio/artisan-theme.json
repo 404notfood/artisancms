@@ -1,0 +1,209 @@
+{
+  "name": "Studio",
+  "slug": "studio",
+  "version": "1.0.0",
+  "description": "Thème studio créatif avec navigation sidebar fixe — fond charbon profond, accent violet électrique, pour portfolios de freelances, studios de design et agences créatives d'exception.",
+  "author": {
+    "name": "ArtisanCMS",
+    "url": "https://artisancms.dev"
+  },
+  "license": "MIT",
+  "requires": {
+    "cms": ">=1.0.0"
+  },
+  "preview": "assets/images/preview.png",
+  "category": "creative",
+  "tags": ["dark", "sidebar", "studio", "portfolio", "creative", "freelance", "premium"],
+  "layouts": [
+    {
+      "slug": "sidebar",
+      "name": "Sidebar navigation",
+      "regions": ["sidebar", "content"]
+    },
+    {
+      "slug": "default",
+      "name": "Par défaut (sidebar)",
+      "regions": ["sidebar", "content"]
+    },
+    {
+      "slug": "full",
+      "name": "Pleine largeur",
+      "regions": ["content"]
+    }
+  ],
+  "menu_locations": [
+    {
+      "slug": "sidebar",
+      "name": "Navigation sidebar"
+    },
+    {
+      "slug": "footer",
+      "name": "Liens bas de sidebar"
+    }
+  ],
+  "customization": {
+    "sidebar": {
+      "width": {
+        "label": "Largeur sidebar",
+        "type": "select",
+        "default": "260px",
+        "options": ["220px", "260px", "300px", "320px"]
+      },
+      "background_color": {
+        "label": "Fond sidebar",
+        "type": "color",
+        "default": "#080808"
+      },
+      "text_color": {
+        "label": "Texte navigation",
+        "type": "color",
+        "default": "#a1a1aa"
+      },
+      "active_color": {
+        "label": "Lien actif",
+        "type": "color",
+        "default": "#ffffff"
+      },
+      "logo_url": {
+        "label": "Logo",
+        "type": "image",
+        "default": ""
+      },
+      "show_tagline": {
+        "label": "Afficher le tagline",
+        "type": "boolean",
+        "default": true
+      },
+      "tagline": {
+        "label": "Tagline sous le logo",
+        "type": "text",
+        "default": "Studio créatif"
+      },
+      "cta_text": {
+        "label": "Texte du bouton CTA",
+        "type": "text",
+        "default": "Démarrer un projet"
+      },
+      "cta_url": {
+        "label": "URL du CTA",
+        "type": "text",
+        "default": "/contact"
+      },
+      "show_social": {
+        "label": "Afficher les réseaux sociaux",
+        "type": "boolean",
+        "default": true
+      },
+      "social_twitter": { "label": "Twitter/X", "type": "text", "default": "" },
+      "social_instagram": { "label": "Instagram", "type": "text", "default": "" },
+      "social_linkedin": { "label": "LinkedIn", "type": "text", "default": "" },
+      "social_github": { "label": "GitHub", "type": "text", "default": "" },
+      "social_dribbble": { "label": "Dribbble", "type": "text", "default": "" },
+      "border_color": {
+        "label": "Bordure séparatrice",
+        "type": "color",
+        "default": "rgba(255,255,255,0.06)"
+      }
+    },
+    "colors": {
+      "primary": {
+        "label": "Couleur principale",
+        "type": "color",
+        "default": "#7c3aed"
+      },
+      "primary_light": {
+        "label": "Variante claire",
+        "type": "color",
+        "default": "#a78bfa"
+      },
+      "accent": {
+        "label": "Accent secondaire",
+        "type": "color",
+        "default": "#06b6d4"
+      },
+      "background": {
+        "label": "Fond principal",
+        "type": "color",
+        "default": "#0c0c0e"
+      },
+      "surface": {
+        "label": "Fond des cartes",
+        "type": "color",
+        "default": "#141416"
+      },
+      "text": {
+        "label": "Texte principal",
+        "type": "color",
+        "default": "#fafafa"
+      },
+      "text_muted": {
+        "label": "Texte secondaire",
+        "type": "color",
+        "default": "#71717a"
+      },
+      "border": {
+        "label": "Bordures",
+        "type": "color",
+        "default": "rgba(255,255,255,0.07)"
+      }
+    },
+    "fonts": {
+      "heading": {
+        "label": "Police des titres",
+        "type": "font",
+        "default": "Syne"
+      },
+      "body": {
+        "label": "Police du corps",
+        "type": "font",
+        "default": "Inter"
+      },
+      "base_size": {
+        "label": "Taille de base",
+        "type": "select",
+        "default": "15px",
+        "options": ["14px", "15px", "16px", "17px"]
+      },
+      "line_height": {
+        "label": "Interligne",
+        "type": "select",
+        "default": "1.7",
+        "options": ["1.5", "1.6", "1.7", "1.8"]
+      }
+    },
+    "layout": {
+      "border_radius": {
+        "label": "Arrondi",
+        "type": "select",
+        "default": "0.5rem",
+        "options": ["0", "0.25rem", "0.5rem", "0.75rem", "1rem"]
+      },
+      "content_max_width": {
+        "label": "Largeur max contenu",
+        "type": "select",
+        "default": "900px",
+        "options": ["720px", "800px", "900px", "1080px", "100%"]
+      }
+    }
+  },
+  "css_variables": {
+    "--color-primary": "#7c3aed",
+    "--color-primary-light": "#a78bfa",
+    "--color-accent": "#06b6d4",
+    "--color-background": "#0c0c0e",
+    "--color-surface": "#141416",
+    "--color-text": "#fafafa",
+    "--color-text-muted": "#71717a",
+    "--color-border": "rgba(255,255,255,0.07)",
+    "--font-heading": "'Syne', system-ui, sans-serif",
+    "--font-body": "'Inter', system-ui, sans-serif",
+    "--font-size-base": "15px",
+    "--border-radius": "0.5rem",
+    "--sidebar-width": "260px"
+  },
+  "font_imports": [
+    "https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
+  ],
+  "supports": ["responsive", "sidebar"],
+  "default_template": "studio-portfolio"
+}

@@ -10,7 +10,7 @@ export default function SectionRenderer({ block, children, isEditing }: BlockRen
         paddingRight = 20,
         maxWidth,
         centered,
-    } = block.props as Record<string, string | number | boolean>;
+    } = ((block.props ?? block.settings ?? {}) as Record<string, string | number | boolean>);
 
     const inner = centered && maxWidth ? (
         <div style={{ maxWidth: `${maxWidth}px`, margin: '0 auto', width: '100%' }}>

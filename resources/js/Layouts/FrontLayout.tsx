@@ -76,6 +76,18 @@ const SEMANTIC_MAPPINGS: Record<string, Record<string, string>> = {
     },
 };
 
+/** Detect if a hex color is dark (lightness < 40%). */
+function isHexDark(hex: string): boolean {
+    const clean = hex.replace('#', '');
+    if (clean.length < 6) return false;
+    const r = parseInt(clean.substring(0, 2), 16);
+    const g = parseInt(clean.substring(2, 4), 16);
+    const b = parseInt(clean.substring(4, 6), 16);
+    // Perceived luminance
+    const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    return lum < 0.4;
+}
+
 function buildCssVariables(customizations: Record<string, string | boolean>): Record<string, string> {
     const vars: Record<string, string> = {};
 
@@ -104,6 +116,40 @@ function buildCssVariables(customizations: Record<string, string | boolean>): Re
 
         const cssKey = prefix + key.replace(/_/g, '-');
         vars[cssKey] = cssValue;
+    }
+
+    // ── Derive semantic variables for block renderers ──────────────────────
+    const bg = String(customizations['colors.background'] || '#ffffff');
+    const isDark = isHexDark(bg);
+
+    // --color-surface: subtle card background
+    if (!vars['--color-surface']) {
+        vars['--color-surface'] = isDark
+            ? 'rgba(255,255,255,0.04)'
+            : 'rgba(0,0,0,0.025)';
+    }
+
+    // --color-border: subtle divider / card border
+    if (!vars['--color-border']) {
+        vars['--color-border'] = isDark
+            ? 'rgba(255,255,255,0.08)'
+            : 'rgba(0,0,0,0.07)';
+    }
+
+    // --color-hero-text: text on hero (always high contrast)
+    if (!vars['--color-hero-text']) {
+        vars['--color-hero-text'] = isDark ? '#ffffff' : '#ffffff';
+    }
+
+    // --border-radius: alias for layout.border_radius
+    if (vars['--border-radius'] === undefined) {
+        const br = String(customizations['layout.border_radius'] || '0.5rem');
+        const BUTTON_RADIUS_MAP: Record<string, string> = {
+            square: '0',
+            rounded: '0.375rem',
+            pill: '9999px',
+        };
+        vars['--border-radius'] = BUTTON_RADIUS_MAP[br] ?? br;
     }
 
     return vars;
@@ -168,7 +214,7 @@ function Header({ menu, customizations, brandingLogo }: {
     const borderRadius = c(customizations, 'layout.border_radius', '0.375rem');
 
     // Detect theme personality from colors/style
-    const isDark = bgColor.startsWith('#0') || bgColor === '#050505' || bgColor.toLowerCase().includes('0a0a');
+    const isDark = isHexDark(bgColor);
     const isLuxury = borderRadius === '0' || borderRadius === '0.125rem' || borderRadius === '0.25rem';
 
     const navStyle = isDark ? 'dark' : isLuxury ? 'luxury' : 'default';
@@ -391,7 +437,7 @@ function Footer({ menu, customizations }: { menu?: MenuData; customizations: Rec
     const primaryColor = c(customizations, 'colors.primary', '#6366f1');
     const borderRadius = c(customizations, 'layout.border_radius', '0.375rem');
 
-    const isDark = bgColor.startsWith('#0') || bgColor === '#050505' || bgColor === '#1a2e1a' || bgColor === '#1c1917';
+    const isDark = isHexDark(bgColor);
     const isLuxury = !isDark && (borderRadius === '0' || borderRadius === '0.125rem' || borderRadius === '0.25rem');
 
     const copyrightText = c(customizations, 'footer.copyright_text', `© {year} {site_name}.`)
@@ -575,8 +621,14 @@ export default function FrontLayout({ children, menus, theme }: FrontLayoutProps
     if (fontBody) allVars['--font-body'] = `'${fontBody}', system-ui, sans-serif`;
     if (fontHeading) allVars['--font-heading'] = `'${fontHeading}', Georgia, serif`;
 
+    // Build CSS variables as a <style> tag to avoid React's CSSProperties serialization issues
+    // (spreading CSS custom properties via inline style can cause React to drop standard properties)
+    const cssVarBlock = Object.entries(allVars)
+        .map(([k, v]) => `${k}:${v}`)
+        .join(';');
+    const themeStyleTag = `.artisan-theme{${cssVarBlock}}`;
+
     const rootStyle: React.CSSProperties = {
-        ...allVars as React.CSSProperties,
         backgroundColor: bgColor,
         color: textColor,
         fontFamily: fontBody ? `var(--font-body)` : undefined,
@@ -586,9 +638,10 @@ export default function FrontLayout({ children, menus, theme }: FrontLayoutProps
 
     return (
         <AnimationConfigContext.Provider value={animationConfigMap}>
-            <div className="flex min-h-screen flex-col" style={rootStyle}>
+            <div className="artisan-theme flex min-h-screen flex-col" style={rootStyle}>
                 <Head>
                     {favicon && <link rel="icon" href={favicon} />}
+                    <style>{themeStyleTag}</style>
                     {designTokensCss && <style>{designTokensCss}</style>}
                     <link rel="alternate" type="application/rss+xml" title="Flux RSS" href="/feed" />
                     {googleFontsUrl && (

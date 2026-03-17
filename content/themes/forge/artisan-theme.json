@@ -1,0 +1,178 @@
+{
+  "name": "Forge",
+  "slug": "forge",
+  "version": "1.0.0",
+  "description": "Thème industrie & artisanat — fond charbon, accent orange brûlé, typographie musclée pour artisans, plombiers, électriciens et entreprises BTP. Impact visuel maximal, confiance immédiate.",
+  "author": {
+    "name": "ArtisanCMS",
+    "url": "https://artisancms.dev"
+  },
+  "license": "MIT",
+  "requires": {
+    "cms": ">=1.0.0"
+  },
+  "preview": "assets/images/preview.png",
+  "category": "business",
+  "tags": ["dark", "industry", "btp", "artisan", "plombier", "electricien", "construction", "orange"],
+  "layouts": [
+    {
+      "slug": "default",
+      "name": "Par défaut",
+      "regions": ["header", "content", "footer"]
+    },
+    {
+      "slug": "full",
+      "name": "Pleine largeur",
+      "regions": ["content"]
+    }
+  ],
+  "menu_locations": [
+    {
+      "slug": "header",
+      "name": "Navigation principale"
+    },
+    {
+      "slug": "footer",
+      "name": "Pied de page"
+    }
+  ],
+  "customization": {
+    "header": {
+      "background_color": {
+        "label": "Fond header",
+        "type": "color",
+        "default": "#0d0d0d"
+      },
+      "text_color": {
+        "label": "Texte navigation",
+        "type": "color",
+        "default": "#e0e0e0"
+      },
+      "logo_url": {
+        "label": "Logo",
+        "type": "image",
+        "default": ""
+      },
+      "company_name": {
+        "label": "Nom de l'entreprise",
+        "type": "text",
+        "default": "ProArtisan"
+      },
+      "tagline": {
+        "label": "Slogan court",
+        "type": "text",
+        "default": "Qualité & Fiabilité"
+      },
+      "phone": {
+        "label": "Numéro de téléphone",
+        "type": "text",
+        "default": "06 XX XX XX XX"
+      },
+      "sticky": {
+        "label": "Header sticky",
+        "type": "boolean",
+        "default": true
+      }
+    },
+    "colors": {
+      "primary": {
+        "label": "Couleur principale",
+        "type": "color",
+        "default": "#f97316"
+      },
+      "primary_dark": {
+        "label": "Variante sombre",
+        "type": "color",
+        "default": "#ea580c"
+      },
+      "accent": {
+        "label": "Accent secondaire",
+        "type": "color",
+        "default": "#fbbf24"
+      },
+      "background": {
+        "label": "Fond principal",
+        "type": "color",
+        "default": "#0d0d0d"
+      },
+      "surface": {
+        "label": "Fond des sections",
+        "type": "color",
+        "default": "#161616"
+      },
+      "surface_2": {
+        "label": "Fond alterné",
+        "type": "color",
+        "default": "#1a1a1a"
+      },
+      "text": {
+        "label": "Texte principal",
+        "type": "color",
+        "default": "#f5f5f5"
+      },
+      "text_muted": {
+        "label": "Texte secondaire",
+        "type": "color",
+        "default": "#9ca3af"
+      },
+      "border": {
+        "label": "Bordures",
+        "type": "color",
+        "default": "rgba(255,255,255,0.08)"
+      }
+    },
+    "fonts": {
+      "heading": {
+        "label": "Police des titres",
+        "type": "font",
+        "default": "Bebas Neue"
+      },
+      "body": {
+        "label": "Police du corps",
+        "type": "font",
+        "default": "DM Sans"
+      },
+      "base_size": {
+        "label": "Taille de base",
+        "type": "select",
+        "default": "16px",
+        "options": ["15px", "16px", "17px", "18px"]
+      }
+    },
+    "layout": {
+      "max_width": {
+        "label": "Largeur max contenu",
+        "type": "select",
+        "default": "1200px",
+        "options": ["1100px", "1200px", "1300px", "1400px"]
+      },
+      "border_radius": {
+        "label": "Arrondi",
+        "type": "select",
+        "default": "0.25rem",
+        "options": ["0", "0.25rem", "0.5rem", "0.75rem"]
+      }
+    }
+  },
+  "css_variables": {
+    "--color-primary": "#f97316",
+    "--color-primary-dark": "#ea580c",
+    "--color-accent": "#fbbf24",
+    "--color-background": "#0d0d0d",
+    "--color-surface": "#161616",
+    "--color-surface-2": "#1a1a1a",
+    "--color-text": "#f5f5f5",
+    "--color-text-muted": "#9ca3af",
+    "--color-border": "rgba(255,255,255,0.08)",
+    "--font-heading": "'Bebas Neue', Impact, sans-serif",
+    "--font-body": "'DM Sans', system-ui, sans-serif",
+    "--font-size-base": "16px",
+    "--border-radius": "0.25rem",
+    "--max-width": "1200px"
+  },
+  "font_imports": [
+    "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap"
+  ],
+  "supports": ["responsive"],
+  "default_template": "forge-btp"
+}

@@ -105,7 +105,8 @@ class ThemeManager
             try {
                 $templateService = app(TemplateService::class);
                 $templateService->install($defaultTemplate, $userId, [
-                    'overwrite'        => false,
+                    'reset_existing'   => true,
+                    'overwrite'        => true,
                     'install_menus'    => true,
                     'install_settings' => true,
                     'install_theme'    => false,

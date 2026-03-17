@@ -1,0 +1,221 @@
+{
+  "name": "Studio Portfolio",
+  "slug": "studio-portfolio",
+  "version": "1.0.0",
+  "category": "portfolio",
+  "description": "Portfolio créatif premium avec navigation sidebar — mise en page latérale fixe, sections épurées, galerie de projets avec overlays, témoignages et contact minimaliste.",
+  "author": "ArtisanCMS",
+  "compatible_themes": ["studio"],
+  "suggested_theme": "studio",
+  "pages": [
+    {
+      "id": "home",
+      "title": "Accueil",
+      "slug": "accueil",
+      "template": "sidebar",
+      "is_homepage": true,
+      "meta_title": "Studio — Designer & Développeur créatif",
+      "meta_description": "Je conçois et développe des expériences digitales mémorables pour les marques ambitieuses.",
+      "content": {
+        "blocks": [
+          {
+            "type": "section",
+            "id": "st-hero",
+            "props": {
+              "backgroundColor": "#0c0c0e",
+              "paddingTop": 0,
+              "paddingBottom": 0,
+              "paddingLeft": 0,
+              "paddingRight": 0
+            },
+            "children": [
+              {
+                "type": "custom-html",
+                "id": "st-hero-inner",
+                "props": {
+                  "html": "<div style=\"max-width:900px;margin:0 auto;padding:80px 48px\"><p style=\"font-size:11px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#7c3aed;margin:0 0 28px 0;font-family:'Inter',system-ui,sans-serif\">— Disponible pour nouveaux projets</p><h1 style=\"font-family:'Syne',system-ui,sans-serif;font-size:clamp(48px,6vw,88px);font-weight:800;line-height:0.95;margin:0 0 32px 0\"><span style=\"display:block;color:#fafafa\">Design &amp;</span><span style=\"display:block;-webkit-text-stroke:2px #fafafa;color:transparent\">Development.</span><span style=\"display:block;color:#fafafa\">Expérience.</span></h1><p style=\"font-family:'Inter',system-ui,sans-serif;font-size:17px;color:#71717a;max-width:480px;line-height:1.75;margin:0 0 48px 0\">Je transforme vos idées en interfaces élégantes et performantes. Spécialisé en UX/UI design, développement front-end et identité de marque.</p><div style=\"display:flex;gap:24px;align-items:center;flex-wrap:wrap\"><a href=\"/projets\" style=\"background:#7c3aed;color:#fff;padding:14px 28px;border-radius:4px;font-family:'Inter',system-ui,sans-serif;font-size:15px;font-weight:600;text-decoration:none;display:inline-block\">Voir mes projets →</a><a href=\"/contact\" style=\"background:transparent;color:#fafafa;padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.2);font-family:'Inter',system-ui,sans-serif;font-size:15px;font-weight:500;text-decoration:none;display:inline-block\">Me contacter →</a></div><div style=\"margin-top:72px;padding-top:40px;border-top:1px solid rgba(255,255,255,0.07);display:flex;gap:40px;flex-wrap:wrap\"><div><p style=\"font-family:'Syne',system-ui,sans-serif;font-size:48px;font-weight:800;color:#7c3aed;line-height:1;margin:0 0 6px 0\">60+</p><p style=\"font-family:'Inter',system-ui,sans-serif;font-size:11px;color:#71717a;letter-spacing:0.14em;text-transform:uppercase;margin:0\">PROJETS LIVRÉS</p></div><div><p style=\"font-family:'Syne',system-ui,sans-serif;font-size:48px;font-weight:800;color:#7c3aed;line-height:1;margin:0 0 6px 0\">7 ans</p><p style=\"font-family:'Inter',system-ui,sans-serif;font-size:11px;color:#71717a;letter-spacing:0.14em;text-transform:uppercase;margin:0\">D&#39;EXPÉRIENCE</p></div><div><p style=\"font-family:'Syne',system-ui,sans-serif;font-size:48px;font-weight:800;color:#7c3aed;line-height:1;margin:0 0 6px 0\">100%</p><p style=\"font-family:'Inter',system-ui,sans-serif;font-size:11px;color:#71717a;letter-spacing:0.14em;text-transform:uppercase;margin:0\">CLIENTS SATISFAITS</p></div></div></div>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "st-projets",
+            "props": {
+              "backgroundColor": "#0c0c0e",
+              "paddingTop": 0,
+              "paddingBottom": 0,
+              "paddingLeft": 0,
+              "paddingRight": 0
+            },
+            "children": [
+              {
+                "type": "custom-html",
+                "id": "st-projets-inner",
+                "props": {
+                  "html": "<div style=\"max-width:900px;margin:0 auto;padding:0 48px 80px 48px\"><div style=\"display:flex;justify-content:space-between;align-items:center;margin-bottom:32px\"><h2 style=\"font-family:'Syne',system-ui,sans-serif;font-size:36px;font-weight:700;color:#fafafa;margin:0\">Projets sélectionnés</h2><a href=\"/projets\" style=\"font-family:'Inter',system-ui,sans-serif;font-size:12px;color:#7c3aed;text-decoration:none;letter-spacing:0.1em;text-transform:uppercase\">VOIR TOUT →</a></div><div style=\"background:linear-gradient(135deg,#1e1033 0%,#2d1b69 100%);border-radius:4px;position:relative;height:420px;display:flex;align-items:flex-end;padding:32px;margin-bottom:16px\"><div style=\"position:absolute;top:20px;right:20px\"><span style=\"font-family:'Syne',system-ui,sans-serif;font-size:13px;color:#7c3aed\">2024 →</span></div><div><div style=\"display:flex;gap:8px;margin-bottom:10px\"><span style=\"background:rgba(124,58,237,0.2);color:#a78bfa;border:1px solid rgba(124,58,237,0.3);padding:4px 10px;border-radius:999px;font-family:'Inter',system-ui,sans-serif;font-size:11px;font-weight:500\">SaaS</span><span style=\"background:rgba(124,58,237,0.2);color:#a78bfa;border:1px solid rgba(124,58,237,0.3);padding:4px 10px;border-radius:999px;font-family:'Inter',system-ui,sans-serif;font-size:11px;font-weight:500\">UX Design</span></div><p style=\"font-family:'Syne',system-ui,sans-serif;font-size:22px;font-weight:700;color:#fff;margin:0 0 6px 0\">Plateforme FinTech — Dashboard &amp; Analytics</p><p style=\"font-family:'Inter',system-ui,sans-serif;font-size:13px;color:#71717a;margin:0\">Refonte UX complète · +40% rétention</p></div></div><div style=\"display:flex;gap:16px\"><div style=\"flex:1;background:linear-gradient(135deg,#0f2027 0%,#0a3d4f 100%);border-radius:4px;height:280px;display:flex;align-items:flex-end;padding:24px\"><div><div style=\"display:flex;gap:8px;margin-bottom:8px\"><span style=\"background:rgba(6,182,212,0.2);color:#22d3ee;border:1px solid rgba(6,182,212,0.3);padding:4px 10px;border-radius:999px;font-family:'Inter',system-ui,sans-serif;font-size:11px;font-weight:500\">Web App</span><span style=\"background:rgba(6,182,212,0.2);color:#22d3ee;border:1px solid rgba(6,182,212,0.3);padding:4px 10px;border-radius:999px;font-family:'Inter',system-ui,sans-serif;font-size:11px;font-weight:500\">Motion</span></div><p style=\"font-family:'Syne',system-ui,sans-serif;font-size:18px;font-weight:700;color:#fff;margin:0 0 4px 0\">Studio d&#39;Architecture — Site Vitrine</p><p style=\"font-family:'Inter',system-ui,sans-serif;font-size:12px;color:#71717a;margin:0\">Animation GSAP · Lighthouse 100</p></div></div><div style=\"flex:1;background:linear-gradient(135deg,#1a0a00 0%,#3d2000 100%);border-radius:4px;height:280px;display:flex;align-items:flex-end;padding:24px\"><div><div style=\"display:flex;gap:8px;margin-bottom:8px\"><span style=\"background:rgba(245,158,11,0.2);color:#fbbf24;border:1px solid rgba(245,158,11,0.3);padding:4px 10px;border-radius:999px;font-family:'Inter',system-ui,sans-serif;font-size:11px;font-weight:500\">E-commerce</span><span style=\"background:rgba(245,158,11,0.2);color:#fbbf24;border:1px solid rgba(245,158,11,0.3);padding:4px 10px;border-radius:999px;font-family:'Inter',system-ui,sans-serif;font-size:11px;font-weight:500\">Branding</span></div><p style=\"font-family:'Syne',system-ui,sans-serif;font-size:18px;font-weight:700;color:#fff;margin:0 0 4px 0\">Boutique Mode Éthique</p><p style=\"font-family:'Inter',system-ui,sans-serif;font-size:12px;color:#71717a;margin:0\">Conversion +65% · Design system complet</p></div></div></div></div>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "st-services",
+            "props": {
+              "backgroundColor": "#0c0c0e",
+              "paddingTop": 0,
+              "paddingBottom": 0,
+              "paddingLeft": 0,
+              "paddingRight": 0
+            },
+            "children": [
+              {
+                "type": "custom-html",
+                "id": "st-services-inner",
+                "props": {
+                  "html": "<div style=\"max-width:900px;margin:0 auto;padding:80px 48px\"><p style=\"font-family:'Inter',system-ui,sans-serif;font-size:11px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#7c3aed;margin:0 0 16px 0\">— Services</p><h2 style=\"font-family:'Syne',system-ui,sans-serif;font-size:52px;font-weight:800;color:#fafafa;margin:0 0 48px 0;line-height:1\">Ce que je propose</h2><div><div style=\"display:flex;justify-content:space-between;align-items:center;padding:28px 0;border-bottom:1px solid rgba(255,255,255,0.07)\"><div style=\"display:flex;align-items:center;gap:20px\"><span style=\"font-family:'Inter',system-ui,sans-serif;font-size:12px;color:#71717a;font-weight:500;min-width:24px\">01</span><span style=\"font-family:'Syne',system-ui,sans-serif;font-size:22px;font-weight:700;color:#fafafa\">UX/UI Design</span></div><p style=\"font-family:'Inter',system-ui,sans-serif;font-size:14px;color:#71717a;max-width:320px;text-align:right;margin:0;line-height:1.6\">Conception d&#39;interfaces intuitives centrées utilisateur. Research, wireframes, prototypes interactifs Figma.</p></div><div style=\"display:flex;justify-content:space-between;align-items:center;padding:28px 0;border-bottom:1px solid rgba(255,255,255,0.07)\"><div style=\"display:flex;align-items:center;gap:20px\"><span style=\"font-family:'Inter',system-ui,sans-serif;font-size:12px;color:#71717a;font-weight:500;min-width:24px\">02</span><span style=\"font-family:'Syne',system-ui,sans-serif;font-size:22px;font-weight:700;color:#fafafa\">Développement Front-End</span></div><p style=\"font-family:'Inter',system-ui,sans-serif;font-size:14px;color:#71717a;max-width:320px;text-align:right;margin:0;line-height:1.6\">React, Next.js, TypeScript. Code propre, performant, accessible. Du design au pixel perfect.</p></div><div style=\"display:flex;justify-content:space-between;align-items:center;padding:28px 0;border-bottom:1px solid rgba(255,255,255,0.07)\"><div style=\"display:flex;align-items:center;gap:20px\"><span style=\"font-family:'Inter',system-ui,sans-serif;font-size:12px;color:#71717a;font-weight:500;min-width:24px\">03</span><span style=\"font-family:'Syne',system-ui,sans-serif;font-size:22px;font-weight:700;color:#fafafa\">Identité de Marque</span></div><p style=\"font-family:'Inter',system-ui,sans-serif;font-size:14px;color:#71717a;max-width:320px;text-align:right;margin:0;line-height:1.6\">Logos, chartes graphiques, design systems complets. Une identité cohérente sur tous vos supports.</p></div><div style=\"display:flex;justify-content:space-between;align-items:center;padding:28px 0;border-bottom:1px solid rgba(255,255,255,0.07)\"><div style=\"display:flex;align-items:center;gap:20px\"><span style=\"font-family:'Inter',system-ui,sans-serif;font-size:12px;color:#71717a;font-weight:500;min-width:24px\">04</span><span style=\"font-family:'Syne',system-ui,sans-serif;font-size:22px;font-weight:700;color:#fafafa\">Motion &amp; Animation</span></div><p style=\"font-family:'Inter',system-ui,sans-serif;font-size:14px;color:#71717a;max-width:320px;text-align:right;margin:0;line-height:1.6\">Animations UI, transitions, micro-interactions. Les détails qui transforment une bonne interface.</p></div></div></div>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "st-temoignages",
+            "props": {
+              "backgroundColor": "#141416",
+              "paddingTop": 0,
+              "paddingBottom": 0,
+              "paddingLeft": 0,
+              "paddingRight": 0
+            },
+            "children": [
+              {
+                "type": "custom-html",
+                "id": "st-temoignages-inner",
+                "props": {
+                  "html": "<div style=\"max-width:900px;margin:0 auto;padding:80px 48px\"><p style=\"font-family:'Inter',system-ui,sans-serif;font-size:11px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#7c3aed;margin:0 0 16px 0\">— Témoignages</p><h2 style=\"font-family:'Syne',system-ui,sans-serif;font-size:52px;font-weight:800;color:#fafafa;margin:0 0 40px 0;line-height:1\">Ce qu&#39;ils disent</h2><div style=\"display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,0.05)\"><div style=\"background:#141416;padding:36px\"><p style=\"font-family:'Inter',system-ui,sans-serif;font-size:15px;color:#d4d4d8;font-style:italic;line-height:1.7;margin:0 0 24px 0\">«&nbsp;Un travail exceptionnel, livré dans les temps. L&#39;interface a dépassé toutes nos attentes. On retravaillera ensemble sans hésiter.&nbsp;»</p><p style=\"font-family:'Syne',system-ui,sans-serif;font-size:15px;font-weight:700;color:#fafafa;margin:0 0 4px 0\">Marie Laurent</p><p style=\"font-family:'Inter',system-ui,sans-serif;font-size:13px;color:#71717a;margin:0\">CEO, Lumina Studio</p></div><div style=\"background:#141416;padding:36px\"><p style=\"font-family:'Inter',system-ui,sans-serif;font-size:15px;color:#d4d4d8;font-style:italic;line-height:1.7;margin:0 0 24px 0\">«&nbsp;Rare de trouver quelqu&#39;un qui comprend autant le design que le code. Chaque détail était soigné, l&#39;expérience de collaboration était fluide.&nbsp;»</p><p style=\"font-family:'Syne',system-ui,sans-serif;font-size:15px;font-weight:700;color:#fafafa;margin:0 0 4px 0\">Thomas Renaud</p><p style=\"font-family:'Inter',system-ui,sans-serif;font-size:13px;color:#71717a;margin:0\">Lead Product, Finova</p></div><div style=\"background:#141416;padding:36px\"><p style=\"font-family:'Inter',system-ui,sans-serif;font-size:15px;color:#d4d4d8;font-style:italic;line-height:1.7;margin:0 0 24px 0\">«&nbsp;Notre taux de conversion a augmenté de 65% après la refonte. Le ROI a été immédiat. Je recommande sans réserve.&nbsp;»</p><p style=\"font-family:'Syne',system-ui,sans-serif;font-size:15px;font-weight:700;color:#fafafa;margin:0 0 4px 0\">Sophie Marchetti</p><p style=\"font-family:'Inter',system-ui,sans-serif;font-size:13px;color:#71717a;margin:0\">Fondatrice, Éthico</p></div></div></div>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "st-contact-cta",
+            "props": {
+              "backgroundColor": "#0c0c0e",
+              "paddingTop": 0,
+              "paddingBottom": 0,
+              "paddingLeft": 0,
+              "paddingRight": 0
+            },
+            "children": [
+              {
+                "type": "custom-html",
+                "id": "st-contact-cta-inner",
+                "props": {
+                  "html": "<div style=\"max-width:900px;margin:0 auto;padding:80px 48px\"><div style=\"max-width:600px;margin:0 auto;text-align:center\"><p style=\"font-family:'Inter',system-ui,sans-serif;font-size:11px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#7c3aed;margin:0 0 16px 0\">— Démarrons quelque chose</p><h2 style=\"font-family:'Syne',system-ui,sans-serif;font-size:64px;font-weight:800;color:#fafafa;line-height:1;margin:0 0 24px 0\">Vous avez un projet ?</h2><p style=\"font-family:'Inter',system-ui,sans-serif;font-size:16px;color:#71717a;margin:0 0 40px 0;line-height:1.7\">Je suis disponible pour des missions freelance. Parlons de votre projet autour d&#39;un café virtuel.</p><a href=\"/contact\" style=\"background:#7c3aed;color:#fff;padding:18px 40px;border-radius:4px;font-family:'Inter',system-ui,sans-serif;font-size:16px;font-weight:600;text-decoration:none;display:inline-block\">Envoyer un message</a><p style=\"font-family:'Inter',system-ui,sans-serif;font-size:14px;color:#71717a;margin:20px 0 0 0\">ou par email : hello@studio.dev</p></div></div>"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "projets",
+      "title": "Projets",
+      "slug": "projets",
+      "template": "sidebar",
+      "meta_title": "Projets — Studio Portfolio",
+      "meta_description": "Découvrez mes réalisations en design UX/UI, développement web et identité de marque.",
+      "content": {
+        "blocks": [
+          {
+            "type": "section",
+            "id": "proj-header",
+            "props": {
+              "backgroundColor": "#0c0c0e",
+              "paddingTop": 0,
+              "paddingBottom": 0,
+              "paddingLeft": 0,
+              "paddingRight": 0
+            },
+            "children": [
+              {
+                "type": "custom-html",
+                "id": "proj-header-inner",
+                "props": {
+                  "html": "<div style=\"max-width:900px;margin:0 auto;padding:80px 48px\"><p style=\"font-family:'Inter',system-ui,sans-serif;font-size:11px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#7c3aed;margin:0 0 16px 0\">— Portfolio</p><h1 style=\"font-family:'Syne',system-ui,sans-serif;font-size:72px;font-weight:800;color:#fafafa;margin:0 0 16px 0;line-height:1\">Tous les projets</h1><p style=\"font-family:'Inter',system-ui,sans-serif;font-size:17px;color:#71717a;margin:0\">Une sélection de mes meilleurs travaux en design et développement.</p></div>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "proj-grid",
+            "props": {
+              "backgroundColor": "#0c0c0e",
+              "paddingTop": 0,
+              "paddingBottom": 0,
+              "paddingLeft": 0,
+              "paddingRight": 0
+            },
+            "children": [
+              {
+                "type": "custom-html",
+                "id": "proj-grid-inner",
+                "props": {
+                  "html": "<div style=\"max-width:900px;margin:0 auto;padding:0 48px 80px 48px\"><div style=\"display:grid;grid-template-columns:repeat(2,1fr);gap:16px\"><div style=\"background:linear-gradient(135deg,#1e1033,#2d1b69);border-radius:4px;padding:32px;min-height:260px;display:flex;flex-direction:column;justify-content:flex-end\"><div style=\"display:flex;gap:8px;margin-bottom:10px\"><span style=\"background:rgba(124,58,237,0.2);color:#a78bfa;border:1px solid rgba(124,58,237,0.3);padding:4px 10px;border-radius:999px;font-family:'Inter',system-ui,sans-serif;font-size:11px;font-weight:500\">SaaS</span><span style=\"background:rgba(124,58,237,0.2);color:#a78bfa;border:1px solid rgba(124,58,237,0.3);padding:4px 10px;border-radius:999px;font-family:'Inter',system-ui,sans-serif;font-size:11px;font-weight:500\">UX Design</span></div><p style=\"font-family:'Syne',system-ui,sans-serif;font-size:20px;font-weight:700;color:#fff;margin:0\">Plateforme FinTech</p></div><div style=\"background:linear-gradient(135deg,#0f2027,#0a3d4f);border-radius:4px;padding:32px;min-height:260px;display:flex;flex-direction:column;justify-content:flex-end\"><div style=\"display:flex;gap:8px;margin-bottom:10px\"><span style=\"background:rgba(6,182,212,0.2);color:#22d3ee;border:1px solid rgba(6,182,212,0.3);padding:4px 10px;border-radius:999px;font-family:'Inter',system-ui,sans-serif;font-size:11px;font-weight:500\">Web</span><span style=\"background:rgba(6,182,212,0.2);color:#22d3ee;border:1px solid rgba(6,182,212,0.3);padding:4px 10px;border-radius:999px;font-family:'Inter',system-ui,sans-serif;font-size:11px;font-weight:500\">Motion</span></div><p style=\"font-family:'Syne',system-ui,sans-serif;font-size:20px;font-weight:700;color:#fff;margin:0\">Studio Architecture</p></div><div style=\"background:linear-gradient(135deg,#1a0a00,#3d2000);border-radius:4px;padding:32px;min-height:260px;display:flex;flex-direction:column;justify-content:flex-end\"><div style=\"display:flex;gap:8px;margin-bottom:10px\"><span style=\"background:rgba(245,158,11,0.2);color:#fbbf24;border:1px solid rgba(245,158,11,0.3);padding:4px 10px;border-radius:999px;font-family:'Inter',system-ui,sans-serif;font-size:11px;font-weight:500\">E-commerce</span><span style=\"background:rgba(245,158,11,0.2);color:#fbbf24;border:1px solid rgba(245,158,11,0.3);padding:4px 10px;border-radius:999px;font-family:'Inter',system-ui,sans-serif;font-size:11px;font-weight:500\">Brand</span></div><p style=\"font-family:'Syne',system-ui,sans-serif;font-size:20px;font-weight:700;color:#fff;margin:0\">Boutique Éthique</p></div><div style=\"background:linear-gradient(135deg,#0a1a0a,#1a3d1a);border-radius:4px;padding:32px;min-height:260px;display:flex;flex-direction:column;justify-content:flex-end\"><div style=\"display:flex;gap:8px;margin-bottom:10px\"><span style=\"background:rgba(16,185,129,0.2);color:#6ee7b7;border:1px solid rgba(16,185,129,0.3);padding:4px 10px;border-radius:999px;font-family:'Inter',system-ui,sans-serif;font-size:11px;font-weight:500\">Mobile</span><span style=\"background:rgba(16,185,129,0.2);color:#6ee7b7;border:1px solid rgba(16,185,129,0.3);padding:4px 10px;border-radius:999px;font-family:'Inter',system-ui,sans-serif;font-size:11px;font-weight:500\">UX</span></div><p style=\"font-family:'Syne',system-ui,sans-serif;font-size:20px;font-weight:700;color:#fff;margin:0\">App Santé &amp; Bien-être</p></div><div style=\"grid-column:span 2;background:linear-gradient(135deg,#1a0a1a,#3d1a3d);border-radius:4px;padding:32px;min-height:260px;display:flex;flex-direction:column;justify-content:flex-end\"><div style=\"display:flex;gap:8px;margin-bottom:10px\"><span style=\"background:rgba(124,58,237,0.2);color:#a78bfa;border:1px solid rgba(124,58,237,0.3);padding:4px 10px;border-radius:999px;font-family:'Inter',system-ui,sans-serif;font-size:11px;font-weight:500\">SaaS</span><span style=\"background:rgba(124,58,237,0.2);color:#a78bfa;border:1px solid rgba(124,58,237,0.3);padding:4px 10px;border-radius:999px;font-family:'Inter',system-ui,sans-serif;font-size:11px;font-weight:500\">Dev</span></div><p style=\"font-family:'Syne',system-ui,sans-serif;font-size:20px;font-weight:700;color:#fff;margin:0\">Dashboard Analytics B2B</p></div></div></div>"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "contact",
+      "title": "Contact",
+      "slug": "contact",
+      "template": "sidebar",
+      "meta_title": "Contact — Studio Portfolio",
+      "meta_description": "Discutons de votre projet. Je suis disponible pour missions freelance.",
+      "content": {
+        "blocks": [
+          {
+            "type": "section",
+            "id": "contact-main",
+            "props": {
+              "backgroundColor": "#0c0c0e",
+              "paddingTop": 0,
+              "paddingBottom": 0,
+              "paddingLeft": 0,
+              "paddingRight": 0
+            },
+            "children": [
+              {
+                "type": "custom-html",
+                "id": "contact-main-inner",
+                "props": {
+                  "html": "<div style=\"max-width:900px;margin:0 auto;padding:80px 48px\"><div style=\"display:grid;grid-template-columns:1fr 1fr;gap:80px\"><div><p style=\"font-family:'Inter',system-ui,sans-serif;font-size:11px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#7c3aed;margin:0 0 16px 0\">— Contact</p><h1 style=\"font-family:'Syne',system-ui,sans-serif;font-size:52px;font-weight:800;color:#fafafa;margin:0 0 40px 0;line-height:1.05\">Parlons de votre projet</h1><div style=\"display:flex;flex-direction:column;gap:20px\"><div style=\"display:flex;align-items:center;gap:12px\"><span style=\"font-size:16px\">✉</span><span style=\"font-family:'Inter',system-ui,sans-serif;font-size:15px;color:#fafafa\">hello@studio.dev</span></div><div style=\"display:flex;align-items:center;gap:12px\"><span style=\"font-size:16px\">⏱</span><span style=\"font-family:'Inter',system-ui,sans-serif;font-size:15px;color:#fafafa\">Réponse sous 24h</span></div><div style=\"display:flex;align-items:center;gap:12px\"><span style=\"font-size:16px\">📍</span><span style=\"font-family:'Inter',system-ui,sans-serif;font-size:15px;color:#fafafa\">Disponible remote, partout</span></div><div style=\"display:inline-flex;align-items:center;gap:8px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);border-radius:999px;padding:8px 16px;margin-top:8px\"><span style=\"width:8px;height:8px;border-radius:50%;background:#10b981;display:inline-block;flex-shrink:0\"></span><span style=\"font-family:'Inter',system-ui,sans-serif;font-size:13px;color:#6ee7b7\">Actuellement disponible pour de nouvelles missions</span></div></div></div><div><p style=\"font-family:'Inter',system-ui,sans-serif;font-size:11px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#71717a;margin:0 0 24px 0\">Votre message</p><div style=\"display:flex;flex-direction:column;gap:16px\"><div><label style=\"display:block;font-family:'Inter',system-ui,sans-serif;font-size:12px;font-weight:500;color:#71717a;margin-bottom:8px\">Nom</label><input type=\"text\" placeholder=\"Marie Dupont\" style=\"width:100%;padding:12px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:4px;font-family:'Inter',system-ui,sans-serif;font-size:14px;color:#fafafa;box-sizing:border-box;outline:none\" /></div><div><label style=\"display:block;font-family:'Inter',system-ui,sans-serif;font-size:12px;font-weight:500;color:#71717a;margin-bottom:8px\">Email</label><input type=\"email\" placeholder=\"marie@entreprise.fr\" style=\"width:100%;padding:12px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:4px;font-family:'Inter',system-ui,sans-serif;font-size:14px;color:#fafafa;box-sizing:border-box;outline:none\" /></div><div><label style=\"display:block;font-family:'Inter',system-ui,sans-serif;font-size:12px;font-weight:500;color:#71717a;margin-bottom:8px\">Type de projet</label><select style=\"width:100%;padding:12px 16px;background:#141416;border:1px solid rgba(255,255,255,0.07);border-radius:4px;font-family:'Inter',system-ui,sans-serif;font-size:14px;color:#fafafa;box-sizing:border-box;outline:none\"><option value=\"\">Choisir...</option><option value=\"design\">UX/UI Design</option><option value=\"dev\">Développement</option><option value=\"brand\">Identité de marque</option><option value=\"autre\">Autre</option></select></div><div><label style=\"display:block;font-family:'Inter',system-ui,sans-serif;font-size:12px;font-weight:500;color:#71717a;margin-bottom:8px\">Message</label><textarea rows=\"5\" placeholder=\"Décrivez votre projet...\" style=\"width:100%;padding:12px 16px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:4px;font-family:'Inter',system-ui,sans-serif;font-size:14px;color:#fafafa;box-sizing:border-box;outline:none;resize:vertical\"></textarea></div><button style=\"background:#7c3aed;color:#fff;padding:14px 32px;border:none;border-radius:4px;font-family:'Inter',system-ui,sans-serif;font-size:15px;font-weight:600;cursor:pointer;display:inline-block\">Envoyer →</button></div></div></div></div>"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "menus": [
+    {
+      "name": "Navigation sidebar",
+      "location": "sidebar",
+      "items": [
+        {"title": "Accueil", "url": "/accueil", "order": 1},
+        {"title": "Projets", "url": "/projets", "order": 2},
+        {"title": "Contact", "url": "/contact", "order": 3}
+      ]
+    }
+  ],
+  "settings": {}
+}
