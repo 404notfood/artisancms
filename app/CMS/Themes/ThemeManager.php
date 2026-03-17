@@ -6,6 +6,7 @@ namespace App\CMS\Themes;
 
 use App\CMS\Facades\CMS;
 use App\Models\CmsTheme;
+use App\Services\TemplateService;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
@@ -71,8 +72,11 @@ class ThemeManager
 
     /**
      * Activate a theme by slug. Deactivates the current active theme first.
+     * If the theme declares a default_template, installs it automatically.
+     *
+     * @param int|null $userId User performing the activation (needed for template install)
      */
-    public function activate(string $slug): bool
+    public function activate(string $slug, ?int $userId = null): bool
     {
         $theme = CmsTheme::where('slug', $slug)->first();
 
@@ -92,6 +96,26 @@ class ThemeManager
         $theme->update(['active' => true]);
 
         CMS::fire('theme.activated', $theme);
+
+        // Auto-install the bundled template if declared
+        $config = $this->getThemeConfig($slug);
+        $defaultTemplate = $config['default_template'] ?? null;
+
+        if ($defaultTemplate && $userId !== null) {
+            try {
+                $templateService = app(TemplateService::class);
+                $templateService->install($defaultTemplate, $userId, [
+                    'overwrite'        => false,
+                    'install_menus'    => true,
+                    'install_settings' => true,
+                    'install_theme'    => false,
+                ]);
+            } catch (\Throwable $e) {
+                Log::warning("Theme {$slug}: could not auto-install template '{$defaultTemplate}'", [
+                    'error' => $e->getMessage(),
+                ]);
+            }
+        }
 
         return true;
     }

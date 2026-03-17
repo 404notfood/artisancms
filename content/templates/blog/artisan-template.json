@@ -1,280 +1,428 @@
 {
-    "name": "Édito",
-    "slug": "blog",
-    "version": "2.0.0",
-    "category": "blog",
-    "description": "Template blog magazine éditorial premium — design noir et rose, typographie classique contrastée, mise en page journalistique.",
-    "author": "ArtisanCMS",
-    "preview": "assets/images/preview.png",
-    "pages": [
-        {
-            "id": "home",
-            "title": "Accueil",
-            "slug": "accueil",
-            "template": "home",
-            "is_homepage": true,
-            "meta_title": "Édito — Le magazine qui vous ressemble",
-            "meta_description": "Articles de fond, portraits, culture et société. Un magazine indépendant porté par la curiosité.",
-            "content": {
-                "blocks": [
-                    {
-                        "type": "section",
-                        "id": "bl-hero",
-                        "props": { "backgroundColor": "#18181b", "paddingTop": 0, "paddingBottom": 64, "paddingLeft": 24, "paddingRight": 24, "maxWidth": 1080, "centered": true },
-                        "children": [
-                            {
-                                "type": "text",
-                                "id": "bl-hero-masthead",
-                                "props": { "content": "<div style='border-bottom:1px solid rgba(255,255,255,0.1);padding:14px 0;display:flex;justify-content:space-between;align-items:center;margin-bottom:64px'><span style='color:rgba(255,255,255,0.35);font-size:0.75rem;font-style:italic'>Lundi 17 mars 2025</span><span style='color:#ec4899;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase'>ÉDITO — N°42</span><span style='color:rgba(255,255,255,0.35);font-size:0.75rem'>Culture · Société · Idées</span></div>" }
-                            },
-                            {
-                                "type": "grid",
-                                "id": "bl-hero-grid",
-                                "props": { "columns": 2, "gap": 64 },
-                                "children": [
-                                    {
-                                        "type": "text",
-                                        "id": "bl-hero-content",
-                                        "props": { "content": "<div><p style='color:#ec4899;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:20px'>À la une</p><h1 style='color:#ffffff;font-size:2.75rem;font-weight:800;line-height:1.15;margin-bottom:24px;letter-spacing:-0.03em'>Demain, la presse sera ce que vous en ferez</h1><p style='color:#a1a1aa;font-size:1.1rem;line-height:1.75;margin-bottom:32px'>À l'heure où l'attention se fragmente et les algorithmes dictent la culture, des voix indépendantes résistent. Portrait d'un journalisme qui refuse de capituler.</p><div style='display:flex;align-items:center;gap:14px'><div style='width:40px;height:40px;background:linear-gradient(135deg,#ec4899,#8b5cf6);border-radius:50%;flex-shrink:0'></div><div><p style='color:#e4e4e7;font-weight:600;font-size:0.875rem;margin:0'>Clara Benoit</p><p style='color:#71717a;font-size:0.8rem;margin:0'>Journaliste · Société · 12 min de lecture</p></div></div></div>" }
-                                    },
-                                    {
-                                        "type": "text",
-                                        "id": "bl-hero-img",
-                                        "props": { "content": "<div style='background:#27272a;border-radius:12px;height:360px;display:flex;align-items:center;justify-content:center;color:#52525b;font-size:0.875rem;font-style:italic;border:1px solid rgba(255,255,255,0.06)'>[Image article à la une]</div>" }
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "type": "section",
-                        "id": "bl-home-articles",
-                        "props": { "backgroundColor": "#fafafa", "paddingTop": 80, "paddingBottom": 80, "paddingLeft": 24, "paddingRight": 24, "maxWidth": 1080, "centered": true },
-                        "children": [
-                            {
-                                "type": "text",
-                                "id": "bl-art-header",
-                                "props": { "content": "<div style='display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid #18181b;padding-bottom:12px;margin-bottom:48px'><h2 style='color:#18181b;font-size:1.5rem;font-weight:800;margin:0;letter-spacing:-0.02em'>Derniers articles</h2><a href='/articles' style='color:#ec4899;font-size:0.875rem;font-weight:600;text-decoration:none'>Voir tout →</a></div>" }
-                            },
-                            {
-                                "type": "grid",
-                                "id": "bl-art-grid",
-                                "props": { "columns": 3, "gap": 40 },
-                                "children": [
-                                    {
-                                        "type": "text",
-                                        "id": "bl-art1",
-                                        "props": { "content": "<article><div style='background:#e4e4e7;border-radius:8px;height:200px;display:flex;align-items:center;justify-content:center;color:#a1a1aa;font-size:0.8rem;margin-bottom:20px'>[Image article]</div><span style='background:#fce7f3;color:#ec4899;font-size:0.7rem;font-weight:700;padding:3px 10px;border-radius:100px;letter-spacing:0.05em;text-transform:uppercase;display:inline-block;margin-bottom:12px'>Culture</span><h3 style='color:#18181b;font-size:1.1rem;font-weight:700;line-height:1.3;margin-bottom:10px;letter-spacing:-0.01em'><a href='/articles/cinema' style='color:inherit;text-decoration:none'>Le néoréalisme numérique ou comment le cinéma réinvente le réel</a></h3><p style='color:#71717a;font-size:0.875rem;line-height:1.6;margin-bottom:16px'>Enquête sur une génération de cinéastes qui filment le monde sans filtre, armés de leurs seuls smartphones.</p><div style='display:flex;align-items:center;justify-content:space-between'><div style='display:flex;align-items:center;gap:8px'><div style='width:28px;height:28px;background:#ec4899;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.7rem;font-weight:700'>JT</div><span style='color:#a1a1aa;font-size:0.8rem'>Jules Thomas</span></div><span style='color:#a1a1aa;font-size:0.75rem'>8 min</span></div></article>" }
-                                    },
-                                    {
-                                        "type": "text",
-                                        "id": "bl-art2",
-                                        "props": { "content": "<article><div style='background:#e4e4e7;border-radius:8px;height:200px;display:flex;align-items:center;justify-content:center;color:#a1a1aa;font-size:0.8rem;margin-bottom:20px'>[Image article]</div><span style='background:#f0fdf4;color:#16a34a;font-size:0.7rem;font-weight:700;padding:3px 10px;border-radius:100px;letter-spacing:0.05em;text-transform:uppercase;display:inline-block;margin-bottom:12px'>Société</span><h3 style='color:#18181b;font-size:1.1rem;font-weight:700;line-height:1.3;margin-bottom:10px;letter-spacing:-0.01em'><a href='/articles/travail' style='color:inherit;text-decoration:none'>Génération sens : pourquoi les jeunes actifs fuient les grandes entreprises</a></h3><p style='color:#71717a;font-size:0.875rem;line-height:1.6;margin-bottom:16px'>Portraits de trentenaires qui ont tout quitté pour moins de revenus mais plus de cohérence avec leurs valeurs.</p><div style='display:flex;align-items:center;justify-content:space-between'><div style='display:flex;align-items:center;gap:8px'><div style='width:28px;height:28px;background:#16a34a;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.7rem;font-weight:700'>LB</div><span style='color:#a1a1aa;font-size:0.8rem'>Léa Bourdin</span></div><span style='color:#a1a1aa;font-size:0.75rem'>11 min</span></div></article>" }
-                                    },
-                                    {
-                                        "type": "text",
-                                        "id": "bl-art3",
-                                        "props": { "content": "<article><div style='background:#e4e4e7;border-radius:8px;height:200px;display:flex;align-items:center;justify-content:center;color:#a1a1aa;font-size:0.8rem;margin-bottom:20px'>[Image article]</div><span style='background:#ede9fe;color:#7c3aed;font-size:0.7rem;font-weight:700;padding:3px 10px;border-radius:100px;letter-spacing:0.05em;text-transform:uppercase;display:inline-block;margin-bottom:12px'>Idées</span><h3 style='color:#18181b;font-size:1.1rem;font-weight:700;line-height:1.3;margin-bottom:10px;letter-spacing:-0.01em'><a href='/articles/ia-creation' style='color:inherit;text-decoration:none'>L'IA peut-elle être créative ? Le débat qui divise les philosophes</a></h3><p style='color:#71717a;font-size:0.875rem;line-height:1.6;margin-bottom:16px'>Entre ceux qui voient dans l'IA un outil et ceux qui craignent la fin de l'originalité. Une question qui divise.</p><div style='display:flex;align-items:center;justify-content:space-between'><div style='display:flex;align-items:center;gap:8px'><div style='width:28px;height:28px;background:#7c3aed;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.7rem;font-weight:700'>AM</div><span style='color:#a1a1aa;font-size:0.8rem'>Ariane Michel</span></div><span style='color:#a1a1aa;font-size:0.75rem'>15 min</span></div></article>" }
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "type": "section",
-                        "id": "bl-newsletter",
-                        "props": { "backgroundColor": "#18181b", "paddingTop": 80, "paddingBottom": 80, "paddingLeft": 24, "paddingRight": 24, "maxWidth": 680, "centered": true },
-                        "children": [
-                            {
-                                "type": "text",
-                                "id": "bl-nl-label",
-                                "props": { "content": "<p style='text-align:center;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#ec4899;margin-bottom:16px'>La newsletter</p>" }
-                            },
-                            {
-                                "type": "heading",
-                                "id": "bl-nl-title",
-                                "props": { "text": "La semaine en 5 articles essentiels", "level": 2, "alignment": "center", "color": "#ffffff" }
-                            },
-                            {
-                                "type": "spacer",
-                                "id": "bl-nl-sp",
-                                "props": { "height": 16 }
-                            },
-                            {
-                                "type": "text",
-                                "id": "bl-nl-sub",
-                                "props": { "content": "<p style='text-align:center;color:#a1a1aa;line-height:1.7;margin-bottom:32px'>Chaque vendredi, notre sélection des meilleurs articles. 12 000 lecteurs abonnés. Gratuit, sans publicité.</p><div style='display:flex;gap:12px;max-width:460px;margin:0 auto'><input type='email' placeholder='votre@email.fr' style='flex:1;padding:14px 20px;border:1.5px solid rgba(255,255,255,0.15);border-radius:8px;font-size:0.95rem;color:#fff;background:rgba(255,255,255,0.05);box-sizing:border-box' /><button style='background:#ec4899;color:#fff;padding:14px 24px;border:none;border-radius:8px;font-weight:700;font-size:0.9rem;cursor:pointer;white-space:nowrap'>S'abonner →</button></div><p style='text-align:center;color:#52525b;font-size:0.75rem;margin-top:12px'>Désinscription en un clic · Aucune donnée vendue</p>" }
-                            }
-                        ]
-                    },
-                    {
-                        "type": "section",
-                        "id": "bl-categories",
-                        "props": { "backgroundColor": "#fff", "paddingTop": 80, "paddingBottom": 80, "paddingLeft": 24, "paddingRight": 24, "maxWidth": 1080, "centered": true },
-                        "children": [
-                            {
-                                "type": "text",
-                                "id": "bl-cat-title",
-                                "props": { "content": "<h2 style='color:#18181b;font-size:1.375rem;font-weight:800;margin-bottom:40px;letter-spacing:-0.02em;border-bottom:2px solid #18181b;padding-bottom:12px'>Explorer par thématique</h2>" }
-                            },
-                            {
-                                "type": "grid",
-                                "id": "bl-cat-grid",
-                                "props": { "columns": 4, "gap": 20 },
-                                "children": [
-                                    {
-                                        "type": "text",
-                                        "id": "bl-cat1",
-                                        "props": { "content": "<a href='/culture' style='text-decoration:none;display:block;padding:24px;background:#fce7f3;border-radius:10px'><p style='font-size:1.75rem;margin-bottom:12px'>🎭</p><h3 style='color:#18181b;font-size:1rem;font-weight:700;margin-bottom:6px'>Culture</h3><p style='color:#71717a;font-size:0.8rem'>47 articles</p></a>" }
-                                    },
-                                    {
-                                        "type": "text",
-                                        "id": "bl-cat2",
-                                        "props": { "content": "<a href='/societe' style='text-decoration:none;display:block;padding:24px;background:#f0fdf4;border-radius:10px'><p style='font-size:1.75rem;margin-bottom:12px'>🌍</p><h3 style='color:#18181b;font-size:1rem;font-weight:700;margin-bottom:6px'>Société</h3><p style='color:#71717a;font-size:0.8rem'>63 articles</p></a>" }
-                                    },
-                                    {
-                                        "type": "text",
-                                        "id": "bl-cat3",
-                                        "props": { "content": "<a href='/idees' style='text-decoration:none;display:block;padding:24px;background:#ede9fe;border-radius:10px'><p style='font-size:1.75rem;margin-bottom:12px'>💡</p><h3 style='color:#18181b;font-size:1rem;font-weight:700;margin-bottom:6px'>Idées</h3><p style='color:#71717a;font-size:0.8rem'>38 articles</p></a>" }
-                                    },
-                                    {
-                                        "type": "text",
-                                        "id": "bl-cat4",
-                                        "props": { "content": "<a href='/technologie' style='text-decoration:none;display:block;padding:24px;background:#fef3c7;border-radius:10px'><p style='font-size:1.75rem;margin-bottom:12px'>🔬</p><h3 style='color:#18181b;font-size:1rem;font-weight:700;margin-bottom:6px'>Technologie</h3><p style='color:#71717a;font-size:0.8rem'>51 articles</p></a>" }
-                                    }
-                                ]
-                            }
-                        ]
+  "name": "Édito",
+  "slug": "blog",
+  "version": "2.0.0",
+  "category": "blog",
+  "description": "Template blog magazine éditorial premium — design noir et rose, typographie classique contrastée, mise en page journalistique.",
+  "author": "ArtisanCMS",
+  "preview": "assets/images/preview.png",
+  "pages": [
+    {
+      "id": "home",
+      "title": "Accueil",
+      "slug": "accueil",
+      "template": "home",
+      "is_homepage": true,
+      "meta_title": "Édito — Le magazine qui vous ressemble",
+      "meta_description": "Articles de fond, portraits, culture et société. Un magazine indépendant porté par la curiosité.",
+      "content": {
+        "blocks": [
+          {
+            "type": "section",
+            "id": "bl-hero",
+            "props": {
+              "backgroundColor": "#18181b",
+              "paddingTop": 0,
+              "paddingBottom": 64,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 1080,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "bl-hero-masthead",
+                "props": {
+                  "content": "<div style='border-bottom:1px solid rgba(255,255,255,0.1);padding:14px 0;display:flex;justify-content:space-between;align-items:center;margin-bottom:64px'><span style='color:rgba(255,255,255,0.35);font-size:0.75rem;font-style:italic'>Lundi 17 mars 2025</span><span style='color:#ec4899;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase'>ÉDITO — N°42</span><span style='color:rgba(255,255,255,0.35);font-size:0.75rem'>Culture · Société · Idées</span></div>"
+                }
+              },
+              {
+                "type": "grid",
+                "id": "bl-hero-grid",
+                "props": {
+                  "columns": 2,
+                  "gap": 64
+                },
+                "children": [
+                  {
+                    "type": "text",
+                    "id": "bl-hero-content",
+                    "props": {
+                      "content": "<div><p style='color:#ec4899;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:20px'>À la une</p><h1 style='color:#ffffff;font-size:2.75rem;font-weight:800;line-height:1.15;margin-bottom:24px;letter-spacing:-0.03em'>Demain, la presse sera ce que vous en ferez</h1><p style='color:#a1a1aa;font-size:1.1rem;line-height:1.75;margin-bottom:32px'>À l'heure où l'attention se fragmente et les algorithmes dictent la culture, des voix indépendantes résistent. Portrait d'un journalisme qui refuse de capituler.</p><div style='display:flex;align-items:center;gap:14px'><div style='width:40px;height:40px;background:linear-gradient(135deg,#ec4899,#8b5cf6);border-radius:50%;flex-shrink:0'></div><div><p style='color:#e4e4e7;font-weight:600;font-size:0.875rem;margin:0'>Clara Benoit</p><p style='color:#71717a;font-size:0.8rem;margin:0'>Journaliste · Société · 12 min de lecture</p></div></div></div>"
                     }
-                ]
-            }
-        },
-        {
-            "id": "about",
-            "title": "À propos",
-            "slug": "a-propos",
-            "template": "default",
-            "meta_title": "À propos — Édito Magazine",
-            "meta_description": "Notre ligne éditoriale, notre équipe, nos valeurs. Un journalisme indépendant.",
-            "content": {
-                "blocks": [
-                    {
-                        "type": "section",
-                        "id": "bl-about-hero",
-                        "props": { "backgroundColor": "#18181b", "paddingTop": 96, "paddingBottom": 96, "paddingLeft": 24, "paddingRight": 24, "maxWidth": 800, "centered": true },
-                        "children": [
-                            {
-                                "type": "text",
-                                "id": "bl-about-kicker",
-                                "props": { "content": "<p style='text-align:center;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#ec4899;margin-bottom:20px'>Notre histoire</p>" }
-                            },
-                            {
-                                "type": "heading",
-                                "id": "bl-about-title",
-                                "props": { "text": "Un magazine né de la conviction que le fond compte plus que la forme", "level": 1, "alignment": "center", "color": "#ffffff" }
-                            },
-                            {
-                                "type": "spacer",
-                                "id": "bl-ab-sp",
-                                "props": { "height": 24 }
-                            },
-                            {
-                                "type": "text",
-                                "id": "bl-about-text",
-                                "props": { "content": "<p style='text-align:center;color:#a1a1aa;font-size:1.1rem;line-height:1.8'>Fondé en 2019 par une équipe de journalistes indépendants, Édito défend un journalisme de qualité, sans dépendance aux annonceurs ni aux algorithmes.</p>" }
-                            }
-                        ]
-                    },
-                    {
-                        "type": "section",
-                        "id": "bl-about-team",
-                        "props": { "backgroundColor": "#fafafa", "paddingTop": 80, "paddingBottom": 80, "paddingLeft": 24, "paddingRight": 24, "maxWidth": 960, "centered": true },
-                        "children": [
-                            {
-                                "type": "heading",
-                                "id": "bl-team-title",
-                                "props": { "text": "L'équipe éditoriale", "level": 2, "alignment": "center", "color": "#18181b" }
-                            },
-                            {
-                                "type": "spacer",
-                                "id": "bl-team-sp",
-                                "props": { "height": 48 }
-                            },
-                            {
-                                "type": "grid",
-                                "id": "bl-team-grid",
-                                "props": { "columns": 4, "gap": 32 },
-                                "children": [
-                                    {
-                                        "type": "text",
-                                        "id": "bl-team1",
-                                        "props": { "content": "<div style='text-align:center'><div style='width:80px;height:80px;background:linear-gradient(135deg,#ec4899,#8b5cf6);border-radius:50%;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:1.5rem'>CB</div><h3 style='color:#18181b;font-size:0.95rem;font-weight:700;margin-bottom:4px'>Clara Benoit</h3><p style='color:#ec4899;font-size:0.75rem;font-weight:600;margin-bottom:8px'>Directrice de la rédaction</p><p style='color:#71717a;font-size:0.8rem;line-height:1.6'>Ex-Le Monde. Spécialiste des questions de société.</p></div>" }
-                                    },
-                                    {
-                                        "type": "text",
-                                        "id": "bl-team2",
-                                        "props": { "content": "<div style='text-align:center'><div style='width:80px;height:80px;background:linear-gradient(135deg,#0891b2,#6366f1);border-radius:50%;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:1.5rem'>JT</div><h3 style='color:#18181b;font-size:0.95rem;font-weight:700;margin-bottom:4px'>Jules Thomas</h3><p style='color:#ec4899;font-size:0.75rem;font-weight:600;margin-bottom:8px'>Chroniqueur culture</p><p style='color:#71717a;font-size:0.8rem;line-height:1.6'>Critique cinéma, littérature et arts vivants.</p></div>" }
-                                    },
-                                    {
-                                        "type": "text",
-                                        "id": "bl-team3",
-                                        "props": { "content": "<div style='text-align:center'><div style='width:80px;height:80px;background:linear-gradient(135deg,#10b981,#0891b2);border-radius:50%;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:1.5rem'>LB</div><h3 style='color:#18181b;font-size:0.95rem;font-weight:700;margin-bottom:4px'>Léa Bourdin</h3><p style='color:#ec4899;font-size:0.75rem;font-weight:600;margin-bottom:8px'>Journaliste société</p><p style='color:#71717a;font-size:0.8rem;line-height:1.6'>Enquêtes sur le travail et l'environnement.</p></div>" }
-                                    },
-                                    {
-                                        "type": "text",
-                                        "id": "bl-team4",
-                                        "props": { "content": "<div style='text-align:center'><div style='width:80px;height:80px;background:linear-gradient(135deg,#f59e0b,#ec4899);border-radius:50%;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:1.5rem'>AM</div><h3 style='color:#18181b;font-size:0.95rem;font-weight:700;margin-bottom:4px'>Ariane Michel</h3><p style='color:#ec4899;font-size:0.75rem;font-weight:600;margin-bottom:8px'>Philosophie & idées</p><p style='color:#71717a;font-size:0.8rem;line-height:1.6'>Docteure en philosophie. Enjeux technologiques.</p></div>" }
-                                    }
-                                ]
-                            }
-                        ]
+                  },
+                  {
+                    "type": "text",
+                    "id": "bl-hero-img",
+                    "props": {
+                      "content": "<div style='background:#27272a;border-radius:12px;height:360px;display:flex;align-items:center;justify-content:center;color:#52525b;font-size:0.875rem;font-style:italic;border:1px solid rgba(255,255,255,0.06)'>[Image article à la une]</div>"
                     }
+                  }
                 ]
-            }
-        },
-        {
-            "id": "contact",
-            "title": "Contact",
-            "slug": "contact",
-            "template": "default",
-            "meta_title": "Contact — Édito Magazine",
-            "meta_description": "Proposer un article, signaler une erreur, nous rejoindre.",
-            "content": {
-                "blocks": [
-                    {
-                        "type": "section",
-                        "id": "bl-contact-section",
-                        "props": { "backgroundColor": "#fafafa", "paddingTop": 96, "paddingBottom": 96, "paddingLeft": 24, "paddingRight": 24, "maxWidth": 760, "centered": true },
-                        "children": [
-                            {
-                                "type": "text",
-                                "id": "bl-contact-kicker",
-                                "props": { "content": "<p style='font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#ec4899;margin-bottom:16px'>La rédaction</p>" }
-                            },
-                            {
-                                "type": "heading",
-                                "id": "bl-contact-title",
-                                "props": { "text": "Nous écrire", "level": 1, "alignment": "left", "color": "#18181b" }
-                            },
-                            {
-                                "type": "spacer",
-                                "id": "bl-contact-sp",
-                                "props": { "height": 16 }
-                            },
-                            {
-                                "type": "text",
-                                "id": "bl-contact-sub",
-                                "props": { "content": "<p style='color:#71717a;font-size:1rem;line-height:1.7;margin-bottom:40px'>Proposition d'article, partenariat, signalement d'erreur ou simple message — nous lisons chaque email et répondons sous 5 jours ouvrables.</p>" }
-                            },
-                            {
-                                "type": "text",
-                                "id": "bl-contact-form",
-                                "props": { "content": "<div style='background:#fff;border:1px solid #e4e4e7;border-radius:12px;padding:40px;display:flex;flex-direction:column;gap:20px'><div style='display:grid;grid-template-columns:1fr 1fr;gap:16px'><div><label style='display:block;color:#18181b;font-weight:600;font-size:0.8rem;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em'>Prénom</label><input type='text' style='width:100%;padding:12px 16px;border:1.5px solid #e4e4e7;border-radius:8px;font-size:0.95rem;box-sizing:border-box' /></div><div><label style='display:block;color:#18181b;font-weight:600;font-size:0.8rem;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em'>Nom</label><input type='text' style='width:100%;padding:12px 16px;border:1.5px solid #e4e4e7;border-radius:8px;font-size:0.95rem;box-sizing:border-box' /></div></div><div><label style='display:block;color:#18181b;font-weight:600;font-size:0.8rem;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em'>Email</label><input type='email' style='width:100%;padding:12px 16px;border:1.5px solid #e4e4e7;border-radius:8px;font-size:0.95rem;box-sizing:border-box' /></div><div><label style='display:block;color:#18181b;font-weight:600;font-size:0.8rem;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em'>Objet</label><select style='width:100%;padding:12px 16px;border:1.5px solid #e4e4e7;border-radius:8px;font-size:0.95rem;color:#374151;background:#fff;box-sizing:border-box'><option>Proposition d'article</option><option>Partenariat éditorial</option><option>Signalement d'erreur</option><option>Question lecteur</option><option>Autre</option></select></div><div><label style='display:block;color:#18181b;font-weight:600;font-size:0.8rem;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em'>Message</label><textarea rows='5' style='width:100%;padding:12px 16px;border:1.5px solid #e4e4e7;border-radius:8px;font-size:0.95rem;box-sizing:border-box;resize:vertical'></textarea></div><button style='background:#18181b;color:#fff;padding:16px 24px;border:none;border-radius:8px;font-weight:700;font-size:1rem;cursor:pointer'>Envoyer →</button></div>" }
-                            }
-                        ]
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "bl-home-articles",
+            "props": {
+              "backgroundColor": "#fafafa",
+              "paddingTop": 80,
+              "paddingBottom": 80,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 1080,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "bl-art-header",
+                "props": {
+                  "content": "<div style='display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid #18181b;padding-bottom:12px;margin-bottom:48px'><h2 style='color:#18181b;font-size:1.5rem;font-weight:800;margin:0;letter-spacing:-0.02em'>Derniers articles</h2><a href='/articles' style='color:#ec4899;font-size:0.875rem;font-weight:600;text-decoration:none'>Voir tout →</a></div>"
+                }
+              },
+              {
+                "type": "grid",
+                "id": "bl-art-grid",
+                "props": {
+                  "columns": 3,
+                  "gap": 40
+                },
+                "children": [
+                  {
+                    "type": "text",
+                    "id": "bl-art1",
+                    "props": {
+                      "content": "<article><div style='background:#e4e4e7;border-radius:8px;height:200px;display:flex;align-items:center;justify-content:center;color:#a1a1aa;font-size:0.8rem;margin-bottom:20px'>[Image article]</div><span style='background:#fce7f3;color:#ec4899;font-size:0.7rem;font-weight:700;padding:3px 10px;border-radius:100px;letter-spacing:0.05em;text-transform:uppercase;display:inline-block;margin-bottom:12px'>Culture</span><h3 style='color:#18181b;font-size:1.1rem;font-weight:700;line-height:1.3;margin-bottom:10px;letter-spacing:-0.01em'><a href='/articles/cinema' style='color:inherit;text-decoration:none'>Le néoréalisme numérique ou comment le cinéma réinvente le réel</a></h3><p style='color:#71717a;font-size:0.875rem;line-height:1.6;margin-bottom:16px'>Enquête sur une génération de cinéastes qui filment le monde sans filtre, armés de leurs seuls smartphones.</p><div style='display:flex;align-items:center;justify-content:space-between'><div style='display:flex;align-items:center;gap:8px'><div style='width:28px;height:28px;background:#ec4899;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.7rem;font-weight:700'>JT</div><span style='color:#a1a1aa;font-size:0.8rem'>Jules Thomas</span></div><span style='color:#a1a1aa;font-size:0.75rem'>8 min</span></div></article>"
                     }
+                  },
+                  {
+                    "type": "text",
+                    "id": "bl-art2",
+                    "props": {
+                      "content": "<article><div style='background:#e4e4e7;border-radius:8px;height:200px;display:flex;align-items:center;justify-content:center;color:#a1a1aa;font-size:0.8rem;margin-bottom:20px'>[Image article]</div><span style='background:#f0fdf4;color:#16a34a;font-size:0.7rem;font-weight:700;padding:3px 10px;border-radius:100px;letter-spacing:0.05em;text-transform:uppercase;display:inline-block;margin-bottom:12px'>Société</span><h3 style='color:#18181b;font-size:1.1rem;font-weight:700;line-height:1.3;margin-bottom:10px;letter-spacing:-0.01em'><a href='/articles/travail' style='color:inherit;text-decoration:none'>Génération sens : pourquoi les jeunes actifs fuient les grandes entreprises</a></h3><p style='color:#71717a;font-size:0.875rem;line-height:1.6;margin-bottom:16px'>Portraits de trentenaires qui ont tout quitté pour moins de revenus mais plus de cohérence avec leurs valeurs.</p><div style='display:flex;align-items:center;justify-content:space-between'><div style='display:flex;align-items:center;gap:8px'><div style='width:28px;height:28px;background:#16a34a;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.7rem;font-weight:700'>LB</div><span style='color:#a1a1aa;font-size:0.8rem'>Léa Bourdin</span></div><span style='color:#a1a1aa;font-size:0.75rem'>11 min</span></div></article>"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "id": "bl-art3",
+                    "props": {
+                      "content": "<article><div style='background:#e4e4e7;border-radius:8px;height:200px;display:flex;align-items:center;justify-content:center;color:#a1a1aa;font-size:0.8rem;margin-bottom:20px'>[Image article]</div><span style='background:#ede9fe;color:#7c3aed;font-size:0.7rem;font-weight:700;padding:3px 10px;border-radius:100px;letter-spacing:0.05em;text-transform:uppercase;display:inline-block;margin-bottom:12px'>Idées</span><h3 style='color:#18181b;font-size:1.1rem;font-weight:700;line-height:1.3;margin-bottom:10px;letter-spacing:-0.01em'><a href='/articles/ia-creation' style='color:inherit;text-decoration:none'>L'IA peut-elle être créative ? Le débat qui divise les philosophes</a></h3><p style='color:#71717a;font-size:0.875rem;line-height:1.6;margin-bottom:16px'>Entre ceux qui voient dans l'IA un outil et ceux qui craignent la fin de l'originalité. Une question qui divise.</p><div style='display:flex;align-items:center;justify-content:space-between'><div style='display:flex;align-items:center;gap:8px'><div style='width:28px;height:28px;background:#7c3aed;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.7rem;font-weight:700'>AM</div><span style='color:#a1a1aa;font-size:0.8rem'>Ariane Michel</span></div><span style='color:#a1a1aa;font-size:0.75rem'>15 min</span></div></article>"
+                    }
+                  }
                 ]
-            }
-        }
-    ]
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "bl-newsletter",
+            "props": {
+              "backgroundColor": "#18181b",
+              "paddingTop": 80,
+              "paddingBottom": 80,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 680,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "bl-nl-label",
+                "props": {
+                  "content": "<p style='text-align:center;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#ec4899;margin-bottom:16px'>La newsletter</p>"
+                }
+              },
+              {
+                "type": "heading",
+                "id": "bl-nl-title",
+                "props": {
+                  "text": "La semaine en 5 articles essentiels",
+                  "level": 2,
+                  "alignment": "center",
+                  "color": "#ffffff"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "bl-nl-sp",
+                "props": {
+                  "height": 16
+                }
+              },
+              {
+                "type": "text",
+                "id": "bl-nl-sub",
+                "props": {
+                  "content": "<p style='text-align:center;color:#a1a1aa;line-height:1.7;margin-bottom:32px'>Chaque vendredi, notre sélection des meilleurs articles. 12 000 lecteurs abonnés. Gratuit, sans publicité.</p><div style='display:flex;gap:12px;max-width:460px;margin:0 auto'><input type='email' placeholder='votre@email.fr' style='flex:1;padding:14px 20px;border:1.5px solid rgba(255,255,255,0.15);border-radius:8px;font-size:0.95rem;color:#fff;background:rgba(255,255,255,0.05);box-sizing:border-box' /><button style='background:#ec4899;color:#fff;padding:14px 24px;border:none;border-radius:8px;font-weight:700;font-size:0.9rem;cursor:pointer;white-space:nowrap'>S'abonner →</button></div><p style='text-align:center;color:#52525b;font-size:0.75rem;margin-top:12px'>Désinscription en un clic · Aucune donnée vendue</p>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "bl-categories",
+            "props": {
+              "backgroundColor": "#fff",
+              "paddingTop": 80,
+              "paddingBottom": 80,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 1080,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "bl-cat-title",
+                "props": {
+                  "content": "<h2 style='color:#18181b;font-size:1.375rem;font-weight:800;margin-bottom:40px;letter-spacing:-0.02em;border-bottom:2px solid #18181b;padding-bottom:12px'>Explorer par thématique</h2>"
+                }
+              },
+              {
+                "type": "grid",
+                "id": "bl-cat-grid",
+                "props": {
+                  "columns": 4,
+                  "gap": 20
+                },
+                "children": [
+                  {
+                    "type": "text",
+                    "id": "bl-cat1",
+                    "props": {
+                      "content": "<a href='/culture' style='text-decoration:none;display:block;padding:24px;background:#fce7f3;border-radius:10px'><p style='font-size:1.75rem;margin-bottom:12px'>🎭</p><h3 style='color:#18181b;font-size:1rem;font-weight:700;margin-bottom:6px'>Culture</h3><p style='color:#71717a;font-size:0.8rem'>47 articles</p></a>"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "id": "bl-cat2",
+                    "props": {
+                      "content": "<a href='/societe' style='text-decoration:none;display:block;padding:24px;background:#f0fdf4;border-radius:10px'><p style='font-size:1.75rem;margin-bottom:12px'>🌍</p><h3 style='color:#18181b;font-size:1rem;font-weight:700;margin-bottom:6px'>Société</h3><p style='color:#71717a;font-size:0.8rem'>63 articles</p></a>"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "id": "bl-cat3",
+                    "props": {
+                      "content": "<a href='/idees' style='text-decoration:none;display:block;padding:24px;background:#ede9fe;border-radius:10px'><p style='font-size:1.75rem;margin-bottom:12px'>💡</p><h3 style='color:#18181b;font-size:1rem;font-weight:700;margin-bottom:6px'>Idées</h3><p style='color:#71717a;font-size:0.8rem'>38 articles</p></a>"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "id": "bl-cat4",
+                    "props": {
+                      "content": "<a href='/technologie' style='text-decoration:none;display:block;padding:24px;background:#fef3c7;border-radius:10px'><p style='font-size:1.75rem;margin-bottom:12px'>🔬</p><h3 style='color:#18181b;font-size:1rem;font-weight:700;margin-bottom:6px'>Technologie</h3><p style='color:#71717a;font-size:0.8rem'>51 articles</p></a>"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "about",
+      "title": "À propos",
+      "slug": "a-propos",
+      "template": "default",
+      "meta_title": "À propos — Édito Magazine",
+      "meta_description": "Notre ligne éditoriale, notre équipe, nos valeurs. Un journalisme indépendant.",
+      "content": {
+        "blocks": [
+          {
+            "type": "section",
+            "id": "bl-about-hero",
+            "props": {
+              "backgroundColor": "#18181b",
+              "paddingTop": 96,
+              "paddingBottom": 96,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 800,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "bl-about-kicker",
+                "props": {
+                  "content": "<p style='text-align:center;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#ec4899;margin-bottom:20px'>Notre histoire</p>"
+                }
+              },
+              {
+                "type": "heading",
+                "id": "bl-about-title",
+                "props": {
+                  "text": "Un magazine né de la conviction que le fond compte plus que la forme",
+                  "level": 1,
+                  "alignment": "center",
+                  "color": "#ffffff"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "bl-ab-sp",
+                "props": {
+                  "height": 24
+                }
+              },
+              {
+                "type": "text",
+                "id": "bl-about-text",
+                "props": {
+                  "content": "<p style='text-align:center;color:#a1a1aa;font-size:1.1rem;line-height:1.8'>Fondé en 2019 par une équipe de journalistes indépendants, Édito défend un journalisme de qualité, sans dépendance aux annonceurs ni aux algorithmes.</p>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "bl-about-team",
+            "props": {
+              "backgroundColor": "#fafafa",
+              "paddingTop": 80,
+              "paddingBottom": 80,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 960,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "heading",
+                "id": "bl-team-title",
+                "props": {
+                  "text": "L'équipe éditoriale",
+                  "level": 2,
+                  "alignment": "center",
+                  "color": "#18181b"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "bl-team-sp",
+                "props": {
+                  "height": 48
+                }
+              },
+              {
+                "type": "grid",
+                "id": "bl-team-grid",
+                "props": {
+                  "columns": 4,
+                  "gap": 32
+                },
+                "children": [
+                  {
+                    "type": "text",
+                    "id": "bl-team1",
+                    "props": {
+                      "content": "<div style='text-align:center'><div style='width:80px;height:80px;background:linear-gradient(135deg,#ec4899,#8b5cf6);border-radius:50%;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:1.5rem'>CB</div><h3 style='color:#18181b;font-size:0.95rem;font-weight:700;margin-bottom:4px'>Clara Benoit</h3><p style='color:#ec4899;font-size:0.75rem;font-weight:600;margin-bottom:8px'>Directrice de la rédaction</p><p style='color:#71717a;font-size:0.8rem;line-height:1.6'>Ex-Le Monde. Spécialiste des questions de société.</p></div>"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "id": "bl-team2",
+                    "props": {
+                      "content": "<div style='text-align:center'><div style='width:80px;height:80px;background:linear-gradient(135deg,#0891b2,#6366f1);border-radius:50%;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:1.5rem'>JT</div><h3 style='color:#18181b;font-size:0.95rem;font-weight:700;margin-bottom:4px'>Jules Thomas</h3><p style='color:#ec4899;font-size:0.75rem;font-weight:600;margin-bottom:8px'>Chroniqueur culture</p><p style='color:#71717a;font-size:0.8rem;line-height:1.6'>Critique cinéma, littérature et arts vivants.</p></div>"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "id": "bl-team3",
+                    "props": {
+                      "content": "<div style='text-align:center'><div style='width:80px;height:80px;background:linear-gradient(135deg,#10b981,#0891b2);border-radius:50%;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:1.5rem'>LB</div><h3 style='color:#18181b;font-size:0.95rem;font-weight:700;margin-bottom:4px'>Léa Bourdin</h3><p style='color:#ec4899;font-size:0.75rem;font-weight:600;margin-bottom:8px'>Journaliste société</p><p style='color:#71717a;font-size:0.8rem;line-height:1.6'>Enquêtes sur le travail et l'environnement.</p></div>"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "id": "bl-team4",
+                    "props": {
+                      "content": "<div style='text-align:center'><div style='width:80px;height:80px;background:linear-gradient(135deg,#f59e0b,#ec4899);border-radius:50%;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:1.5rem'>AM</div><h3 style='color:#18181b;font-size:0.95rem;font-weight:700;margin-bottom:4px'>Ariane Michel</h3><p style='color:#ec4899;font-size:0.75rem;font-weight:600;margin-bottom:8px'>Philosophie & idées</p><p style='color:#71717a;font-size:0.8rem;line-height:1.6'>Docteure en philosophie. Enjeux technologiques.</p></div>"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "contact",
+      "title": "Contact",
+      "slug": "contact",
+      "template": "default",
+      "meta_title": "Contact — Édito Magazine",
+      "meta_description": "Proposer un article, signaler une erreur, nous rejoindre.",
+      "content": {
+        "blocks": [
+          {
+            "type": "section",
+            "id": "bl-contact-section",
+            "props": {
+              "backgroundColor": "#fafafa",
+              "paddingTop": 96,
+              "paddingBottom": 96,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 760,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "bl-contact-kicker",
+                "props": {
+                  "content": "<p style='font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#ec4899;margin-bottom:16px'>La rédaction</p>"
+                }
+              },
+              {
+                "type": "heading",
+                "id": "bl-contact-title",
+                "props": {
+                  "text": "Nous écrire",
+                  "level": 1,
+                  "alignment": "left",
+                  "color": "#18181b"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "bl-contact-sp",
+                "props": {
+                  "height": 16
+                }
+              },
+              {
+                "type": "text",
+                "id": "bl-contact-sub",
+                "props": {
+                  "content": "<p style='color:#71717a;font-size:1rem;line-height:1.7;margin-bottom:40px'>Proposition d'article, partenariat, signalement d'erreur ou simple message — nous lisons chaque email et répondons sous 5 jours ouvrables.</p>"
+                }
+              },
+              {
+                "type": "text",
+                "id": "bl-contact-form",
+                "props": {
+                  "content": "<div style='background:#fff;border:1px solid #e4e4e7;border-radius:12px;padding:40px;display:flex;flex-direction:column;gap:20px'><div style='display:grid;grid-template-columns:1fr 1fr;gap:16px'><div><label style='display:block;color:#18181b;font-weight:600;font-size:0.8rem;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em'>Prénom</label><input type='text' style='width:100%;padding:12px 16px;border:1.5px solid #e4e4e7;border-radius:8px;font-size:0.95rem;box-sizing:border-box' /></div><div><label style='display:block;color:#18181b;font-weight:600;font-size:0.8rem;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em'>Nom</label><input type='text' style='width:100%;padding:12px 16px;border:1.5px solid #e4e4e7;border-radius:8px;font-size:0.95rem;box-sizing:border-box' /></div></div><div><label style='display:block;color:#18181b;font-weight:600;font-size:0.8rem;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em'>Email</label><input type='email' style='width:100%;padding:12px 16px;border:1.5px solid #e4e4e7;border-radius:8px;font-size:0.95rem;box-sizing:border-box' /></div><div><label style='display:block;color:#18181b;font-weight:600;font-size:0.8rem;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em'>Objet</label><select style='width:100%;padding:12px 16px;border:1.5px solid #e4e4e7;border-radius:8px;font-size:0.95rem;color:#374151;background:#fff;box-sizing:border-box'><option>Proposition d'article</option><option>Partenariat éditorial</option><option>Signalement d'erreur</option><option>Question lecteur</option><option>Autre</option></select></div><div><label style='display:block;color:#18181b;font-weight:600;font-size:0.8rem;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em'>Message</label><textarea rows='5' style='width:100%;padding:12px 16px;border:1.5px solid #e4e4e7;border-radius:8px;font-size:0.95rem;box-sizing:border-box;resize:vertical'></textarea></div><button style='background:#18181b;color:#fff;padding:16px 24px;border:none;border-radius:8px;font-weight:700;font-size:1rem;cursor:pointer'>Envoyer →</button></div>"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "compatible_themes": [
+    "botanica",
+    "lumiere",
+    "default"
+  ],
+  "suggested_theme": "botanica"
 }

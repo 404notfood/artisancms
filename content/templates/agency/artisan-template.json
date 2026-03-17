@@ -1,310 +1,472 @@
 {
-    "name": "Nexus Agency",
-    "slug": "agency",
-    "version": "2.0.0",
-    "category": "agency",
-    "description": "Template agence digitale bold et moderne — design violet/indigo contrasté, typographie impactante, portfolio projets, statistiques et témoignages clients.",
-    "author": "ArtisanCMS",
-    "preview": "assets/images/preview.png",
-    "pages": [
-        {
-            "id": "home",
-            "title": "Accueil",
-            "slug": "accueil",
-            "template": "home",
-            "is_homepage": true,
-            "meta_title": "Nexus — Agence digitale créative",
-            "meta_description": "Nous créons des expériences digitales qui transforment les marques et propulsent les businesses ambitieux.",
-            "content": {
-                "blocks": [
-                    {
-                        "type": "section",
-                        "id": "ag-hero",
-                        "props": { "backgroundColor": "#0f0f1a", "paddingTop": 100, "paddingBottom": 100, "paddingLeft": 24, "paddingRight": 24, "maxWidth": 1000, "centered": true },
-                        "children": [
-                            {
-                                "type": "text",
-                                "id": "ag-hero-badge",
-                                "props": { "content": "<p style='text-align:center;margin-bottom:24px'><span style='display:inline-block;background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.4);color:#a5b4fc;font-size:0.75rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;padding:6px 16px;border-radius:100px'>✦ Agence digitale créative — depuis 2015</span></p>" }
-                            },
-                            {
-                                "type": "heading",
-                                "id": "ag-hero-title",
-                                "props": { "text": "Nous transformons vos idées en expériences digitales inoubliables", "level": 1, "alignment": "center", "color": "#ffffff" }
-                            },
-                            {
-                                "type": "spacer",
-                                "id": "ag-sp1",
-                                "props": { "height": 24 }
-                            },
-                            {
-                                "type": "text",
-                                "id": "ag-hero-sub",
-                                "props": { "content": "<p style='text-align:center;color:#94a3b8;font-size:1.25rem;line-height:1.7;max-width:680px;margin:0 auto'>Design UX/UI, développement web et stratégie digitale. Nous accompagnons les entreprises ambitieuses dans leur croissance numérique.</p>" }
-                            },
-                            {
-                                "type": "spacer",
-                                "id": "ag-sp2",
-                                "props": { "height": 48 }
-                            },
-                            {
-                                "type": "text",
-                                "id": "ag-hero-cta",
-                                "props": { "content": "<div style='display:flex;gap:16px;justify-content:center;flex-wrap:wrap'><a href='/projets' style='display:inline-block;background:#6366f1;color:#fff;padding:16px 32px;border-radius:8px;font-weight:700;text-decoration:none;font-size:1rem;letter-spacing:0.01em'>Voir nos projets →</a><a href='/contact' style='display:inline-block;background:transparent;border:1.5px solid rgba(255,255,255,0.2);color:#e2e8f0;padding:16px 32px;border-radius:8px;font-weight:600;text-decoration:none;font-size:1rem'>Discutons de votre projet</a></div>" }
-                            },
-                            {
-                                "type": "spacer",
-                                "id": "ag-sp3",
-                                "props": { "height": 80 }
-                            },
-                            {
-                                "type": "text",
-                                "id": "ag-hero-stats",
-                                "props": { "content": "<div style='display:grid;grid-template-columns:repeat(4,1fr);gap:32px;border-top:1px solid rgba(255,255,255,0.08);padding-top:48px'><div style='text-align:center'><p style='color:#6366f1;font-size:2.5rem;font-weight:800;line-height:1;margin-bottom:8px'>120+</p><p style='color:#64748b;font-size:0.875rem;letter-spacing:0.05em'>Projets livrés</p></div><div style='text-align:center'><p style='color:#6366f1;font-size:2.5rem;font-weight:800;line-height:1;margin-bottom:8px'>8</p><p style='color:#64748b;font-size:0.875rem;letter-spacing:0.05em'>Ans d'expertise</p></div><div style='text-align:center'><p style='color:#6366f1;font-size:2.5rem;font-weight:800;line-height:1;margin-bottom:8px'>95%</p><p style='color:#64748b;font-size:0.875rem;letter-spacing:0.05em'>Clients satisfaits</p></div><div style='text-align:center'><p style='color:#6366f1;font-size:2.5rem;font-weight:800;line-height:1;margin-bottom:8px'>18</p><p style='color:#64748b;font-size:0.875rem;letter-spacing:0.05em'>Experts créatifs</p></div></div>" }
-                            }
-                        ]
-                    },
-                    {
-                        "type": "section",
-                        "id": "ag-services",
-                        "props": { "backgroundColor": "#f8fafc", "paddingTop": 96, "paddingBottom": 96, "paddingLeft": 24, "paddingRight": 24, "maxWidth": 1080, "centered": true },
-                        "children": [
-                            {
-                                "type": "text",
-                                "id": "ag-svc-label",
-                                "props": { "content": "<p style='font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#6366f1;margin-bottom:16px'>Nos expertises</p>" }
-                            },
-                            {
-                                "type": "heading",
-                                "id": "ag-svc-title",
-                                "props": { "text": "Ce que nous faisons", "level": 2, "alignment": "left", "color": "#0f172a" }
-                            },
-                            {
-                                "type": "spacer",
-                                "id": "ag-sp4",
-                                "props": { "height": 56 }
-                            },
-                            {
-                                "type": "grid",
-                                "id": "ag-svc-grid",
-                                "props": { "columns": 3, "gap": 32 },
-                                "children": [
-                                    {
-                                        "type": "text",
-                                        "id": "ag-svc1",
-                                        "props": { "content": "<div style='padding:40px 32px;background:#fff;border-radius:12px;border:1px solid #e2e8f0;transition:all 0.2s'><div style='width:48px;height:48px;background:#ede9fe;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:24px;font-size:1.5rem'>🎨</div><h3 style='color:#0f172a;font-size:1.25rem;font-weight:700;margin-bottom:12px'>Design UX/UI</h3><p style='color:#64748b;line-height:1.7;margin-bottom:20px;font-size:0.95rem'>Interfaces intuitives centrées utilisateur. Recherche UX, design systems complets, prototypes interactifs Figma.</p><a href='/services#ux' style='color:#6366f1;font-weight:600;font-size:0.875rem;text-decoration:none'>En savoir plus →</a></div>" }
-                                    },
-                                    {
-                                        "type": "text",
-                                        "id": "ag-svc2",
-                                        "props": { "content": "<div style='padding:40px 32px;background:#fff;border-radius:12px;border:1px solid #e2e8f0'><div style='width:48px;height:48px;background:#e0f2fe;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:24px;font-size:1.5rem'>💻</div><h3 style='color:#0f172a;font-size:1.25rem;font-weight:700;margin-bottom:12px'>Développement Web</h3><p style='color:#64748b;line-height:1.7;margin-bottom:20px;font-size:0.95rem'>Applications performantes sur mesure. React, Next.js, Laravel — des architectures évolutives, pensées pour la durée.</p><a href='/services#dev' style='color:#6366f1;font-weight:600;font-size:0.875rem;text-decoration:none'>En savoir plus →</a></div>" }
-                                    },
-                                    {
-                                        "type": "text",
-                                        "id": "ag-svc3",
-                                        "props": { "content": "<div style='padding:40px 32px;background:#fff;border-radius:12px;border:1px solid #e2e8f0'><div style='width:48px;height:48px;background:#fce7f3;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:24px;font-size:1.5rem'>📈</div><h3 style='color:#0f172a;font-size:1.25rem;font-weight:700;margin-bottom:12px'>Stratégie Digitale</h3><p style='color:#64748b;line-height:1.7;margin-bottom:20px;font-size:0.95rem'>SEO, SEA, analytics, conversion. Une approche data-driven pour maximiser votre ROI et votre visibilité en ligne.</p><a href='/services#strategie' style='color:#6366f1;font-weight:600;font-size:0.875rem;text-decoration:none'>En savoir plus →</a></div>" }
-                                    },
-                                    {
-                                        "type": "text",
-                                        "id": "ag-svc4",
-                                        "props": { "content": "<div style='padding:40px 32px;background:#fff;border-radius:12px;border:1px solid #e2e8f0'><div style='width:48px;height:48px;background:#dcfce7;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:24px;font-size:1.5rem'>🛒</div><h3 style='color:#0f172a;font-size:1.25rem;font-weight:700;margin-bottom:12px'>E-commerce</h3><p style='color:#64748b;line-height:1.7;margin-bottom:20px;font-size:0.95rem'>Boutiques en ligne optimisées pour la conversion. Expérience d'achat fluide, paiement sécurisé, gestion facile.</p><a href='/services#ecommerce' style='color:#6366f1;font-weight:600;font-size:0.875rem;text-decoration:none'>En savoir plus →</a></div>" }
-                                    },
-                                    {
-                                        "type": "text",
-                                        "id": "ag-svc5",
-                                        "props": { "content": "<div style='padding:40px 32px;background:#fff;border-radius:12px;border:1px solid #e2e8f0'><div style='width:48px;height:48px;background:#fef9c3;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:24px;font-size:1.5rem'>📱</div><h3 style='color:#0f172a;font-size:1.25rem;font-weight:700;margin-bottom:12px'>Applications Mobile</h3><p style='color:#64748b;line-height:1.7;margin-bottom:20px;font-size:0.95rem'>Apps iOS & Android natives ou React Native. De l'idée au store, nous gérons l'ensemble du cycle de développement.</p><a href='/services#mobile' style='color:#6366f1;font-weight:600;font-size:0.875rem;text-decoration:none'>En savoir plus →</a></div>" }
-                                    },
-                                    {
-                                        "type": "text",
-                                        "id": "ag-svc6",
-                                        "props": { "content": "<div style='padding:40px 32px;background:#6366f1;border-radius:12px;position:relative;overflow:hidden'><div style='position:absolute;top:-20px;right:-20px;width:100px;height:100px;background:rgba(255,255,255,0.05);border-radius:50%'></div><div style='position:absolute;bottom:-30px;left:-10px;width:80px;height:80px;background:rgba(255,255,255,0.05);border-radius:50%'></div><h3 style='color:#fff;font-size:1.25rem;font-weight:700;margin-bottom:12px;position:relative'>Votre projet ?</h3><p style='color:rgba(255,255,255,0.8);line-height:1.7;margin-bottom:24px;font-size:0.95rem;position:relative'>Discutons ensemble de vos ambitions. Audit gratuit — réponse sous 24h.</p><a href='/contact' style='display:inline-block;background:#fff;color:#6366f1;padding:12px 24px;border-radius:6px;font-weight:700;text-decoration:none;font-size:0.875rem;position:relative'>Démarrer →</a></div>" }
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "type": "section",
-                        "id": "ag-projets",
-                        "props": { "backgroundColor": "#fff", "paddingTop": 96, "paddingBottom": 96, "paddingLeft": 24, "paddingRight": 24, "maxWidth": 1080, "centered": true },
-                        "children": [
-                            {
-                                "type": "text",
-                                "id": "ag-proj-header",
-                                "props": { "content": "<div style='display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:56px'><div><p style='font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#6366f1;margin-bottom:16px'>Portfolio</p><h2 style='color:#0f172a;font-size:2rem;font-weight:800;line-height:1.2;margin:0'>Nos dernières réalisations</h2></div><a href='/projets' style='color:#6366f1;font-weight:600;text-decoration:none;white-space:nowrap'>Voir tout →</a></div>" }
-                            },
-                            {
-                                "type": "grid",
-                                "id": "ag-proj-grid",
-                                "props": { "columns": 2, "gap": 24 },
-                                "children": [
-                                    {
-                                        "type": "text",
-                                        "id": "ag-proj1",
-                                        "props": { "content": "<div style='border-radius:12px;overflow:hidden;background:#f1f5f9'><div style='background:linear-gradient(135deg,#6366f1,#8b5cf6);height:240px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.3);font-size:3rem'>◈</div><div style='padding:24px'><div style='display:flex;gap:8px;margin-bottom:12px'><span style='background:#ede9fe;color:#6366f1;font-size:0.75rem;font-weight:600;padding:3px 10px;border-radius:100px'>UX/UI Design</span><span style='background:#ede9fe;color:#6366f1;font-size:0.75rem;font-weight:600;padding:3px 10px;border-radius:100px'>React</span></div><h3 style='color:#0f172a;font-size:1.125rem;font-weight:700;margin-bottom:8px'>Plateforme SaaS FinTech</h3><p style='color:#64748b;font-size:0.875rem;line-height:1.6;margin-bottom:16px'>Refonte complète d'une application de gestion financière B2B. +40% de satisfaction utilisateur en 3 mois.</p><a href='/projets/fintech' style='color:#6366f1;font-weight:600;font-size:0.875rem;text-decoration:none'>Voir le projet →</a></div></div>" }
-                                    },
-                                    {
-                                        "type": "text",
-                                        "id": "ag-proj2",
-                                        "props": { "content": "<div style='border-radius:12px;overflow:hidden;background:#f1f5f9'><div style='background:linear-gradient(135deg,#0891b2,#06b6d4);height:240px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.3);font-size:3rem'>◉</div><div style='padding:24px'><div style='display:flex;gap:8px;margin-bottom:12px'><span style='background:#e0f2fe;color:#0284c7;font-size:0.75rem;font-weight:600;padding:3px 10px;border-radius:100px'>E-commerce</span><span style='background:#e0f2fe;color:#0284c7;font-size:0.75rem;font-weight:600;padding:3px 10px;border-radius:100px'>Next.js</span></div><h3 style='color:#0f172a;font-size:1.125rem;font-weight:700;margin-bottom:8px'>Boutique Mode Luxe</h3><p style='color:#64748b;font-size:0.875rem;line-height:1.6;margin-bottom:16px'>Création d'une boutique e-commerce premium. 2,3M€ de CA la première année, taux de conversion ×3.</p><a href='/projets/mode-luxe' style='color:#6366f1;font-weight:600;font-size:0.875rem;text-decoration:none'>Voir le projet →</a></div></div>" }
-                                    },
-                                    {
-                                        "type": "text",
-                                        "id": "ag-proj3",
-                                        "props": { "content": "<div style='border-radius:12px;overflow:hidden;background:#f1f5f9'><div style='background:linear-gradient(135deg,#f59e0b,#f97316);height:240px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.3);font-size:3rem'>◫</div><div style='padding:24px'><div style='display:flex;gap:8px;margin-bottom:12px'><span style='background:#fef3c7;color:#d97706;font-size:0.75rem;font-weight:600;padding:3px 10px;border-radius:100px'>Branding</span><span style='background:#fef3c7;color:#d97706;font-size:0.75rem;font-weight:600;padding:3px 10px;border-radius:100px'>Web App</span></div><h3 style='color:#0f172a;font-size:1.125rem;font-weight:700;margin-bottom:8px'>Identité & App Startup</h3><p style='color:#64748b;font-size:0.875rem;line-height:1.6;margin-bottom:16px'>Branding complet + application web pour une startup FoodTech. Levée de fonds de 2M€ post-lancement.</p><a href='/projets/foodtech' style='color:#6366f1;font-weight:600;font-size:0.875rem;text-decoration:none'>Voir le projet →</a></div></div>" }
-                                    },
-                                    {
-                                        "type": "text",
-                                        "id": "ag-proj4",
-                                        "props": { "content": "<div style='border-radius:12px;overflow:hidden;background:#f1f5f9'><div style='background:linear-gradient(135deg,#10b981,#059669);height:240px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.3);font-size:3rem'>◍</div><div style='padding:24px'><div style='display:flex;gap:8px;margin-bottom:12px'><span style='background:#dcfce7;color:#16a34a;font-size:0.75rem;font-weight:600;padding:3px 10px;border-radius:100px'>Mobile App</span><span style='background:#dcfce7;color:#16a34a;font-size:0.75rem;font-weight:600;padding:3px 10px;border-radius:100px'>React Native</span></div><h3 style='color:#0f172a;font-size:1.125rem;font-weight:700;margin-bottom:8px'>App Santé & Bien-être</h3><p style='color:#64748b;font-size:0.875rem;line-height:1.6;margin-bottom:16px'>Application mobile de suivi médical. 50 000 téléchargements en 6 mois, note 4.8/5 sur les stores.</p><a href='/projets/sante' style='color:#6366f1;font-weight:600;font-size:0.875rem;text-decoration:none'>Voir le projet →</a></div></div>" }
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "type": "section",
-                        "id": "ag-temoignages",
-                        "props": { "backgroundColor": "#0f0f1a", "paddingTop": 96, "paddingBottom": 96, "paddingLeft": 24, "paddingRight": 24, "maxWidth": 960, "centered": true },
-                        "children": [
-                            {
-                                "type": "text",
-                                "id": "ag-tem-label",
-                                "props": { "content": "<p style='text-align:center;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#6366f1;margin-bottom:16px'>Témoignages</p>" }
-                            },
-                            {
-                                "type": "heading",
-                                "id": "ag-tem-title",
-                                "props": { "text": "Ils nous font confiance", "level": 2, "alignment": "center", "color": "#ffffff" }
-                            },
-                            {
-                                "type": "spacer",
-                                "id": "ag-sp5",
-                                "props": { "height": 56 }
-                            },
-                            {
-                                "type": "grid",
-                                "id": "ag-tem-grid",
-                                "props": { "columns": 2, "gap": 24 },
-                                "children": [
-                                    {
-                                        "type": "text",
-                                        "id": "ag-tem1",
-                                        "props": { "content": "<div style='background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:36px'><p style='color:#6366f1;font-size:1.25rem;margin-bottom:16px'>★★★★★</p><p style='color:#e2e8f0;line-height:1.8;font-size:1rem;margin-bottom:28px;font-style:italic'>« Nexus a complètement transformé notre présence en ligne. Le nouveau site a généré +180% de leads qualifiés dès le premier mois. Une équipe vraiment à l'écoute et techniquement excellente. »</p><div style='display:flex;align-items:center;gap:16px'><div style='width:48px;height:48px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700'>SA</div><div><p style='color:#f1f5f9;font-weight:600;margin:0;font-size:0.95rem'>Sophie Arnaud</p><p style='color:#64748b;font-size:0.8rem;margin:0'>CMO — TechCorp SAS</p></div></div></div>" }
-                                    },
-                                    {
-                                        "type": "text",
-                                        "id": "ag-tem2",
-                                        "props": { "content": "<div style='background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:36px'><p style='color:#6366f1;font-size:1.25rem;margin-bottom:16px'>★★★★★</p><p style='color:#e2e8f0;line-height:1.8;font-size:1rem;margin-bottom:28px;font-style:italic'>« Projet livré en avance, budget respecté, résultats au-delà de nos attentes. Notre boutique en ligne fait maintenant 3x notre CA physique. Je recommande Nexus sans réserve. »</p><div style='display:flex;align-items:center;gap:16px'><div style='width:48px;height:48px;background:linear-gradient(135deg,#0891b2,#06b6d4);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700'>MB</div><div><p style='color:#f1f5f9;font-weight:600;margin:0;font-size:0.95rem'>Marc Beaumont</p><p style='color:#64748b;font-size:0.8rem;margin:0'>Fondateur — Maison Beaumont</p></div></div></div>" }
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "type": "section",
-                        "id": "ag-cta",
-                        "props": { "backgroundColor": "#6366f1", "paddingTop": 96, "paddingBottom": 96, "paddingLeft": 24, "paddingRight": 24, "maxWidth": 800, "centered": true },
-                        "children": [
-                            {
-                                "type": "heading",
-                                "id": "ag-cta-title",
-                                "props": { "text": "Prêt à démarrer votre projet ?", "level": 2, "alignment": "center", "color": "#ffffff" }
-                            },
-                            {
-                                "type": "spacer",
-                                "id": "ag-sp6",
-                                "props": { "height": 16 }
-                            },
-                            {
-                                "type": "text",
-                                "id": "ag-cta-text",
-                                "props": { "content": "<p style='text-align:center;color:rgba(255,255,255,0.8);font-size:1.125rem;line-height:1.7;margin-bottom:40px'>Audit gratuit · Devis en 48h · Accompagnement de bout en bout<br>Aucune prestation cachée — transparence totale sur nos méthodes et tarifs.</p>" }
-                            },
-                            {
-                                "type": "text",
-                                "id": "ag-cta-btns",
-                                "props": { "content": "<div style='display:flex;gap:16px;justify-content:center;flex-wrap:wrap'><a href='/contact' style='display:inline-block;background:#fff;color:#6366f1;padding:16px 32px;border-radius:8px;font-weight:700;text-decoration:none;font-size:1rem'>Discutons ensemble →</a><a href='tel:+33123456789' style='display:inline-block;border:1.5px solid rgba(255,255,255,0.4);color:#fff;padding:16px 32px;border-radius:8px;font-weight:600;text-decoration:none;font-size:1rem'>01 23 45 67 89</a></div>" }
-                            }
-                        ]
+  "name": "Nexus Agency",
+  "slug": "agency",
+  "version": "2.0.0",
+  "category": "agency",
+  "description": "Template agence digitale bold et moderne — design violet/indigo contrasté, typographie impactante, portfolio projets, statistiques et témoignages clients.",
+  "author": "ArtisanCMS",
+  "preview": "assets/images/preview.png",
+  "pages": [
+    {
+      "id": "home",
+      "title": "Accueil",
+      "slug": "accueil",
+      "template": "home",
+      "is_homepage": true,
+      "meta_title": "Nexus — Agence digitale créative",
+      "meta_description": "Nous créons des expériences digitales qui transforment les marques et propulsent les businesses ambitieux.",
+      "content": {
+        "blocks": [
+          {
+            "type": "section",
+            "id": "ag-hero",
+            "props": {
+              "backgroundColor": "#0f0f1a",
+              "paddingTop": 100,
+              "paddingBottom": 100,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 1000,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "ag-hero-badge",
+                "props": {
+                  "content": "<p style='text-align:center;margin-bottom:24px'><span style='display:inline-block;background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.4);color:#a5b4fc;font-size:0.75rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;padding:6px 16px;border-radius:100px'>✦ Agence digitale créative — depuis 2015</span></p>"
+                }
+              },
+              {
+                "type": "heading",
+                "id": "ag-hero-title",
+                "props": {
+                  "text": "Nous transformons vos idées en expériences digitales inoubliables",
+                  "level": 1,
+                  "alignment": "center",
+                  "color": "#ffffff"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "ag-sp1",
+                "props": {
+                  "height": 24
+                }
+              },
+              {
+                "type": "text",
+                "id": "ag-hero-sub",
+                "props": {
+                  "content": "<p style='text-align:center;color:#94a3b8;font-size:1.25rem;line-height:1.7;max-width:680px;margin:0 auto'>Design UX/UI, développement web et stratégie digitale. Nous accompagnons les entreprises ambitieuses dans leur croissance numérique.</p>"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "ag-sp2",
+                "props": {
+                  "height": 48
+                }
+              },
+              {
+                "type": "text",
+                "id": "ag-hero-cta",
+                "props": {
+                  "content": "<div style='display:flex;gap:16px;justify-content:center;flex-wrap:wrap'><a href='/projets' style='display:inline-block;background:#6366f1;color:#fff;padding:16px 32px;border-radius:8px;font-weight:700;text-decoration:none;font-size:1rem;letter-spacing:0.01em'>Voir nos projets →</a><a href='/contact' style='display:inline-block;background:transparent;border:1.5px solid rgba(255,255,255,0.2);color:#e2e8f0;padding:16px 32px;border-radius:8px;font-weight:600;text-decoration:none;font-size:1rem'>Discutons de votre projet</a></div>"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "ag-sp3",
+                "props": {
+                  "height": 80
+                }
+              },
+              {
+                "type": "text",
+                "id": "ag-hero-stats",
+                "props": {
+                  "content": "<div style='display:grid;grid-template-columns:repeat(4,1fr);gap:32px;border-top:1px solid rgba(255,255,255,0.08);padding-top:48px'><div style='text-align:center'><p style='color:#6366f1;font-size:2.5rem;font-weight:800;line-height:1;margin-bottom:8px'>120+</p><p style='color:#64748b;font-size:0.875rem;letter-spacing:0.05em'>Projets livrés</p></div><div style='text-align:center'><p style='color:#6366f1;font-size:2.5rem;font-weight:800;line-height:1;margin-bottom:8px'>8</p><p style='color:#64748b;font-size:0.875rem;letter-spacing:0.05em'>Ans d'expertise</p></div><div style='text-align:center'><p style='color:#6366f1;font-size:2.5rem;font-weight:800;line-height:1;margin-bottom:8px'>95%</p><p style='color:#64748b;font-size:0.875rem;letter-spacing:0.05em'>Clients satisfaits</p></div><div style='text-align:center'><p style='color:#6366f1;font-size:2.5rem;font-weight:800;line-height:1;margin-bottom:8px'>18</p><p style='color:#64748b;font-size:0.875rem;letter-spacing:0.05em'>Experts créatifs</p></div></div>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "ag-services",
+            "props": {
+              "backgroundColor": "#f8fafc",
+              "paddingTop": 96,
+              "paddingBottom": 96,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 1080,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "ag-svc-label",
+                "props": {
+                  "content": "<p style='font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#6366f1;margin-bottom:16px'>Nos expertises</p>"
+                }
+              },
+              {
+                "type": "heading",
+                "id": "ag-svc-title",
+                "props": {
+                  "text": "Ce que nous faisons",
+                  "level": 2,
+                  "alignment": "left",
+                  "color": "#0f172a"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "ag-sp4",
+                "props": {
+                  "height": 56
+                }
+              },
+              {
+                "type": "grid",
+                "id": "ag-svc-grid",
+                "props": {
+                  "columns": 3,
+                  "gap": 32
+                },
+                "children": [
+                  {
+                    "type": "text",
+                    "id": "ag-svc1",
+                    "props": {
+                      "content": "<div style='padding:40px 32px;background:#fff;border-radius:12px;border:1px solid #e2e8f0;transition:all 0.2s'><div style='width:48px;height:48px;background:#ede9fe;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:24px;font-size:1.5rem'>🎨</div><h3 style='color:#0f172a;font-size:1.25rem;font-weight:700;margin-bottom:12px'>Design UX/UI</h3><p style='color:#64748b;line-height:1.7;margin-bottom:20px;font-size:0.95rem'>Interfaces intuitives centrées utilisateur. Recherche UX, design systems complets, prototypes interactifs Figma.</p><a href='/services#ux' style='color:#6366f1;font-weight:600;font-size:0.875rem;text-decoration:none'>En savoir plus →</a></div>"
                     }
-                ]
-            }
-        },
-        {
-            "id": "services",
-            "title": "Services",
-            "slug": "services",
-            "template": "default",
-            "meta_title": "Nos services — Nexus Agence",
-            "meta_description": "Design UX/UI, développement web, e-commerce, mobile et stratégie digitale. Découvrez nos expertises.",
-            "content": {
-                "blocks": [
-                    {
-                        "type": "section",
-                        "id": "ag-svc-hero",
-                        "props": { "backgroundColor": "#0f0f1a", "paddingTop": 80, "paddingBottom": 80, "paddingLeft": 24, "paddingRight": 24, "maxWidth": 800, "centered": true },
-                        "children": [
-                            {
-                                "type": "text",
-                                "id": "ag-svc-h-label",
-                                "props": { "content": "<p style='text-align:center;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#6366f1;margin-bottom:16px'>Notre offre</p>" }
-                            },
-                            {
-                                "type": "heading",
-                                "id": "ag-svc-h-title",
-                                "props": { "text": "Des services sur mesure pour votre croissance", "level": 1, "alignment": "center", "color": "#ffffff" }
-                            },
-                            {
-                                "type": "spacer",
-                                "id": "ag-svh-sp",
-                                "props": { "height": 16 }
-                            },
-                            {
-                                "type": "text",
-                                "id": "ag-svc-h-sub",
-                                "props": { "content": "<p style='text-align:center;color:#94a3b8;font-size:1.125rem;line-height:1.7'>Chaque projet est unique. Nous adaptons nos processus et nos équipes à vos enjeux spécifiques.</p>" }
-                            }
-                        ]
+                  },
+                  {
+                    "type": "text",
+                    "id": "ag-svc2",
+                    "props": {
+                      "content": "<div style='padding:40px 32px;background:#fff;border-radius:12px;border:1px solid #e2e8f0'><div style='width:48px;height:48px;background:#e0f2fe;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:24px;font-size:1.5rem'>💻</div><h3 style='color:#0f172a;font-size:1.25rem;font-weight:700;margin-bottom:12px'>Développement Web</h3><p style='color:#64748b;line-height:1.7;margin-bottom:20px;font-size:0.95rem'>Applications performantes sur mesure. React, Next.js, Laravel — des architectures évolutives, pensées pour la durée.</p><a href='/services#dev' style='color:#6366f1;font-weight:600;font-size:0.875rem;text-decoration:none'>En savoir plus →</a></div>"
                     }
-                ]
-            }
-        },
-        {
-            "id": "contact",
-            "title": "Contact",
-            "slug": "contact",
-            "template": "default",
-            "meta_title": "Contact — Nexus Agence",
-            "meta_description": "Parlez-nous de votre projet. Audit gratuit et devis sous 48h.",
-            "content": {
-                "blocks": [
-                    {
-                        "type": "section",
-                        "id": "ag-contact-section",
-                        "props": { "backgroundColor": "#f8fafc", "paddingTop": 96, "paddingBottom": 96, "paddingLeft": 24, "paddingRight": 24, "maxWidth": 960, "centered": true },
-                        "children": [
-                            {
-                                "type": "grid",
-                                "id": "ag-contact-grid",
-                                "props": { "columns": 2, "gap": 80 },
-                                "children": [
-                                    {
-                                        "type": "text",
-                                        "id": "ag-contact-left",
-                                        "props": { "content": "<div><p style='font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#6366f1;margin-bottom:16px'>Contact</p><h2 style='color:#0f172a;font-size:2rem;font-weight:800;line-height:1.2;margin-bottom:24px'>Démarrons quelque chose de grand ensemble</h2><p style='color:#64748b;line-height:1.7;margin-bottom:40px'>Décrivez-nous votre projet — nous vous répondons sous 24h avec une analyse préliminaire et une estimation tarifaire.</p><div style='display:flex;flex-direction:column;gap:24px'><div style='display:flex;align-items:center;gap:16px'><div style='width:40px;height:40px;background:#ede9fe;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.125rem;flex-shrink:0'>📧</div><div><p style='color:#374151;font-weight:600;margin:0;font-size:0.9rem'>Email</p><a href='mailto:hello@nexus.fr' style='color:#6366f1;text-decoration:none;font-size:0.875rem'>hello@nexus.fr</a></div></div><div style='display:flex;align-items:center;gap:16px'><div style='width:40px;height:40px;background:#ede9fe;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.125rem;flex-shrink:0'>📞</div><div><p style='color:#374151;font-weight:600;margin:0;font-size:0.9rem'>Téléphone</p><a href='tel:+33123456789' style='color:#6366f1;text-decoration:none;font-size:0.875rem'>01 23 45 67 89</a></div></div><div style='display:flex;align-items:center;gap:16px'><div style='width:40px;height:40px;background:#ede9fe;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.125rem;flex-shrink:0'>📍</div><div><p style='color:#374151;font-weight:600;margin:0;font-size:0.9rem'>Adresse</p><p style='color:#64748b;font-size:0.875rem;margin:0'>12 rue du Louvre, 75001 Paris</p></div></div></div></div>" }
-                                    },
-                                    {
-                                        "type": "text",
-                                        "id": "ag-contact-form",
-                                        "props": { "content": "<div style='background:#fff;border-radius:16px;padding:48px;border:1px solid #e2e8f0'><h3 style='color:#0f172a;font-size:1.25rem;font-weight:700;margin-bottom:32px'>Parlez-nous de votre projet</h3><div style='display:flex;flex-direction:column;gap:20px'><div style='display:grid;grid-template-columns:1fr 1fr;gap:16px'><div><label style='display:block;color:#374151;font-weight:600;font-size:0.8rem;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em'>Prénom</label><input type='text' placeholder='Marie' style='width:100%;padding:12px 16px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:0.95rem;color:#1f2937;background:#fff;box-sizing:border-box' /></div><div><label style='display:block;color:#374151;font-weight:600;font-size:0.8rem;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em'>Nom</label><input type='text' placeholder='Dupont' style='width:100%;padding:12px 16px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:0.95rem;color:#1f2937;background:#fff;box-sizing:border-box' /></div></div><div><label style='display:block;color:#374151;font-weight:600;font-size:0.8rem;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em'>Email professionnel</label><input type='email' placeholder='marie@entreprise.fr' style='width:100%;padding:12px 16px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:0.95rem;color:#1f2937;background:#fff;box-sizing:border-box' /></div><div><label style='display:block;color:#374151;font-weight:600;font-size:0.8rem;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em'>Budget estimé</label><select style='width:100%;padding:12px 16px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:0.95rem;color:#1f2937;background:#fff;box-sizing:border-box'><option>Moins de 5 000 €</option><option>5 000 – 15 000 €</option><option>15 000 – 50 000 €</option><option>Plus de 50 000 €</option><option>À définir ensemble</option></select></div><div><label style='display:block;color:#374151;font-weight:600;font-size:0.8rem;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em'>Votre projet</label><textarea rows='4' placeholder='Décrivez votre projet en quelques lignes...' style='width:100%;padding:12px 16px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:0.95rem;color:#1f2937;background:#fff;box-sizing:border-box;resize:vertical'></textarea></div><button style='width:100%;background:#6366f1;color:#fff;padding:16px;border:none;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;letter-spacing:0.01em'>Envoyer ma demande →</button></div></div>" }
-                                    }
-                                ]
-                            }
-                        ]
+                  },
+                  {
+                    "type": "text",
+                    "id": "ag-svc3",
+                    "props": {
+                      "content": "<div style='padding:40px 32px;background:#fff;border-radius:12px;border:1px solid #e2e8f0'><div style='width:48px;height:48px;background:#fce7f3;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:24px;font-size:1.5rem'>📈</div><h3 style='color:#0f172a;font-size:1.25rem;font-weight:700;margin-bottom:12px'>Stratégie Digitale</h3><p style='color:#64748b;line-height:1.7;margin-bottom:20px;font-size:0.95rem'>SEO, SEA, analytics, conversion. Une approche data-driven pour maximiser votre ROI et votre visibilité en ligne.</p><a href='/services#strategie' style='color:#6366f1;font-weight:600;font-size:0.875rem;text-decoration:none'>En savoir plus →</a></div>"
                     }
+                  },
+                  {
+                    "type": "text",
+                    "id": "ag-svc4",
+                    "props": {
+                      "content": "<div style='padding:40px 32px;background:#fff;border-radius:12px;border:1px solid #e2e8f0'><div style='width:48px;height:48px;background:#dcfce7;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:24px;font-size:1.5rem'>🛒</div><h3 style='color:#0f172a;font-size:1.25rem;font-weight:700;margin-bottom:12px'>E-commerce</h3><p style='color:#64748b;line-height:1.7;margin-bottom:20px;font-size:0.95rem'>Boutiques en ligne optimisées pour la conversion. Expérience d'achat fluide, paiement sécurisé, gestion facile.</p><a href='/services#ecommerce' style='color:#6366f1;font-weight:600;font-size:0.875rem;text-decoration:none'>En savoir plus →</a></div>"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "id": "ag-svc5",
+                    "props": {
+                      "content": "<div style='padding:40px 32px;background:#fff;border-radius:12px;border:1px solid #e2e8f0'><div style='width:48px;height:48px;background:#fef9c3;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:24px;font-size:1.5rem'>📱</div><h3 style='color:#0f172a;font-size:1.25rem;font-weight:700;margin-bottom:12px'>Applications Mobile</h3><p style='color:#64748b;line-height:1.7;margin-bottom:20px;font-size:0.95rem'>Apps iOS & Android natives ou React Native. De l'idée au store, nous gérons l'ensemble du cycle de développement.</p><a href='/services#mobile' style='color:#6366f1;font-weight:600;font-size:0.875rem;text-decoration:none'>En savoir plus →</a></div>"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "id": "ag-svc6",
+                    "props": {
+                      "content": "<div style='padding:40px 32px;background:#6366f1;border-radius:12px;position:relative;overflow:hidden'><div style='position:absolute;top:-20px;right:-20px;width:100px;height:100px;background:rgba(255,255,255,0.05);border-radius:50%'></div><div style='position:absolute;bottom:-30px;left:-10px;width:80px;height:80px;background:rgba(255,255,255,0.05);border-radius:50%'></div><h3 style='color:#fff;font-size:1.25rem;font-weight:700;margin-bottom:12px;position:relative'>Votre projet ?</h3><p style='color:rgba(255,255,255,0.8);line-height:1.7;margin-bottom:24px;font-size:0.95rem;position:relative'>Discutons ensemble de vos ambitions. Audit gratuit — réponse sous 24h.</p><a href='/contact' style='display:inline-block;background:#fff;color:#6366f1;padding:12px 24px;border-radius:6px;font-weight:700;text-decoration:none;font-size:0.875rem;position:relative'>Démarrer →</a></div>"
+                    }
+                  }
                 ]
-            }
-        }
-    ]
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "ag-projets",
+            "props": {
+              "backgroundColor": "#fff",
+              "paddingTop": 96,
+              "paddingBottom": 96,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 1080,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "ag-proj-header",
+                "props": {
+                  "content": "<div style='display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:56px'><div><p style='font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#6366f1;margin-bottom:16px'>Portfolio</p><h2 style='color:#0f172a;font-size:2rem;font-weight:800;line-height:1.2;margin:0'>Nos dernières réalisations</h2></div><a href='/projets' style='color:#6366f1;font-weight:600;text-decoration:none;white-space:nowrap'>Voir tout →</a></div>"
+                }
+              },
+              {
+                "type": "grid",
+                "id": "ag-proj-grid",
+                "props": {
+                  "columns": 2,
+                  "gap": 24
+                },
+                "children": [
+                  {
+                    "type": "text",
+                    "id": "ag-proj1",
+                    "props": {
+                      "content": "<div style='border-radius:12px;overflow:hidden;background:#f1f5f9'><div style='background:linear-gradient(135deg,#6366f1,#8b5cf6);height:240px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.3);font-size:3rem'>◈</div><div style='padding:24px'><div style='display:flex;gap:8px;margin-bottom:12px'><span style='background:#ede9fe;color:#6366f1;font-size:0.75rem;font-weight:600;padding:3px 10px;border-radius:100px'>UX/UI Design</span><span style='background:#ede9fe;color:#6366f1;font-size:0.75rem;font-weight:600;padding:3px 10px;border-radius:100px'>React</span></div><h3 style='color:#0f172a;font-size:1.125rem;font-weight:700;margin-bottom:8px'>Plateforme SaaS FinTech</h3><p style='color:#64748b;font-size:0.875rem;line-height:1.6;margin-bottom:16px'>Refonte complète d'une application de gestion financière B2B. +40% de satisfaction utilisateur en 3 mois.</p><a href='/projets/fintech' style='color:#6366f1;font-weight:600;font-size:0.875rem;text-decoration:none'>Voir le projet →</a></div></div>"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "id": "ag-proj2",
+                    "props": {
+                      "content": "<div style='border-radius:12px;overflow:hidden;background:#f1f5f9'><div style='background:linear-gradient(135deg,#0891b2,#06b6d4);height:240px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.3);font-size:3rem'>◉</div><div style='padding:24px'><div style='display:flex;gap:8px;margin-bottom:12px'><span style='background:#e0f2fe;color:#0284c7;font-size:0.75rem;font-weight:600;padding:3px 10px;border-radius:100px'>E-commerce</span><span style='background:#e0f2fe;color:#0284c7;font-size:0.75rem;font-weight:600;padding:3px 10px;border-radius:100px'>Next.js</span></div><h3 style='color:#0f172a;font-size:1.125rem;font-weight:700;margin-bottom:8px'>Boutique Mode Luxe</h3><p style='color:#64748b;font-size:0.875rem;line-height:1.6;margin-bottom:16px'>Création d'une boutique e-commerce premium. 2,3M€ de CA la première année, taux de conversion ×3.</p><a href='/projets/mode-luxe' style='color:#6366f1;font-weight:600;font-size:0.875rem;text-decoration:none'>Voir le projet →</a></div></div>"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "id": "ag-proj3",
+                    "props": {
+                      "content": "<div style='border-radius:12px;overflow:hidden;background:#f1f5f9'><div style='background:linear-gradient(135deg,#f59e0b,#f97316);height:240px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.3);font-size:3rem'>◫</div><div style='padding:24px'><div style='display:flex;gap:8px;margin-bottom:12px'><span style='background:#fef3c7;color:#d97706;font-size:0.75rem;font-weight:600;padding:3px 10px;border-radius:100px'>Branding</span><span style='background:#fef3c7;color:#d97706;font-size:0.75rem;font-weight:600;padding:3px 10px;border-radius:100px'>Web App</span></div><h3 style='color:#0f172a;font-size:1.125rem;font-weight:700;margin-bottom:8px'>Identité & App Startup</h3><p style='color:#64748b;font-size:0.875rem;line-height:1.6;margin-bottom:16px'>Branding complet + application web pour une startup FoodTech. Levée de fonds de 2M€ post-lancement.</p><a href='/projets/foodtech' style='color:#6366f1;font-weight:600;font-size:0.875rem;text-decoration:none'>Voir le projet →</a></div></div>"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "id": "ag-proj4",
+                    "props": {
+                      "content": "<div style='border-radius:12px;overflow:hidden;background:#f1f5f9'><div style='background:linear-gradient(135deg,#10b981,#059669);height:240px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.3);font-size:3rem'>◍</div><div style='padding:24px'><div style='display:flex;gap:8px;margin-bottom:12px'><span style='background:#dcfce7;color:#16a34a;font-size:0.75rem;font-weight:600;padding:3px 10px;border-radius:100px'>Mobile App</span><span style='background:#dcfce7;color:#16a34a;font-size:0.75rem;font-weight:600;padding:3px 10px;border-radius:100px'>React Native</span></div><h3 style='color:#0f172a;font-size:1.125rem;font-weight:700;margin-bottom:8px'>App Santé & Bien-être</h3><p style='color:#64748b;font-size:0.875rem;line-height:1.6;margin-bottom:16px'>Application mobile de suivi médical. 50 000 téléchargements en 6 mois, note 4.8/5 sur les stores.</p><a href='/projets/sante' style='color:#6366f1;font-weight:600;font-size:0.875rem;text-decoration:none'>Voir le projet →</a></div></div>"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "ag-temoignages",
+            "props": {
+              "backgroundColor": "#0f0f1a",
+              "paddingTop": 96,
+              "paddingBottom": 96,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 960,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "ag-tem-label",
+                "props": {
+                  "content": "<p style='text-align:center;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#6366f1;margin-bottom:16px'>Témoignages</p>"
+                }
+              },
+              {
+                "type": "heading",
+                "id": "ag-tem-title",
+                "props": {
+                  "text": "Ils nous font confiance",
+                  "level": 2,
+                  "alignment": "center",
+                  "color": "#ffffff"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "ag-sp5",
+                "props": {
+                  "height": 56
+                }
+              },
+              {
+                "type": "grid",
+                "id": "ag-tem-grid",
+                "props": {
+                  "columns": 2,
+                  "gap": 24
+                },
+                "children": [
+                  {
+                    "type": "text",
+                    "id": "ag-tem1",
+                    "props": {
+                      "content": "<div style='background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:36px'><p style='color:#6366f1;font-size:1.25rem;margin-bottom:16px'>★★★★★</p><p style='color:#e2e8f0;line-height:1.8;font-size:1rem;margin-bottom:28px;font-style:italic'>« Nexus a complètement transformé notre présence en ligne. Le nouveau site a généré +180% de leads qualifiés dès le premier mois. Une équipe vraiment à l'écoute et techniquement excellente. »</p><div style='display:flex;align-items:center;gap:16px'><div style='width:48px;height:48px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700'>SA</div><div><p style='color:#f1f5f9;font-weight:600;margin:0;font-size:0.95rem'>Sophie Arnaud</p><p style='color:#64748b;font-size:0.8rem;margin:0'>CMO — TechCorp SAS</p></div></div></div>"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "id": "ag-tem2",
+                    "props": {
+                      "content": "<div style='background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:36px'><p style='color:#6366f1;font-size:1.25rem;margin-bottom:16px'>★★★★★</p><p style='color:#e2e8f0;line-height:1.8;font-size:1rem;margin-bottom:28px;font-style:italic'>« Projet livré en avance, budget respecté, résultats au-delà de nos attentes. Notre boutique en ligne fait maintenant 3x notre CA physique. Je recommande Nexus sans réserve. »</p><div style='display:flex;align-items:center;gap:16px'><div style='width:48px;height:48px;background:linear-gradient(135deg,#0891b2,#06b6d4);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700'>MB</div><div><p style='color:#f1f5f9;font-weight:600;margin:0;font-size:0.95rem'>Marc Beaumont</p><p style='color:#64748b;font-size:0.8rem;margin:0'>Fondateur — Maison Beaumont</p></div></div></div>"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "ag-cta",
+            "props": {
+              "backgroundColor": "#6366f1",
+              "paddingTop": 96,
+              "paddingBottom": 96,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 800,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "heading",
+                "id": "ag-cta-title",
+                "props": {
+                  "text": "Prêt à démarrer votre projet ?",
+                  "level": 2,
+                  "alignment": "center",
+                  "color": "#ffffff"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "ag-sp6",
+                "props": {
+                  "height": 16
+                }
+              },
+              {
+                "type": "text",
+                "id": "ag-cta-text",
+                "props": {
+                  "content": "<p style='text-align:center;color:rgba(255,255,255,0.8);font-size:1.125rem;line-height:1.7;margin-bottom:40px'>Audit gratuit · Devis en 48h · Accompagnement de bout en bout<br>Aucune prestation cachée — transparence totale sur nos méthodes et tarifs.</p>"
+                }
+              },
+              {
+                "type": "text",
+                "id": "ag-cta-btns",
+                "props": {
+                  "content": "<div style='display:flex;gap:16px;justify-content:center;flex-wrap:wrap'><a href='/contact' style='display:inline-block;background:#fff;color:#6366f1;padding:16px 32px;border-radius:8px;font-weight:700;text-decoration:none;font-size:1rem'>Discutons ensemble →</a><a href='tel:+33123456789' style='display:inline-block;border:1.5px solid rgba(255,255,255,0.4);color:#fff;padding:16px 32px;border-radius:8px;font-weight:600;text-decoration:none;font-size:1rem'>01 23 45 67 89</a></div>"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "services",
+      "title": "Services",
+      "slug": "services",
+      "template": "default",
+      "meta_title": "Nos services — Nexus Agence",
+      "meta_description": "Design UX/UI, développement web, e-commerce, mobile et stratégie digitale. Découvrez nos expertises.",
+      "content": {
+        "blocks": [
+          {
+            "type": "section",
+            "id": "ag-svc-hero",
+            "props": {
+              "backgroundColor": "#0f0f1a",
+              "paddingTop": 80,
+              "paddingBottom": 80,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 800,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "ag-svc-h-label",
+                "props": {
+                  "content": "<p style='text-align:center;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#6366f1;margin-bottom:16px'>Notre offre</p>"
+                }
+              },
+              {
+                "type": "heading",
+                "id": "ag-svc-h-title",
+                "props": {
+                  "text": "Des services sur mesure pour votre croissance",
+                  "level": 1,
+                  "alignment": "center",
+                  "color": "#ffffff"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "ag-svh-sp",
+                "props": {
+                  "height": 16
+                }
+              },
+              {
+                "type": "text",
+                "id": "ag-svc-h-sub",
+                "props": {
+                  "content": "<p style='text-align:center;color:#94a3b8;font-size:1.125rem;line-height:1.7'>Chaque projet est unique. Nous adaptons nos processus et nos équipes à vos enjeux spécifiques.</p>"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "contact",
+      "title": "Contact",
+      "slug": "contact",
+      "template": "default",
+      "meta_title": "Contact — Nexus Agence",
+      "meta_description": "Parlez-nous de votre projet. Audit gratuit et devis sous 48h.",
+      "content": {
+        "blocks": [
+          {
+            "type": "section",
+            "id": "ag-contact-section",
+            "props": {
+              "backgroundColor": "#f8fafc",
+              "paddingTop": 96,
+              "paddingBottom": 96,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 960,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "grid",
+                "id": "ag-contact-grid",
+                "props": {
+                  "columns": 2,
+                  "gap": 80
+                },
+                "children": [
+                  {
+                    "type": "text",
+                    "id": "ag-contact-left",
+                    "props": {
+                      "content": "<div><p style='font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#6366f1;margin-bottom:16px'>Contact</p><h2 style='color:#0f172a;font-size:2rem;font-weight:800;line-height:1.2;margin-bottom:24px'>Démarrons quelque chose de grand ensemble</h2><p style='color:#64748b;line-height:1.7;margin-bottom:40px'>Décrivez-nous votre projet — nous vous répondons sous 24h avec une analyse préliminaire et une estimation tarifaire.</p><div style='display:flex;flex-direction:column;gap:24px'><div style='display:flex;align-items:center;gap:16px'><div style='width:40px;height:40px;background:#ede9fe;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.125rem;flex-shrink:0'>📧</div><div><p style='color:#374151;font-weight:600;margin:0;font-size:0.9rem'>Email</p><a href='mailto:hello@nexus.fr' style='color:#6366f1;text-decoration:none;font-size:0.875rem'>hello@nexus.fr</a></div></div><div style='display:flex;align-items:center;gap:16px'><div style='width:40px;height:40px;background:#ede9fe;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.125rem;flex-shrink:0'>📞</div><div><p style='color:#374151;font-weight:600;margin:0;font-size:0.9rem'>Téléphone</p><a href='tel:+33123456789' style='color:#6366f1;text-decoration:none;font-size:0.875rem'>01 23 45 67 89</a></div></div><div style='display:flex;align-items:center;gap:16px'><div style='width:40px;height:40px;background:#ede9fe;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.125rem;flex-shrink:0'>📍</div><div><p style='color:#374151;font-weight:600;margin:0;font-size:0.9rem'>Adresse</p><p style='color:#64748b;font-size:0.875rem;margin:0'>12 rue du Louvre, 75001 Paris</p></div></div></div></div>"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "id": "ag-contact-form",
+                    "props": {
+                      "content": "<div style='background:#fff;border-radius:16px;padding:48px;border:1px solid #e2e8f0'><h3 style='color:#0f172a;font-size:1.25rem;font-weight:700;margin-bottom:32px'>Parlez-nous de votre projet</h3><div style='display:flex;flex-direction:column;gap:20px'><div style='display:grid;grid-template-columns:1fr 1fr;gap:16px'><div><label style='display:block;color:#374151;font-weight:600;font-size:0.8rem;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em'>Prénom</label><input type='text' placeholder='Marie' style='width:100%;padding:12px 16px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:0.95rem;color:#1f2937;background:#fff;box-sizing:border-box' /></div><div><label style='display:block;color:#374151;font-weight:600;font-size:0.8rem;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em'>Nom</label><input type='text' placeholder='Dupont' style='width:100%;padding:12px 16px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:0.95rem;color:#1f2937;background:#fff;box-sizing:border-box' /></div></div><div><label style='display:block;color:#374151;font-weight:600;font-size:0.8rem;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em'>Email professionnel</label><input type='email' placeholder='marie@entreprise.fr' style='width:100%;padding:12px 16px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:0.95rem;color:#1f2937;background:#fff;box-sizing:border-box' /></div><div><label style='display:block;color:#374151;font-weight:600;font-size:0.8rem;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em'>Budget estimé</label><select style='width:100%;padding:12px 16px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:0.95rem;color:#1f2937;background:#fff;box-sizing:border-box'><option>Moins de 5 000 €</option><option>5 000 – 15 000 €</option><option>15 000 – 50 000 €</option><option>Plus de 50 000 €</option><option>À définir ensemble</option></select></div><div><label style='display:block;color:#374151;font-weight:600;font-size:0.8rem;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em'>Votre projet</label><textarea rows='4' placeholder='Décrivez votre projet en quelques lignes...' style='width:100%;padding:12px 16px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:0.95rem;color:#1f2937;background:#fff;box-sizing:border-box;resize:vertical'></textarea></div><button style='width:100%;background:#6366f1;color:#fff;padding:16px;border:none;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;letter-spacing:0.01em'>Envoyer ma demande →</button></div></div>"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "compatible_themes": [
+    "noir",
+    "default"
+  ],
+  "suggested_theme": "noir"
 }

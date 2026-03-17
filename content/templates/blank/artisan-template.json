@@ -4,7 +4,11 @@
   "version": "1.0.0",
   "description": "Page d'accueil vide, aucun contenu pré-rempli",
   "category": "other",
-  "tags": ["blank", "empty", "starter"],
+  "tags": [
+    "blank",
+    "empty",
+    "starter"
+  ],
   "author": {
     "name": "ArtisanCMS",
     "url": "https://artisancms.dev"
@@ -21,5 +25,12 @@
     "pages": "data/pages.json",
     "menus": "data/menus.json",
     "settings": "data/settings.json"
-  }
+  },
+  "compatible_themes": [
+    "default",
+    "lumiere",
+    "noir",
+    "botanica"
+  ],
+  "suggested_theme": "default"
 }

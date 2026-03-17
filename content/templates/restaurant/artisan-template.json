@@ -1,478 +1,742 @@
 {
-    "name": "Le Gourmet",
-    "slug": "restaurant",
-    "version": "2.0.0",
-    "category": "restaurant",
-    "description": "Template restaurant gastronomique premium — design chaud et élégant, palette bordeaux et or, typographie raffinée.",
-    "author": "ArtisanCMS",
-    "preview": "assets/images/preview.png",
-    "pages": [
-        {
-            "id": "home",
-            "title": "Accueil",
-            "slug": "accueil",
-            "template": "home",
-            "is_homepage": true,
-            "meta_title": "Le Gourmet — Restaurant gastronomique",
-            "meta_description": "Découvrez une expérience culinaire d'exception. Cuisine française raffinée, produits frais et locaux, cave sélectionnée.",
-            "content": {
-                "blocks": [
-                    {
-                        "type": "hero",
-                        "id": "rst-home-hero",
-                        "props": {
-                            "title": "Une expérience culinaire d'exception",
-                            "subtitle": "Cuisine française raffinée, produits frais du terroir, dans un cadre intimiste au cœur de la ville. Chaque repas est une invitation au voyage.",
-                            "overlay": true,
-                            "ctaText": "Réserver une table",
-                            "ctaUrl": "/reservation"
-                        }
-                    },
-                    {
-                        "type": "section",
-                        "id": "rst-home-intro",
-                        "props": { "backgroundColor": "#fffbeb", "paddingTop": 80, "paddingBottom": 80, "paddingLeft": 24, "paddingRight": 24, "maxWidth": 900, "centered": true },
-                        "children": [
-                            {
-                                "type": "text",
-                                "id": "rst-home-intro-label",
-                                "props": { "content": "<p style='text-align:center;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#a16207;margin-bottom:16px'>Notre histoire</p>" }
-                            },
-                            {
-                                "type": "heading",
-                                "id": "rst-home-intro-title",
-                                "props": { "text": "La cuisine comme art de vivre", "level": 2, "alignment": "center", "color": "#451a03" }
-                            },
-                            {
-                                "type": "spacer",
-                                "id": "rst-sp0",
-                                "props": { "height": 24 }
-                            },
-                            {
-                                "type": "text",
-                                "id": "rst-home-intro-text",
-                                "props": { "content": "<p style='text-align:center;color:#78716c;font-size:1.125rem;line-height:1.8;max-width:680px;margin:0 auto'>Fondé en 2008 par le Chef Antoine Moreau, Le Gourmet célèbre la richesse des produits français. Notre brigade de passionnés compose chaque jour des menus qui marient tradition et créativité, pour vous offrir un moment suspendu hors du temps.</p>" }
-                            },
-                            {
-                                "type": "spacer",
-                                "id": "rst-sp1",
-                                "props": { "height": 48 }
-                            },
-                            {
-                                "type": "grid",
-                                "id": "rst-home-valeurs",
-                                "props": { "columns": 3, "gap": 40 },
-                                "children": [
-                                    {
-                                        "type": "text",
-                                        "id": "rst-val1",
-                                        "props": { "content": "<div style='text-align:center;padding:32px 24px;background:#fff;border-radius:4px;border-top:3px solid #dc2626'><div style='font-size:2rem;margin-bottom:16px'>🌿</div><h3 style='color:#451a03;font-size:1.125rem;font-weight:700;margin-bottom:12px;letter-spacing:-0.01em'>Produits du terroir</h3><p style='color:#78716c;line-height:1.7;font-size:0.95rem'>Maraîchers, éleveurs et vignerons partenaires sélectionnés pour leur engagement qualité. Du producteur à votre assiette, moins de 48h.</p></div>" }
-                                    },
-                                    {
-                                        "type": "text",
-                                        "id": "rst-val2",
-                                        "props": { "content": "<div style='text-align:center;padding:32px 24px;background:#fff;border-radius:4px;border-top:3px solid #dc2626'><div style='font-size:2rem;margin-bottom:16px'>👨‍🍳</div><h3 style='color:#451a03;font-size:1.125rem;font-weight:700;margin-bottom:12px;letter-spacing:-0.01em'>Tout fait maison</h3><p style='color:#78716c;line-height:1.7;font-size:0.95rem'>Pains, pâtes, desserts, conserves — chaque élément est préparé dans nos cuisines par une équipe de 12 artisans passionnés.</p></div>" }
-                                    },
-                                    {
-                                        "type": "text",
-                                        "id": "rst-val3",
-                                        "props": { "content": "<div style='text-align:center;padding:32px 24px;background:#fff;border-radius:4px;border-top:3px solid #dc2626'><div style='font-size:2rem;margin-bottom:16px'>🍷</div><h3 style='color:#451a03;font-size:1.125rem;font-weight:700;margin-bottom:12px;letter-spacing:-0.01em'>Cave d'exception</h3><p style='color:#78716c;line-height:1.7;font-size:0.95rem'>280 références soigneusement sélectionnées. Notre sommelier Thomas vous guide vers l'accord parfait pour sublimer chaque plat.</p></div>" }
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "type": "section",
-                        "id": "rst-home-menu",
-                        "props": { "backgroundColor": "#fef2f2", "paddingTop": 80, "paddingBottom": 80, "paddingLeft": 24, "paddingRight": 24, "maxWidth": 900, "centered": true },
-                        "children": [
-                            {
-                                "type": "text",
-                                "id": "rst-menu-label",
-                                "props": { "content": "<p style='text-align:center;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#dc2626;margin-bottom:16px'>La carte</p>" }
-                            },
-                            {
-                                "type": "heading",
-                                "id": "rst-menu-title",
-                                "props": { "text": "Les menus du moment", "level": 2, "alignment": "center", "color": "#450a0a" }
-                            },
-                            {
-                                "type": "spacer",
-                                "id": "rst-sp2",
-                                "props": { "height": 16 }
-                            },
-                            {
-                                "type": "text",
-                                "id": "rst-menu-sub",
-                                "props": { "content": "<p style='text-align:center;color:#78716c;max-width:560px;margin:0 auto;line-height:1.7'>Nos menus évoluent au fil des saisons et des arrivages. Allergènes sur demande — nous adaptons volontiers chaque plat.</p>" }
-                            },
-                            {
-                                "type": "spacer",
-                                "id": "rst-sp3",
-                                "props": { "height": 48 }
-                            },
-                            {
-                                "type": "grid",
-                                "id": "rst-menus-grid",
-                                "props": { "columns": 3, "gap": 32 },
-                                "children": [
-                                    {
-                                        "type": "text",
-                                        "id": "rst-menu-decouverte",
-                                        "props": { "content": "<div style='background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.08)'><div style='background:#dc2626;padding:24px;text-align:center'><p style='color:rgba(255,255,255,0.8);font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:4px'>Menu</p><h3 style='color:#fff;font-size:1.375rem;font-weight:700;margin:0'>Découverte</h3></div><div style='padding:28px 24px'><p style='color:#451a03;font-size:2rem;font-weight:800;text-align:center;margin-bottom:4px'>38 <span style='font-size:1rem;font-weight:400'>€</span></p><p style='text-align:center;color:#9ca3af;font-size:0.875rem;margin-bottom:24px'>3 plats — déjeuner uniquement</p><ul style='list-style:none;padding:0;margin:0;color:#4b5563;font-size:0.9rem;line-height:2'><li style='border-bottom:1px solid #f5f5f5;padding-bottom:8px;margin-bottom:8px'>→ Entrée du marché</li><li style='border-bottom:1px solid #f5f5f5;padding-bottom:8px;margin-bottom:8px'>→ Plat du chef</li><li>→ Dessert maison</li></ul></div></div>" }
-                                    },
-                                    {
-                                        "type": "text",
-                                        "id": "rst-menu-gastronomique",
-                                        "props": { "content": "<div style='background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 4px 20px rgba(220,38,38,0.15);transform:scale(1.02)'><div style='background:#451a03;padding:24px;text-align:center;position:relative'><p style='position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:#dc2626;color:#fff;font-size:0.7rem;font-weight:700;letter-spacing:0.1em;padding:4px 16px;text-transform:uppercase;border-radius:0 0 8px 8px'>Le plus choisi</p><p style='color:rgba(255,255,255,0.7);font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:4px;margin-top:16px'>Menu</p><h3 style='color:#fff;font-size:1.375rem;font-weight:700;margin:0'>Gastronomique</h3></div><div style='padding:28px 24px'><p style='color:#451a03;font-size:2rem;font-weight:800;text-align:center;margin-bottom:4px'>68 <span style='font-size:1rem;font-weight:400'>€</span></p><p style='text-align:center;color:#9ca3af;font-size:0.875rem;margin-bottom:24px'>5 plats — déjeuner & dîner</p><ul style='list-style:none;padding:0;margin:0;color:#4b5563;font-size:0.9rem;line-height:2'><li style='border-bottom:1px solid #f5f5f5;padding-bottom:8px;margin-bottom:8px'>→ Amuse-bouche</li><li style='border-bottom:1px solid #f5f5f5;padding-bottom:8px;margin-bottom:8px'>→ Entrée signature</li><li style='border-bottom:1px solid #f5f5f5;padding-bottom:8px;margin-bottom:8px'>→ Poisson ou viande</li><li style='border-bottom:1px solid #f5f5f5;padding-bottom:8px;margin-bottom:8px'>→ Sélection fromagère</li><li>→ Dessert du chef</li></ul></div></div>" }
-                                    },
-                                    {
-                                        "type": "text",
-                                        "id": "rst-menu-prestige",
-                                        "props": { "content": "<div style='background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.08)'><div style='background:#a16207;padding:24px;text-align:center'><p style='color:rgba(255,255,255,0.8);font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:4px'>Menu</p><h3 style='color:#fff;font-size:1.375rem;font-weight:700;margin:0'>Prestige</h3></div><div style='padding:28px 24px'><p style='color:#451a03;font-size:2rem;font-weight:800;text-align:center;margin-bottom:4px'>120 <span style='font-size:1rem;font-weight:400'>€</span></p><p style='text-align:center;color:#9ca3af;font-size:0.875rem;margin-bottom:24px'>7 plats — dîner uniquement</p><ul style='list-style:none;padding:0;margin:0;color:#4b5563;font-size:0.9rem;line-height:2'><li style='border-bottom:1px solid #f5f5f5;padding-bottom:8px;margin-bottom:8px'>→ Mise en bouche ×3</li><li style='border-bottom:1px solid #f5f5f5;padding-bottom:8px;margin-bottom:8px'>→ Entrée grand cru</li><li style='border-bottom:1px solid #f5f5f5;padding-bottom:8px;margin-bottom:8px'>→ Turbot sauvage</li><li style='border-bottom:1px solid #f5f5f5;padding-bottom:8px;margin-bottom:8px'>→ Pièce de bœuf Wagyu</li><li style='border-bottom:1px solid #f5f5f5;padding-bottom:8px;margin-bottom:8px'>→ Chariot de fromages</li><li>→ Dessert & mignardises</li></ul></div></div>" }
-                                    }
-                                ]
-                            },
-                            {
-                                "type": "spacer",
-                                "id": "rst-sp4",
-                                "props": { "height": 40 }
-                            },
-                            {
-                                "type": "text",
-                                "id": "rst-menu-note",
-                                "props": { "content": "<p style='text-align:center;color:#9ca3af;font-size:0.875rem'>Accord mets-vins disponible sur demande · Végétarien et sans gluten sur réservation</p>" }
-                            }
-                        ]
-                    },
-                    {
-                        "type": "section",
-                        "id": "rst-home-temoignages",
-                        "props": { "backgroundColor": "#fff", "paddingTop": 80, "paddingBottom": 80, "paddingLeft": 24, "paddingRight": 24, "maxWidth": 960, "centered": true },
-                        "children": [
-                            {
-                                "type": "text",
-                                "id": "rst-temoignages-label",
-                                "props": { "content": "<p style='text-align:center;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#a16207;margin-bottom:16px'>Vos avis</p>" }
-                            },
-                            {
-                                "type": "heading",
-                                "id": "rst-temoignages-title",
-                                "props": { "text": "Ce que disent nos convives", "level": 2, "alignment": "center", "color": "#451a03" }
-                            },
-                            {
-                                "type": "spacer",
-                                "id": "rst-sp5",
-                                "props": { "height": 48 }
-                            },
-                            {
-                                "type": "grid",
-                                "id": "rst-temoignages-grid",
-                                "props": { "columns": 3, "gap": 32 },
-                                "children": [
-                                    {
-                                        "type": "text",
-                                        "id": "rst-temoignage1",
-                                        "props": { "content": "<div style='background:#fffbeb;padding:32px;border-radius:8px;border-left:3px solid #dc2626'><p style='color:#78716c;font-style:italic;line-height:1.8;margin-bottom:20px;font-size:0.95rem'>« Un dîner inoubliable. Le menu Gastronomique est une véritable partition orchestrée avec précision. Le service, discret et attentionné, a rendu cette soirée magique. »</p><div style='display:flex;align-items:center;gap:12px'><div style='width:40px;height:40px;background:#dc2626;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:0.875rem;flex-shrink:0'>MR</div><div><p style='color:#451a03;font-weight:600;font-size:0.9rem;margin:0'>Marie Rousseau</p><p style='color:#a16207;font-size:0.8rem;margin:0'>★★★★★ · Google</p></div></div></div>" }
-                                    },
-                                    {
-                                        "type": "text",
-                                        "id": "rst-temoignage2",
-                                        "props": { "content": "<div style='background:#fffbeb;padding:32px;border-radius:8px;border-left:3px solid #dc2626'><p style='color:#78716c;font-style:italic;line-height:1.8;margin-bottom:20px;font-size:0.95rem'>« La qualité des produits est exceptionnelle. On sent vraiment le travail de sélection derrière chaque ingrédient. Le turbot était parfaitement cuit, la sauce sublime. »</p><div style='display:flex;align-items:center;gap:12px'><div style='width:40px;height:40px;background:#a16207;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:0.875rem;flex-shrink:0'>PD</div><div><p style='color:#451a03;font-weight:600;font-size:0.9rem;margin:0'>Pierre Dubois</p><p style='color:#a16207;font-size:0.8rem;margin:0'>★★★★★ · TripAdvisor</p></div></div></div>" }
-                                    },
-                                    {
-                                        "type": "text",
-                                        "id": "rst-temoignage3",
-                                        "props": { "content": "<div style='background:#fffbeb;padding:32px;border-radius:8px;border-left:3px solid #dc2626'><p style='color:#78716c;font-style:italic;line-height:1.8;margin-bottom:20px;font-size:0.95rem'>« Notre anniversaire de mariage dans ce restaurant restera gravé dans nos mémoires. L'équipe nous a réservé un accueil exceptionnel et personnalisé. Merci du fond du cœur. »</p><div style='display:flex;align-items:center;gap:12px'><div style='width:40px;height:40px;background:#dc2626;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:0.875rem;flex-shrink:0'>SL</div><div><p style='color:#451a03;font-weight:600;font-size:0.9rem;margin:0'>Sophie & Lucas</p><p style='color:#a16207;font-size:0.8rem;margin:0'>★★★★★ · Google</p></div></div></div>" }
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "type": "section",
-                        "id": "rst-home-cta",
-                        "props": { "backgroundColor": "#dc2626", "paddingTop": 80, "paddingBottom": 80, "paddingLeft": 24, "paddingRight": 24, "maxWidth": 700, "centered": true },
-                        "children": [
-                            {
-                                "type": "heading",
-                                "id": "rst-cta-title",
-                                "props": { "text": "Réservez votre table", "level": 2, "alignment": "center", "color": "#ffffff" }
-                            },
-                            {
-                                "type": "spacer",
-                                "id": "rst-sp6",
-                                "props": { "height": 16 }
-                            },
-                            {
-                                "type": "text",
-                                "id": "rst-cta-text",
-                                "props": { "content": "<p style='text-align:center;color:rgba(255,255,255,0.85);font-size:1.125rem;line-height:1.7;margin-bottom:32px'>Ouvert du mardi au dimanche · Déjeuner 12h–14h30 · Dîner 19h–22h30<br>Réservation recommandée · Groupes sur devis</p>" }
-                            },
-                            {
-                                "type": "button",
-                                "id": "rst-cta-btn",
-                                "props": { "text": "Réserver en ligne", "url": "/reservation", "alignment": "center", "variant": "outline", "size": "lg" }
-                            },
-                            {
-                                "type": "spacer",
-                                "id": "rst-sp7",
-                                "props": { "height": 24 }
-                            },
-                            {
-                                "type": "text",
-                                "id": "rst-cta-tel",
-                                "props": { "content": "<p style='text-align:center;color:rgba(255,255,255,0.7);font-size:0.875rem'>ou appelez-nous au <strong style='color:#fff'>01 23 45 67 89</strong></p>" }
-                            }
-                        ]
-                    },
-                    {
-                        "type": "section",
-                        "id": "rst-home-infos",
-                        "props": { "backgroundColor": "#451a03", "paddingTop": 64, "paddingBottom": 64, "paddingLeft": 24, "paddingRight": 24, "maxWidth": 960, "centered": true },
-                        "children": [
-                            {
-                                "type": "grid",
-                                "id": "rst-infos-grid",
-                                "props": { "columns": 3, "gap": 40 },
-                                "children": [
-                                    {
-                                        "type": "text",
-                                        "id": "rst-info-adresse",
-                                        "props": { "content": "<div><h4 style='color:#fde68a;font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:12px'>Adresse</h4><p style='color:rgba(255,255,255,0.8);line-height:1.8;font-size:0.95rem'>15, rue des Gourmets<br>75006 Paris<br><a href='#' style='color:#fbbf24;text-decoration:none;font-size:0.875rem'>→ Voir le plan</a></p></div>" }
-                                    },
-                                    {
-                                        "type": "text",
-                                        "id": "rst-info-horaires",
-                                        "props": { "content": "<div><h4 style='color:#fde68a;font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:12px'>Horaires</h4><p style='color:rgba(255,255,255,0.8);line-height:2;font-size:0.95rem'>Mar–Sam : 12h–14h30 · 19h–22h30<br>Dimanche : 12h–15h (déjeuner)<br>Lundi : fermé</p></div>" }
-                                    },
-                                    {
-                                        "type": "text",
-                                        "id": "rst-info-contact",
-                                        "props": { "content": "<div><h4 style='color:#fde68a;font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:12px'>Contact</h4><p style='color:rgba(255,255,255,0.8);line-height:2;font-size:0.95rem'><a href='tel:+33123456789' style='color:rgba(255,255,255,0.8);text-decoration:none'>01 23 45 67 89</a><br><a href='mailto:contact@legourmet.fr' style='color:#fbbf24;text-decoration:none;font-size:0.875rem'>contact@legourmet.fr</a></p></div>" }
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ]
+  "name": "Le Gourmet",
+  "slug": "restaurant",
+  "version": "2.0.0",
+  "category": "restaurant",
+  "description": "Template restaurant gastronomique premium — design chaud et élégant, palette bordeaux et or, typographie raffinée.",
+  "author": "ArtisanCMS",
+  "preview": "assets/images/preview.png",
+  "pages": [
+    {
+      "id": "home",
+      "title": "Accueil",
+      "slug": "accueil",
+      "template": "home",
+      "is_homepage": true,
+      "meta_title": "Le Gourmet — Restaurant gastronomique",
+      "meta_description": "Découvrez une expérience culinaire d'exception. Cuisine française raffinée, produits frais et locaux, cave sélectionnée.",
+      "content": {
+        "blocks": [
+          {
+            "type": "hero",
+            "id": "rst-home-hero",
+            "props": {
+              "title": "Une expérience culinaire d'exception",
+              "subtitle": "Cuisine française raffinée, produits frais du terroir, dans un cadre intimiste au cœur de la ville. Chaque repas est une invitation au voyage.",
+              "overlay": true,
+              "ctaText": "Réserver une table",
+              "ctaUrl": "/reservation"
             }
-        },
-        {
-            "id": "menu",
-            "title": "La Carte",
-            "slug": "la-carte",
-            "template": "default",
-            "meta_title": "La Carte — Le Gourmet",
-            "meta_description": "Découvrez notre carte et nos menus. Cuisine gastronomique française de saison.",
-            "content": {
-                "blocks": [
-                    {
-                        "type": "section",
-                        "id": "rst-menu-header",
-                        "props": { "backgroundColor": "#fffbeb", "paddingTop": 64, "paddingBottom": 64, "paddingLeft": 24, "paddingRight": 24, "maxWidth": 800, "centered": true },
-                        "children": [
-                            {
-                                "type": "text",
-                                "id": "rst-menu-h-label",
-                                "props": { "content": "<p style='text-align:center;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#dc2626;margin-bottom:16px'>Restaurant Le Gourmet</p>" }
-                            },
-                            {
-                                "type": "heading",
-                                "id": "rst-menu-h-title",
-                                "props": { "text": "Notre carte", "level": 1, "alignment": "center", "color": "#451a03" }
-                            },
-                            {
-                                "type": "spacer",
-                                "id": "rst-mh-sp1",
-                                "props": { "height": 16 }
-                            },
-                            {
-                                "type": "text",
-                                "id": "rst-menu-h-sub",
-                                "props": { "content": "<p style='text-align:center;color:#78716c;font-size:1rem;line-height:1.7'>Carte mise à jour le 15 mars 2025 · Prix nets service compris · Allergènes sur demande</p>" }
-                            }
-                        ]
-                    },
-                    {
-                        "type": "section",
-                        "id": "rst-menu-entrees",
-                        "props": { "backgroundColor": "#fff", "paddingTop": 60, "paddingBottom": 20, "paddingLeft": 24, "paddingRight": 24, "maxWidth": 800, "centered": true },
-                        "children": [
-                            {
-                                "type": "heading",
-                                "id": "rst-entrees-title",
-                                "props": { "text": "Entrées", "level": 2, "alignment": "left", "color": "#dc2626" }
-                            },
-                            {
-                                "type": "divider",
-                                "id": "rst-div1",
-                                "props": { "color": "#fde68a", "thickness": 1 }
-                            },
-                            {
-                                "type": "spacer",
-                                "id": "rst-es1",
-                                "props": { "height": 8 }
-                            },
-                            {
-                                "type": "text",
-                                "id": "rst-entrees-items",
-                                "props": { "content": "<div style='display:flex;flex-direction:column;gap:20px'><div style='display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px dotted #e5e7eb;padding-bottom:16px'><div><p style='color:#451a03;font-weight:600;margin-bottom:4px'>Foie gras de canard maison</p><p style='color:#9ca3af;font-size:0.875rem'>Chutney figue & poire, brioche toastée</p></div><span style='color:#dc2626;font-weight:700;font-size:1.125rem;white-space:nowrap;margin-left:16px'>26 €</span></div><div style='display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px dotted #e5e7eb;padding-bottom:16px'><div><p style='color:#451a03;font-weight:600;margin-bottom:4px'>Tartare de Saint-Jacques</p><p style='color:#9ca3af;font-size:0.875rem'>Pomme verte, caviar de Sologne, huile de truffe blanche</p></div><span style='color:#dc2626;font-weight:700;font-size:1.125rem;white-space:nowrap;margin-left:16px'>34 €</span></div><div style='display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px dotted #e5e7eb;padding-bottom:16px'><div><p style='color:#451a03;font-weight:600;margin-bottom:4px'>Velouté de butternut</p><p style='color:#9ca3af;font-size:0.875rem'>Huile de noisette, chips de poire, crème de châtaigne</p></div><span style='color:#dc2626;font-weight:700;font-size:1.125rem;white-space:nowrap;margin-left:16px'>18 €</span></div><div style='display:flex;justify-content:space-between;align-items:baseline;padding-bottom:8px'><div><p style='color:#451a03;font-weight:600;margin-bottom:4px'>Salade de homard breton <span style='background:#fde68a;color:#451a03;font-size:0.7rem;padding:2px 8px;border-radius:20px;font-weight:700;margin-left:8px'>Signature</span></p><p style='color:#9ca3af;font-size:0.875rem'>Avocat, mango, vinaigrette agrumes & gingembre</p></div><span style='color:#dc2626;font-weight:700;font-size:1.125rem;white-space:nowrap;margin-left:16px'>42 €</span></div></div>" }
-                            }
-                        ]
-                    },
-                    {
-                        "type": "section",
-                        "id": "rst-menu-plats",
-                        "props": { "backgroundColor": "#fff", "paddingTop": 40, "paddingBottom": 20, "paddingLeft": 24, "paddingRight": 24, "maxWidth": 800, "centered": true },
-                        "children": [
-                            {
-                                "type": "heading",
-                                "id": "rst-plats-title",
-                                "props": { "text": "Plats", "level": 2, "alignment": "left", "color": "#dc2626" }
-                            },
-                            {
-                                "type": "divider",
-                                "id": "rst-div2",
-                                "props": { "color": "#fde68a", "thickness": 1 }
-                            },
-                            {
-                                "type": "spacer",
-                                "id": "rst-ps1",
-                                "props": { "height": 8 }
-                            },
-                            {
-                                "type": "text",
-                                "id": "rst-plats-items",
-                                "props": { "content": "<div style='display:flex;flex-direction:column;gap:20px'><div style='display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px dotted #e5e7eb;padding-bottom:16px'><div><p style='color:#451a03;font-weight:600;margin-bottom:4px'>Turbot sauvage de ligne</p><p style='color:#9ca3af;font-size:0.875rem'>Beurre blanc ciboulette, vitelotte, légumes printaniers</p></div><span style='color:#dc2626;font-weight:700;font-size:1.125rem;white-space:nowrap;margin-left:16px'>54 €</span></div><div style='display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px dotted #e5e7eb;padding-bottom:16px'><div><p style='color:#451a03;font-weight:600;margin-bottom:4px'>Filet de bœuf Wagyu A5 <span style='background:#fde68a;color:#451a03;font-size:0.7rem;padding:2px 8px;border-radius:20px;font-weight:700;margin-left:8px'>Signature</span></p><p style='color:#9ca3af;font-size:0.875rem'>Sauce périgueux, gratin dauphinois, jus réduit à l'armagnac</p></div><span style='color:#dc2626;font-weight:700;font-size:1.125rem;white-space:nowrap;margin-left:16px'>78 €</span></div><div style='display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px dotted #e5e7eb;padding-bottom:16px'><div><p style='color:#451a03;font-weight:600;margin-bottom:4px'>Pigeon rôti entier <span style='background:#f3f4f6;color:#374151;font-size:0.7rem;padding:2px 8px;border-radius:20px;font-weight:600;margin-left:8px'>2 pers.</span></p><p style='color:#9ca3af;font-size:0.875rem'>Jus aux cerises, lentilles du Puy, cromesquis de foie gras</p></div><span style='color:#dc2626;font-weight:700;font-size:1.125rem;white-space:nowrap;margin-left:16px'>72 €</span></div><div style='display:flex;justify-content:space-between;align-items:baseline;padding-bottom:8px'><div><p style='color:#451a03;font-weight:600;margin-bottom:4px'>Risotto de saison <span style='background:#dcfce7;color:#166534;font-size:0.7rem;padding:2px 8px;border-radius:20px;font-weight:600;margin-left:8px'>Végétarien</span></p><p style='color:#9ca3af;font-size:0.875rem'>Truffe noire du Périgord, parmesan 36 mois, huile de noisette</p></div><span style='color:#dc2626;font-weight:700;font-size:1.125rem;white-space:nowrap;margin-left:16px'>46 €</span></div></div>" }
-                            }
-                        ]
-                    },
-                    {
-                        "type": "section",
-                        "id": "rst-menu-desserts",
-                        "props": { "backgroundColor": "#fff", "paddingTop": 40, "paddingBottom": 80, "paddingLeft": 24, "paddingRight": 24, "maxWidth": 800, "centered": true },
-                        "children": [
-                            {
-                                "type": "heading",
-                                "id": "rst-desserts-title",
-                                "props": { "text": "Desserts", "level": 2, "alignment": "left", "color": "#dc2626" }
-                            },
-                            {
-                                "type": "divider",
-                                "id": "rst-div3",
-                                "props": { "color": "#fde68a", "thickness": 1 }
-                            },
-                            {
-                                "type": "spacer",
-                                "id": "rst-ds1",
-                                "props": { "height": 8 }
-                            },
-                            {
-                                "type": "text",
-                                "id": "rst-desserts-items",
-                                "props": { "content": "<div style='display:flex;flex-direction:column;gap:20px'><div style='display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px dotted #e5e7eb;padding-bottom:16px'><div><p style='color:#451a03;font-weight:600;margin-bottom:4px'>Soufflé au Grand Marnier <span style='background:#fde68a;color:#451a03;font-size:0.7rem;padding:2px 8px;border-radius:20px;font-weight:700;margin-left:8px'>Signature</span></p><p style='color:#9ca3af;font-size:0.875rem'>Glace vanille Bourbon de Madagascar · à commander à l'entrée</p></div><span style='color:#dc2626;font-weight:700;font-size:1.125rem;white-space:nowrap;margin-left:16px'>22 €</span></div><div style='display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px dotted #e5e7eb;padding-bottom:16px'><div><p style='color:#451a03;font-weight:600;margin-bottom:4px'>Millefeuille à la vanille</p><p style='color:#9ca3af;font-size:0.875rem'>Pâte feuilletée inversée, crème mousseline légère, caramel salé</p></div><span style='color:#dc2626;font-weight:700;font-size:1.125rem;white-space:nowrap;margin-left:16px'>18 €</span></div><div style='display:flex;justify-content:space-between;align-items:baseline;padding-bottom:8px'><div><p style='color:#451a03;font-weight:600;margin-bottom:4px'>Tarte au citron revisitée</p><p style='color:#9ca3af;font-size:0.875rem'>Ganache citron yuzu, meringue italienne flambée, sorbet basilic</p></div><span style='color:#dc2626;font-weight:700;font-size:1.125rem;white-space:nowrap;margin-left:16px'>18 €</span></div></div>" }
-                            }
-                        ]
+          },
+          {
+            "type": "section",
+            "id": "rst-home-intro",
+            "props": {
+              "backgroundColor": "#fffbeb",
+              "paddingTop": 80,
+              "paddingBottom": 80,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 900,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "rst-home-intro-label",
+                "props": {
+                  "content": "<p style='text-align:center;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#a16207;margin-bottom:16px'>Notre histoire</p>"
+                }
+              },
+              {
+                "type": "heading",
+                "id": "rst-home-intro-title",
+                "props": {
+                  "text": "La cuisine comme art de vivre",
+                  "level": 2,
+                  "alignment": "center",
+                  "color": "#451a03"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "rst-sp0",
+                "props": {
+                  "height": 24
+                }
+              },
+              {
+                "type": "text",
+                "id": "rst-home-intro-text",
+                "props": {
+                  "content": "<p style='text-align:center;color:#78716c;font-size:1.125rem;line-height:1.8;max-width:680px;margin:0 auto'>Fondé en 2008 par le Chef Antoine Moreau, Le Gourmet célèbre la richesse des produits français. Notre brigade de passionnés compose chaque jour des menus qui marient tradition et créativité, pour vous offrir un moment suspendu hors du temps.</p>"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "rst-sp1",
+                "props": {
+                  "height": 48
+                }
+              },
+              {
+                "type": "grid",
+                "id": "rst-home-valeurs",
+                "props": {
+                  "columns": 3,
+                  "gap": 40
+                },
+                "children": [
+                  {
+                    "type": "text",
+                    "id": "rst-val1",
+                    "props": {
+                      "content": "<div style='text-align:center;padding:32px 24px;background:#fff;border-radius:4px;border-top:3px solid #dc2626'><div style='font-size:2rem;margin-bottom:16px'>🌿</div><h3 style='color:#451a03;font-size:1.125rem;font-weight:700;margin-bottom:12px;letter-spacing:-0.01em'>Produits du terroir</h3><p style='color:#78716c;line-height:1.7;font-size:0.95rem'>Maraîchers, éleveurs et vignerons partenaires sélectionnés pour leur engagement qualité. Du producteur à votre assiette, moins de 48h.</p></div>"
                     }
-                ]
-            }
-        },
-        {
-            "id": "reservation",
-            "title": "Réservation",
-            "slug": "reservation",
-            "template": "default",
-            "meta_title": "Réserver une table — Le Gourmet",
-            "meta_description": "Réservez votre table au restaurant Le Gourmet. En ligne ou par téléphone.",
-            "content": {
-                "blocks": [
-                    {
-                        "type": "section",
-                        "id": "rst-resa-header",
-                        "props": { "backgroundColor": "#fffbeb", "paddingTop": 80, "paddingBottom": 80, "paddingLeft": 24, "paddingRight": 24, "maxWidth": 700, "centered": true },
-                        "children": [
-                            {
-                                "type": "text",
-                                "id": "rst-resa-label",
-                                "props": { "content": "<p style='text-align:center;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#dc2626;margin-bottom:16px'>Le Gourmet</p>" }
-                            },
-                            {
-                                "type": "heading",
-                                "id": "rst-resa-title",
-                                "props": { "text": "Réserver votre table", "level": 1, "alignment": "center", "color": "#451a03" }
-                            },
-                            {
-                                "type": "spacer",
-                                "id": "rst-rs1",
-                                "props": { "height": 16 }
-                            },
-                            {
-                                "type": "text",
-                                "id": "rst-resa-sub",
-                                "props": { "content": "<p style='text-align:center;color:#78716c;font-size:1rem;line-height:1.7'>Nous confirmons votre réservation sous 24h par email.<br>Pour les groupes de plus de 8 personnes, contactez-nous directement.</p>" }
-                            },
-                            {
-                                "type": "spacer",
-                                "id": "rst-rs2",
-                                "props": { "height": 48 }
-                            },
-                            {
-                                "type": "text",
-                                "id": "rst-resa-grid",
-                                "props": { "content": "<div style='display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px'><div><label style='display:block;color:#451a03;font-weight:600;font-size:0.875rem;margin-bottom:8px'>Prénom *</label><input type='text' placeholder='Antoine' style='width:100%;padding:12px 16px;border:1.5px solid #e5e7eb;border-radius:6px;font-size:1rem;color:#1f2937;background:#fff;box-sizing:border-box' /></div><div><label style='display:block;color:#451a03;font-weight:600;font-size:0.875rem;margin-bottom:8px'>Nom *</label><input type='text' placeholder='Moreau' style='width:100%;padding:12px 16px;border:1.5px solid #e5e7eb;border-radius:6px;font-size:1rem;color:#1f2937;background:#fff;box-sizing:border-box' /></div><div><label style='display:block;color:#451a03;font-weight:600;font-size:0.875rem;margin-bottom:8px'>Date *</label><input type='date' style='width:100%;padding:12px 16px;border:1.5px solid #e5e7eb;border-radius:6px;font-size:1rem;color:#1f2937;background:#fff;box-sizing:border-box' /></div><div><label style='display:block;color:#451a03;font-weight:600;font-size:0.875rem;margin-bottom:8px'>Heure *</label><select style='width:100%;padding:12px 16px;border:1.5px solid #e5e7eb;border-radius:6px;font-size:1rem;color:#1f2937;background:#fff;box-sizing:border-box'><option>12h00</option><option>12h30</option><option>13h00</option><option>13h30</option><option>19h00</option><option>19h30</option><option>20h00</option><option>20h30</option><option>21h00</option></select></div><div><label style='display:block;color:#451a03;font-weight:600;font-size:0.875rem;margin-bottom:8px'>Nombre de couverts *</label><select style='width:100%;padding:12px 16px;border:1.5px solid #e5e7eb;border-radius:6px;font-size:1rem;color:#1f2937;background:#fff;box-sizing:border-box'><option>1 personne</option><option>2 personnes</option><option>3 personnes</option><option>4 personnes</option><option>5 personnes</option><option>6 personnes</option><option>7 personnes</option><option>8 personnes</option></select></div><div><label style='display:block;color:#451a03;font-weight:600;font-size:0.875rem;margin-bottom:8px'>Téléphone *</label><input type='tel' placeholder='06 00 00 00 00' style='width:100%;padding:12px 16px;border:1.5px solid #e5e7eb;border-radius:6px;font-size:1rem;color:#1f2937;background:#fff;box-sizing:border-box' /></div></div><div style='margin-bottom:16px'><label style='display:block;color:#451a03;font-weight:600;font-size:0.875rem;margin-bottom:8px'>Email *</label><input type='email' placeholder='votre@email.fr' style='width:100%;padding:12px 16px;border:1.5px solid #e5e7eb;border-radius:6px;font-size:1rem;color:#1f2937;background:#fff;box-sizing:border-box' /></div><div style='margin-bottom:24px'><label style='display:block;color:#451a03;font-weight:600;font-size:0.875rem;margin-bottom:8px'>Allergènes ou occasions spéciales</label><textarea placeholder='Anniversaire, régime sans gluten, allergie aux fruits de mer...' rows='3' style='width:100%;padding:12px 16px;border:1.5px solid #e5e7eb;border-radius:6px;font-size:1rem;color:#1f2937;background:#fff;box-sizing:border-box;resize:vertical'></textarea></div><button type='submit' style='width:100%;background:#dc2626;color:#fff;padding:16px 24px;border:none;border-radius:6px;font-size:1rem;font-weight:700;cursor:pointer;letter-spacing:0.02em'>Confirmer ma réservation</button>" }
-                            }
-                        ]
+                  },
+                  {
+                    "type": "text",
+                    "id": "rst-val2",
+                    "props": {
+                      "content": "<div style='text-align:center;padding:32px 24px;background:#fff;border-radius:4px;border-top:3px solid #dc2626'><div style='font-size:2rem;margin-bottom:16px'>👨‍🍳</div><h3 style='color:#451a03;font-size:1.125rem;font-weight:700;margin-bottom:12px;letter-spacing:-0.01em'>Tout fait maison</h3><p style='color:#78716c;line-height:1.7;font-size:0.95rem'>Pains, pâtes, desserts, conserves — chaque élément est préparé dans nos cuisines par une équipe de 12 artisans passionnés.</p></div>"
                     }
-                ]
-            }
-        },
-        {
-            "id": "contact",
-            "title": "Contact",
-            "slug": "contact",
-            "template": "default",
-            "meta_title": "Contact — Le Gourmet",
-            "meta_description": "Contactez le restaurant Le Gourmet. Adresse, horaires, téléphone.",
-            "content": {
-                "blocks": [
-                    {
-                        "type": "section",
-                        "id": "rst-contact-header",
-                        "props": { "backgroundColor": "#fff", "paddingTop": 80, "paddingBottom": 80, "paddingLeft": 24, "paddingRight": 24, "maxWidth": 960, "centered": true },
-                        "children": [
-                            {
-                                "type": "heading",
-                                "id": "rst-contact-title",
-                                "props": { "text": "Nous trouver", "level": 1, "alignment": "center", "color": "#451a03" }
-                            },
-                            {
-                                "type": "spacer",
-                                "id": "rst-cs1",
-                                "props": { "height": 56 }
-                            },
-                            {
-                                "type": "grid",
-                                "id": "rst-contact-grid",
-                                "props": { "columns": 2, "gap": 64 },
-                                "children": [
-                                    {
-                                        "type": "text",
-                                        "id": "rst-contact-infos",
-                                        "props": { "content": "<div style='display:flex;flex-direction:column;gap:32px'><div><h3 style='color:#dc2626;font-size:0.75rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:12px'>Adresse</h3><p style='color:#451a03;font-size:1.125rem;font-weight:600;margin-bottom:4px'>Le Gourmet</p><p style='color:#78716c;line-height:1.8'>15, rue des Gourmets<br>75006 Paris<br>Métro : Odéon (ligne 4 & 10)</p></div><div><h3 style='color:#dc2626;font-size:0.75rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:12px'>Horaires d'ouverture</h3><div style='display:flex;flex-direction:column;gap:8px;color:#78716c'><div style='display:flex;justify-content:space-between'><span>Mardi – Vendredi</span><span style='color:#451a03;font-weight:600'>12h–14h30 · 19h–22h30</span></div><div style='display:flex;justify-content:space-between'><span>Samedi</span><span style='color:#451a03;font-weight:600'>19h–22h30</span></div><div style='display:flex;justify-content:space-between'><span>Dimanche</span><span style='color:#451a03;font-weight:600'>12h–15h</span></div><div style='display:flex;justify-content:space-between'><span>Lundi</span><span style='color:#9ca3af;font-style:italic'>Fermé</span></div></div></div><div><h3 style='color:#dc2626;font-size:0.75rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:12px'>Téléphone & Email</h3><p style='color:#451a03;font-size:1.25rem;font-weight:700;margin-bottom:4px'><a href='tel:+33123456789' style='color:#dc2626;text-decoration:none'>01 23 45 67 89</a></p><p style='color:#78716c;font-size:0.9rem'><a href='mailto:contact@legourmet.fr' style='color:#a16207;text-decoration:none'>contact@legourmet.fr</a></p></div></div>" }
-                                    },
-                                    {
-                                        "type": "text",
-                                        "id": "rst-contact-map",
-                                        "props": { "content": "<div style='background:#f5f5f5;border-radius:12px;height:400px;display:flex;align-items:center;justify-content:center;color:#9ca3af;font-size:0.875rem'>[Carte Google Maps]</div>" }
-                                    }
-                                ]
-                            }
-                        ]
+                  },
+                  {
+                    "type": "text",
+                    "id": "rst-val3",
+                    "props": {
+                      "content": "<div style='text-align:center;padding:32px 24px;background:#fff;border-radius:4px;border-top:3px solid #dc2626'><div style='font-size:2rem;margin-bottom:16px'>🍷</div><h3 style='color:#451a03;font-size:1.125rem;font-weight:700;margin-bottom:12px;letter-spacing:-0.01em'>Cave d'exception</h3><p style='color:#78716c;line-height:1.7;font-size:0.95rem'>280 références soigneusement sélectionnées. Notre sommelier Thomas vous guide vers l'accord parfait pour sublimer chaque plat.</p></div>"
                     }
+                  }
                 ]
-            }
-        }
-    ]
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "rst-home-menu",
+            "props": {
+              "backgroundColor": "#fef2f2",
+              "paddingTop": 80,
+              "paddingBottom": 80,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 900,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "rst-menu-label",
+                "props": {
+                  "content": "<p style='text-align:center;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#dc2626;margin-bottom:16px'>La carte</p>"
+                }
+              },
+              {
+                "type": "heading",
+                "id": "rst-menu-title",
+                "props": {
+                  "text": "Les menus du moment",
+                  "level": 2,
+                  "alignment": "center",
+                  "color": "#450a0a"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "rst-sp2",
+                "props": {
+                  "height": 16
+                }
+              },
+              {
+                "type": "text",
+                "id": "rst-menu-sub",
+                "props": {
+                  "content": "<p style='text-align:center;color:#78716c;max-width:560px;margin:0 auto;line-height:1.7'>Nos menus évoluent au fil des saisons et des arrivages. Allergènes sur demande — nous adaptons volontiers chaque plat.</p>"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "rst-sp3",
+                "props": {
+                  "height": 48
+                }
+              },
+              {
+                "type": "grid",
+                "id": "rst-menus-grid",
+                "props": {
+                  "columns": 3,
+                  "gap": 32
+                },
+                "children": [
+                  {
+                    "type": "text",
+                    "id": "rst-menu-decouverte",
+                    "props": {
+                      "content": "<div style='background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.08)'><div style='background:#dc2626;padding:24px;text-align:center'><p style='color:rgba(255,255,255,0.8);font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:4px'>Menu</p><h3 style='color:#fff;font-size:1.375rem;font-weight:700;margin:0'>Découverte</h3></div><div style='padding:28px 24px'><p style='color:#451a03;font-size:2rem;font-weight:800;text-align:center;margin-bottom:4px'>38 <span style='font-size:1rem;font-weight:400'>€</span></p><p style='text-align:center;color:#9ca3af;font-size:0.875rem;margin-bottom:24px'>3 plats — déjeuner uniquement</p><ul style='list-style:none;padding:0;margin:0;color:#4b5563;font-size:0.9rem;line-height:2'><li style='border-bottom:1px solid #f5f5f5;padding-bottom:8px;margin-bottom:8px'>→ Entrée du marché</li><li style='border-bottom:1px solid #f5f5f5;padding-bottom:8px;margin-bottom:8px'>→ Plat du chef</li><li>→ Dessert maison</li></ul></div></div>"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "id": "rst-menu-gastronomique",
+                    "props": {
+                      "content": "<div style='background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 4px 20px rgba(220,38,38,0.15);transform:scale(1.02)'><div style='background:#451a03;padding:24px;text-align:center;position:relative'><p style='position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:#dc2626;color:#fff;font-size:0.7rem;font-weight:700;letter-spacing:0.1em;padding:4px 16px;text-transform:uppercase;border-radius:0 0 8px 8px'>Le plus choisi</p><p style='color:rgba(255,255,255,0.7);font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:4px;margin-top:16px'>Menu</p><h3 style='color:#fff;font-size:1.375rem;font-weight:700;margin:0'>Gastronomique</h3></div><div style='padding:28px 24px'><p style='color:#451a03;font-size:2rem;font-weight:800;text-align:center;margin-bottom:4px'>68 <span style='font-size:1rem;font-weight:400'>€</span></p><p style='text-align:center;color:#9ca3af;font-size:0.875rem;margin-bottom:24px'>5 plats — déjeuner & dîner</p><ul style='list-style:none;padding:0;margin:0;color:#4b5563;font-size:0.9rem;line-height:2'><li style='border-bottom:1px solid #f5f5f5;padding-bottom:8px;margin-bottom:8px'>→ Amuse-bouche</li><li style='border-bottom:1px solid #f5f5f5;padding-bottom:8px;margin-bottom:8px'>→ Entrée signature</li><li style='border-bottom:1px solid #f5f5f5;padding-bottom:8px;margin-bottom:8px'>→ Poisson ou viande</li><li style='border-bottom:1px solid #f5f5f5;padding-bottom:8px;margin-bottom:8px'>→ Sélection fromagère</li><li>→ Dessert du chef</li></ul></div></div>"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "id": "rst-menu-prestige",
+                    "props": {
+                      "content": "<div style='background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.08)'><div style='background:#a16207;padding:24px;text-align:center'><p style='color:rgba(255,255,255,0.8);font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:4px'>Menu</p><h3 style='color:#fff;font-size:1.375rem;font-weight:700;margin:0'>Prestige</h3></div><div style='padding:28px 24px'><p style='color:#451a03;font-size:2rem;font-weight:800;text-align:center;margin-bottom:4px'>120 <span style='font-size:1rem;font-weight:400'>€</span></p><p style='text-align:center;color:#9ca3af;font-size:0.875rem;margin-bottom:24px'>7 plats — dîner uniquement</p><ul style='list-style:none;padding:0;margin:0;color:#4b5563;font-size:0.9rem;line-height:2'><li style='border-bottom:1px solid #f5f5f5;padding-bottom:8px;margin-bottom:8px'>→ Mise en bouche ×3</li><li style='border-bottom:1px solid #f5f5f5;padding-bottom:8px;margin-bottom:8px'>→ Entrée grand cru</li><li style='border-bottom:1px solid #f5f5f5;padding-bottom:8px;margin-bottom:8px'>→ Turbot sauvage</li><li style='border-bottom:1px solid #f5f5f5;padding-bottom:8px;margin-bottom:8px'>→ Pièce de bœuf Wagyu</li><li style='border-bottom:1px solid #f5f5f5;padding-bottom:8px;margin-bottom:8px'>→ Chariot de fromages</li><li>→ Dessert & mignardises</li></ul></div></div>"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "spacer",
+                "id": "rst-sp4",
+                "props": {
+                  "height": 40
+                }
+              },
+              {
+                "type": "text",
+                "id": "rst-menu-note",
+                "props": {
+                  "content": "<p style='text-align:center;color:#9ca3af;font-size:0.875rem'>Accord mets-vins disponible sur demande · Végétarien et sans gluten sur réservation</p>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "rst-home-temoignages",
+            "props": {
+              "backgroundColor": "#fff",
+              "paddingTop": 80,
+              "paddingBottom": 80,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 960,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "rst-temoignages-label",
+                "props": {
+                  "content": "<p style='text-align:center;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#a16207;margin-bottom:16px'>Vos avis</p>"
+                }
+              },
+              {
+                "type": "heading",
+                "id": "rst-temoignages-title",
+                "props": {
+                  "text": "Ce que disent nos convives",
+                  "level": 2,
+                  "alignment": "center",
+                  "color": "#451a03"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "rst-sp5",
+                "props": {
+                  "height": 48
+                }
+              },
+              {
+                "type": "grid",
+                "id": "rst-temoignages-grid",
+                "props": {
+                  "columns": 3,
+                  "gap": 32
+                },
+                "children": [
+                  {
+                    "type": "text",
+                    "id": "rst-temoignage1",
+                    "props": {
+                      "content": "<div style='background:#fffbeb;padding:32px;border-radius:8px;border-left:3px solid #dc2626'><p style='color:#78716c;font-style:italic;line-height:1.8;margin-bottom:20px;font-size:0.95rem'>« Un dîner inoubliable. Le menu Gastronomique est une véritable partition orchestrée avec précision. Le service, discret et attentionné, a rendu cette soirée magique. »</p><div style='display:flex;align-items:center;gap:12px'><div style='width:40px;height:40px;background:#dc2626;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:0.875rem;flex-shrink:0'>MR</div><div><p style='color:#451a03;font-weight:600;font-size:0.9rem;margin:0'>Marie Rousseau</p><p style='color:#a16207;font-size:0.8rem;margin:0'>★★★★★ · Google</p></div></div></div>"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "id": "rst-temoignage2",
+                    "props": {
+                      "content": "<div style='background:#fffbeb;padding:32px;border-radius:8px;border-left:3px solid #dc2626'><p style='color:#78716c;font-style:italic;line-height:1.8;margin-bottom:20px;font-size:0.95rem'>« La qualité des produits est exceptionnelle. On sent vraiment le travail de sélection derrière chaque ingrédient. Le turbot était parfaitement cuit, la sauce sublime. »</p><div style='display:flex;align-items:center;gap:12px'><div style='width:40px;height:40px;background:#a16207;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:0.875rem;flex-shrink:0'>PD</div><div><p style='color:#451a03;font-weight:600;font-size:0.9rem;margin:0'>Pierre Dubois</p><p style='color:#a16207;font-size:0.8rem;margin:0'>★★★★★ · TripAdvisor</p></div></div></div>"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "id": "rst-temoignage3",
+                    "props": {
+                      "content": "<div style='background:#fffbeb;padding:32px;border-radius:8px;border-left:3px solid #dc2626'><p style='color:#78716c;font-style:italic;line-height:1.8;margin-bottom:20px;font-size:0.95rem'>« Notre anniversaire de mariage dans ce restaurant restera gravé dans nos mémoires. L'équipe nous a réservé un accueil exceptionnel et personnalisé. Merci du fond du cœur. »</p><div style='display:flex;align-items:center;gap:12px'><div style='width:40px;height:40px;background:#dc2626;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:0.875rem;flex-shrink:0'>SL</div><div><p style='color:#451a03;font-weight:600;font-size:0.9rem;margin:0'>Sophie & Lucas</p><p style='color:#a16207;font-size:0.8rem;margin:0'>★★★★★ · Google</p></div></div></div>"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "rst-home-cta",
+            "props": {
+              "backgroundColor": "#dc2626",
+              "paddingTop": 80,
+              "paddingBottom": 80,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 700,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "heading",
+                "id": "rst-cta-title",
+                "props": {
+                  "text": "Réservez votre table",
+                  "level": 2,
+                  "alignment": "center",
+                  "color": "#ffffff"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "rst-sp6",
+                "props": {
+                  "height": 16
+                }
+              },
+              {
+                "type": "text",
+                "id": "rst-cta-text",
+                "props": {
+                  "content": "<p style='text-align:center;color:rgba(255,255,255,0.85);font-size:1.125rem;line-height:1.7;margin-bottom:32px'>Ouvert du mardi au dimanche · Déjeuner 12h–14h30 · Dîner 19h–22h30<br>Réservation recommandée · Groupes sur devis</p>"
+                }
+              },
+              {
+                "type": "button",
+                "id": "rst-cta-btn",
+                "props": {
+                  "text": "Réserver en ligne",
+                  "url": "/reservation",
+                  "alignment": "center",
+                  "variant": "outline",
+                  "size": "lg"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "rst-sp7",
+                "props": {
+                  "height": 24
+                }
+              },
+              {
+                "type": "text",
+                "id": "rst-cta-tel",
+                "props": {
+                  "content": "<p style='text-align:center;color:rgba(255,255,255,0.7);font-size:0.875rem'>ou appelez-nous au <strong style='color:#fff'>01 23 45 67 89</strong></p>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "rst-home-infos",
+            "props": {
+              "backgroundColor": "#451a03",
+              "paddingTop": 64,
+              "paddingBottom": 64,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 960,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "grid",
+                "id": "rst-infos-grid",
+                "props": {
+                  "columns": 3,
+                  "gap": 40
+                },
+                "children": [
+                  {
+                    "type": "text",
+                    "id": "rst-info-adresse",
+                    "props": {
+                      "content": "<div><h4 style='color:#fde68a;font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:12px'>Adresse</h4><p style='color:rgba(255,255,255,0.8);line-height:1.8;font-size:0.95rem'>15, rue des Gourmets<br>75006 Paris<br><a href='#' style='color:#fbbf24;text-decoration:none;font-size:0.875rem'>→ Voir le plan</a></p></div>"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "id": "rst-info-horaires",
+                    "props": {
+                      "content": "<div><h4 style='color:#fde68a;font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:12px'>Horaires</h4><p style='color:rgba(255,255,255,0.8);line-height:2;font-size:0.95rem'>Mar–Sam : 12h–14h30 · 19h–22h30<br>Dimanche : 12h–15h (déjeuner)<br>Lundi : fermé</p></div>"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "id": "rst-info-contact",
+                    "props": {
+                      "content": "<div><h4 style='color:#fde68a;font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:12px'>Contact</h4><p style='color:rgba(255,255,255,0.8);line-height:2;font-size:0.95rem'><a href='tel:+33123456789' style='color:rgba(255,255,255,0.8);text-decoration:none'>01 23 45 67 89</a><br><a href='mailto:contact@legourmet.fr' style='color:#fbbf24;text-decoration:none;font-size:0.875rem'>contact@legourmet.fr</a></p></div>"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "menu",
+      "title": "La Carte",
+      "slug": "la-carte",
+      "template": "default",
+      "meta_title": "La Carte — Le Gourmet",
+      "meta_description": "Découvrez notre carte et nos menus. Cuisine gastronomique française de saison.",
+      "content": {
+        "blocks": [
+          {
+            "type": "section",
+            "id": "rst-menu-header",
+            "props": {
+              "backgroundColor": "#fffbeb",
+              "paddingTop": 64,
+              "paddingBottom": 64,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 800,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "rst-menu-h-label",
+                "props": {
+                  "content": "<p style='text-align:center;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#dc2626;margin-bottom:16px'>Restaurant Le Gourmet</p>"
+                }
+              },
+              {
+                "type": "heading",
+                "id": "rst-menu-h-title",
+                "props": {
+                  "text": "Notre carte",
+                  "level": 1,
+                  "alignment": "center",
+                  "color": "#451a03"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "rst-mh-sp1",
+                "props": {
+                  "height": 16
+                }
+              },
+              {
+                "type": "text",
+                "id": "rst-menu-h-sub",
+                "props": {
+                  "content": "<p style='text-align:center;color:#78716c;font-size:1rem;line-height:1.7'>Carte mise à jour le 15 mars 2025 · Prix nets service compris · Allergènes sur demande</p>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "rst-menu-entrees",
+            "props": {
+              "backgroundColor": "#fff",
+              "paddingTop": 60,
+              "paddingBottom": 20,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 800,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "heading",
+                "id": "rst-entrees-title",
+                "props": {
+                  "text": "Entrées",
+                  "level": 2,
+                  "alignment": "left",
+                  "color": "#dc2626"
+                }
+              },
+              {
+                "type": "divider",
+                "id": "rst-div1",
+                "props": {
+                  "color": "#fde68a",
+                  "thickness": 1
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "rst-es1",
+                "props": {
+                  "height": 8
+                }
+              },
+              {
+                "type": "text",
+                "id": "rst-entrees-items",
+                "props": {
+                  "content": "<div style='display:flex;flex-direction:column;gap:20px'><div style='display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px dotted #e5e7eb;padding-bottom:16px'><div><p style='color:#451a03;font-weight:600;margin-bottom:4px'>Foie gras de canard maison</p><p style='color:#9ca3af;font-size:0.875rem'>Chutney figue & poire, brioche toastée</p></div><span style='color:#dc2626;font-weight:700;font-size:1.125rem;white-space:nowrap;margin-left:16px'>26 €</span></div><div style='display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px dotted #e5e7eb;padding-bottom:16px'><div><p style='color:#451a03;font-weight:600;margin-bottom:4px'>Tartare de Saint-Jacques</p><p style='color:#9ca3af;font-size:0.875rem'>Pomme verte, caviar de Sologne, huile de truffe blanche</p></div><span style='color:#dc2626;font-weight:700;font-size:1.125rem;white-space:nowrap;margin-left:16px'>34 €</span></div><div style='display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px dotted #e5e7eb;padding-bottom:16px'><div><p style='color:#451a03;font-weight:600;margin-bottom:4px'>Velouté de butternut</p><p style='color:#9ca3af;font-size:0.875rem'>Huile de noisette, chips de poire, crème de châtaigne</p></div><span style='color:#dc2626;font-weight:700;font-size:1.125rem;white-space:nowrap;margin-left:16px'>18 €</span></div><div style='display:flex;justify-content:space-between;align-items:baseline;padding-bottom:8px'><div><p style='color:#451a03;font-weight:600;margin-bottom:4px'>Salade de homard breton <span style='background:#fde68a;color:#451a03;font-size:0.7rem;padding:2px 8px;border-radius:20px;font-weight:700;margin-left:8px'>Signature</span></p><p style='color:#9ca3af;font-size:0.875rem'>Avocat, mango, vinaigrette agrumes & gingembre</p></div><span style='color:#dc2626;font-weight:700;font-size:1.125rem;white-space:nowrap;margin-left:16px'>42 €</span></div></div>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "rst-menu-plats",
+            "props": {
+              "backgroundColor": "#fff",
+              "paddingTop": 40,
+              "paddingBottom": 20,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 800,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "heading",
+                "id": "rst-plats-title",
+                "props": {
+                  "text": "Plats",
+                  "level": 2,
+                  "alignment": "left",
+                  "color": "#dc2626"
+                }
+              },
+              {
+                "type": "divider",
+                "id": "rst-div2",
+                "props": {
+                  "color": "#fde68a",
+                  "thickness": 1
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "rst-ps1",
+                "props": {
+                  "height": 8
+                }
+              },
+              {
+                "type": "text",
+                "id": "rst-plats-items",
+                "props": {
+                  "content": "<div style='display:flex;flex-direction:column;gap:20px'><div style='display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px dotted #e5e7eb;padding-bottom:16px'><div><p style='color:#451a03;font-weight:600;margin-bottom:4px'>Turbot sauvage de ligne</p><p style='color:#9ca3af;font-size:0.875rem'>Beurre blanc ciboulette, vitelotte, légumes printaniers</p></div><span style='color:#dc2626;font-weight:700;font-size:1.125rem;white-space:nowrap;margin-left:16px'>54 €</span></div><div style='display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px dotted #e5e7eb;padding-bottom:16px'><div><p style='color:#451a03;font-weight:600;margin-bottom:4px'>Filet de bœuf Wagyu A5 <span style='background:#fde68a;color:#451a03;font-size:0.7rem;padding:2px 8px;border-radius:20px;font-weight:700;margin-left:8px'>Signature</span></p><p style='color:#9ca3af;font-size:0.875rem'>Sauce périgueux, gratin dauphinois, jus réduit à l'armagnac</p></div><span style='color:#dc2626;font-weight:700;font-size:1.125rem;white-space:nowrap;margin-left:16px'>78 €</span></div><div style='display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px dotted #e5e7eb;padding-bottom:16px'><div><p style='color:#451a03;font-weight:600;margin-bottom:4px'>Pigeon rôti entier <span style='background:#f3f4f6;color:#374151;font-size:0.7rem;padding:2px 8px;border-radius:20px;font-weight:600;margin-left:8px'>2 pers.</span></p><p style='color:#9ca3af;font-size:0.875rem'>Jus aux cerises, lentilles du Puy, cromesquis de foie gras</p></div><span style='color:#dc2626;font-weight:700;font-size:1.125rem;white-space:nowrap;margin-left:16px'>72 €</span></div><div style='display:flex;justify-content:space-between;align-items:baseline;padding-bottom:8px'><div><p style='color:#451a03;font-weight:600;margin-bottom:4px'>Risotto de saison <span style='background:#dcfce7;color:#166534;font-size:0.7rem;padding:2px 8px;border-radius:20px;font-weight:600;margin-left:8px'>Végétarien</span></p><p style='color:#9ca3af;font-size:0.875rem'>Truffe noire du Périgord, parmesan 36 mois, huile de noisette</p></div><span style='color:#dc2626;font-weight:700;font-size:1.125rem;white-space:nowrap;margin-left:16px'>46 €</span></div></div>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "rst-menu-desserts",
+            "props": {
+              "backgroundColor": "#fff",
+              "paddingTop": 40,
+              "paddingBottom": 80,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 800,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "heading",
+                "id": "rst-desserts-title",
+                "props": {
+                  "text": "Desserts",
+                  "level": 2,
+                  "alignment": "left",
+                  "color": "#dc2626"
+                }
+              },
+              {
+                "type": "divider",
+                "id": "rst-div3",
+                "props": {
+                  "color": "#fde68a",
+                  "thickness": 1
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "rst-ds1",
+                "props": {
+                  "height": 8
+                }
+              },
+              {
+                "type": "text",
+                "id": "rst-desserts-items",
+                "props": {
+                  "content": "<div style='display:flex;flex-direction:column;gap:20px'><div style='display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px dotted #e5e7eb;padding-bottom:16px'><div><p style='color:#451a03;font-weight:600;margin-bottom:4px'>Soufflé au Grand Marnier <span style='background:#fde68a;color:#451a03;font-size:0.7rem;padding:2px 8px;border-radius:20px;font-weight:700;margin-left:8px'>Signature</span></p><p style='color:#9ca3af;font-size:0.875rem'>Glace vanille Bourbon de Madagascar · à commander à l'entrée</p></div><span style='color:#dc2626;font-weight:700;font-size:1.125rem;white-space:nowrap;margin-left:16px'>22 €</span></div><div style='display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px dotted #e5e7eb;padding-bottom:16px'><div><p style='color:#451a03;font-weight:600;margin-bottom:4px'>Millefeuille à la vanille</p><p style='color:#9ca3af;font-size:0.875rem'>Pâte feuilletée inversée, crème mousseline légère, caramel salé</p></div><span style='color:#dc2626;font-weight:700;font-size:1.125rem;white-space:nowrap;margin-left:16px'>18 €</span></div><div style='display:flex;justify-content:space-between;align-items:baseline;padding-bottom:8px'><div><p style='color:#451a03;font-weight:600;margin-bottom:4px'>Tarte au citron revisitée</p><p style='color:#9ca3af;font-size:0.875rem'>Ganache citron yuzu, meringue italienne flambée, sorbet basilic</p></div><span style='color:#dc2626;font-weight:700;font-size:1.125rem;white-space:nowrap;margin-left:16px'>18 €</span></div></div>"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "reservation",
+      "title": "Réservation",
+      "slug": "reservation",
+      "template": "default",
+      "meta_title": "Réserver une table — Le Gourmet",
+      "meta_description": "Réservez votre table au restaurant Le Gourmet. En ligne ou par téléphone.",
+      "content": {
+        "blocks": [
+          {
+            "type": "section",
+            "id": "rst-resa-header",
+            "props": {
+              "backgroundColor": "#fffbeb",
+              "paddingTop": 80,
+              "paddingBottom": 80,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 700,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "rst-resa-label",
+                "props": {
+                  "content": "<p style='text-align:center;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#dc2626;margin-bottom:16px'>Le Gourmet</p>"
+                }
+              },
+              {
+                "type": "heading",
+                "id": "rst-resa-title",
+                "props": {
+                  "text": "Réserver votre table",
+                  "level": 1,
+                  "alignment": "center",
+                  "color": "#451a03"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "rst-rs1",
+                "props": {
+                  "height": 16
+                }
+              },
+              {
+                "type": "text",
+                "id": "rst-resa-sub",
+                "props": {
+                  "content": "<p style='text-align:center;color:#78716c;font-size:1rem;line-height:1.7'>Nous confirmons votre réservation sous 24h par email.<br>Pour les groupes de plus de 8 personnes, contactez-nous directement.</p>"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "rst-rs2",
+                "props": {
+                  "height": 48
+                }
+              },
+              {
+                "type": "text",
+                "id": "rst-resa-grid",
+                "props": {
+                  "content": "<div style='display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px'><div><label style='display:block;color:#451a03;font-weight:600;font-size:0.875rem;margin-bottom:8px'>Prénom *</label><input type='text' placeholder='Antoine' style='width:100%;padding:12px 16px;border:1.5px solid #e5e7eb;border-radius:6px;font-size:1rem;color:#1f2937;background:#fff;box-sizing:border-box' /></div><div><label style='display:block;color:#451a03;font-weight:600;font-size:0.875rem;margin-bottom:8px'>Nom *</label><input type='text' placeholder='Moreau' style='width:100%;padding:12px 16px;border:1.5px solid #e5e7eb;border-radius:6px;font-size:1rem;color:#1f2937;background:#fff;box-sizing:border-box' /></div><div><label style='display:block;color:#451a03;font-weight:600;font-size:0.875rem;margin-bottom:8px'>Date *</label><input type='date' style='width:100%;padding:12px 16px;border:1.5px solid #e5e7eb;border-radius:6px;font-size:1rem;color:#1f2937;background:#fff;box-sizing:border-box' /></div><div><label style='display:block;color:#451a03;font-weight:600;font-size:0.875rem;margin-bottom:8px'>Heure *</label><select style='width:100%;padding:12px 16px;border:1.5px solid #e5e7eb;border-radius:6px;font-size:1rem;color:#1f2937;background:#fff;box-sizing:border-box'><option>12h00</option><option>12h30</option><option>13h00</option><option>13h30</option><option>19h00</option><option>19h30</option><option>20h00</option><option>20h30</option><option>21h00</option></select></div><div><label style='display:block;color:#451a03;font-weight:600;font-size:0.875rem;margin-bottom:8px'>Nombre de couverts *</label><select style='width:100%;padding:12px 16px;border:1.5px solid #e5e7eb;border-radius:6px;font-size:1rem;color:#1f2937;background:#fff;box-sizing:border-box'><option>1 personne</option><option>2 personnes</option><option>3 personnes</option><option>4 personnes</option><option>5 personnes</option><option>6 personnes</option><option>7 personnes</option><option>8 personnes</option></select></div><div><label style='display:block;color:#451a03;font-weight:600;font-size:0.875rem;margin-bottom:8px'>Téléphone *</label><input type='tel' placeholder='06 00 00 00 00' style='width:100%;padding:12px 16px;border:1.5px solid #e5e7eb;border-radius:6px;font-size:1rem;color:#1f2937;background:#fff;box-sizing:border-box' /></div></div><div style='margin-bottom:16px'><label style='display:block;color:#451a03;font-weight:600;font-size:0.875rem;margin-bottom:8px'>Email *</label><input type='email' placeholder='votre@email.fr' style='width:100%;padding:12px 16px;border:1.5px solid #e5e7eb;border-radius:6px;font-size:1rem;color:#1f2937;background:#fff;box-sizing:border-box' /></div><div style='margin-bottom:24px'><label style='display:block;color:#451a03;font-weight:600;font-size:0.875rem;margin-bottom:8px'>Allergènes ou occasions spéciales</label><textarea placeholder='Anniversaire, régime sans gluten, allergie aux fruits de mer...' rows='3' style='width:100%;padding:12px 16px;border:1.5px solid #e5e7eb;border-radius:6px;font-size:1rem;color:#1f2937;background:#fff;box-sizing:border-box;resize:vertical'></textarea></div><button type='submit' style='width:100%;background:#dc2626;color:#fff;padding:16px 24px;border:none;border-radius:6px;font-size:1rem;font-weight:700;cursor:pointer;letter-spacing:0.02em'>Confirmer ma réservation</button>"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "contact",
+      "title": "Contact",
+      "slug": "contact",
+      "template": "default",
+      "meta_title": "Contact — Le Gourmet",
+      "meta_description": "Contactez le restaurant Le Gourmet. Adresse, horaires, téléphone.",
+      "content": {
+        "blocks": [
+          {
+            "type": "section",
+            "id": "rst-contact-header",
+            "props": {
+              "backgroundColor": "#fff",
+              "paddingTop": 80,
+              "paddingBottom": 80,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 960,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "heading",
+                "id": "rst-contact-title",
+                "props": {
+                  "text": "Nous trouver",
+                  "level": 1,
+                  "alignment": "center",
+                  "color": "#451a03"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "rst-cs1",
+                "props": {
+                  "height": 56
+                }
+              },
+              {
+                "type": "grid",
+                "id": "rst-contact-grid",
+                "props": {
+                  "columns": 2,
+                  "gap": 64
+                },
+                "children": [
+                  {
+                    "type": "text",
+                    "id": "rst-contact-infos",
+                    "props": {
+                      "content": "<div style='display:flex;flex-direction:column;gap:32px'><div><h3 style='color:#dc2626;font-size:0.75rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:12px'>Adresse</h3><p style='color:#451a03;font-size:1.125rem;font-weight:600;margin-bottom:4px'>Le Gourmet</p><p style='color:#78716c;line-height:1.8'>15, rue des Gourmets<br>75006 Paris<br>Métro : Odéon (ligne 4 & 10)</p></div><div><h3 style='color:#dc2626;font-size:0.75rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:12px'>Horaires d'ouverture</h3><div style='display:flex;flex-direction:column;gap:8px;color:#78716c'><div style='display:flex;justify-content:space-between'><span>Mardi – Vendredi</span><span style='color:#451a03;font-weight:600'>12h–14h30 · 19h–22h30</span></div><div style='display:flex;justify-content:space-between'><span>Samedi</span><span style='color:#451a03;font-weight:600'>19h–22h30</span></div><div style='display:flex;justify-content:space-between'><span>Dimanche</span><span style='color:#451a03;font-weight:600'>12h–15h</span></div><div style='display:flex;justify-content:space-between'><span>Lundi</span><span style='color:#9ca3af;font-style:italic'>Fermé</span></div></div></div><div><h3 style='color:#dc2626;font-size:0.75rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:12px'>Téléphone & Email</h3><p style='color:#451a03;font-size:1.25rem;font-weight:700;margin-bottom:4px'><a href='tel:+33123456789' style='color:#dc2626;text-decoration:none'>01 23 45 67 89</a></p><p style='color:#78716c;font-size:0.9rem'><a href='mailto:contact@legourmet.fr' style='color:#a16207;text-decoration:none'>contact@legourmet.fr</a></p></div></div>"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "id": "rst-contact-map",
+                    "props": {
+                      "content": "<div style='background:#f5f5f5;border-radius:12px;height:400px;display:flex;align-items:center;justify-content:center;color:#9ca3af;font-size:0.875rem'>[Carte Google Maps]</div>"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "compatible_themes": [
+    "lumiere",
+    "botanica",
+    "default"
+  ],
+  "suggested_theme": "lumiere"
 }

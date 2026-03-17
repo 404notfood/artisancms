@@ -83,9 +83,9 @@ class ThemeController extends Controller
         }
     }
 
-    public function activate(string $slug): RedirectResponse
+    public function activate(Request $request, string $slug): RedirectResponse
     {
-        $this->themeManager->activate($slug);
+        $this->themeManager->activate($slug, (int) $request->user()->id);
 
         return redirect()->back()->with('success', __('cms.themes.activated'));
     }

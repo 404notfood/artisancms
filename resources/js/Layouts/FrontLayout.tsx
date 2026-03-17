@@ -1,6 +1,6 @@
 import { Head, Link, usePage } from '@inertiajs/react';
 import type { MenuData, MenuItemData } from '@/types/cms';
-import { useMemo, type ReactNode } from 'react';
+import { useMemo, useState, type ReactNode } from 'react';
 import { AnnouncementBar } from '@/Components/front/announcement-bar';
 import { AnimationConfigContext, type AnimationConfigMap } from '@/Components/front/block-renderer';
 
@@ -62,8 +62,6 @@ const SECTION_PREFIXES: Record<string, string> = {
     global_styles: '--global-',
 };
 
-const NON_CSS_TYPES = new Set(['boolean', 'image', 'text']);
-
 const SEMANTIC_MAPPINGS: Record<string, Record<string, string>> = {
     shadow_intensity: {
         none: 'none',
@@ -91,19 +89,15 @@ function buildCssVariables(customizations: Record<string, string | boolean>): Re
         const section = dotKey.substring(0, dotIdx);
         const key = dotKey.substring(dotIdx + 1);
 
-        // Skip animation config keys - they are not CSS variables
         if (section === 'animations' || section === 'typography') continue;
 
         const prefix = SECTION_PREFIXES[section];
         if (!prefix) continue;
 
-        // Skip non-CSS types heuristically (URLs, long text)
         if (String(value).startsWith('/') || String(value).startsWith('http')) continue;
         if (String(value).includes('{year}') || String(value).includes('{site_name}')) continue;
 
         let cssValue = String(value);
-
-        // Apply semantic mappings
         if (SEMANTIC_MAPPINGS[key]?.[cssValue]) {
             cssValue = SEMANTIC_MAPPINGS[key][cssValue];
         }
@@ -117,40 +111,45 @@ function buildCssVariables(customizations: Record<string, string | boolean>): Re
 
 // ─── Nav Item ───────────────────────────────────────────────────────────────
 
-function NavItem({ item, textColor }: { item: MenuItemData; textColor?: string }) {
+function NavItem({ item, style: styleVariant, textColor, accentColor }: {
+    item: MenuItemData;
+    style?: string;
+    textColor?: string;
+    accentColor?: string;
+}) {
     const url = getMenuItemUrl(item);
     const isExternal = url.startsWith('http');
-    const style = textColor ? { color: textColor } : undefined;
 
-    if (isExternal) {
-        return (
-            <a
-                href={url}
-                target={item.target || '_self'}
-                style={style}
-                className={`text-sm font-medium transition-colors hover:text-[var(--color-primary)] ${item.css_class || ''}`}
-            >
-                {item.label}
-            </a>
-        );
-    }
+    const baseStyle = textColor ? { color: textColor } : undefined;
 
-    return (
-        <Link
-            href={url}
-            style={style}
-            className={`text-sm font-medium transition-colors hover:text-[var(--color-primary)] ${item.css_class || ''}`}
-        >
-            {item.label}
-        </Link>
-    );
+    // Different hover effects per style
+    const className = styleVariant === 'luxury'
+        ? `text-sm tracking-widest uppercase font-light transition-colors hover:text-[var(--color-primary)] ${item.css_class || ''}`
+        : styleVariant === 'dark'
+            ? `text-sm font-medium transition-all hover:text-[var(--color-primary)] hover:drop-shadow-[0_0_8px_var(--color-primary)] ${item.css_class || ''}`
+            : `text-sm font-medium transition-colors hover:text-[var(--color-primary)] ${item.css_class || ''}`;
+
+    const props = {
+        style: baseStyle,
+        className,
+        ...(isExternal ? { target: item.target || '_self' } : {}),
+    };
+
+    return isExternal
+        ? <a href={url} {...props}>{item.label}</a>
+        : <Link href={url} {...props}>{item.label}</Link>;
 }
 
 // ─── Header ─────────────────────────────────────────────────────────────────
 
-function Header({ menu, customizations, brandingLogo }: { menu?: MenuData; customizations: Record<string, string | boolean>; brandingLogo?: string }) {
+function Header({ menu, customizations, brandingLogo }: {
+    menu?: MenuData;
+    customizations: Record<string, string | boolean>;
+    brandingLogo?: string;
+}) {
     const { cms } = usePage().props as { cms?: { name: string; version: string }; [key: string]: unknown };
     const siteName = cms?.name || 'ArtisanCMS';
+    const [mobileOpen, setMobileOpen] = useState(false);
 
     const logoUrl = c(customizations, 'header.logo_url') || brandingLogo || '';
     const height = c(customizations, 'header.height', '64px');
@@ -158,72 +157,194 @@ function Header({ menu, customizations, brandingLogo }: { menu?: MenuData; custo
     const sticky = b(customizations, 'header.sticky', true);
     const bgColor = c(customizations, 'header.background_color', '#ffffff');
     const textColor = c(customizations, 'header.text_color', '#1e293b');
+    const borderBottomColor = c(customizations, 'header.border_bottom_color', '');
+    const hasBorderBottom = b(customizations, 'header.border_bottom', true);
+    const accentLine = b(customizations, 'header.accent_line', false);
     const menuAlignment = c(customizations, 'header.menu_alignment', 'right');
     const ctaText = c(customizations, 'header.cta_text');
     const ctaUrl = c(customizations, 'header.cta_url');
     const ctaStyle = c(customizations, 'header.cta_style', 'primary');
+    const primaryColor = c(customizations, 'colors.primary', '#6366f1');
+    const borderRadius = c(customizations, 'layout.border_radius', '0.375rem');
 
-    const alignmentClass = menuAlignment === 'center' ? 'justify-center' : menuAlignment === 'left' ? 'justify-start' : 'justify-end';
+    // Detect theme personality from colors/style
+    const isDark = bgColor.startsWith('#0') || bgColor === '#050505' || bgColor.toLowerCase().includes('0a0a');
+    const isLuxury = borderRadius === '0' || borderRadius === '0.125rem' || borderRadius === '0.25rem';
 
-    const headerBg = headerStyle === 'transparent'
-        ? 'bg-transparent'
-        : headerStyle === 'gradient'
-            ? ''
-            : '';
+    const navStyle = isDark ? 'dark' : isLuxury ? 'luxury' : 'default';
+
+    const alignmentClass = menuAlignment === 'center'
+        ? 'justify-center'
+        : menuAlignment === 'left'
+            ? 'justify-start'
+            : 'justify-end';
+
+    // Header background per style
+    let headerBg = '';
+    let headerBorder = '';
+
+    if (headerStyle === 'transparent') {
+        headerBg = 'bg-transparent';
+    } else if (headerStyle === 'blur') {
+        headerBg = 'backdrop-blur-md';
+    }
+
+    if (hasBorderBottom !== false && !isDark) {
+        headerBorder = borderBottomColor
+            ? `1px solid ${borderBottomColor}`
+            : '1px solid rgba(0,0,0,0.06)';
+    } else if (isDark) {
+        headerBorder = borderBottomColor
+            ? `1px solid ${borderBottomColor}`
+            : '1px solid rgba(255,255,255,0.06)';
+    }
 
     const headerClasses = [
         sticky ? 'sticky top-0 z-50' : '',
-        'border-b border-gray-100 backdrop-blur-md',
+        headerBg,
+        'transition-all duration-200',
     ].filter(Boolean).join(' ');
 
     const headerStyleObj: React.CSSProperties = {
-        backgroundColor: headerStyle === 'transparent' ? 'transparent' : `${bgColor}cc`,
+        backgroundColor: headerStyle === 'transparent' ? 'transparent' : bgColor,
         height,
+        borderBottom: headerBorder || undefined,
     };
 
-    if (headerStyle === 'gradient') {
-        headerStyleObj.background = `linear-gradient(135deg, ${bgColor}, color-mix(in srgb, ${bgColor} 80%, black))`;
+    if (headerStyle === 'blur') {
+        headerStyleObj.backgroundColor = bgColor + 'e0';
     }
 
-    const ctaClasses: Record<string, string> = {
-        primary: 'bg-[var(--color-primary)] text-white hover:opacity-90',
-        secondary: 'bg-[var(--color-secondary)] text-white hover:opacity-90',
-        outline: 'border border-[var(--color-primary)] text-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-white',
+    // CTA button style
+    const ctaBtnStyle: React.CSSProperties = {
+        backgroundColor: ctaStyle === 'primary' ? primaryColor : 'transparent',
+        color: ctaStyle === 'primary' ? '#fff' : primaryColor,
+        border: ctaStyle === 'outline' ? `1px solid ${primaryColor}` : 'none',
+        borderRadius,
+        padding: isLuxury ? '0.5rem 1.75rem' : '0.5rem 1.25rem',
+        fontSize: isLuxury ? '0.75rem' : '0.875rem',
+        letterSpacing: isLuxury ? '0.1em' : '0',
+        textTransform: isLuxury ? 'uppercase' as const : 'none' as const,
+        fontWeight: isDark ? 600 : isLuxury ? 400 : 500,
     };
+
+    if (isDark && ctaStyle === 'primary') {
+        // Glow effect for dark themes
+        ctaBtnStyle.boxShadow = `0 0 20px ${primaryColor}40`;
+    }
+
+    const navItems = menu?.items.filter((i) => !i.parent_id).sort((a, b) => a.order - b.order) ?? [];
 
     return (
         <header className={headerClasses} style={headerStyleObj}>
+            {/* Accent line (luxury themes) */}
+            {accentLine && (
+                <div style={{ height: '2px', background: `linear-gradient(90deg, transparent, ${primaryColor}, transparent)` }} />
+            )}
+
             <div className="container flex h-full items-center justify-between">
-                <Link href="/" className="shrink-0 text-xl font-bold hover:opacity-80" style={{ color: textColor }}>
+                {/* Logo / Site name */}
+                <Link href="/" className="shrink-0 hover:opacity-80 transition-opacity" style={{ color: textColor }}>
                     {logoUrl ? (
                         <img src={logoUrl} alt={siteName} className="h-8 w-auto object-contain" />
+                    ) : isLuxury ? (
+                        <span style={{
+                            fontFamily: 'var(--font-heading)',
+                            fontSize: '1.25rem',
+                            fontWeight: 300,
+                            letterSpacing: '0.2em',
+                            textTransform: 'uppercase',
+                        }}>
+                            {siteName}
+                        </span>
+                    ) : isDark ? (
+                        <span style={{
+                            fontFamily: 'var(--font-heading)',
+                            fontSize: '1.25rem',
+                            fontWeight: 800,
+                            letterSpacing: '-0.02em',
+                        }}>
+                            {siteName}
+                        </span>
                     ) : (
-                        siteName
+                        <span style={{
+                            fontFamily: 'var(--font-heading)',
+                            fontSize: '1.25rem',
+                            fontWeight: 600,
+                        }}>
+                            {siteName}
+                        </span>
                     )}
                 </Link>
 
-                <div className={`hidden flex-1 items-center gap-6 px-6 md:flex ${alignmentClass}`}>
-                    {menu && menu.items.length > 0 && (
-                        <nav className="flex items-center gap-6">
-                            {menu.items
-                                .filter((item) => !item.parent_id)
-                                .sort((a, b) => a.order - b.order)
-                                .map((item) => (
-                                    <NavItem key={item.id} item={item} textColor={textColor} />
-                                ))}
+                {/* Desktop nav */}
+                <div className={`hidden flex-1 items-center gap-6 px-8 md:flex ${alignmentClass}`}>
+                    {navItems.length > 0 && (
+                        <nav className={`flex items-center ${isLuxury ? 'gap-8' : 'gap-6'}`}>
+                            {navItems.map((item) => (
+                                <NavItem
+                                    key={item.id}
+                                    item={item}
+                                    style={navStyle}
+                                    textColor={textColor}
+                                    accentColor={primaryColor}
+                                />
+                            ))}
                         </nav>
                     )}
                 </div>
 
-                {ctaText && ctaUrl && (
-                    <Link
-                        href={ctaUrl}
-                        className={`hidden shrink-0 rounded-lg px-4 py-2 text-sm font-medium transition-all md:inline-flex ${ctaClasses[ctaStyle] || ctaClasses.primary}`}
+                <div className="flex items-center gap-3">
+                    {ctaText && ctaUrl && (
+                        <Link href={ctaUrl} className="hidden md:inline-flex items-center transition-all" style={ctaBtnStyle}>
+                            {ctaText}
+                        </Link>
+                    )}
+
+                    {/* Mobile hamburger */}
+                    <button
+                        type="button"
+                        className="md:hidden p-2 rounded-md"
+                        style={{ color: textColor }}
+                        onClick={() => setMobileOpen(!mobileOpen)}
+                        aria-label="Menu"
                     >
-                        {ctaText}
-                    </Link>
-                )}
+                        <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                            {mobileOpen
+                                ? <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                : <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                            }
+                        </svg>
+                    </button>
+                </div>
             </div>
+
+            {/* Mobile menu */}
+            {mobileOpen && (
+                <div className="md:hidden border-t" style={{
+                    backgroundColor: bgColor,
+                    borderColor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)',
+                }}>
+                    <nav className="container flex flex-col py-4 gap-1">
+                        {navItems.map((item) => (
+                            <Link
+                                key={item.id}
+                                href={getMenuItemUrl(item)}
+                                className="px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-black/5"
+                                style={{ color: textColor }}
+                                onClick={() => setMobileOpen(false)}
+                            >
+                                {item.label}
+                            </Link>
+                        ))}
+                        {ctaText && ctaUrl && (
+                            <Link href={ctaUrl} className="mt-3 inline-flex items-center justify-center" style={ctaBtnStyle}>
+                                {ctaText}
+                            </Link>
+                        )}
+                    </nav>
+                </div>
+            )}
         </header>
     );
 }
@@ -238,7 +359,7 @@ function SocialIcon({ platform, url, color }: { platform: string; url: string; c
         twitter: 'M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z',
         instagram: 'M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zM17.5 6.5h.01M7.5 2h9A5.5 5.5 0 0122 7.5v9a5.5 5.5 0 01-5.5 5.5h-9A5.5 5.5 0 012 16.5v-9A5.5 5.5 0 017.5 2z',
         linkedin: 'M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2zM4 2a2 2 0 110 4 2 2 0 010-4z',
-        youtube: 'M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33A2.78 2.78 0 003.4 19.1c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.25 29 29 0 00-.46-5.43zM9.75 15.02V8.48l5.75 3.27-5.75 3.27z',
+        github: 'M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22',
     };
 
     const d = icons[platform];
@@ -262,47 +383,153 @@ function Footer({ menu, customizations }: { menu?: MenuData; customizations: Rec
 
     const bgColor = c(customizations, 'footer.background_color', '#f8fafc');
     const textColor = c(customizations, 'footer.text_color', '#64748b');
-    const copyrightText = c(customizations, 'footer.copyright_text', `\u00a9 {year} {site_name}. Tous droits reserves.`)
-        .replace('{year}', String(year))
-        .replace('{site_name}', siteName);
+    const accentColor = c(customizations, 'footer.accent_color', c(customizations, 'colors.primary', '#6366f1'));
+    const tagline = c(customizations, 'footer.tagline', '');
+    const layout = c(customizations, 'footer.layout', 'simple');
     const showPoweredBy = b(customizations, 'footer.show_powered_by', true);
     const showSocialLinks = b(customizations, 'footer.show_social_links', false);
+    const primaryColor = c(customizations, 'colors.primary', '#6366f1');
+    const borderRadius = c(customizations, 'layout.border_radius', '0.375rem');
 
-    const socialPlatforms = ['facebook', 'twitter', 'instagram', 'linkedin', 'youtube'];
+    const isDark = bgColor.startsWith('#0') || bgColor === '#050505' || bgColor === '#1a2e1a' || bgColor === '#1c1917';
+    const isLuxury = !isDark && (borderRadius === '0' || borderRadius === '0.125rem' || borderRadius === '0.25rem');
 
-    return (
-        <footer className="border-t border-gray-100 py-8" style={{ backgroundColor: bgColor, color: textColor }}>
-            <div className="container">
-                {menu && menu.items.length > 0 && (
-                    <nav className="mb-6 flex flex-wrap justify-center gap-6">
-                        {menu.items
-                            .filter((item) => !item.parent_id)
-                            .sort((a, b) => a.order - b.order)
-                            .map((item) => (
-                                <NavItem key={item.id} item={item} textColor={textColor} />
+    const copyrightText = c(customizations, 'footer.copyright_text', `© {year} {site_name}.`)
+        .replace('{year}', String(year))
+        .replace('{site_name}', siteName);
+
+    const borderStyle = isDark
+        ? `1px solid rgba(255,255,255,0.06)`
+        : `1px solid rgba(0,0,0,0.06)`;
+
+    const navItems = menu?.items.filter((i) => !i.parent_id).sort((a, b) => a.order - b.order) ?? [];
+    const socialPlatforms = ['facebook', 'twitter', 'instagram', 'linkedin', 'github', 'youtube'];
+
+    // Luxury footer — columns with accent titles
+    if (isLuxury) {
+        return (
+            <footer style={{ backgroundColor: bgColor, color: textColor, borderTop: borderStyle }}>
+                <div className="container py-16">
+                    {tagline && (
+                        <p className="text-center mb-8 text-sm tracking-widest uppercase opacity-60" style={{ fontFamily: 'var(--font-heading)' }}>
+                            {tagline}
+                        </p>
+                    )}
+
+                    {navItems.length > 0 && (
+                        <nav className="flex flex-wrap justify-center gap-8 mb-10">
+                            {navItems.map((item) => (
+                                <NavItem key={item.id} item={item} style="luxury" textColor={textColor} accentColor={accentColor} />
                             ))}
+                        </nav>
+                    )}
+
+                    {/* Gold divider */}
+                    <div style={{ height: '1px', background: `linear-gradient(90deg, transparent, ${accentColor}60, transparent)`, margin: '0 auto 2rem', maxWidth: '200px' }} />
+
+                    {showSocialLinks && (
+                        <div className="flex justify-center gap-5 mb-8">
+                            {socialPlatforms.map((p) => {
+                                const url = c(customizations, `footer.social_${p}`);
+                                return url ? <SocialIcon key={p} platform={p} url={url} color={accentColor} /> : null;
+                            })}
+                        </div>
+                    )}
+
+                    <p className="text-center text-xs tracking-widest uppercase opacity-50">{copyrightText}</p>
+                    {showPoweredBy && (
+                        <p className="mt-2 text-center text-xs opacity-30">Propulsé par ArtisanCMS</p>
+                    )}
+                </div>
+            </footer>
+        );
+    }
+
+    // Dark footer — modern minimal avec accent néon
+    if (isDark) {
+        return (
+            <footer style={{ backgroundColor: bgColor, color: textColor, borderTop: borderStyle }}>
+                <div className="container py-12">
+                    <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+                        {/* Brand */}
+                        <div className="flex-1">
+                            <Link href="/" className="hover:opacity-80 transition-opacity">
+                                <span style={{
+                                    fontFamily: 'var(--font-heading)',
+                                    fontSize: '1.125rem',
+                                    fontWeight: 800,
+                                    letterSpacing: '-0.02em',
+                                    color: '#fff',
+                                }}>
+                                    {siteName}
+                                </span>
+                            </Link>
+                            {tagline && (
+                                <p className="mt-2 text-sm opacity-50">{tagline}</p>
+                            )}
+                        </div>
+
+                        {/* Nav */}
+                        {navItems.length > 0 && (
+                            <nav className="flex flex-wrap gap-6">
+                                {navItems.map((item) => (
+                                    <NavItem key={item.id} item={item} style="dark" textColor={textColor} accentColor={accentColor} />
+                                ))}
+                            </nav>
+                        )}
+
+                        {/* Social */}
+                        {showSocialLinks && (
+                            <div className="flex gap-4">
+                                {socialPlatforms.map((p) => {
+                                    const url = c(customizations, `footer.social_${p}`);
+                                    return url ? <SocialIcon key={p} platform={p} url={url} color={accentColor} /> : null;
+                                })}
+                            </div>
+                        )}
+                    </div>
+
+                    <div style={{ height: '1px', backgroundColor: 'rgba(255,255,255,0.06)', margin: '2.5rem 0' }} />
+
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs opacity-40">
+                        <p>{copyrightText}</p>
+                        {showPoweredBy && <p>Propulsé par ArtisanCMS</p>}
+                    </div>
+                </div>
+            </footer>
+        );
+    }
+
+    // Default / nature footer
+    return (
+        <footer style={{ backgroundColor: bgColor, color: textColor, borderTop: borderStyle }}>
+            <div className="container py-10">
+                {tagline && (
+                    <p className="text-center mb-6 text-sm italic opacity-70" style={{ fontFamily: 'var(--font-heading)' }}>
+                        {tagline}
+                    </p>
+                )}
+
+                {navItems.length > 0 && (
+                    <nav className="mb-6 flex flex-wrap justify-center gap-6">
+                        {navItems.map((item) => (
+                            <NavItem key={item.id} item={item} textColor={textColor} />
+                        ))}
                     </nav>
                 )}
 
                 {showSocialLinks && (
                     <div className="mb-6 flex justify-center gap-4">
-                        {socialPlatforms.map((platform) => {
-                            const url = c(customizations, `footer.social_${platform}`);
-                            return url ? (
-                                <SocialIcon key={platform} platform={platform} url={url} color={textColor} />
-                            ) : null;
+                        {socialPlatforms.map((p) => {
+                            const url = c(customizations, `footer.social_${p}`);
+                            return url ? <SocialIcon key={p} platform={p} url={url} color={accentColor} /> : null;
                         })}
                     </div>
                 )}
 
-                <p className="text-center text-sm" style={{ color: textColor }}>
-                    {copyrightText}
-                </p>
-
+                <p className="text-center text-sm opacity-70">{copyrightText}</p>
                 {showPoweredBy && (
-                    <p className="mt-2 text-center text-xs opacity-60">
-                        Propulse par ArtisanCMS
-                    </p>
+                    <p className="mt-2 text-center text-xs opacity-40">Propulsé par ArtisanCMS</p>
                 )}
             </div>
         </footer>
@@ -312,13 +539,27 @@ function Footer({ menu, customizations }: { menu?: MenuData; customizations: Rec
 // ─── Layout ─────────────────────────────────────────────────────────────────
 
 export default function FrontLayout({ children, menus, theme }: FrontLayoutProps) {
-    const { branding, designTokensCss, announcement } = usePage().props as { branding?: { logo?: string; favicon?: string; name?: string }; designTokensCss?: string; announcement?: { id: number; message: string; link_text?: string; link_url?: string; bg_color: string; text_color: string; position: 'top' | 'bottom'; dismissible: boolean } | null; [key: string]: unknown };
+    const { branding, designTokensCss, announcement } = usePage().props as {
+        branding?: { logo?: string; favicon?: string; name?: string };
+        designTokensCss?: string;
+        announcement?: {
+            id: number; message: string; link_text?: string; link_url?: string;
+            bg_color: string; text_color: string; position: 'top' | 'bottom'; dismissible: boolean;
+        } | null;
+        [key: string]: unknown;
+    };
     const customizations = (theme.customizations || {}) as Record<string, string | boolean>;
     const cssVariables = buildCssVariables(customizations);
     const googleFontsUrl = getGoogleFontsUrl(customizations);
     const favicon = branding?.favicon;
 
-    // Parse animation config from theme customizations
+    const bgColor = c(customizations, 'colors.background', '#ffffff');
+    const textColor = c(customizations, 'colors.text', '#1e293b');
+    const fontBody = c(customizations, 'fonts.body', '');
+    const fontHeading = c(customizations, 'fonts.heading', '');
+    const baseSize = c(customizations, 'fonts.base_size', '16px');
+    const lineHeight = c(customizations, 'fonts.line_height', '1.6');
+
     const animationConfigMap = useMemo<AnimationConfigMap | null>(() => {
         const raw = customizations['animations.config'];
         if (!raw || typeof raw !== 'string') return null;
@@ -329,13 +570,27 @@ export default function FrontLayout({ children, menus, theme }: FrontLayoutProps
         }
     }, [customizations]);
 
+    // Inject font family into CSS variables if declared
+    const allVars: Record<string, string> = { ...cssVariables };
+    if (fontBody) allVars['--font-body'] = `'${fontBody}', system-ui, sans-serif`;
+    if (fontHeading) allVars['--font-heading'] = `'${fontHeading}', Georgia, serif`;
+
+    const rootStyle: React.CSSProperties = {
+        ...allVars as React.CSSProperties,
+        backgroundColor: bgColor,
+        color: textColor,
+        fontFamily: fontBody ? `var(--font-body)` : undefined,
+        fontSize: baseSize,
+        lineHeight,
+    };
+
     return (
         <AnimationConfigContext.Provider value={animationConfigMap}>
-            <div className="flex min-h-screen flex-col" style={cssVariables as React.CSSProperties}>
+            <div className="flex min-h-screen flex-col" style={rootStyle}>
                 <Head>
                     {favicon && <link rel="icon" href={favicon} />}
                     {designTokensCss && <style>{designTokensCss}</style>}
-                    <link rel="alternate" type="application/rss+xml" title={`${c(customizations, 'general.site_name', 'ArtisanCMS')} - Flux RSS`} href="/feed" />
+                    <link rel="alternate" type="application/rss+xml" title="Flux RSS" href="/feed" />
                     {googleFontsUrl && (
                         <>
                             <link rel="preconnect" href="https://fonts.googleapis.com" />
