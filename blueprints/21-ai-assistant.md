@@ -5,6 +5,8 @@ L'Assistant IA est un **plugin officiel** (`content/plugins/ai-assistant/`) qui 
 
 Le plugin supporte plusieurs fournisseurs d'IA (OpenAI, Anthropic) via une couche d'abstraction (driver pattern) et inclut un systeme de suivi d'utilisation avec limites configurables pour maitriser les couts.
 
+> **Extension :** La génération de thèmes et templates via l'AI est documentée dans le **Blueprint 32** (`32-ai-theme-generator.md`). Ce blueprint couvre les drivers `ThemeGeneratorDriver` / `TemplateGeneratorDriver`, les modèles économiques (clé propre, crédits, site de présentation) et l'intégration dans le wizard d'installation.
+
 ---
 
 ## 1. Structure du plugin

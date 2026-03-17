@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
+use RuntimeException;
 
 class ThemeController extends Controller
 {
@@ -22,21 +23,64 @@ class ThemeController extends Controller
         $this->themeManager->loadThemes();
 
         $dbThemes = CmsTheme::orderBy('name')->get();
+        $themesPath = config('cms.paths.themes');
 
-        $themes = $dbThemes->map(function (CmsTheme $theme) {
+        $themes = $dbThemes->map(function (CmsTheme $theme) use ($themesPath) {
+            $previewPath = $themesPath . '/' . $theme->slug . '/assets/images/preview.png';
+            $previewUrl  = null;
+
+            if (file_exists($previewPath)) {
+                $previewUrl = asset('content/themes/' . $theme->slug . '/assets/images/preview.png');
+            }
+
             return [
-                'slug' => $theme->slug,
-                'name' => $theme->name,
-                'version' => $theme->version,
+                'slug'        => $theme->slug,
+                'name'        => $theme->name,
+                'version'     => $theme->version,
                 'description' => $theme->description ?? '',
-                'author' => $theme->author ?? '',
-                'active' => $theme->active,
+                'author'      => $theme->author ?? '',
+                'active'      => $theme->active,
+                'preview_url' => $previewUrl,
             ];
         })->values();
 
         return Inertia::render('Admin/Themes/Index', [
             'themes' => $themes,
         ]);
+    }
+
+    public function upload(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'theme_zip' => ['required', 'file', 'mimes:zip', 'max:51200'],
+        ]);
+
+        try {
+            $slug = $this->themeManager->installFromZip($request->file('theme_zip'));
+
+            return redirect()
+                ->route('admin.themes.index')
+                ->with('success', __('cms.themes.installed'));
+        } catch (RuntimeException $e) {
+            return redirect()
+                ->route('admin.themes.index')
+                ->with('error', $e->getMessage());
+        }
+    }
+
+    public function destroy(string $slug): RedirectResponse
+    {
+        try {
+            $this->themeManager->uninstall($slug);
+
+            return redirect()
+                ->route('admin.themes.index')
+                ->with('success', __('cms.themes.deleted'));
+        } catch (RuntimeException $e) {
+            return redirect()
+                ->route('admin.themes.index')
+                ->with('error', $e->getMessage());
+        }
     }
 
     public function activate(string $slug): RedirectResponse

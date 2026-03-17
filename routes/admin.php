@@ -129,7 +129,9 @@ Route::delete('taxonomy-terms/{taxonomyTerm}', [TaxonomyController::class, 'dest
 
 // Themes
 Route::get('themes', [ThemeController::class, 'index'])->name('admin.themes.index');
+Route::post('themes/upload', [ThemeController::class, 'upload'])->name('admin.themes.upload');
 Route::post('themes/{slug}/activate', [ThemeController::class, 'activate'])->name('admin.themes.activate');
+Route::delete('themes/{slug}', [ThemeController::class, 'destroy'])->name('admin.themes.destroy');
 Route::get('themes/{slug}/customize', [ThemeController::class, 'customizePage'])->name('admin.themes.customize.page');
 Route::put('themes/{slug}/customize', [ThemeController::class, 'customize'])->name('admin.themes.customize');
 

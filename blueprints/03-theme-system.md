@@ -412,3 +412,99 @@ L'admin CMS propose un éditeur de thème visuel :
 6. **Sauvegarder / Publier** : les changements sont sauvegardés en DB (table `cms_themes.settings`)
 
 Le tout est un formulaire React qui modifie les CSS variables en temps réel dans l'iframe de preview, puis sauvegarde en DB via Inertia.
+
+---
+
+## Installation de thèmes via le dashboard
+
+Comme WordPress, l'admin permet d'installer un thème en uploadant un fichier `.zip` sans accès FTP.
+
+### Flux d'installation
+
+```
+1. Admin clique "Installer un thème"
+2. Modale d'upload → drag & drop ou sélection fichier .zip
+3. POST /admin/themes/upload (multipart)
+4. ThemeManager::installFromZip()
+   ├── Validation MIME (application/zip)
+   ├── Extraction dans un dossier temporaire
+   ├── Vérification présence artisan-theme.json
+   ├── Validation du manifeste (champs requis : name, slug, version)
+   ├── Vérification slug non-conflit (sauf mise à jour)
+   ├── Copie vers content/themes/{slug}/
+   ├── Nettoyage du dossier temporaire
+   └── Enregistrement / mise à jour en DB (CmsTheme::updateOrCreate)
+5. Redirection avec flash success
+```
+
+### Flux de suppression
+
+```
+1. Admin clique "Supprimer" sur un thème inactif
+2. Confirmation → DELETE /admin/themes/{slug}
+3. ThemeManager::uninstall()
+   ├── Vérification thème non actif (impossible de supprimer le thème actif)
+   ├── Suppression du dossier content/themes/{slug}/
+   └── Suppression de l'entrée DB
+```
+
+### Méthodes ajoutées à ThemeManager
+
+```php
+/**
+ * Installe un thème depuis un fichier ZIP uploadé.
+ * Retourne le slug du thème installé.
+ */
+public function installFromZip(UploadedFile $file): string
+
+/**
+ * Désinstalle un thème (supprime dossier + DB).
+ * Lève une exception si le thème est actif.
+ */
+public function uninstall(string $slug): void
+```
+
+### Structure ZIP attendue
+
+Le ZIP doit contenir un dossier racine unique avec le manifeste à sa racine :
+
+```
+mon-theme-1.0.0.zip
+└── mon-theme/                    ← dossier racine (slug du thème)
+    ├── artisan-theme.json        ← OBLIGATOIRE
+    ├── assets/
+    │   └── images/
+    │       └── preview.png       ← thumbnail affiché dans la liste
+    └── ...
+```
+
+Variante acceptée : le ZIP peut aussi contenir les fichiers directement à la racine
+(détection automatique lors de l'extraction).
+
+### Règles de validation
+
+| Règle | Détail |
+|-------|--------|
+| MIME | `application/zip` ou `application/x-zip-compressed` |
+| Taille max | 50 Mo |
+| Manifeste requis | `name`, `slug`, `version` présents |
+| Slug format | kebab-case, pas de conflit avec thème actif d'un autre auteur |
+| PHP ZipArchive | Extension requise (vérifiée dans `RequirementsChecker`) |
+
+### Routes ajoutées
+
+```
+POST   /admin/themes/upload          → ThemeController::upload
+DELETE /admin/themes/{slug}          → ThemeController::destroy
+```
+
+### UX dashboard
+
+La page `Admin/Themes/Index` affiche :
+
+- Bouton **"Installer un thème"** en haut à droite
+- Modale avec zone de drop `.zip` + barre de progression
+- Thumbnail (`assets/images/preview.png`) dans la carte si présente, sinon placeholder générique
+- Badge **"Mise à jour disponible"** si version ZIP > version DB (futur V2 avec marketplace)
+- Bouton **"Supprimer"** sur les thèmes inactifs (avec confirmation)
+- Impossible de supprimer le thème actif (bouton grisé + tooltip)

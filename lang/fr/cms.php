@@ -115,10 +115,19 @@ return [
 
     // Themes
     'themes' => [
-        'title' => 'Thèmes',
-        'activate' => 'Activer',
-        'active' => 'Actif',
-        'customize' => 'Personnaliser',
+        'title'                  => 'Thèmes',
+        'activate'               => 'Activer',
+        'active'                 => 'Actif',
+        'customize'              => 'Personnaliser',
+        'activated'              => 'Thème activé avec succès.',
+        'customized'             => 'Thème personnalisé avec succès.',
+        'installed'              => 'Thème installé avec succès.',
+        'deleted'                => 'Thème supprimé.',
+        'zip_open_failed'        => 'Impossible d\'ouvrir le fichier ZIP.',
+        'manifest_missing'       => 'Le fichier artisan-theme.json est absent du ZIP.',
+        'manifest_invalid_field' => 'Champ obligatoire manquant dans le manifeste : :field',
+        'manifest_parse_error'   => 'Erreur lors de la lecture du manifeste',
+        'cannot_delete_active'   => 'Impossible de supprimer le thème actuellement actif.',
     ],
 
     // Installation

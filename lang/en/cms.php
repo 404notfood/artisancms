@@ -154,10 +154,19 @@ return [
 
     // Themes
     'themes' => [
-        'title' => 'Themes',
-        'activate' => 'Activate',
-        'active' => 'Active',
-        'customize' => 'Customize',
+        'title'                  => 'Themes',
+        'activate'               => 'Activate',
+        'active'                 => 'Active',
+        'customize'              => 'Customize',
+        'activated'              => 'Theme activated successfully.',
+        'customized'             => 'Theme customized successfully.',
+        'installed'              => 'Theme installed successfully.',
+        'deleted'                => 'Theme deleted.',
+        'zip_open_failed'        => 'Could not open the ZIP file.',
+        'manifest_missing'       => 'artisan-theme.json is missing from the ZIP.',
+        'manifest_invalid_field' => 'Required field missing in manifest: :field',
+        'manifest_parse_error'   => 'Error reading manifest',
+        'cannot_delete_active'   => 'Cannot delete the currently active theme.',
     ],
 
     // Installation

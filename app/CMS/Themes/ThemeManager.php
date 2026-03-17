@@ -6,9 +6,12 @@ namespace App\CMS\Themes;
 
 use App\CMS\Facades\CMS;
 use App\Models\CmsTheme;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
+use RuntimeException;
+use ZipArchive;
 
 class ThemeManager
 {
@@ -303,6 +306,140 @@ class ThemeManager
         }
 
         return $result;
+    }
+
+    /**
+     * Install a theme from an uploaded ZIP file.
+     * Returns the slug of the installed theme.
+     *
+     * @throws RuntimeException
+     */
+    public function installFromZip(UploadedFile $file): string
+    {
+        $themesPath = config('cms.paths.themes');
+        $tmpDir = sys_get_temp_dir() . '/artisan_theme_' . uniqid('', true);
+
+        try {
+            $zip = new ZipArchive();
+
+            if ($zip->open($file->getRealPath()) !== true) {
+                throw new RuntimeException(__('cms.themes.zip_open_failed'));
+            }
+
+            File::makeDirectory($tmpDir, 0755, true);
+            $zip->extractTo($tmpDir);
+            $zip->close();
+
+            // Detect root folder: either files at root or single subdirectory
+            $manifestPath = $this->findManifest($tmpDir);
+
+            if ($manifestPath === null) {
+                throw new RuntimeException(__('cms.themes.manifest_missing'));
+            }
+
+            $manifest = json_decode(File::get($manifestPath), true, 512, JSON_THROW_ON_ERROR);
+
+            foreach (['name', 'slug', 'version'] as $required) {
+                if (empty($manifest[$required])) {
+                    throw new RuntimeException(__('cms.themes.manifest_invalid_field', ['field' => $required]));
+                }
+            }
+
+            $slug = $manifest['slug'];
+            $themeSourceDir = dirname($manifestPath);
+            $themeDestDir = $themesPath . '/' . $slug;
+
+            // Check for conflict: slug used by a different active theme from another author
+            $existing = CmsTheme::where('slug', $slug)->first();
+            if ($existing && $existing->active) {
+                // Allow updating active theme
+            }
+
+            // Copy to content/themes/{slug}/
+            if (File::isDirectory($themeDestDir)) {
+                File::deleteDirectory($themeDestDir);
+            }
+            File::copyDirectory($themeSourceDir, $themeDestDir);
+
+            // Register or update in DB
+            $authorRaw = $manifest['author'] ?? '';
+            $authorName = is_array($authorRaw) ? ($authorRaw['name'] ?? '') : (string) $authorRaw;
+
+            CmsTheme::updateOrCreate(
+                ['slug' => $slug],
+                [
+                    'name'        => $manifest['name'],
+                    'version'     => $manifest['version'],
+                    'description' => $manifest['description'] ?? '',
+                    'author'      => $authorName,
+                    'settings'    => $manifest['settings'] ?? [],
+                ],
+            );
+
+            // Bust in-memory manifest cache
+            unset($this->manifests[$slug]);
+
+            CMS::fire('theme.installed', ['slug' => $slug, 'manifest' => $manifest]);
+
+            return $slug;
+
+        } catch (\JsonException $e) {
+            throw new RuntimeException(__('cms.themes.manifest_parse_error') . ': ' . $e->getMessage());
+        } finally {
+            if (File::isDirectory($tmpDir)) {
+                File::deleteDirectory($tmpDir);
+            }
+        }
+    }
+
+    /**
+     * Uninstall a theme: remove its folder and DB record.
+     *
+     * @throws RuntimeException if the theme is currently active
+     */
+    public function uninstall(string $slug): void
+    {
+        $theme = CmsTheme::where('slug', $slug)->firstOrFail();
+
+        if ($theme->active) {
+            throw new RuntimeException(__('cms.themes.cannot_delete_active'));
+        }
+
+        $themeDir = config('cms.paths.themes') . '/' . $slug;
+
+        if (File::isDirectory($themeDir)) {
+            File::deleteDirectory($themeDir);
+        }
+
+        $theme->delete();
+
+        unset($this->manifests[$slug]);
+
+        CMS::fire('theme.uninstalled', ['slug' => $slug]);
+    }
+
+    /**
+     * Locate artisan-theme.json inside an extracted ZIP directory.
+     * Handles both flat (files at root) and single-subfolder structures.
+     */
+    private function findManifest(string $extractDir): ?string
+    {
+        // Direct manifest at root
+        $direct = $extractDir . '/artisan-theme.json';
+        if (File::exists($direct)) {
+            return $direct;
+        }
+
+        // Single subdirectory
+        $subdirs = File::directories($extractDir);
+        if (count($subdirs) === 1) {
+            $nested = $subdirs[0] . '/artisan-theme.json';
+            if (File::exists($nested)) {
+                return $nested;
+            }
+        }
+
+        return null;
     }
 
     /**
