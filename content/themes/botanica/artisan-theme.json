@@ -1,0 +1,137 @@
+{
+  "name": "Botanica",
+  "slug": "botanica",
+  "version": "1.0.0",
+  "description": "Thème nature et bio — couleurs végétales douces, esthétique organique pour restaurants bio, coachs bien-être, marques naturelles et cabinets de santé.",
+  "author": {
+    "name": "ArtisanCMS",
+    "url": "https://artisancms.dev"
+  },
+  "license": "MIT",
+  "requires": { "cms": ">=1.0.0" },
+  "preview": "assets/images/preview.png",
+  "category": "wellness",
+  "tags": ["nature", "organic", "wellness", "green", "bio", "health", "coaching", "restaurant"],
+  "layouts": [
+    { "slug": "default", "name": "Par défaut", "regions": ["header", "content", "footer"] },
+    { "slug": "full-width", "name": "Pleine largeur", "regions": ["header", "content", "footer"] },
+    { "slug": "landing", "name": "Landing page", "regions": ["content"] },
+    { "slug": "article", "name": "Article / Recette", "regions": ["header", "content", "sidebar", "footer"] }
+  ],
+  "menu_locations": [
+    { "slug": "header", "name": "Navigation principale" },
+    { "slug": "footer", "name": "Navigation pied de page" },
+    { "slug": "sidebar", "name": "Sidebar navigation" }
+  ],
+  "customization": {
+    "header": {
+      "logo_url": { "label": "Logo", "type": "image", "default": "" },
+      "height": { "label": "Hauteur du header", "type": "select", "default": "72px", "options": ["56px", "64px", "72px", "80px"] },
+      "style": { "label": "Style", "type": "select", "default": "solid", "options": ["solid", "transparent", "leaf-border"] },
+      "sticky": { "label": "Header fixe", "type": "boolean", "default": true },
+      "background_color": { "label": "Couleur de fond", "type": "color", "default": "#fafaf7" },
+      "text_color": { "label": "Couleur du texte", "type": "color", "default": "#1a2e1a" },
+      "border_bottom_color": { "label": "Couleur bordure bas", "type": "color", "default": "#d4e8d4" },
+      "menu_alignment": { "label": "Alignement du menu", "type": "select", "default": "right", "options": ["left", "center", "right"] },
+      "mobile_menu_style": { "label": "Menu mobile", "type": "select", "default": "slide", "options": ["hamburger", "slide", "fullscreen"] },
+      "cta_text": { "label": "Texte du bouton CTA", "type": "text", "default": "Prendre RDV" },
+      "cta_url": { "label": "URL du bouton CTA", "type": "text", "default": "/contact" },
+      "cta_style": { "label": "Style du CTA", "type": "select", "default": "primary", "options": ["primary", "secondary", "outline"] }
+    },
+    "footer": {
+      "layout": { "label": "Style du footer", "type": "select", "default": "columns", "options": ["simple", "columns", "minimal"] },
+      "columns": { "label": "Nombre de colonnes", "type": "select", "default": "3", "options": ["2", "3", "4"] },
+      "background_color": { "label": "Couleur de fond", "type": "color", "default": "#1a2e1a" },
+      "text_color": { "label": "Couleur du texte", "type": "color", "default": "#a8c5a0" },
+      "accent_color": { "label": "Couleur accent (liens)", "type": "color", "default": "#86efac" },
+      "copyright_text": { "label": "Texte copyright", "type": "text", "default": "© {year} {site_name}. Fait avec soin." },
+      "tagline": { "label": "Signature / tagline", "type": "text", "default": "Prendre soin de soi et de la planète." },
+      "show_social_links": { "label": "Afficher les liens sociaux", "type": "boolean", "default": true },
+      "social_facebook": { "label": "Facebook URL", "type": "text", "default": "" },
+      "social_instagram": { "label": "Instagram URL", "type": "text", "default": "" },
+      "show_newsletter_footer": { "label": "Formulaire newsletter dans le footer", "type": "boolean", "default": true },
+      "show_powered_by": { "label": "Afficher Propulsé par ArtisanCMS", "type": "boolean", "default": true }
+    },
+    "colors": {
+      "primary": { "label": "Vert principal", "type": "color", "default": "#2d6a2d" },
+      "primary_light": { "label": "Vert clair", "type": "color", "default": "#4ade80" },
+      "primary_pale": { "label": "Vert très pâle", "type": "color", "default": "#f0fdf0" },
+      "secondary": { "label": "Terre / brun chaud", "type": "color", "default": "#7c5c3e" },
+      "secondary_light": { "label": "Beige chaud", "type": "color", "default": "#fdf4ec" },
+      "accent": { "label": "Accent sage", "type": "color", "default": "#8aaa6e" },
+      "accent_yellow": { "label": "Jaune doux (miel)", "type": "color", "default": "#fbbf24" },
+      "background": { "label": "Fond de page", "type": "color", "default": "#fafaf7" },
+      "surface": { "label": "Fond des cartes", "type": "color", "default": "#f4f9f0" },
+      "surface_warm": { "label": "Surface chaude (beige)", "type": "color", "default": "#fdf8f2" },
+      "dark": { "label": "Couleur sombre (footer/accent)", "type": "color", "default": "#1a2e1a" },
+      "text": { "label": "Texte principal", "type": "color", "default": "#1a2e1a" },
+      "text_muted": { "label": "Texte secondaire", "type": "color", "default": "#6b7c6b" },
+      "border": { "label": "Bordures", "type": "color", "default": "#d4e8d4" },
+      "link": { "label": "Couleur des liens", "type": "color", "default": "#2d6a2d" },
+      "link_hover": { "label": "Liens au survol", "type": "color", "default": "#4ade80" },
+      "success": { "label": "Succès", "type": "color", "default": "#22c55e" },
+      "warning": { "label": "Avertissement", "type": "color", "default": "#f59e0b" },
+      "error": { "label": "Erreur", "type": "color", "default": "#ef4444" }
+    },
+    "fonts": {
+      "heading": { "label": "Police des titres", "type": "font", "default": "Lora" },
+      "body": { "label": "Police du corps", "type": "font", "default": "Nunito" },
+      "base_size": { "label": "Taille de base", "type": "select", "default": "17px", "options": ["15px", "16px", "17px", "18px", "19px"] },
+      "h1_size": { "label": "Taille H1", "type": "text", "default": "3.25rem" },
+      "h2_size": { "label": "Taille H2", "type": "text", "default": "2.25rem" },
+      "h3_size": { "label": "Taille H3", "type": "text", "default": "1.625rem" },
+      "h4_size": { "label": "Taille H4", "type": "text", "default": "1.25rem" },
+      "h5_size": { "label": "Taille H5", "type": "text", "default": "1.125rem" },
+      "h6_size": { "label": "Taille H6", "type": "text", "default": "1rem" },
+      "heading_weight": { "label": "Graisse titres", "type": "select", "default": "600", "options": ["400", "500", "600", "700"] },
+      "heading_italic": { "label": "Titres en italique", "type": "boolean", "default": false },
+      "line_height": { "label": "Interligne", "type": "select", "default": "1.75", "options": ["1.5", "1.6", "1.7", "1.75", "1.8", "1.9"] },
+      "letter_spacing": { "label": "Espacement lettres", "type": "select", "default": "0", "options": ["-0.025em", "0", "0.025em", "0.05em"] }
+    },
+    "layout": {
+      "container_width": { "label": "Largeur max", "type": "select", "default": "1200px", "options": ["960px", "1080px", "1200px", "1400px"] },
+      "border_radius": { "label": "Arrondi cartes/boutons", "type": "select", "default": "0.75rem", "options": ["0", "0.25rem", "0.5rem", "0.75rem", "1rem", "1.5rem"] },
+      "section_spacing": { "label": "Espacement sections", "type": "select", "default": "large", "options": ["compact", "normal", "large", "xlarge"] },
+      "sidebar_position": { "label": "Position sidebar (blog/recettes)", "type": "select", "default": "right", "options": ["left", "right", "none"] },
+      "content_width": { "label": "Largeur contenu texte", "type": "select", "default": "68ch", "options": ["55ch", "60ch", "65ch", "68ch", "75ch"] }
+    },
+    "nature": {
+      "show_leaf_dividers": { "label": "Séparateurs feuilles décoratives", "type": "boolean", "default": true },
+      "show_texture_bg": { "label": "Fond texturé (grain papier)", "type": "boolean", "default": false },
+      "card_border_style": { "label": "Style bordure cartes", "type": "select", "default": "left-accent", "options": ["none", "full", "left-accent", "bottom-accent", "top-accent"] },
+      "hero_style": { "label": "Style section héros", "type": "select", "default": "nature-overlay", "options": ["light", "warm", "nature-overlay", "full-green"] },
+      "label_style": { "label": "Style des labels de section", "type": "select", "default": "leaf-icon", "options": ["none", "uppercase", "leaf-icon", "dot"] }
+    },
+    "global_styles": {
+      "button_style": { "label": "Style des boutons", "type": "select", "default": "pill", "options": ["square", "rounded", "pill"] },
+      "card_style": { "label": "Style des cartes", "type": "select", "default": "shadow", "options": ["flat", "shadow", "bordered", "warm-bg"] },
+      "shadow_intensity": { "label": "Intensité des ombres", "type": "select", "default": "light", "options": ["none", "light", "medium", "strong"] },
+      "enable_animations": { "label": "Activer les animations", "type": "boolean", "default": true },
+      "hover_effect": { "label": "Effet de survol", "type": "select", "default": "lift-green", "options": ["none", "lift", "lift-green", "scale"] }
+    }
+  },
+  "font_imports": [
+    "https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Nunito:wght@300;400;500;600;700&display=swap"
+  ],
+  "css_variables": {
+    "--color-primary": "#2d6a2d",
+    "--color-primary-light": "#4ade80",
+    "--color-primary-pale": "#f0fdf0",
+    "--color-secondary": "#7c5c3e",
+    "--color-accent": "#8aaa6e",
+    "--color-background": "#fafaf7",
+    "--color-surface": "#f4f9f0",
+    "--color-surface-warm": "#fdf8f2",
+    "--color-dark": "#1a2e1a",
+    "--color-text": "#1a2e1a",
+    "--color-text-muted": "#6b7c6b",
+    "--color-border": "#d4e8d4",
+    "--font-heading": "'Lora', Georgia, serif",
+    "--font-body": "'Nunito', system-ui, sans-serif",
+    "--font-size-base": "17px",
+    "--border-radius": "0.75rem",
+    "--container-width": "1200px",
+    "--section-padding": "80px"
+  },
+  "supports": ["dark_mode", "responsive", "rtl"]
+}

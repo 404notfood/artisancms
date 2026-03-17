@@ -1351,6 +1351,127 @@ class TemplateService
         $theme->update(['customizations' => $merged]);
     }
 
+    /**
+     * Apply advanced typography configuration (presets + per-heading scale).
+     * Writes fonts into theme customizations and updates DesignTokens for H1-H6/body/small.
+     */
+    protected function applyTypographyConfig(array $options, array $template): void
+    {
+        $typographyConfig = $options['typography_config'] ?? null;
+
+        if (empty($typographyConfig) || !is_array($typographyConfig)) {
+            return;
+        }
+
+        $theme = $this->resolveTheme($template);
+
+        if ($theme === null) {
+            return;
+        }
+
+        $customizations = [];
+
+        if (!empty($typographyConfig['headingFont'])) {
+            $customizations['fonts.heading'] = $typographyConfig['headingFont'];
+        }
+        if (!empty($typographyConfig['bodyFont'])) {
+            $customizations['fonts.body'] = $typographyConfig['bodyFont'];
+        }
+        if (!empty($typographyConfig['presetId'])) {
+            $customizations['typography.preset'] = $typographyConfig['presetId'];
+        }
+
+        // Write scale into design tokens if scale data is provided
+        $scale = $typographyConfig['scale'] ?? null;
+
+        if (is_array($scale)) {
+            $tokenGroup = 'typography';
+            $levels = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'body', 'small'];
+
+            foreach ($levels as $level) {
+                if (!isset($scale[$level]) || !is_array($scale[$level])) {
+                    continue;
+                }
+
+                $entry = $scale[$level];
+                $tokenName = $level;
+                $tokenValue = json_encode([
+                    'fontSize' => $entry['fontSize'] ?? '1rem',
+                    'fontWeight' => $entry['fontWeight'] ?? 400,
+                    'lineHeight' => $entry['lineHeight'] ?? '1.5',
+                    'letterSpacing' => $entry['letterSpacing'] ?? '0',
+                ], JSON_THROW_ON_ERROR);
+
+                \App\Models\DesignToken::updateOrCreate(
+                    ['group' => $tokenGroup, 'name' => $tokenName],
+                    ['value' => $tokenValue, 'type' => 'typography'],
+                );
+            }
+
+            Cache::forget('cms.design_tokens');
+        }
+
+        if (!empty($customizations)) {
+            $this->mergeThemeCustomizations($theme, $customizations);
+        }
+    }
+
+    /**
+     * Apply animation configuration from the wizard.
+     * Writes animation preset and config into theme customizations.
+     */
+    protected function applyAnimationConfig(array $options, array $template): void
+    {
+        $animationPreset = $options['animation_preset'] ?? null;
+        $animationConfig = $options['animation_config'] ?? null;
+
+        if (empty($animationPreset) && empty($animationConfig)) {
+            return;
+        }
+
+        $theme = $this->resolveTheme($template);
+
+        if ($theme === null) {
+            return;
+        }
+
+        $customizations = [];
+
+        if (!empty($animationPreset)) {
+            $customizations['animations.preset'] = $animationPreset;
+        }
+        if (!empty($animationConfig) && is_array($animationConfig)) {
+            $customizations['animations.config'] = json_encode($animationConfig, JSON_THROW_ON_ERROR);
+        }
+
+        $this->mergeThemeCustomizations($theme, $customizations);
+    }
+
+    /**
+     * Resolve the theme model for a template (by required theme or active fallback).
+     */
+    protected function resolveTheme(array $template): ?CmsTheme
+    {
+        $themeSlug = $template['requires']['theme'] ?? 'default';
+        $theme = CmsTheme::where('slug', $themeSlug)->first();
+
+        if ($theme === null) {
+            $theme = CmsTheme::where('active', true)->first();
+        }
+
+        return $theme;
+    }
+
+    /**
+     * Merge customization key-value pairs into a theme's customizations.
+     */
+    protected function mergeThemeCustomizations(CmsTheme $theme, array $customizations): void
+    {
+        $existing = $theme->customizations ?? [];
+        $merged = array_merge($existing, $customizations);
+        $theme->update(['customizations' => $merged]);
+    }
+
     // -------------------------------------------------------
     // Utilities
     // -------------------------------------------------------

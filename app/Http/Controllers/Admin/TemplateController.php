@@ -91,6 +91,13 @@ class TemplateController extends Controller
             'heading_color' => ['sometimes', 'nullable', 'regex:/^#[0-9A-Fa-f]{6}$/'],
             'text_color' => ['sometimes', 'nullable', 'regex:/^#[0-9A-Fa-f]{6}$/'],
             'include_legal_pages' => ['sometimes', 'boolean'],
+            'typography_preset' => ['sometimes', 'nullable', 'string', 'max:50'],
+            'typography_config' => ['sometimes', 'nullable', 'array'],
+            'typography_config.headingFont' => ['sometimes', 'string', 'max:100'],
+            'typography_config.bodyFont' => ['sometimes', 'string', 'max:100'],
+            'typography_config.scale' => ['sometimes', 'array'],
+            'animation_preset' => ['sometimes', 'nullable', 'string', 'max:50'],
+            'animation_config' => ['sometimes', 'nullable', 'array'],
         ]);
 
         try {
@@ -109,6 +116,10 @@ class TemplateController extends Controller
                     'heading_color' => $validated['heading_color'] ?? null,
                     'text_color' => $validated['text_color'] ?? null,
                     'include_legal_pages' => $validated['include_legal_pages'] ?? false,
+                    'typography_preset' => $validated['typography_preset'] ?? null,
+                    'typography_config' => $validated['typography_config'] ?? null,
+                    'animation_preset' => $validated['animation_preset'] ?? null,
+                    'animation_config' => $validated['animation_config'] ?? null,
                 ],
             );
 

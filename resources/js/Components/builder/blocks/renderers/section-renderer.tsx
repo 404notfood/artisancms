@@ -1,7 +1,22 @@
 import type { BlockRendererProps } from '../block-registry';
 
-export default function SectionRenderer({ block, children }: BlockRendererProps) {
-    const { backgroundColor, backgroundImage, paddingTop = 40, paddingBottom = 40, paddingLeft = 20, paddingRight = 20 } = block.props as Record<string, string | number>;
+export default function SectionRenderer({ block, children, isEditing }: BlockRendererProps) {
+    const {
+        backgroundColor,
+        backgroundImage,
+        paddingTop = 40,
+        paddingBottom = 40,
+        paddingLeft = 20,
+        paddingRight = 20,
+        maxWidth,
+        centered,
+    } = block.props as Record<string, string | number | boolean>;
+
+    const inner = centered && maxWidth ? (
+        <div style={{ maxWidth: `${maxWidth}px`, margin: '0 auto', width: '100%' }}>
+            {children}
+        </div>
+    ) : children;
 
     return (
         <div
@@ -17,11 +32,11 @@ export default function SectionRenderer({ block, children }: BlockRendererProps)
                 paddingRight: `${paddingRight}px`,
             }}
         >
-            {children || (
+            {inner || (isEditing && (
                 <div className="border-2 border-dashed border-gray-300 rounded p-4 text-center text-gray-400 text-sm">
                     Section vide — glissez des blocs ici
                 </div>
-            )}
+            ))}
         </div>
     );
 }

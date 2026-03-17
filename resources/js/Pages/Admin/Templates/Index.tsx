@@ -12,9 +12,12 @@ import {
 } from '@/Components/ui/dialog';
 import { Switch } from '@/Components/ui/switch';
 import { Label } from '@/Components/ui/label';
-import { Select, SelectOption } from '@/Components/ui/select';
-import { LayoutTemplate, Upload, Loader2, Check, ChevronLeft, ChevronRight, Type, Palette, Settings2 } from 'lucide-react';
-import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
+import { LayoutTemplate, Upload, Loader2, Check, ChevronLeft, ChevronRight, Type, Palette, Settings2, Sparkles } from 'lucide-react';
+import { useState, useCallback } from 'react';
+import WizardStepTypography from './wizard/WizardStepTypography';
+import WizardStepAnimations from './wizard/WizardStepAnimations';
+import { DEFAULT_TYPOGRAPHY_CONFIG, type TypographyConfig } from './wizard/constants/typography-presets';
+import { DEFAULT_ANIMATION_CONFIG, type AnimationConfig } from './wizard/constants/animation-presets';
 
 // -------------------------------------------------------
 // Types
@@ -92,22 +95,9 @@ const categoryColors: Record<string, string> = {
     blog: 'bg-teal-50 text-teal-700 border-teal-200',
 };
 
-const FONT_OPTIONS = [
-    { value: 'Inter', label: 'Inter' },
-    { value: 'Roboto', label: 'Roboto' },
-    { value: 'Open Sans', label: 'Open Sans' },
-    { value: 'Lato', label: 'Lato' },
-    { value: 'Montserrat', label: 'Montserrat' },
-    { value: 'Poppins', label: 'Poppins' },
-    { value: 'Playfair Display', label: 'Playfair Display' },
-    { value: 'Merriweather', label: 'Merriweather' },
-    { value: 'Georgia', label: 'Georgia' },
-    { value: 'system-ui', label: 'System UI' },
-];
-
 const COLOR_PALETTES = [
     { name: 'Indigo', primary: '#4f46e5', heading: '#1e1b4b', text: '#374151' },
-    { name: 'Émeraude', primary: '#059669', heading: '#064e3b', text: '#374151' },
+    { name: 'Emeraude', primary: '#059669', heading: '#064e3b', text: '#374151' },
     { name: 'Rose', primary: '#e11d48', heading: '#4c0519', text: '#374151' },
     { name: 'Ambre', primary: '#d97706', heading: '#451a03', text: '#374151' },
     { name: 'Ciel', primary: '#0284c7', heading: '#0c4a6e', text: '#374151' },
@@ -117,76 +107,11 @@ const WIZARD_STEPS = [
     { id: 1, label: 'Template', icon: LayoutTemplate },
     { id: 2, label: 'Typographie', icon: Type },
     { id: 3, label: 'Couleurs', icon: Palette },
-    { id: 4, label: 'Options', icon: Settings2 },
+    { id: 4, label: 'Animations', icon: Sparkles },
+    { id: 5, label: 'Options', icon: Settings2 },
 ];
 
-// -------------------------------------------------------
-// Google Fonts loader
-// -------------------------------------------------------
-
-const loadedFonts = new Set<string>();
-
-function loadGoogleFont(fontFamily: string) {
-    if (fontFamily === 'system-ui' || fontFamily === 'Georgia' || loadedFonts.has(fontFamily)) return;
-    loadedFonts.add(fontFamily);
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(fontFamily)}:wght@400;600;700&display=swap`;
-    document.head.appendChild(link);
-}
-
-// -------------------------------------------------------
-// FontPreview component
-// -------------------------------------------------------
-
-function FontPreview({
-    headingFont,
-    bodyFont,
-    primaryColor,
-    headingColor,
-    textColor,
-}: {
-    headingFont: string;
-    bodyFont: string;
-    primaryColor: string;
-    headingColor: string;
-    textColor: string;
-}) {
-    useEffect(() => {
-        loadGoogleFont(headingFont);
-        loadGoogleFont(bodyFont);
-    }, [headingFont, bodyFont]);
-
-    return (
-        <div className="border rounded-lg p-5 bg-white space-y-3">
-            <h3
-                className="text-xl font-bold leading-tight"
-                style={{ fontFamily: `"${headingFont}", sans-serif`, color: headingColor }}
-            >
-                Titre Principal
-            </h3>
-            <h4
-                className="text-base font-semibold"
-                style={{ fontFamily: `"${headingFont}", sans-serif`, color: headingColor }}
-            >
-                Sous-titre de section
-            </h4>
-            <p
-                className="text-sm leading-relaxed"
-                style={{ fontFamily: `"${bodyFont}", sans-serif`, color: textColor }}
-            >
-                Voici un exemple de paragraphe avec la police de corps sélectionnée.
-                Ce texte vous permet de visualiser le rendu final sur votre site.
-            </p>
-            <button
-                className="inline-flex items-center px-4 py-2 text-sm font-medium text-white rounded-md"
-                style={{ backgroundColor: primaryColor, fontFamily: `"${bodyFont}", sans-serif` }}
-            >
-                Bouton d'action
-            </button>
-        </div>
-    );
-}
+const TOTAL_STEPS = WIZARD_STEPS.length;
 
 // -------------------------------------------------------
 // Main component
@@ -203,15 +128,17 @@ export default function TemplatesIndex({ templates }: Props) {
     const [step, setStep] = useState(1);
 
     // Step 2: Typography
-    const [headingFont, setHeadingFont] = useState('Inter');
-    const [bodyFont, setBodyFont] = useState('Inter');
+    const [typographyConfig, setTypographyConfig] = useState<TypographyConfig>(DEFAULT_TYPOGRAPHY_CONFIG);
 
     // Step 3: Colors
     const [primaryColor, setPrimaryColor] = useState('#4f46e5');
     const [headingColor, setHeadingColor] = useState('#1e1b4b');
     const [textColor, setTextColor] = useState('#374151');
 
-    // Step 4: Options
+    // Step 4: Animations
+    const [animationConfig, setAnimationConfig] = useState<AnimationConfig>(DEFAULT_ANIMATION_CONFIG);
+
+    // Step 5: Options
     const [selectedPages, setSelectedPages] = useState<string[]>([]);
     const [installMenus, setInstallMenus] = useState(true);
     const [installSettings, setInstallSettings] = useState(false);
@@ -225,11 +152,11 @@ export default function TemplatesIndex({ templates }: Props) {
         setSelectedTemplate(template);
         setDetails(null);
         setStep(1);
-        setHeadingFont('Inter');
-        setBodyFont('Inter');
+        setTypographyConfig(DEFAULT_TYPOGRAPHY_CONFIG);
         setPrimaryColor('#4f46e5');
         setHeadingColor('#1e1b4b');
         setTextColor('#374151');
+        setAnimationConfig(DEFAULT_ANIMATION_CONFIG);
         setSelectedPages([]);
         setInstallMenus(true);
         setInstallSettings(false);
@@ -246,11 +173,8 @@ export default function TemplatesIndex({ templates }: Props) {
             .then((data: TemplateDetails) => {
                 setDetails(data);
                 setSelectedPages(data.pages.map(p => p.id));
-                // Pre-fill from theme summary if available
                 if (data.theme_summary) {
                     if (data.theme_summary.primary_color) setPrimaryColor(data.theme_summary.primary_color);
-                    if (data.theme_summary.font_heading) setHeadingFont(data.theme_summary.font_heading);
-                    if (data.theme_summary.font_body) setBodyFont(data.theme_summary.font_body);
                 }
             })
             .catch(() => setDetails(null))
@@ -284,21 +208,24 @@ export default function TemplatesIndex({ templates }: Props) {
             install_settings: installSettings,
             install_theme: installTheme,
             overwrite,
-            heading_font: headingFont,
-            body_font: bodyFont,
+            heading_font: typographyConfig.headingFont,
+            body_font: typographyConfig.bodyFont,
             primary_color: primaryColor,
             heading_color: headingColor,
             text_color: textColor,
             include_legal_pages: includeLegalPages,
+            typography_preset: typographyConfig.presetId,
+            typography_config: typographyConfig,
+            animation_preset: animationConfig.presetId,
+            animation_config: animationConfig.config,
         }, {
             onFinish: () => setInstalling(null),
         });
-    }, [selectedTemplate, selectedPages, installMenus, installSettings, installTheme, overwrite, headingFont, bodyFont, primaryColor, headingColor, textColor, includeLegalPages]);
+    }, [selectedTemplate, selectedPages, installMenus, installSettings, installTheme, overwrite, typographyConfig, primaryColor, headingColor, textColor, includeLegalPages, animationConfig]);
 
     const selectedCount = selectedPages.length;
-    const canGoNext = step < 4;
     const canGoPrev = step > 1;
-    const isLastStep = step === 4;
+    const isLastStep = step === TOTAL_STEPS;
 
     const applyPalette = useCallback((palette: typeof COLOR_PALETTES[0]) => {
         setPrimaryColor(palette.primary);
@@ -393,7 +320,6 @@ export default function TemplatesIndex({ templates }: Props) {
                     {/* Progress bar */}
                     <div className="flex items-center gap-1 mb-2">
                         {WIZARD_STEPS.map((s, i) => {
-                            const Icon = s.icon;
                             const isActive = step === s.id;
                             const isDone = step > s.id;
                             return (
@@ -491,49 +417,12 @@ export default function TemplatesIndex({ templates }: Props) {
 
                             {/* Step 2: Typography */}
                             {step === 2 && (
-                                <div className="space-y-5">
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div>
-                                            <Label htmlFor="heading-font" className="text-sm font-medium mb-1.5 block">
-                                                Police des titres
-                                            </Label>
-                                            <Select
-                                                id="heading-font"
-                                                value={headingFont}
-                                                onChange={e => setHeadingFont(e.target.value)}
-                                            >
-                                                {FONT_OPTIONS.map(f => (
-                                                    <SelectOption key={f.value} value={f.value}>
-                                                        {f.label}
-                                                    </SelectOption>
-                                                ))}
-                                            </Select>
-                                        </div>
-                                        <div>
-                                            <Label htmlFor="body-font" className="text-sm font-medium mb-1.5 block">
-                                                Police du texte
-                                            </Label>
-                                            <Select
-                                                id="body-font"
-                                                value={bodyFont}
-                                                onChange={e => setBodyFont(e.target.value)}
-                                            >
-                                                {FONT_OPTIONS.map(f => (
-                                                    <SelectOption key={f.value} value={f.value}>
-                                                        {f.label}
-                                                    </SelectOption>
-                                                ))}
-                                            </Select>
-                                        </div>
-                                    </div>
-                                    <FontPreview
-                                        headingFont={headingFont}
-                                        bodyFont={bodyFont}
-                                        primaryColor={primaryColor}
-                                        headingColor={headingColor}
-                                        textColor={textColor}
-                                    />
-                                </div>
+                                <WizardStepTypography
+                                    config={typographyConfig}
+                                    onChange={setTypographyConfig}
+                                    headingColor={headingColor}
+                                    textColor={textColor}
+                                />
                             )}
 
                             {/* Step 3: Colors */}
@@ -615,19 +504,19 @@ export default function TemplatesIndex({ templates }: Props) {
                                             </div>
                                         </div>
                                     </div>
-
-                                    <FontPreview
-                                        headingFont={headingFont}
-                                        bodyFont={bodyFont}
-                                        primaryColor={primaryColor}
-                                        headingColor={headingColor}
-                                        textColor={textColor}
-                                    />
                                 </div>
                             )}
 
-                            {/* Step 4: Options (pages, menus, settings, legal) */}
+                            {/* Step 4: Animations */}
                             {step === 4 && (
+                                <WizardStepAnimations
+                                    config={animationConfig}
+                                    onChange={setAnimationConfig}
+                                />
+                            )}
+
+                            {/* Step 5: Options (pages, menus, settings, legal) */}
+                            {step === 5 && (
                                 <div className="space-y-5">
                                     {/* Pages selection */}
                                     <div>

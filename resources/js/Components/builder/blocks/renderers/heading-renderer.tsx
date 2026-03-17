@@ -2,7 +2,7 @@ import type { BlockRendererProps } from '../block-registry';
 
 export default function HeadingRenderer({ block, isSelected, isEditing, onUpdate }: BlockRendererProps) {
     const level = Number(block.props.level) || 2;
-    const text = (block.props.text as string) || 'Titre';
+    const text = (block.props.text as string) || (block.props.content as string) || 'Titre';
     const alignment = (block.props.alignment as string) || 'left';
     const color = (block.props.color as string) || undefined;
     const Tag = `h${level}` as keyof React.JSX.IntrinsicElements;

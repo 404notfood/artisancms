@@ -24,6 +24,8 @@ const ANIMATION_TYPES = [
     { value: 'rotate', label: 'Rotation' },
     { value: 'bounce', label: 'Rebond' },
     { value: 'flip', label: 'Retournement' },
+    { value: 'blur-in', label: 'Fondu flou' },
+    { value: 'stagger-fade', label: 'Apparition decalee' },
 ];
 
 const EASING_OPTIONS = [

@@ -1,3 +1,4 @@
+import { createContext, useContext } from 'react';
 import type { BlockNode } from '@/types/cms';
 
 // Reuse existing builder renderers
@@ -42,6 +43,40 @@ import ShapeDividerRenderer from '@/Components/builder/blocks/renderers/shape-di
 import AnimateOnScroll from './animate-on-scroll';
 import type { BlockRendererProps } from '@/Components/builder/blocks/block-registry';
 import type { ComponentType } from 'react';
+
+// ─── Animation config context ─────────────────────────────────────────────
+
+export interface BlockAnimationCfg {
+    entrance: { type: string; duration: number; delay: number; easing: string; stagger: number };
+    hover: { type: string; intensity: string };
+    text: { type: string };
+    continuous: { type: string; speed: string };
+}
+
+export type AnimationConfigMap = Record<string, BlockAnimationCfg>;
+
+export const AnimationConfigContext = createContext<AnimationConfigMap | null>(null);
+
+// ─── Block type to category mapping ────────────────────────────────────────
+
+type CategoryKey = 'sections' | 'headings' | 'text' | 'images' | 'buttons' | 'lists' | 'cards';
+
+const BLOCK_TYPE_TO_CATEGORY: Record<string, CategoryKey> = {
+    section: 'sections',
+    heading: 'headings',
+    text: 'text',
+    image: 'images',
+    button: 'buttons',
+    list: 'lists',
+    testimonials: 'cards',
+    'pricing-table': 'cards',
+    'icon-box': 'cards',
+    'product-card': 'cards',
+    cta: 'cards',
+    alert: 'cards',
+    blockquote: 'text',
+    'code-block': 'text',
+};
 
 /**
  * Map of block type slugs to their renderer components.
@@ -99,6 +134,7 @@ interface BlockRendererComponentProps {
  * since the front-end is read-only.
  */
 export default function BlockRenderer({ block }: BlockRendererComponentProps) {
+    const animationConfigMap = useContext(AnimationConfigContext);
     const Renderer = rendererMap[block.type];
 
     if (!Renderer) {
@@ -113,8 +149,44 @@ export default function BlockRenderer({ block }: BlockRendererComponentProps) {
           ))
         : undefined;
 
-    const animation = block.props?.animation as { type?: string; duration?: number; delay?: number; easing?: string } | undefined;
-    const hasAnimation = animation && animation.type && animation.type !== 'none';
+    // Per-block animation (set in the builder)
+    const blockAnimation = block.props?.animation as { type?: string; duration?: number; delay?: number; easing?: string } | undefined;
+    const hasBlockAnimation = blockAnimation && blockAnimation.type && blockAnimation.type !== 'none';
+
+    // Theme-level animation config (from wizard)
+    const category = BLOCK_TYPE_TO_CATEGORY[block.type];
+    const themeAnim = category && animationConfigMap ? animationConfigMap[category] : undefined;
+
+    // Determine final animation props: block-level overrides theme-level
+    let finalAnimation = blockAnimation;
+    let hoverConfig: { type: string; intensity: string } | undefined;
+    let textEffectConfig: { type: string } | undefined;
+    let continuousConfig: { type: string; speed: string } | undefined;
+
+    if (!hasBlockAnimation && themeAnim) {
+        // Use theme config if no block-level animation
+        if (themeAnim.entrance.type !== 'none') {
+            finalAnimation = {
+                type: themeAnim.entrance.type,
+                duration: themeAnim.entrance.duration,
+                delay: themeAnim.entrance.delay,
+                easing: themeAnim.entrance.easing,
+            };
+        }
+    }
+
+    // Hover and text effects from theme config (block-level doesn't have these)
+    if (themeAnim) {
+        if (themeAnim.hover.type !== 'none') {
+            hoverConfig = themeAnim.hover;
+        }
+        if (themeAnim.text.type !== 'none') {
+            textEffectConfig = themeAnim.text;
+        }
+        if (themeAnim.continuous.type !== 'none') {
+            continuousConfig = themeAnim.continuous;
+        }
+    }
 
     const rendered = (
         <Renderer
@@ -126,8 +198,20 @@ export default function BlockRenderer({ block }: BlockRendererComponentProps) {
         </Renderer>
     );
 
-    if (hasAnimation) {
-        return <AnimateOnScroll animation={animation}>{rendered}</AnimateOnScroll>;
+    const needsWrapper = (finalAnimation && finalAnimation.type && finalAnimation.type !== 'none')
+        || hoverConfig || textEffectConfig || continuousConfig;
+
+    if (needsWrapper) {
+        return (
+            <AnimateOnScroll
+                animation={finalAnimation}
+                hover={hoverConfig}
+                textEffect={textEffectConfig}
+                continuous={continuousConfig}
+            >
+                {rendered}
+            </AnimateOnScroll>
+        );
     }
 
     return rendered;

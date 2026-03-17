@@ -1,7 +1,8 @@
 import { Head, Link, usePage } from '@inertiajs/react';
 import type { MenuData, MenuItemData } from '@/types/cms';
-import type { ReactNode } from 'react';
+import { useMemo, type ReactNode } from 'react';
 import { AnnouncementBar } from '@/Components/front/announcement-bar';
+import { AnimationConfigContext, type AnimationConfigMap } from '@/Components/front/block-renderer';
 
 interface FrontLayoutProps {
     children: ReactNode;
@@ -89,6 +90,10 @@ function buildCssVariables(customizations: Record<string, string | boolean>): Re
 
         const section = dotKey.substring(0, dotIdx);
         const key = dotKey.substring(dotIdx + 1);
+
+        // Skip animation config keys - they are not CSS variables
+        if (section === 'animations' || section === 'typography') continue;
+
         const prefix = SECTION_PREFIXES[section];
         if (!prefix) continue;
 
@@ -313,29 +318,42 @@ export default function FrontLayout({ children, menus, theme }: FrontLayoutProps
     const googleFontsUrl = getGoogleFontsUrl(customizations);
     const favicon = branding?.favicon;
 
+    // Parse animation config from theme customizations
+    const animationConfigMap = useMemo<AnimationConfigMap | null>(() => {
+        const raw = customizations['animations.config'];
+        if (!raw || typeof raw !== 'string') return null;
+        try {
+            return JSON.parse(raw) as AnimationConfigMap;
+        } catch {
+            return null;
+        }
+    }, [customizations]);
+
     return (
-        <div className="flex min-h-screen flex-col" style={cssVariables as React.CSSProperties}>
-            <Head>
-                {favicon && <link rel="icon" href={favicon} />}
-                {designTokensCss && <style>{designTokensCss}</style>}
-                <link rel="alternate" type="application/rss+xml" title={`${c(customizations, 'general.site_name', 'ArtisanCMS')} - Flux RSS`} href="/feed" />
-                {googleFontsUrl && (
-                    <>
-                        <link rel="preconnect" href="https://fonts.googleapis.com" />
-                        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-                        <link rel="stylesheet" href={googleFontsUrl} />
-                    </>
+        <AnimationConfigContext.Provider value={animationConfigMap}>
+            <div className="flex min-h-screen flex-col" style={cssVariables as React.CSSProperties}>
+                <Head>
+                    {favicon && <link rel="icon" href={favicon} />}
+                    {designTokensCss && <style>{designTokensCss}</style>}
+                    <link rel="alternate" type="application/rss+xml" title={`${c(customizations, 'general.site_name', 'ArtisanCMS')} - Flux RSS`} href="/feed" />
+                    {googleFontsUrl && (
+                        <>
+                            <link rel="preconnect" href="https://fonts.googleapis.com" />
+                            <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+                            <link rel="stylesheet" href={googleFontsUrl} />
+                        </>
+                    )}
+                </Head>
+                {announcement && announcement.position === 'top' && (
+                    <AnnouncementBar announcement={announcement} />
                 )}
-            </Head>
-            {announcement && announcement.position === 'top' && (
-                <AnnouncementBar announcement={announcement} />
-            )}
-            <Header menu={menus.header} customizations={customizations} brandingLogo={branding?.logo} />
-            <div className="flex-1">{children}</div>
-            <Footer menu={menus.footer} customizations={customizations} />
-            {announcement && announcement.position === 'bottom' && (
-                <AnnouncementBar announcement={announcement} />
-            )}
-        </div>
+                <Header menu={menus.header} customizations={customizations} brandingLogo={branding?.logo} />
+                <div className="flex-1">{children}</div>
+                <Footer menu={menus.footer} customizations={customizations} />
+                {announcement && announcement.position === 'bottom' && (
+                    <AnnouncementBar announcement={announcement} />
+                )}
+            </div>
+        </AnimationConfigContext.Provider>
     );
 }

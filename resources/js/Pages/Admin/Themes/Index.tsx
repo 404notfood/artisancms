@@ -33,19 +33,7 @@ export default function ThemesIndex({ themes }: ThemesIndexProps) {
     }
 
     return (
-        <AdminLayout header={
-            <div className="flex items-center justify-between">
-                <h1 className="text-xl font-semibold text-gray-900">Thèmes</h1>
-                <button
-                    type="button"
-                    onClick={() => setUploadOpen(true)}
-                    className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >
-                    <UploadIcon />
-                    Installer un thème
-                </button>
-            </div>
-        }>
+        <AdminLayout header={<h1 className="text-xl font-semibold text-gray-900">Thèmes</h1>}>
             <Head title="Thèmes" />
 
             {flash.success && (
@@ -58,6 +46,20 @@ export default function ThemesIndex({ themes }: ThemesIndexProps) {
                     {(flash as any).error}
                 </div>
             )}
+
+            <div className="mb-6 flex items-center justify-between">
+                <p className="text-sm text-gray-500">
+                    {themes.length} thème{themes.length !== 1 ? 's' : ''} installé{themes.length !== 1 ? 's' : ''}
+                </p>
+                <button
+                    type="button"
+                    onClick={() => setUploadOpen(true)}
+                    className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                >
+                    <UploadIcon />
+                    Installer un thème
+                </button>
+            </div>
 
             {themes.length === 0 ? (
                 <EmptyState onInstall={() => setUploadOpen(true)} />

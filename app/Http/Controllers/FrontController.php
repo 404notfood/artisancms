@@ -76,7 +76,7 @@ class FrontController extends Controller
         $data = [
             'menus' => $menus,
             'theme' => [
-                'customizations' => $theme?->customizations ?? $this->getDefaultCustomizations($themeConfig),
+                'customizations' => $theme ? $this->themeManager->getAllCustomizations($theme->slug) : [],
                 'layouts' => $themeConfig['layouts'] ?? [],
             ],
             'isPreview' => true,
@@ -115,7 +115,7 @@ class FrontController extends Controller
             'page' => $page,
             'menus' => $menus,
             'theme' => [
-                'customizations' => $theme?->customizations ?? $this->getDefaultCustomizations($themeConfig),
+                'customizations' => $theme ? $this->themeManager->getAllCustomizations($theme->slug) : [],
                 'layouts' => $themeConfig['layouts'] ?? [],
             ],
             'designTokensCss' => $this->designTokenService->generateCssVariables(),
@@ -123,32 +123,5 @@ class FrontController extends Controller
         ]);
     }
 
-    /**
-     * Extract default values from theme customization config.
-     *
-     * @param array<string, mixed> $themeConfig
-     * @return array<string, string>
-     */
-    private function getDefaultCustomizations(array $themeConfig): array
-    {
-        if (!isset($themeConfig['customization'])) {
-            return [];
-        }
 
-        $defaults = [];
-
-        /** @var array<string, array<string, mixed>> $items */
-        foreach ($themeConfig['customization'] as $group => $items) {
-            if (!is_array($items)) {
-                continue;
-            }
-            foreach ($items as $key => $config) {
-                if (is_array($config) && isset($config['default'])) {
-                    $defaults["{$group}.{$key}"] = (string) $config['default'];
-                }
-            }
-        }
-
-        return $defaults;
-    }
 }
