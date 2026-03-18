@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Ecommerce\Services;
 
+use App\CMS\Facades\CMS;
 use Ecommerce\Models\Order;
 use Ecommerce\Models\PaymentMethod;
 use Ecommerce\Payment\Drivers\CodDriver;
@@ -51,6 +52,7 @@ class PaymentService
                     'payment_method' => $paymentMethod->slug,
                     'payment_status' => $result->status ?? 'pending',
                 ]);
+                CMS::fire('ecommerce.payment.processed', $order, $result);
             }
 
             return $result;
@@ -133,5 +135,7 @@ class PaymentService
         $order->update([
             'payment_status' => $result->status ?? 'paid',
         ]);
+
+        CMS::fire('ecommerce.payment.webhook_processed', $order, $result);
     }
 }

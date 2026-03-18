@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Backup\Services;
 
+use App\CMS\Facades\CMS;
 use Backup\Models\Backup;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -85,6 +86,8 @@ class BackupService
             $metadata = $this->collectMetadata($type, $checksum, $duration);
 
             $backup->markAsCompleted($size, $metadata);
+
+            CMS::fire('backup.created', $backup);
 
             Log::info("Backup completed: {$filename}", [
                 'type' => $type,
@@ -173,11 +176,15 @@ class BackupService
      */
     public function delete(Backup $backup): void
     {
+        CMS::fire('backup.deleting', $backup);
+
         if (File::exists($backup->path)) {
             File::delete($backup->path);
         }
 
         $backup->delete();
+
+        CMS::fire('backup.deleted', $backup);
     }
 
     /**

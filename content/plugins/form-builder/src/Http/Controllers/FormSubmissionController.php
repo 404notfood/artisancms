@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace FormBuilder\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use FormBuilder\Models\Form;
 use FormBuilder\Models\FormSubmission;
 use FormBuilder\Services\SubmissionService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response as InertiaResponse;
@@ -26,6 +26,7 @@ class FormSubmissionController extends Controller
      */
     public function index(Request $request, Form $form): InertiaResponse
     {
+        abort_unless(auth()->user()?->hasPermission('forms.read'), 403);
         $query = $form->submissions()->orderByDesc('created_at');
 
         $status = $request->query('status');
@@ -57,6 +58,7 @@ class FormSubmissionController extends Controller
      */
     public function show(FormSubmission $submission): InertiaResponse
     {
+        abort_unless(auth()->user()?->hasPermission('forms.read'), 403);
         $submission->load('form');
 
         // Auto-mark as read when viewed
@@ -74,6 +76,7 @@ class FormSubmissionController extends Controller
      */
     public function updateStatus(Request $request, FormSubmission $submission): RedirectResponse
     {
+        abort_unless(auth()->user()?->hasPermission('forms.update'), 403);
         $validated = $request->validate([
             'status' => ['required', Rule::in(['new', 'read', 'replied', 'spam', 'trash'])],
         ]);
@@ -90,6 +93,7 @@ class FormSubmissionController extends Controller
      */
     public function export(Form $form): StreamedResponse
     {
+        abort_unless(auth()->user()?->hasPermission('forms.read'), 403);
         return $this->submissionService->export($form);
     }
 
@@ -98,6 +102,7 @@ class FormSubmissionController extends Controller
      */
     public function destroy(FormSubmission $submission): RedirectResponse
     {
+        abort_unless(auth()->user()?->hasPermission('forms.delete'), 403);
         $formId = $submission->form_id;
 
         $submission->delete();

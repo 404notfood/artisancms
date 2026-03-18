@@ -24,6 +24,7 @@ class ProductController extends Controller
      */
     public function index(Request $request): Response
     {
+        $this->authorize('viewAny', Product::class);
         $filters = $request->only(['status', 'search', 'category_id', 'per_page']);
 
         $products = $this->productService->all($filters);
@@ -41,6 +42,7 @@ class ProductController extends Controller
      */
     public function create(): Response
     {
+        $this->authorize('create', Product::class);
         $categories = ProductCategory::ordered()->get();
 
         return Inertia::render('Admin/Ecommerce/Products/Create', [
@@ -53,6 +55,7 @@ class ProductController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        $this->authorize('create', Product::class);
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:products,slug',
@@ -86,6 +89,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product): Response
     {
+        $this->authorize('update', $product);
         $product->load(['category', 'variants']);
         $categories = ProductCategory::ordered()->get();
 
@@ -100,6 +104,7 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product): RedirectResponse
     {
+        $this->authorize('update', $product);
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:products,slug,' . $product->id,
@@ -134,6 +139,7 @@ class ProductController extends Controller
      */
     public function destroy(Product $product): RedirectResponse
     {
+        $this->authorize('delete', $product);
         $this->productService->delete($product);
 
         return redirect()

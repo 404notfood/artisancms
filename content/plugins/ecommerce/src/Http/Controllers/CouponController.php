@@ -23,6 +23,7 @@ class CouponController extends Controller
      */
     public function index(): Response
     {
+        $this->authorize('viewAny', Coupon::class);
         $coupons = $this->couponService->all();
 
         return Inertia::render('Admin/Ecommerce/Coupons/Index', [
@@ -35,6 +36,7 @@ class CouponController extends Controller
      */
     public function create(): Response
     {
+        $this->authorize('create', Coupon::class);
         return Inertia::render('Admin/Ecommerce/Coupons/Create');
     }
 
@@ -43,6 +45,7 @@ class CouponController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        $this->authorize('create', Coupon::class);
         $validated = $request->validate([
             'code' => 'required|string|max:50|unique:coupons,code',
             'type' => 'required|in:percentage,fixed',
@@ -68,6 +71,7 @@ class CouponController extends Controller
      */
     public function edit(Coupon $coupon): Response
     {
+        $this->authorize('update', $coupon);
         return Inertia::render('Admin/Ecommerce/Coupons/Create', [
             'coupon' => $coupon,
         ]);
@@ -78,6 +82,7 @@ class CouponController extends Controller
      */
     public function update(Request $request, Coupon $coupon): RedirectResponse
     {
+        $this->authorize('update', $coupon);
         $validated = $request->validate([
             'code' => 'required|string|max:50|unique:coupons,code,' . $coupon->id,
             'type' => 'required|in:percentage,fixed',
@@ -101,6 +106,7 @@ class CouponController extends Controller
      */
     public function destroy(Coupon $coupon): RedirectResponse
     {
+        $this->authorize('delete', $coupon);
         $this->couponService->delete($coupon);
 
         return redirect()

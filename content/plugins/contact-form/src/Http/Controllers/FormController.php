@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace ContactForm\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use ContactForm\Models\FormSubmission;
 use ContactForm\Services\FormService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
 use Inertia\Inertia;
 use Inertia\Response as InertiaResponse;
 
@@ -60,6 +60,7 @@ class FormController extends Controller
      */
     public function index(Request $request): InertiaResponse
     {
+        abort_unless(auth()->user()?->hasPermission('forms.read'), 403);
         $submissions = FormSubmission::query()
             ->forForm('contact')
             ->orderBy('created_at', 'desc')
@@ -76,6 +77,7 @@ class FormController extends Controller
      */
     public function show(FormSubmission $submission): JsonResponse
     {
+        abort_unless(auth()->user()?->hasPermission('forms.read'), 403);
         if (!$submission->isRead()) {
             $submission->markAsRead();
         }
@@ -90,6 +92,7 @@ class FormController extends Controller
      */
     public function destroy(FormSubmission $submission): JsonResponse
     {
+        abort_unless(auth()->user()?->hasPermission('forms.delete'), 403);
         $submission->delete();
 
         return response()->json([

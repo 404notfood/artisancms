@@ -94,11 +94,14 @@ class StripeDriver implements PaymentDriverInterface
         $sigHeader = $request->header('Stripe-Signature', '');
         $webhookSecret = $this->config['webhook_secret'] ?? '';
 
-        // Verify webhook signature if secret is configured
-        if (!empty($webhookSecret)) {
-            if (!$this->verifySignature($payload, $sigHeader, $webhookSecret)) {
-                return WebhookResult::failed('Signature webhook invalide.');
-            }
+        // Verify webhook signature (required for security)
+        if (empty($webhookSecret)) {
+            Log::warning('Stripe webhook received but no webhook_secret configured. Rejecting.');
+            return WebhookResult::failed('Webhook secret non configure. Configurez webhook_secret dans les parametres de paiement.');
+        }
+
+        if (!$this->verifySignature($payload, $sigHeader, $webhookSecret)) {
+            return WebhookResult::failed('Signature webhook invalide.');
         }
 
         $event = json_decode($payload, true);
@@ -146,6 +149,11 @@ class StripeDriver implements PaymentDriverInterface
         }
 
         if ($timestamp === null || empty($signatures)) {
+            return false;
+        }
+
+        // Reject webhooks older than 5 minutes to prevent replay attacks
+        if (abs(time() - (int) $timestamp) > 300) {
             return false;
         }
 

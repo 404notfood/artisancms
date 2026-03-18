@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Ecommerce\Services;
 
+use App\CMS\Facades\CMS;
 use Ecommerce\Models\Product;
 use Ecommerce\Models\ProductVariant;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -58,6 +59,8 @@ class ProductService
             }
         }
 
+        CMS::fire('ecommerce.product.created', $product);
+
         return $product;
     }
 
@@ -74,7 +77,10 @@ class ProductService
             $this->syncVariants($product, $data['variants']);
         }
 
-        return $product->fresh();
+        $product = $product->fresh();
+        CMS::fire('ecommerce.product.updated', $product);
+
+        return $product;
     }
 
     /**
@@ -82,7 +88,9 @@ class ProductService
      */
     public function delete(Product $product): void
     {
+        CMS::fire('ecommerce.product.deleting', $product);
         $product->delete();
+        CMS::fire('ecommerce.product.deleted', $product);
     }
 
     /**

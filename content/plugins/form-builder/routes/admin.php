@@ -6,7 +6,7 @@ use FormBuilder\Http\Controllers\FormController;
 use FormBuilder\Http\Controllers\FormSubmissionController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('admin/forms')->middleware(['web', 'auth'])->group(function (): void {
+Route::prefix('admin/forms')->middleware(['web', 'auth', 'cms.admin'])->group(function (): void {
     Route::get('/', [FormController::class, 'index'])->name('admin.forms.index');
     Route::get('/create', [FormController::class, 'create'])->name('admin.forms.create');
     Route::post('/', [FormController::class, 'store'])->name('admin.forms.store');

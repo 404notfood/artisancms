@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace AiAssistant\Http\Controllers;
 
 use AiAssistant\Services\UsageTracker;
+use App\Http\Controllers\Controller;
 use App\Models\CmsPlugin;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class AiSettingsController
+class AiSettingsController extends Controller
 {
     public function __construct(
         protected UsageTracker $usageTracker,
@@ -24,6 +25,7 @@ class AiSettingsController
      */
     public function index(): Response
     {
+        abort_unless(auth()->user()?->isAdmin(), 403);
         $plugin = CmsPlugin::where('slug', 'ai-assistant')->first();
         $settings = $plugin?->settings ?? [];
 
@@ -63,6 +65,7 @@ class AiSettingsController
      */
     public function update(Request $request): JsonResponse
     {
+        abort_unless(auth()->user()?->isAdmin(), 403);
         $validated = $request->validate([
             'ai_driver' => ['sometimes', 'string', 'in:openai,anthropic'],
             'api_key' => ['sometimes', 'nullable', 'string', 'min:10'],

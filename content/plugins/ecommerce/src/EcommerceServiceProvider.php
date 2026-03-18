@@ -4,8 +4,16 @@ declare(strict_types=1);
 
 namespace Ecommerce;
 
+use App\CMS\Blocks\BlockRegistry;
+use App\CMS\Facades\CMS;
+use Ecommerce\Models\Coupon;
+use Ecommerce\Models\Order;
 use Ecommerce\Models\Product;
 use Ecommerce\Observers\ProductStockObserver;
+use Ecommerce\Policies\CouponPolicy;
+use Ecommerce\Policies\OrderPolicy;
+use Ecommerce\Policies\ProductPolicy;
+use Illuminate\Support\Facades\Gate;
 use Ecommerce\Services\CartService;
 use Ecommerce\Services\CouponService;
 use Ecommerce\Services\CustomerService;
@@ -97,5 +105,144 @@ class EcommerceServiceProvider extends ServiceProvider
 
         // Register observers
         Product::observe(ProductStockObserver::class);
+
+        // Register policies
+        Gate::policy(Product::class, ProductPolicy::class);
+        Gate::policy(Order::class, OrderPolicy::class);
+        Gate::policy(Coupon::class, CouponPolicy::class);
+
+        // Register e-commerce blocks in the block registry
+        $this->registerBlocks();
+    }
+
+    /**
+     * Register e-commerce blocks in the BlockRegistry.
+     */
+    private function registerBlocks(): void
+    {
+        $registry = $this->app->make(BlockRegistry::class);
+
+        $blocks = [
+            [
+                'slug' => 'product-card',
+                'name' => 'Fiche produit',
+                'category' => 'ecommerce',
+                'icon' => 'shopping-bag',
+                'schema' => [
+                    'properties' => [
+                        'productId' => ['type' => 'number', 'default' => null],
+                        'showImage' => ['type' => 'boolean', 'default' => true],
+                        'showPrice' => ['type' => 'boolean', 'default' => true],
+                        'showButton' => ['type' => 'boolean', 'default' => true],
+                        'buttonText' => ['type' => 'string', 'default' => 'Ajouter au panier'],
+                        'imageHeight' => ['type' => 'string', 'default' => '200px'],
+                    ],
+                ],
+                'default_props' => [
+                    'productId' => null,
+                    'showImage' => true,
+                    'showPrice' => true,
+                    'showButton' => true,
+                    'buttonText' => 'Ajouter au panier',
+                    'imageHeight' => '200px',
+                ],
+                'is_core' => false,
+                'source' => 'ecommerce',
+            ],
+            [
+                'slug' => 'product-grid',
+                'name' => 'Grille produits',
+                'category' => 'ecommerce',
+                'icon' => 'layout-grid',
+                'schema' => [
+                    'properties' => [
+                        'columns' => ['type' => 'number', 'default' => 3, 'minimum' => 2, 'maximum' => 4],
+                        'categoryId' => ['type' => 'number', 'default' => null],
+                        'limit' => ['type' => 'number', 'default' => 6, 'minimum' => 1, 'maximum' => 24],
+                        'showPagination' => ['type' => 'boolean', 'default' => false],
+                        'gap' => ['type' => 'string', 'default' => '1.5rem'],
+                    ],
+                ],
+                'default_props' => [
+                    'columns' => 3,
+                    'categoryId' => null,
+                    'limit' => 6,
+                    'showPagination' => false,
+                    'gap' => '1.5rem',
+                ],
+                'is_core' => false,
+                'source' => 'ecommerce',
+            ],
+            [
+                'slug' => 'cart-widget',
+                'name' => 'Panier',
+                'category' => 'ecommerce',
+                'icon' => 'shopping-cart',
+                'schema' => [
+                    'properties' => [
+                        'style' => ['type' => 'string', 'default' => 'icon', 'enum' => ['icon', 'sidebar', 'dropdown']],
+                        'showCount' => ['type' => 'boolean', 'default' => true],
+                        'showTotal' => ['type' => 'boolean', 'default' => true],
+                        'position' => ['type' => 'string', 'default' => 'top-right', 'enum' => ['top-right', 'top-left']],
+                    ],
+                ],
+                'default_props' => [
+                    'style' => 'icon',
+                    'showCount' => true,
+                    'showTotal' => true,
+                    'position' => 'top-right',
+                ],
+                'is_core' => false,
+                'source' => 'ecommerce',
+            ],
+            [
+                'slug' => 'checkout-form',
+                'name' => 'Formulaire commande',
+                'category' => 'ecommerce',
+                'icon' => 'credit-card',
+                'schema' => [
+                    'properties' => [
+                        'showOrderSummary' => ['type' => 'boolean', 'default' => true],
+                        'requireAccount' => ['type' => 'boolean', 'default' => false],
+                        'termsUrl' => ['type' => 'string', 'default' => ''],
+                    ],
+                ],
+                'default_props' => [
+                    'showOrderSummary' => true,
+                    'requireAccount' => false,
+                    'termsUrl' => '',
+                ],
+                'is_core' => false,
+                'source' => 'ecommerce',
+            ],
+            [
+                'slug' => 'featured-products',
+                'name' => 'Produits vedettes',
+                'category' => 'ecommerce',
+                'icon' => 'star',
+                'schema' => [
+                    'properties' => [
+                        'title' => ['type' => 'string', 'default' => 'Produits en vedette'],
+                        'limit' => ['type' => 'number', 'default' => 4, 'minimum' => 1, 'maximum' => 12],
+                        'layout' => ['type' => 'string', 'default' => 'scroll', 'enum' => ['scroll', 'grid']],
+                        'showArrows' => ['type' => 'boolean', 'default' => true],
+                        'autoplay' => ['type' => 'boolean', 'default' => false],
+                    ],
+                ],
+                'default_props' => [
+                    'title' => 'Produits en vedette',
+                    'limit' => 4,
+                    'layout' => 'scroll',
+                    'showArrows' => true,
+                    'autoplay' => false,
+                ],
+                'is_core' => false,
+                'source' => 'ecommerce',
+            ],
+        ];
+
+        foreach ($blocks as $block) {
+            $registry->register($block);
+        }
     }
 }

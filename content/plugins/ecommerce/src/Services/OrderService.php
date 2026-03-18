@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Ecommerce\Services;
 
+use App\CMS\Facades\CMS;
 use Ecommerce\Mail\OrderConfirmationMail;
 use Ecommerce\Mail\OrderShippedMail;
 use Ecommerce\Mail\OrderStatusChangedMail;
@@ -79,6 +80,7 @@ class OrderService
         // Send notifications only if status actually changed
         if ($previousStatus !== $status) {
             $this->sendStatusNotification($order, $status, $trackingNumber);
+            CMS::fire('ecommerce.order.status_changed', $order, $previousStatus, $status);
         }
 
         return $order;

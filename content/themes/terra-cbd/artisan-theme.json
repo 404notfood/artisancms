@@ -1,0 +1,504 @@
+{
+  "name": "Terra CBD",
+  "slug": "terra-cbd",
+  "version": "1.0.0",
+  "description": "Thème e-commerce CBD premium — vert profond et or chaud, esthétique naturelle & moderne pour boutiques CBD, huiles essentielles, bien-être et cosmétiques bio.",
+  "author": {
+    "name": "ArtisanCMS",
+    "url": "https://artisancms.dev"
+  },
+  "license": "MIT",
+  "requires": {
+    "cms": ">=1.0.0"
+  },
+  "preview": "assets/images/preview.png",
+  "category": "ecommerce",
+  "tags": [
+    "cbd",
+    "ecommerce",
+    "wellness",
+    "organic",
+    "premium",
+    "shop",
+    "natural",
+    "health"
+  ],
+  "layouts": [
+    {
+      "slug": "default",
+      "name": "Par défaut",
+      "regions": ["header", "content", "footer"]
+    },
+    {
+      "slug": "full-width",
+      "name": "Pleine largeur",
+      "regions": ["header", "content", "footer"]
+    },
+    {
+      "slug": "landing",
+      "name": "Landing page",
+      "regions": ["content"]
+    },
+    {
+      "slug": "shop",
+      "name": "Boutique",
+      "regions": ["header", "content", "sidebar", "footer"]
+    }
+  ],
+  "menu_locations": [
+    { "slug": "header", "name": "Navigation principale" },
+    { "slug": "footer", "name": "Navigation pied de page" },
+    { "slug": "footer_legal", "name": "Mentions légales (footer)" }
+  ],
+  "customization": {
+    "header": {
+      "logo_url": {
+        "label": "Logo",
+        "type": "image",
+        "default": ""
+      },
+      "height": {
+        "label": "Hauteur du header",
+        "type": "select",
+        "default": "72px",
+        "options": ["56px", "64px", "72px", "80px"]
+      },
+      "style": {
+        "label": "Style",
+        "type": "select",
+        "default": "solid",
+        "options": ["solid", "transparent", "dark"]
+      },
+      "sticky": {
+        "label": "Header fixe",
+        "type": "boolean",
+        "default": true
+      },
+      "background_color": {
+        "label": "Couleur de fond",
+        "type": "color",
+        "default": "#0d1f0d"
+      },
+      "text_color": {
+        "label": "Couleur du texte",
+        "type": "color",
+        "default": "#f5f0e8"
+      },
+      "border_bottom_color": {
+        "label": "Couleur bordure bas",
+        "type": "color",
+        "default": "#1e3a1e"
+      },
+      "menu_alignment": {
+        "label": "Alignement du menu",
+        "type": "select",
+        "default": "center",
+        "options": ["left", "center", "right"]
+      },
+      "mobile_menu_style": {
+        "label": "Menu mobile",
+        "type": "select",
+        "default": "slide",
+        "options": ["hamburger", "slide", "fullscreen"]
+      },
+      "show_cart_icon": {
+        "label": "Afficher l'icône panier",
+        "type": "boolean",
+        "default": true
+      },
+      "show_search": {
+        "label": "Afficher la recherche",
+        "type": "boolean",
+        "default": true
+      },
+      "cta_text": {
+        "label": "Texte du bouton CTA",
+        "type": "text",
+        "default": "Boutique"
+      },
+      "cta_url": {
+        "label": "URL du bouton CTA",
+        "type": "text",
+        "default": "/boutique"
+      },
+      "cta_style": {
+        "label": "Style du CTA",
+        "type": "select",
+        "default": "gold",
+        "options": ["primary", "gold", "outline"]
+      },
+      "announcement_bar": {
+        "label": "Barre d'annonce",
+        "type": "text",
+        "default": "🌿 Livraison offerte dès 49€ · Paiement sécurisé · Qualité certifiée"
+      },
+      "show_announcement": {
+        "label": "Afficher la barre d'annonce",
+        "type": "boolean",
+        "default": true
+      }
+    },
+    "footer": {
+      "layout": {
+        "label": "Style du footer",
+        "type": "select",
+        "default": "columns",
+        "options": ["simple", "columns", "minimal"]
+      },
+      "columns": {
+        "label": "Nombre de colonnes",
+        "type": "select",
+        "default": "4",
+        "options": ["2", "3", "4"]
+      },
+      "background_color": {
+        "label": "Couleur de fond",
+        "type": "color",
+        "default": "#0a1a0a"
+      },
+      "text_color": {
+        "label": "Couleur du texte",
+        "type": "color",
+        "default": "#9aab8a"
+      },
+      "accent_color": {
+        "label": "Couleur accent (liens)",
+        "type": "color",
+        "default": "#c9a84c"
+      },
+      "copyright_text": {
+        "label": "Texte copyright",
+        "type": "text",
+        "default": "© {year} {site_name}. Tous droits réservés."
+      },
+      "legal_text": {
+        "label": "Mention légale CBD",
+        "type": "text",
+        "default": "Nos produits contiennent moins de 0,3% de THC. Réservés aux adultes de plus de 18 ans. Non destinés au diagnostic ou traitement médical."
+      },
+      "show_social_links": {
+        "label": "Afficher les liens sociaux",
+        "type": "boolean",
+        "default": true
+      },
+      "social_instagram": {
+        "label": "Instagram URL",
+        "type": "text",
+        "default": ""
+      },
+      "social_facebook": {
+        "label": "Facebook URL",
+        "type": "text",
+        "default": ""
+      },
+      "social_tiktok": {
+        "label": "TikTok URL",
+        "type": "text",
+        "default": ""
+      },
+      "show_newsletter_footer": {
+        "label": "Formulaire newsletter dans le footer",
+        "type": "boolean",
+        "default": true
+      },
+      "show_powered_by": {
+        "label": "Afficher Propulsé par ArtisanCMS",
+        "type": "boolean",
+        "default": true
+      }
+    },
+    "colors": {
+      "primary": {
+        "label": "Vert profond (principal)",
+        "type": "color",
+        "default": "#1a3d1a"
+      },
+      "primary_light": {
+        "label": "Vert moyen",
+        "type": "color",
+        "default": "#2d6a2d"
+      },
+      "primary_pale": {
+        "label": "Vert très pâle",
+        "type": "color",
+        "default": "#e8f5e8"
+      },
+      "gold": {
+        "label": "Or (accent premium)",
+        "type": "color",
+        "default": "#c9a84c"
+      },
+      "gold_light": {
+        "label": "Or clair",
+        "type": "color",
+        "default": "#f0d890"
+      },
+      "secondary": {
+        "label": "Beige naturel",
+        "type": "color",
+        "default": "#f5f0e8"
+      },
+      "background": {
+        "label": "Fond de page",
+        "type": "color",
+        "default": "#fafaf5"
+      },
+      "surface": {
+        "label": "Fond des cartes",
+        "type": "color",
+        "default": "#f0f5ec"
+      },
+      "dark": {
+        "label": "Fond sombre (hero/footer)",
+        "type": "color",
+        "default": "#0d1f0d"
+      },
+      "text": {
+        "label": "Texte principal",
+        "type": "color",
+        "default": "#1a2e1a"
+      },
+      "text_muted": {
+        "label": "Texte secondaire",
+        "type": "color",
+        "default": "#5a7a5a"
+      },
+      "border": {
+        "label": "Bordures",
+        "type": "color",
+        "default": "#c8ddc8"
+      },
+      "link": {
+        "label": "Couleur des liens",
+        "type": "color",
+        "default": "#1a3d1a"
+      },
+      "link_hover": {
+        "label": "Liens au survol",
+        "type": "color",
+        "default": "#c9a84c"
+      },
+      "success": {
+        "label": "Succès",
+        "type": "color",
+        "default": "#22c55e"
+      },
+      "warning": {
+        "label": "Avertissement",
+        "type": "color",
+        "default": "#f59e0b"
+      },
+      "error": {
+        "label": "Erreur",
+        "type": "color",
+        "default": "#ef4444"
+      }
+    },
+    "fonts": {
+      "heading": {
+        "label": "Police des titres",
+        "type": "font",
+        "default": "Cormorant Garamond"
+      },
+      "body": {
+        "label": "Police du corps",
+        "type": "font",
+        "default": "DM Sans"
+      },
+      "base_size": {
+        "label": "Taille de base",
+        "type": "select",
+        "default": "16px",
+        "options": ["15px", "16px", "17px", "18px"]
+      },
+      "h1_size": {
+        "label": "Taille H1",
+        "type": "text",
+        "default": "4rem"
+      },
+      "h2_size": {
+        "label": "Taille H2",
+        "type": "text",
+        "default": "2.5rem"
+      },
+      "h3_size": {
+        "label": "Taille H3",
+        "type": "text",
+        "default": "1.75rem"
+      },
+      "h4_size": {
+        "label": "Taille H4",
+        "type": "text",
+        "default": "1.25rem"
+      },
+      "h5_size": {
+        "label": "Taille H5",
+        "type": "text",
+        "default": "1.125rem"
+      },
+      "h6_size": {
+        "label": "Taille H6",
+        "type": "text",
+        "default": "1rem"
+      },
+      "heading_weight": {
+        "label": "Graisse titres",
+        "type": "select",
+        "default": "600",
+        "options": ["400", "500", "600", "700"]
+      },
+      "heading_italic": {
+        "label": "Titres en italique",
+        "type": "boolean",
+        "default": true
+      },
+      "line_height": {
+        "label": "Interligne",
+        "type": "select",
+        "default": "1.7",
+        "options": ["1.5", "1.6", "1.7", "1.75", "1.8"]
+      },
+      "letter_spacing": {
+        "label": "Espacement lettres",
+        "type": "select",
+        "default": "0.025em",
+        "options": ["-0.025em", "0", "0.025em", "0.05em"]
+      }
+    },
+    "layout": {
+      "container_width": {
+        "label": "Largeur max",
+        "type": "select",
+        "default": "1280px",
+        "options": ["1080px", "1200px", "1280px", "1400px"]
+      },
+      "border_radius": {
+        "label": "Arrondi cartes/boutons",
+        "type": "select",
+        "default": "0.5rem",
+        "options": ["0", "0.25rem", "0.5rem", "0.75rem", "1rem"]
+      },
+      "section_spacing": {
+        "label": "Espacement sections",
+        "type": "select",
+        "default": "large",
+        "options": ["compact", "normal", "large", "xlarge"]
+      },
+      "sidebar_position": {
+        "label": "Position sidebar (boutique)",
+        "type": "select",
+        "default": "left",
+        "options": ["left", "right", "none"]
+      },
+      "content_width": {
+        "label": "Largeur contenu texte",
+        "type": "select",
+        "default": "65ch",
+        "options": ["55ch", "60ch", "65ch", "72ch"]
+      }
+    },
+    "ecommerce": {
+      "product_card_style": {
+        "label": "Style des cartes produit",
+        "type": "select",
+        "default": "premium",
+        "options": ["minimal", "standard", "premium", "dark"]
+      },
+      "products_per_row": {
+        "label": "Produits par ligne",
+        "type": "select",
+        "default": "3",
+        "options": ["2", "3", "4"]
+      },
+      "image_aspect_ratio": {
+        "label": "Format des images produit",
+        "type": "select",
+        "default": "1/1",
+        "options": ["1/1", "3/4", "4/5"]
+      },
+      "show_quick_view": {
+        "label": "Aperçu rapide au survol",
+        "type": "boolean",
+        "default": true
+      },
+      "show_wishlist": {
+        "label": "Bouton wishlist",
+        "type": "boolean",
+        "default": true
+      },
+      "price_display": {
+        "label": "Affichage prix",
+        "type": "select",
+        "default": "prominent",
+        "options": ["minimal", "standard", "prominent"]
+      },
+      "show_cbd_badge": {
+        "label": "Badge % CBD sur les produits",
+        "type": "boolean",
+        "default": true
+      },
+      "show_lab_tested": {
+        "label": "Badge Testé en laboratoire",
+        "type": "boolean",
+        "default": true
+      }
+    },
+    "global_styles": {
+      "button_style": {
+        "label": "Style des boutons",
+        "type": "select",
+        "default": "rounded",
+        "options": ["square", "rounded", "pill"]
+      },
+      "card_style": {
+        "label": "Style des cartes",
+        "type": "select",
+        "default": "shadow",
+        "options": ["flat", "shadow", "bordered", "premium"]
+      },
+      "shadow_intensity": {
+        "label": "Intensité des ombres",
+        "type": "select",
+        "default": "medium",
+        "options": ["none", "light", "medium", "strong"]
+      },
+      "enable_animations": {
+        "label": "Activer les animations",
+        "type": "boolean",
+        "default": true
+      },
+      "hover_effect": {
+        "label": "Effet de survol",
+        "type": "select",
+        "default": "lift",
+        "options": ["none", "lift", "scale", "gold-border"]
+      }
+    }
+  },
+  "font_imports": [
+    "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap"
+  ],
+  "css_variables": {
+    "--color-primary": "#1a3d1a",
+    "--color-primary-light": "#2d6a2d",
+    "--color-primary-pale": "#e8f5e8",
+    "--color-gold": "#c9a84c",
+    "--color-gold-light": "#f0d890",
+    "--color-secondary": "#f5f0e8",
+    "--color-background": "#fafaf5",
+    "--color-surface": "#f0f5ec",
+    "--color-dark": "#0d1f0d",
+    "--color-text": "#1a2e1a",
+    "--color-text-muted": "#5a7a5a",
+    "--color-border": "#c8ddc8",
+    "--color-accent": "#c9a84c",
+    "--font-heading": "'Cormorant Garamond', Georgia, serif",
+    "--font-body": "'DM Sans', system-ui, sans-serif",
+    "--font-size-base": "16px",
+    "--border-radius": "0.5rem",
+    "--container-width": "1280px",
+    "--section-padding": "96px"
+  },
+  "supports": ["dark_mode", "responsive"],
+  "default_template": "shop"
+}

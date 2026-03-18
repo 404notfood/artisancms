@@ -166,7 +166,8 @@ export default function TemplatesIndex({ templates }: Props) {
         setModalOpen(true);
         setLoadingDetails(true);
 
-        fetch(`/admin/templates/${template.slug}/pages`, {
+        const pagesUrl = route('admin.templates.pages', { slug: template.slug });
+        fetch(pagesUrl, {
             headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
         })
             .then(res => res.json())
@@ -202,7 +203,7 @@ export default function TemplatesIndex({ templates }: Props) {
         setInstalling(selectedTemplate.slug);
         setModalOpen(false);
 
-        router.post(`/admin/templates/${selectedTemplate.slug}/install`, {
+        router.post(route('admin.templates.install', { slug: selectedTemplate.slug }), {
             pages: selectedPages,
             install_menus: installMenus,
             install_settings: installSettings,
@@ -310,7 +311,9 @@ export default function TemplatesIndex({ templates }: Props) {
 
             {/* Install wizard modal */}
             <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-                <DialogContent className="sm:max-w-[680px] max-h-[85vh] overflow-y-auto">
+                <DialogContent className="sm:max-w-[680px] flex flex-col max-h-[90vh] overflow-hidden p-0">
+                    {/* Fixed header */}
+                    <div className="px-6 pt-6 pb-4 border-b border-gray-100 shrink-0">
                     <DialogHeader>
                         <DialogTitle>
                             Installer &laquo;{selectedTemplate?.name}&raquo;
@@ -318,7 +321,7 @@ export default function TemplatesIndex({ templates }: Props) {
                     </DialogHeader>
 
                     {/* Progress bar */}
-                    <div className="flex items-center gap-1 mb-2">
+                    <div className="flex items-center gap-1 mt-3">
                         {WIZARD_STEPS.map((s, i) => {
                             const isActive = step === s.id;
                             const isDone = step > s.id;
@@ -355,7 +358,10 @@ export default function TemplatesIndex({ templates }: Props) {
                             );
                         })}
                     </div>
+                    </div>{/* end fixed header */}
 
+                    {/* Scrollable step content */}
+                    <div className="flex-1 overflow-y-auto px-6 py-4">
                     {loadingDetails ? (
                         <div className="flex items-center justify-center py-16">
                             <Loader2 className="h-6 w-6 animate-spin text-gray-400" />
@@ -639,8 +645,10 @@ export default function TemplatesIndex({ templates }: Props) {
                         </>
                     )}
 
-                    {/* Navigation footer */}
-                    <DialogFooter className="flex items-center justify-between sm:justify-between">
+                    </div>{/* end scrollable content */}
+
+                    {/* Fixed footer */}
+                    <DialogFooter className="flex items-center justify-between sm:justify-between px-6 py-4 border-t border-gray-100 shrink-0">
                         <div>
                             {canGoPrev && (
                                 <Button variant="outline" onClick={() => setStep(s => s - 1)}>

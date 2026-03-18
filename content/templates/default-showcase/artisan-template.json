@@ -244,7 +244,7 @@
                   "items": [
                     {
                       "title": "ArtisanCMS est-il vraiment gratuit ?",
-                      "content": "Oui, ArtisanCMS est 100% open source et gratuit. Vous pouvez l'installer sur votre propre serveur sans aucun frais de licence. Des plans Pro et Agency sont disponibles pour des fonctionnalités avancées et un support prioritaire."
+                      "content": "Oui, ArtisanCMS est 100% open source et gratuit, sous licence MIT. Vous pouvez l'installer sur votre propre serveur sans aucun frais de licence, sans abonnement, sans limite cachée."
                     },
                     {
                       "title": "Ai-je besoin de compétences techniques pour utiliser ArtisanCMS ?",
@@ -341,7 +341,7 @@
           },
           {
             "type": "section",
-            "id": "sec-pricing",
+            "id": "sec-opensource",
             "props": {
               "backgroundColor": "#ffffff",
               "paddingTop": 80,
@@ -354,16 +354,16 @@
             "children": [
               {
                 "type": "text",
-                "id": "pricing-label",
+                "id": "oss-label",
                 "props": {
-                  "content": "<p style='text-align:center;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#7c3aed;margin-bottom:12px'>Tarifs</p>"
+                  "content": "<p style=’text-align:center;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#7c3aed;margin-bottom:12px’>100% Gratuit</p>"
                 }
               },
               {
                 "type": "heading",
-                "id": "pricing-title",
+                "id": "oss-title",
                 "props": {
-                  "text": "Plans simples et transparents",
+                  "text": "Open source, pour toujours",
                   "level": 2,
                   "alignment": "center",
                   "color": "#0f172a"
@@ -371,83 +371,48 @@
               },
               {
                 "type": "spacer",
-                "id": "pricing-sp1",
-                "props": {
-                  "height": 12
-                }
+                "id": "oss-sp1",
+                "props": { "height": 12 }
               },
               {
                 "type": "text",
-                "id": "pricing-sub",
+                "id": "oss-sub",
                 "props": {
-                  "content": "<p style='text-align:center;color:#64748b;font-size:1.1rem;line-height:1.7;max-width:520px;margin:0 auto'>Commencez gratuitement. Passez au supérieur quand vous êtes prêt.</p>"
+                  "content": "<p style=’text-align:center;color:#64748b;font-size:1.1rem;line-height:1.7;max-width:580px;margin:0 auto’>ArtisanCMS est et restera gratuit. Aucune licence, aucun abonnement, aucune limite cachée. Installez-le sur votre propre serveur et gardez le contrôle total.</p>"
                 }
               },
               {
                 "type": "spacer",
-                "id": "pricing-sp2",
-                "props": {
-                  "height": 56
-                }
+                "id": "oss-sp2",
+                "props": { "height": 64 }
               },
               {
-                "type": "pricing-table",
-                "id": "pricing-block",
-                "props": {
-                  "currency": "€",
-                  "plans": [
-                    {
-                      "name": "Free",
-                      "price": "0",
-                      "period": "mois",
-                      "description": "Pour démarrer et tester ArtisanCMS",
-                      "features": [
-                        "5 pages",
-                        "3 thèmes inclus",
-                        "50+ blocs",
-                        "1 utilisateur",
-                        "Support communauté"
-                      ],
-                      "cta_text": "Démarrer gratuitement",
-                      "cta_url": "#",
-                      "highlighted": false
-                    },
-                    {
-                      "name": "Pro",
-                      "price": "19",
-                      "period": "mois",
-                      "description": "Pour les freelances et petites agences",
-                      "features": [
-                        "Pages illimitées",
-                        "8 thèmes premium",
-                        "Tous les blocs",
-                        "5 utilisateurs",
-                        "Plugins officiels inclus",
-                        "Support prioritaire"
-                      ],
-                      "cta_text": "Essayer 14 jours gratuit",
-                      "cta_url": "#",
-                      "highlighted": true
-                    },
-                    {
-                      "name": "Agency",
-                      "price": "49",
-                      "period": "mois",
-                      "description": "Pour les agences et grandes équipes",
-                      "features": [
-                        "Sites illimités",
-                        "Thèmes illimités",
-                        "Utilisateurs illimités",
-                        "White-labeling complet",
-                        "Multi-site",
-                        "Support dédié + SLA"
-                      ],
-                      "cta_text": "Contacter l’équipe",
-                      "cta_url": "#",
-                      "highlighted": false
+                "type": "grid",
+                "id": "oss-grid",
+                "props": { "columns": 3, "gap": 32 },
+                "children": [
+                  {
+                    "type": "custom-html",
+                    "id": "oss-card-1",
+                    "props": {
+                      "html": "<div style=’text-align:center;padding:40px 32px;background:#f8fafc;border-radius:20px;border:1px solid #e2e8f0;height:100%’><div style=’width:64px;height:64px;background:linear-gradient(135deg,#7c3aed,#4f46e5);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 24px’><svg width=’28’ height=’28’ viewBox=’0 0 24 24’ fill=’none’ stroke=’#fff’ stroke-width=’2’ stroke-linecap=’round’ stroke-linejoin=’round’><path d=’M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z’/></svg></div><h3 style=’color:#0f172a;font-size:1.15rem;font-weight:700;margin-bottom:12px’>Licence MIT</h3><p style=’color:#64748b;line-height:1.7;font-size:0.9rem’>Utilisez, modifiez, redistribuez librement. Aucune restriction commerciale. Propriété intellectuelle garantie.</p></div>"
                     }
-                  ]
-                }
+                  },
+                  {
+                    "type": "custom-html",
+                    "id": "oss-card-2",
+                    "props": {
+                      "html": "<div style=’text-align:center;padding:40px 32px;background:linear-gradient(135deg,#7c3aed,#4338ca);border-radius:20px;height:100%’><div style=’width:64px;height:64px;background:rgba(255,255,255,0.15);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 24px’><svg width=’28’ height=’28’ viewBox=’0 0 24 24’ fill=’none’ stroke=’#fff’ stroke-width=’2’ stroke-linecap=’round’ stroke-linejoin=’round’><circle cx=’12’ cy=’12’ r=’10’/><line x1=’12’ y1=’8’ x2=’12’ y2=’12’/><line x1=’12’ y1=’16’ x2=’12.01’ y2=’16’/></svg></div><h3 style=’color:#fff;font-size:1.15rem;font-weight:700;margin-bottom:12px’>Zéro abonnement</h3><p style=’color:rgba(255,255,255,0.8);line-height:1.7;font-size:0.9rem’>Pas de frais mensuels, pas de carte de crédit requise. Installez sur votre hébergement et c&#39;est parti.</p></div>"
+                    }
+                  },
+                  {
+                    "type": "custom-html",
+                    "id": "oss-card-3",
+                    "props": {
+                      "html": "<div style=’text-align:center;padding:40px 32px;background:#f8fafc;border-radius:20px;border:1px solid #e2e8f0;height:100%’><div style=’width:64px;height:64px;background:linear-gradient(135deg,#10b981,#059669);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 24px’><svg width=’28’ height=’28’ viewBox=’0 0 24 24’ fill=’none’ stroke=’#fff’ stroke-width=’2’ stroke-linecap=’round’ stroke-linejoin=’round’><polyline points=’20 6 9 17 4 12’/></svg></div><h3 style=’color:#0f172a;font-size:1.15rem;font-weight:700;margin-bottom:12px’>Tout inclus</h3><p style=’color:#64748b;line-height:1.7;font-size:0.9rem’>Pages illimitées, tous les blocs, tous les thèmes, toutes les fonctionnalités. Sans restriction dès le premier jour.</p></div>"
+                    }
+                  }
+                ]
               }
             ]
           },
@@ -562,8 +527,8 @@
           "order": 2
         },
         {
-          "label": "Tarifs",
-          "url": "#pricing",
+          "label": "Open source",
+          "url": "#opensource",
           "order": 3
         },
         {

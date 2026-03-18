@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Ecommerce\Http\Controllers;
 
+use App\CMS\Facades\CMS;
 use App\Http\Controllers\Controller;
 use App\Models\CmsPlugin;
 use Ecommerce\Models\Coupon;
@@ -163,6 +164,7 @@ class CheckoutController extends Controller
         }
 
         $total = max(0, $subtotal + $tax + $shipping - $discount);
+        $total = (float) CMS::applyFilter('ecommerce.checkout.total', $total, $subtotal, $tax, $shipping, $discount);
 
         $shippingAddress = $validated['shipping_address'];
         $billingAddress = !empty($validated['billing_same_as_shipping'])
@@ -207,6 +209,8 @@ class CheckoutController extends Controller
         // Clear cart and coupon session
         $this->cartService->clear();
         $request->session()->forget('coupon_code');
+
+        CMS::fire('ecommerce.order.created', $order);
 
         return redirect()
             ->route('shop.checkout.confirmation', $order)

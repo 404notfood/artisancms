@@ -89,7 +89,7 @@ export default function WizardStepTypography({
             {/* Preset cards */}
             <div>
                 <Label className="text-sm font-medium mb-2 block">Style typographique</Label>
-                <div className="flex gap-2 overflow-x-auto pb-2 -mx-1 px-1">
+                <div className="grid grid-cols-3 gap-2">
                     {TYPOGRAPHY_PRESETS.map(preset => {
                         const isActive = config.presetId === preset.id;
                         return (
@@ -97,31 +97,27 @@ export default function WizardStepTypography({
                                 key={preset.id}
                                 type="button"
                                 onClick={() => selectPreset(preset.id)}
-                                className={`shrink-0 w-[130px] border rounded-lg p-2.5 text-left transition-all ${
+                                className={`border rounded-lg p-3 text-left transition-all ${
                                     isActive
                                         ? 'border-indigo-500 bg-indigo-50 ring-1 ring-indigo-500'
                                         : 'border-gray-200 bg-white hover:border-gray-300'
                                 }`}
                             >
-                                <p
-                                    className="text-sm font-bold truncate leading-tight"
-                                    style={{ fontFamily: `"${preset.headingFont}", sans-serif` }}
-                                >
-                                    {preset.name}
-                                </p>
-                                <p
-                                    className="text-[10px] text-gray-500 truncate mt-0.5"
-                                    style={{ fontFamily: `"${preset.bodyFont}", sans-serif` }}
-                                >
-                                    {preset.description}
-                                </p>
+                                <div className="flex items-center gap-2 mb-1">
+                                    <TypographyIndicator presetId={preset.id} />
+                                    <p className="text-sm font-semibold truncate">{preset.name}</p>
+                                </div>
+                                <p className="text-[10px] text-gray-500 leading-tight">{preset.description}</p>
                             </button>
                         );
                     })}
                     {config.presetId === 'custom' && (
-                        <div className="shrink-0 w-[130px] border border-amber-500 bg-amber-50 ring-1 ring-amber-500 rounded-lg p-2.5 text-left">
-                            <p className="text-sm font-bold truncate leading-tight text-amber-800">Personnalise</p>
-                            <p className="text-[10px] text-amber-600 truncate mt-0.5">Configuration custom</p>
+                        <div className="border border-amber-500 bg-amber-50 ring-1 ring-amber-500 rounded-lg p-3 text-left">
+                            <div className="flex items-center gap-2 mb-1">
+                                <span className="w-3 h-3 rounded-full bg-amber-500" />
+                                <p className="text-sm font-semibold text-amber-800">Personnalise</p>
+                            </div>
+                            <p className="text-[10px] text-amber-600 leading-tight">Configuration custom</p>
                         </div>
                     )}
                 </div>
@@ -204,6 +200,20 @@ export default function WizardStepTypography({
             )}
         </div>
     );
+}
+
+function TypographyIndicator({ presetId }: { presetId: string }) {
+    const colors: Record<string, string> = {
+        moderne: 'bg-blue-400',
+        classique: 'bg-amber-700',
+        elegant: 'bg-rose-400',
+        minimaliste: 'bg-gray-400',
+        bold: 'bg-orange-500',
+        editorial: 'bg-slate-500',
+        tech: 'bg-cyan-500',
+        ludique: 'bg-green-400',
+    };
+    return <span className={`w-3 h-3 rounded-full shrink-0 ${colors[presetId] ?? 'bg-gray-300'}`} />;
 }
 
 function ScaleRow({ level, entry, onChange }: {

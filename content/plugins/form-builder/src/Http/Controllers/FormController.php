@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace FormBuilder\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use FormBuilder\Models\Form;
 use FormBuilder\Services\FormService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
 use Inertia\Inertia;
 use Inertia\Response as InertiaResponse;
 
@@ -23,6 +23,7 @@ class FormController extends Controller
      */
     public function index(): InertiaResponse
     {
+        abort_unless(auth()->user()?->hasPermission('forms.read'), 403);
         $forms = $this->formService->getAll();
 
         return Inertia::render('Admin/Forms/Index', [
@@ -35,6 +36,7 @@ class FormController extends Controller
      */
     public function create(): InertiaResponse
     {
+        abort_unless(auth()->user()?->hasPermission('forms.create'), 403);
         return Inertia::render('Admin/Forms/Create');
     }
 
@@ -43,6 +45,7 @@ class FormController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        abort_unless(auth()->user()?->hasPermission('forms.create'), 403);
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'fields' => ['required', 'array', 'min:1'],
@@ -73,6 +76,7 @@ class FormController extends Controller
      */
     public function edit(Form $form): InertiaResponse
     {
+        abort_unless(auth()->user()?->hasPermission('forms.update'), 403);
         $form->loadCount('submissions');
 
         return Inertia::render('Admin/Forms/Edit', [
@@ -85,6 +89,7 @@ class FormController extends Controller
      */
     public function update(Request $request, Form $form): RedirectResponse
     {
+        abort_unless(auth()->user()?->hasPermission('forms.update'), 403);
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'fields' => ['required', 'array', 'min:1'],
@@ -113,6 +118,7 @@ class FormController extends Controller
      */
     public function destroy(Form $form): RedirectResponse
     {
+        abort_unless(auth()->user()?->hasPermission('forms.delete'), 403);
         $this->formService->delete($form);
 
         return redirect()

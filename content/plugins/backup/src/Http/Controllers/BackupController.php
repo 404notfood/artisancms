@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Backup\Http\Controllers;
 
+use App\CMS\Facades\CMS;
+use App\Http\Controllers\Controller;
 use Backup\Models\Backup;
 use Backup\Services\BackupService;
 use Backup\Services\RestoreService;
@@ -13,7 +15,7 @@ use Inertia\Inertia;
 use Inertia\Response;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
-class BackupController
+class BackupController extends Controller
 {
     public function __construct(
         protected BackupService $backupService,
@@ -25,6 +27,8 @@ class BackupController
      */
     public function index(): Response
     {
+        abort_unless(auth()->user()?->isAdmin(), 403);
+
         $backups = Backup::with('creator')
             ->orderByDesc('created_at')
             ->paginate(20)
@@ -65,6 +69,8 @@ class BackupController
      */
     public function create(Request $request): RedirectResponse
     {
+        abort_unless(auth()->user()?->isAdmin(), 403);
+
         $validated = $request->validate([
             'type' => ['sometimes', 'string', 'in:full,database,media'],
         ]);
@@ -83,6 +89,8 @@ class BackupController
      */
     public function download(Backup $backup): BinaryFileResponse|RedirectResponse
     {
+        abort_unless(auth()->user()?->isAdmin(), 403);
+
         if (!$backup->isComplete()) {
             return redirect()
                 ->route('admin.backups.index')
@@ -103,6 +111,8 @@ class BackupController
      */
     public function restore(Backup $backup): RedirectResponse
     {
+        abort_unless(auth()->user()?->isAdmin(), 403);
+
         if (!$backup->isComplete()) {
             return redirect()
                 ->route('admin.backups.index')
@@ -127,6 +137,8 @@ class BackupController
      */
     public function destroy(Backup $backup): RedirectResponse
     {
+        abort_unless(auth()->user()?->isAdmin(), 403);
+
         $this->backupService->delete($backup);
 
         return redirect()

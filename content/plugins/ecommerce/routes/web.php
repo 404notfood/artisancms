@@ -138,7 +138,7 @@ Route::middleware(['web'])->group(function () {
     });
 });
 
-// Payment webhooks (public, no auth required)
+// Payment webhooks (public, no auth, no CSRF - signature verified by driver)
 Route::post('payment/webhook/{driver}', [PaymentController::class, 'webhook'])
-    ->middleware(['web'])
+    ->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class])
     ->name('payment.webhook');

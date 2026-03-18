@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Backup\Services;
 
+use App\CMS\Facades\CMS;
 use Backup\Models\Backup;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
@@ -86,6 +87,8 @@ class RestoreService
             Artisan::call('cache:clear');
             Artisan::call('config:clear');
             Artisan::call('view:clear');
+
+            CMS::fire('backup.restored', $backup);
 
             Log::info("Backup restored successfully: {$backup->filename}");
 

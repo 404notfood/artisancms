@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Ecommerce\Services;
 
+use App\CMS\Facades\CMS;
 use Ecommerce\Models\CartItem;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -36,12 +37,18 @@ class CartService
 
         if ($existing) {
             $existing->increment('quantity', (int) ($data['quantity'] ?? 1));
-            return $existing->fresh();
+            $item = $existing->fresh();
+            CMS::fire('ecommerce.cart.item_updated', $item);
+            return $item;
         }
 
-        return CartItem::create(array_merge($condition, [
+        $item = CartItem::create(array_merge($condition, [
             'quantity' => (int) ($data['quantity'] ?? 1),
         ]));
+
+        CMS::fire('ecommerce.cart.item_added', $item);
+
+        return $item;
     }
 
     /**
@@ -59,6 +66,7 @@ class CartService
      */
     public function removeItem(CartItem $cartItem): void
     {
+        CMS::fire('ecommerce.cart.item_removed', $cartItem);
         $cartItem->delete();
     }
 

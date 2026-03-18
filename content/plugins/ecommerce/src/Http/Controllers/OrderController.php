@@ -23,6 +23,7 @@ class OrderController extends Controller
      */
     public function index(Request $request): Response
     {
+        $this->authorize('viewAny', Order::class);
         $filters = $request->only(['status', 'search', 'per_page']);
 
         $orders = $this->orderService->all($filters);
@@ -38,6 +39,7 @@ class OrderController extends Controller
      */
     public function show(Order $order): Response
     {
+        $this->authorize('view', $order);
         $order->load(['items', 'user']);
 
         return Inertia::render('Admin/Ecommerce/Orders/Show', [
@@ -50,6 +52,7 @@ class OrderController extends Controller
      */
     public function updateStatus(Request $request, Order $order): RedirectResponse
     {
+        $this->authorize('update', $order);
         $validated = $request->validate([
             'status' => 'required|in:pending,processing,shipped,completed,cancelled,refunded',
             'tracking_number' => 'nullable|string|max:255',
