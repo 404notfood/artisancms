@@ -1,6 +1,6 @@
 import { Head, Link, usePage } from '@inertiajs/react';
 import type { MenuData, MenuItemData } from '@/types/cms';
-import { useMemo, useState, type ReactNode } from 'react';
+import { useMemo, useRef, useState, type ReactNode } from 'react';
 import { AnnouncementBar } from '@/Components/front/announcement-bar';
 import { AnimationConfigContext, type AnimationConfigMap } from '@/Components/front/block-renderer';
 
@@ -155,6 +155,18 @@ function buildCssVariables(customizations: Record<string, string | boolean>): Re
     return vars;
 }
 
+// ─── Menu tree builder ──────────────────────────────────────────────────────
+
+type MenuItemWithChildren = MenuItemData & { children: MenuItemData[] };
+
+function buildMenuTree(items: MenuItemData[]): MenuItemWithChildren[] {
+    const roots = items.filter((i) => !i.parent_id).sort((a, b) => a.order - b.order);
+    return roots.map((root) => ({
+        ...root,
+        children: items.filter((i) => i.parent_id === root.id).sort((a, b) => a.order - b.order),
+    }));
+}
+
 // ─── Nav Item ───────────────────────────────────────────────────────────────
 
 function NavItem({ item, style: styleVariant, textColor, accentColor }: {
@@ -182,8 +194,123 @@ function NavItem({ item, style: styleVariant, textColor, accentColor }: {
     };
 
     return isExternal
-        ? <a href={url} {...props}>{item.label}</a>
-        : <Link href={url} {...props}>{item.label}</Link>;
+        ? <a href={url} {...props}>
+            {item.label}
+            {item.badge_text && (
+                <span className="ml-1.5 inline-flex items-center rounded-full px-1.5 py-0.5 text-[10px] font-bold"
+                    style={{ backgroundColor: item.badge_color || accentColor || '#6366f1', color: '#fff' }}>
+                    {item.badge_text}
+                </span>
+            )}
+          </a>
+        : <Link href={url} {...props}>
+            {item.label}
+            {item.badge_text && (
+                <span className="ml-1.5 inline-flex items-center rounded-full px-1.5 py-0.5 text-[10px] font-bold"
+                    style={{ backgroundColor: item.badge_color || accentColor || '#6366f1', color: '#fff' }}>
+                    {item.badge_text}
+                </span>
+            )}
+          </Link>;
+}
+
+// ─── Nav Item with Dropdown (desktop hover, mobile accordion) ───────────────
+
+function NavItemWithDropdown({ item, children, style: styleVariant, textColor, accentColor, bgColor, isDark }: {
+    item: MenuItemData;
+    children: MenuItemData[];
+    style?: string;
+    textColor?: string;
+    accentColor?: string;
+    bgColor?: string;
+    isDark?: boolean;
+}) {
+    const [open, setOpen] = useState(false);
+    const timeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
+
+    const onMouseEnter = () => {
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        setOpen(true);
+    };
+    const onMouseLeave = () => {
+        timeoutRef.current = setTimeout(() => setOpen(false), 150);
+    };
+
+    const dropdownBg = isDark ? '#1e1e2e' : '#ffffff';
+    const dropdownBorder = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.06)';
+    const hoverBg = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.03)';
+
+    const navClassName = styleVariant === 'luxury'
+        ? `text-sm tracking-widest uppercase font-light transition-colors hover:text-[var(--color-primary)] ${item.css_class || ''}`
+        : styleVariant === 'dark'
+            ? `text-sm font-medium transition-all hover:text-[var(--color-primary)] hover:drop-shadow-[0_0_8px_var(--color-primary)] ${item.css_class || ''}`
+            : `text-sm font-medium transition-colors hover:text-[var(--color-primary)] ${item.css_class || ''}`;
+
+    return (
+        <div className="relative" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+            <button
+                type="button"
+                className={`${navClassName} inline-flex items-center gap-1`}
+                style={{ color: textColor }}
+            >
+                {item.label}
+                {item.badge_text && (
+                    <span className="ml-1 inline-flex items-center rounded-full px-1.5 py-0.5 text-[10px] font-bold"
+                        style={{ backgroundColor: item.badge_color || accentColor || '#6366f1', color: '#fff' }}>
+                        {item.badge_text}
+                    </span>
+                )}
+                <svg
+                    className={`h-3.5 w-3.5 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+                    fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor"
+                >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                </svg>
+            </button>
+
+            {open && (
+                <div
+                    className="absolute top-full left-0 mt-1 min-w-48 rounded-lg py-1 shadow-xl z-50"
+                    style={{
+                        backgroundColor: dropdownBg,
+                        border: `1px solid ${dropdownBorder}`,
+                    }}
+                >
+                    {children.map((child) => {
+                        const childUrl = getMenuItemUrl(child);
+                        const isExternal = childUrl.startsWith('http');
+                        const LinkComponent = isExternal ? 'a' : Link;
+                        const linkProps = isExternal
+                            ? { href: childUrl, target: child.target || '_self' }
+                            : { href: childUrl };
+
+                        return (
+                            <LinkComponent
+                                key={child.id}
+                                {...linkProps as any}
+                                className="block px-4 py-2 text-sm transition-colors"
+                                style={{ color: textColor }}
+                                onMouseEnter={(e: React.MouseEvent<HTMLElement>) => {
+                                    (e.currentTarget as HTMLElement).style.backgroundColor = hoverBg;
+                                }}
+                                onMouseLeave={(e: React.MouseEvent<HTMLElement>) => {
+                                    (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent';
+                                }}
+                            >
+                                {child.label}
+                                {child.badge_text && (
+                                    <span className="ml-1.5 inline-flex items-center rounded-full px-1.5 py-0.5 text-[10px] font-bold"
+                                        style={{ backgroundColor: child.badge_color || accentColor || '#6366f1', color: '#fff' }}>
+                                        {child.badge_text}
+                                    </span>
+                                )}
+                            </LinkComponent>
+                        );
+                    })}
+                </div>
+            )}
+        </div>
+    );
 }
 
 // ─── Header ─────────────────────────────────────────────────────────────────
@@ -279,7 +406,16 @@ function Header({ menu, customizations, brandingLogo }: {
         ctaBtnStyle.boxShadow = `0 0 20px ${primaryColor}40`;
     }
 
-    const navItems = menu?.items.filter((i) => !i.parent_id).sort((a, b) => a.order - b.order) ?? [];
+    const menuTree = buildMenuTree(menu?.items ?? []);
+    const [mobileExpanded, setMobileExpanded] = useState<Set<number>>(new Set());
+
+    const toggleMobileExpand = (id: number) => {
+        setMobileExpanded((prev) => {
+            const next = new Set(prev);
+            if (next.has(id)) next.delete(id); else next.add(id);
+            return next;
+        });
+    };
 
     return (
         <header className={headerClasses} style={headerStyleObj}>
@@ -325,17 +461,30 @@ function Header({ menu, customizations, brandingLogo }: {
 
                 {/* Desktop nav */}
                 <div className={`hidden flex-1 items-center gap-6 px-8 md:flex ${alignmentClass}`}>
-                    {navItems.length > 0 && (
+                    {menuTree.length > 0 && (
                         <nav className={`flex items-center ${isLuxury ? 'gap-8' : 'gap-6'}`}>
-                            {navItems.map((item) => (
-                                <NavItem
-                                    key={item.id}
-                                    item={item}
-                                    style={navStyle}
-                                    textColor={textColor}
-                                    accentColor={primaryColor}
-                                />
-                            ))}
+                            {menuTree.map((item) =>
+                                item.children.length > 0 ? (
+                                    <NavItemWithDropdown
+                                        key={item.id}
+                                        item={item}
+                                        children={item.children}
+                                        style={navStyle}
+                                        textColor={textColor}
+                                        accentColor={primaryColor}
+                                        bgColor={bgColor}
+                                        isDark={isDark}
+                                    />
+                                ) : (
+                                    <NavItem
+                                        key={item.id}
+                                        item={item}
+                                        style={navStyle}
+                                        textColor={textColor}
+                                        accentColor={primaryColor}
+                                    />
+                                ),
+                            )}
                         </nav>
                     )}
                 </div>
@@ -372,17 +521,63 @@ function Header({ menu, customizations, brandingLogo }: {
                     borderColor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)',
                 }}>
                     <nav className="container flex flex-col py-4 gap-1">
-                        {navItems.map((item) => (
-                            <Link
-                                key={item.id}
-                                href={getMenuItemUrl(item)}
-                                className="px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-black/5"
-                                style={{ color: textColor }}
-                                onClick={() => setMobileOpen(false)}
-                            >
-                                {item.label}
-                            </Link>
-                        ))}
+                        {menuTree.map((item) =>
+                            item.children.length > 0 ? (
+                                <div key={item.id}>
+                                    <button
+                                        type="button"
+                                        className="flex w-full items-center justify-between px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-black/5"
+                                        style={{ color: textColor }}
+                                        onClick={() => toggleMobileExpand(item.id)}
+                                    >
+                                        <span>{item.label}</span>
+                                        <svg
+                                            className={`h-4 w-4 transition-transform duration-200 ${mobileExpanded.has(item.id) ? 'rotate-180' : ''}`}
+                                            fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor"
+                                        >
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                        </svg>
+                                    </button>
+                                    {mobileExpanded.has(item.id) && (
+                                        <div className="pl-4">
+                                            {item.children.map((child) => (
+                                                <Link
+                                                    key={child.id}
+                                                    href={getMenuItemUrl(child)}
+                                                    className="block px-3 py-2 rounded-md text-sm transition-colors hover:bg-black/5"
+                                                    style={{ color: textColor, opacity: 0.8 }}
+                                                    onClick={() => setMobileOpen(false)}
+                                                >
+                                                    {child.label}
+                                                    {child.badge_text && (
+                                                        <span className="ml-1.5 inline-flex items-center rounded-full px-1.5 py-0.5 text-[10px] font-bold"
+                                                            style={{ backgroundColor: child.badge_color || primaryColor, color: '#fff' }}>
+                                                            {child.badge_text}
+                                                        </span>
+                                                    )}
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            ) : (
+                                <Link
+                                    key={item.id}
+                                    href={getMenuItemUrl(item)}
+                                    className="px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-black/5"
+                                    style={{ color: textColor }}
+                                    onClick={() => setMobileOpen(false)}
+                                >
+                                    {item.label}
+                                    {item.badge_text && (
+                                        <span className="ml-1.5 inline-flex items-center rounded-full px-1.5 py-0.5 text-[10px] font-bold"
+                                            style={{ backgroundColor: item.badge_color || primaryColor, color: '#fff' }}>
+                                            {item.badge_text}
+                                        </span>
+                                    )}
+                                </Link>
+                            ),
+                        )}
                         {ctaText && ctaUrl && (
                             <Link href={ctaUrl} className="mt-3 inline-flex items-center justify-center" style={ctaBtnStyle}>
                                 {ctaText}
@@ -448,8 +643,26 @@ function Footer({ menu, customizations }: { menu?: MenuData; customizations: Rec
         ? `1px solid rgba(255,255,255,0.06)`
         : `1px solid rgba(0,0,0,0.06)`;
 
-    const navItems = menu?.items.filter((i) => !i.parent_id).sort((a, b) => a.order - b.order) ?? [];
+    const menuTree = buildMenuTree(menu?.items ?? []);
     const socialPlatforms = ['facebook', 'twitter', 'instagram', 'linkedin', 'github', 'youtube'];
+
+    // Footer nav renderer — shows sub-items in column under parent
+    const FooterNav = ({ items, style: s, gap }: { items: MenuItemWithChildren[]; style?: string; gap?: string }) => (
+        <nav className={`flex flex-wrap justify-center ${gap || 'gap-8'} mb-10`}>
+            {items.map((item) => (
+                <div key={item.id} className="text-center">
+                    <NavItem item={item} style={s} textColor={textColor} accentColor={accentColor} />
+                    {item.children.length > 0 && (
+                        <div className="mt-2 flex flex-col gap-1">
+                            {item.children.map((child) => (
+                                <NavItem key={child.id} item={child} style={s} textColor={textColor} accentColor={accentColor} />
+                            ))}
+                        </div>
+                    )}
+                </div>
+            ))}
+        </nav>
+    );
 
     // Luxury footer — columns with accent titles
     if (isLuxury) {
@@ -462,13 +675,7 @@ function Footer({ menu, customizations }: { menu?: MenuData; customizations: Rec
                         </p>
                     )}
 
-                    {navItems.length > 0 && (
-                        <nav className="flex flex-wrap justify-center gap-8 mb-10">
-                            {navItems.map((item) => (
-                                <NavItem key={item.id} item={item} style="luxury" textColor={textColor} accentColor={accentColor} />
-                            ))}
-                        </nav>
-                    )}
+                    {menuTree.length > 0 && <FooterNav items={menuTree} style="luxury" />}
 
                     {/* Gold divider */}
                     <div style={{ height: '1px', background: `linear-gradient(90deg, transparent, ${accentColor}60, transparent)`, margin: '0 auto 2rem', maxWidth: '200px' }} />
@@ -515,11 +722,20 @@ function Footer({ menu, customizations }: { menu?: MenuData; customizations: Rec
                             )}
                         </div>
 
-                        {/* Nav */}
-                        {navItems.length > 0 && (
+                        {/* Nav with sub-items */}
+                        {menuTree.length > 0 && (
                             <nav className="flex flex-wrap gap-6">
-                                {navItems.map((item) => (
-                                    <NavItem key={item.id} item={item} style="dark" textColor={textColor} accentColor={accentColor} />
+                                {menuTree.map((item) => (
+                                    <div key={item.id}>
+                                        <NavItem item={item} style="dark" textColor={textColor} accentColor={accentColor} />
+                                        {item.children.length > 0 && (
+                                            <div className="mt-1.5 flex flex-col gap-0.5">
+                                                {item.children.map((child) => (
+                                                    <NavItem key={child.id} item={child} style="dark" textColor={textColor} accentColor={accentColor} />
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
                                 ))}
                             </nav>
                         )}
@@ -556,10 +772,19 @@ function Footer({ menu, customizations }: { menu?: MenuData; customizations: Rec
                     </p>
                 )}
 
-                {navItems.length > 0 && (
+                {menuTree.length > 0 && (
                     <nav className="mb-6 flex flex-wrap justify-center gap-6">
-                        {navItems.map((item) => (
-                            <NavItem key={item.id} item={item} textColor={textColor} />
+                        {menuTree.map((item) => (
+                            <div key={item.id} className="text-center">
+                                <NavItem item={item} textColor={textColor} />
+                                {item.children.length > 0 && (
+                                    <div className="mt-1.5 flex flex-col gap-0.5">
+                                        {item.children.map((child) => (
+                                            <NavItem key={child.id} item={child} textColor={textColor} />
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
                         ))}
                     </nav>
                 )}

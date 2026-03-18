@@ -32,6 +32,17 @@ import {
     AlertCircle,
     AlertTriangle,
     Info,
+    MessageSquare,
+    ClipboardList,
+    Mail,
+    HardDrive,
+    Sparkles,
+    Truck,
+    Receipt,
+    Star,
+    Warehouse,
+    BarChart3,
+    ChevronDown,
     type LucideIcon,
 } from 'lucide-react';
 
@@ -48,23 +59,22 @@ interface NavItem {
     label: string;
     href: string;
     icon: LucideIcon;
+    badgeKey?: string;
+    requiresPlugin?: string;
+    children?: NavItem[];
 }
 
 interface NavGroup {
     title: string;
     items: NavItem[];
+    requiresPlugin?: string;
 }
 
 // ---------------------------------------------------------------------------
 // Navigation config
 // ---------------------------------------------------------------------------
 
-interface NavGroupDef extends NavGroup {
-    /** If set, this group is only visible when the given plugin slug is enabled */
-    requiresPlugin?: string;
-}
-
-const navigationDefs: NavGroupDef[] = [
+const navigationDefs: NavGroup[] = [
     {
         title: 'Contenu',
         items: [
@@ -72,6 +82,7 @@ const navigationDefs: NavGroupDef[] = [
             { label: 'Pages', href: '/admin/pages', icon: FileText },
             { label: 'Articles', href: '/admin/posts', icon: Newspaper },
             { label: 'Medias', href: '/admin/media', icon: Image },
+            { label: 'Commentaires', href: '/admin/comments', icon: MessageSquare, badgeKey: 'unread_comments' },
         ],
     },
     {
@@ -88,9 +99,24 @@ const navigationDefs: NavGroupDef[] = [
         requiresPlugin: 'ecommerce',
         items: [
             { label: 'Produits', href: '/admin/shop/products', icon: Package },
-            { label: 'Commandes', href: '/admin/shop/orders', icon: ShoppingCart },
+            { label: 'Commandes', href: '/admin/shop/orders', icon: ShoppingCart, badgeKey: 'pending_orders' },
             { label: 'Coupons', href: '/admin/shop/coupons', icon: Ticket },
             { label: 'Categories', href: '/admin/shop/categories', icon: FolderTree },
+            { label: 'Livraison', href: '/admin/shop/shipping', icon: Truck },
+            { label: 'Taxes', href: '/admin/shop/tax', icon: Receipt },
+            { label: 'Stock', href: '/admin/shop/stock', icon: Warehouse },
+            { label: 'Avis', href: '/admin/shop/reviews', icon: Star },
+            { label: 'Rapports', href: '/admin/shop/reports', icon: BarChart3 },
+            { label: 'Parametres', href: '/admin/shop/settings', icon: Settings },
+        ],
+    },
+    {
+        title: 'Outils',
+        items: [
+            { label: 'Formulaires', href: '/admin/forms', icon: ClipboardList, requiresPlugin: 'form-builder', badgeKey: 'new_forms' },
+            { label: 'Contact', href: '/admin/plugins/contact-form/submissions', icon: Mail, requiresPlugin: 'contact-form', badgeKey: 'new_contacts' },
+            { label: 'Sauvegardes', href: '/admin/backups', icon: HardDrive, requiresPlugin: 'backup' },
+            { label: 'Assistant IA', href: '/admin/ai/settings', icon: Sparkles, requiresPlugin: 'ai-assistant' },
         ],
     },
     {
@@ -111,12 +137,13 @@ const navigationDefs: NavGroupDef[] = [
 ];
 
 function getNavigation(enabledPlugins: string[]): NavGroup[] {
-    return navigationDefs.filter((group) => {
-        if (group.requiresPlugin) {
-            return enabledPlugins.includes(group.requiresPlugin);
-        }
-        return true;
-    });
+    return navigationDefs
+        .filter((group) => !group.requiresPlugin || enabledPlugins.includes(group.requiresPlugin))
+        .map((group) => ({
+            ...group,
+            items: group.items.filter((item) => !item.requiresPlugin || enabledPlugins.includes(item.requiresPlugin)),
+        }))
+        .filter((group) => group.items.length > 0);
 }
 
 // ---------------------------------------------------------------------------
@@ -226,12 +253,78 @@ function SidebarNavItem({
     item,
     active,
     collapsed,
+    badge,
+    expanded,
+    onToggleExpand,
+    currentUrl,
+    badges,
 }: {
     item: NavItem;
     active: boolean;
     collapsed: boolean;
+    badge?: number;
+    expanded?: boolean;
+    onToggleExpand?: () => void;
+    currentUrl?: string;
+    badges?: Record<string, number>;
 }) {
     const Icon = item.icon;
+    const hasChildren = item.children && item.children.length > 0;
+
+    // Item with children (accordion)
+    if (hasChildren && !collapsed) {
+        return (
+            <div>
+                <button
+                    type="button"
+                    onClick={onToggleExpand}
+                    className={cn(
+                        'group relative flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-150',
+                        active
+                            ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/20'
+                            : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200',
+                    )}
+                >
+                    <Icon className={cn('h-5 w-5 shrink-0', active ? 'text-white' : 'text-slate-500 group-hover:text-slate-300')} />
+                    <span className="flex-1 truncate text-left">{item.label}</span>
+                    {badge != null && badge > 0 && (
+                        <span className="flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-indigo-500 px-1 text-[10px] font-bold text-white">
+                            {badge > 99 ? '99+' : badge}
+                        </span>
+                    )}
+                    <ChevronDown className={cn('h-4 w-4 shrink-0 transition-transform duration-200', expanded && 'rotate-180')} />
+                </button>
+                {expanded && (
+                    <div className="mt-0.5 space-y-0.5">
+                        {item.children!.map((child) => {
+                            const childActive = currentUrl ? isActive(child.href, currentUrl) : false;
+                            const childBadge = child.badgeKey && badges ? badges[child.badgeKey] : undefined;
+                            return (
+                                <Link
+                                    key={child.href}
+                                    href={child.href}
+                                    className={cn(
+                                        'group relative flex items-center gap-2.5 rounded-lg pl-9 pr-3 py-1.5 text-sm transition-all duration-150',
+                                        childActive
+                                            ? 'bg-indigo-600/70 text-white'
+                                            : 'text-slate-500 hover:bg-slate-800 hover:text-slate-300',
+                                    )}
+                                >
+                                    <child.icon className={cn('h-4 w-4 shrink-0', childActive ? 'text-white' : 'text-slate-600 group-hover:text-slate-400')} />
+                                    <span className="flex-1 truncate">{child.label}</span>
+                                    {childBadge != null && childBadge > 0 && (
+                                        <span className="flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-indigo-500 px-1 text-[10px] font-bold text-white">
+                                            {childBadge > 99 ? '99+' : childBadge}
+                                        </span>
+                                    )}
+                                </Link>
+                            );
+                        })}
+                    </div>
+                )}
+            </div>
+        );
+    }
 
     return (
         <Link
@@ -245,10 +338,24 @@ function SidebarNavItem({
             )}
         >
             <Icon className={cn('h-5 w-5 shrink-0', active ? 'text-white' : 'text-slate-500 group-hover:text-slate-300')} />
-            {!collapsed && <span className="truncate">{item.label}</span>}
+            {!collapsed && (
+                <>
+                    <span className="flex-1 truncate">{item.label}</span>
+                    {badge != null && badge > 0 && (
+                        <span className="flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-indigo-500 px-1 text-[10px] font-bold text-white">
+                            {badge > 99 ? '99+' : badge}
+                        </span>
+                    )}
+                </>
+            )}
             {collapsed && (
                 <span className="pointer-events-none absolute left-full ml-3 rounded-md bg-slate-800 px-2.5 py-1.5 text-xs font-medium text-slate-200 opacity-0 shadow-lg transition-opacity group-hover:opacity-100 whitespace-nowrap z-50 border border-slate-700">
                     {item.label}
+                    {badge != null && badge > 0 && (
+                        <span className="ml-1.5 inline-flex h-[16px] min-w-[16px] items-center justify-center rounded-full bg-indigo-500 px-1 text-[9px] font-bold text-white">
+                            {badge > 99 ? '99+' : badge}
+                        </span>
+                    )}
                 </span>
             )}
         </Link>
@@ -301,19 +408,48 @@ function formatTimeAgo(dateString: string): string {
 }
 
 export default function AdminLayout({ header, children }: AdminLayoutProps) {
-    const { auth, flash, cms, notifications_count } = usePage<SharedProps>().props;
+    const { auth, flash, cms, notifications_count, sidebar_badges } = usePage<SharedProps>().props;
     const currentUrl = usePage().url;
 
     const enabledPlugins = cms?.enabledPlugins ?? [];
     const navigation = getNavigation(enabledPlugins);
+    const badges = (sidebar_badges as Record<string, number>) ?? {};
 
     const [collapsed, setCollapsed] = useState(getInitialCollapsed);
     const [mobileOpen, setMobileOpen] = useState(false);
     const [notifOpen, setNotifOpen] = useState(false);
     const [notifications, setNotifications] = useState<NotificationItem[]>([]);
     const [notifLoading, setNotifLoading] = useState(false);
+    const [expandedItems, setExpandedItems] = useState<Set<string>>(() => {
+        // Auto-expand groups that have an active child
+        const expanded = new Set<string>();
+        for (const group of navigationDefs) {
+            for (const item of group.items) {
+                if (item.children) {
+                    for (const child of item.children) {
+                        if (isActive(child.href, currentUrl)) {
+                            expanded.add(item.label);
+                        }
+                    }
+                }
+            }
+        }
+        return expanded;
+    });
     const notifRef = useRef<HTMLDivElement>(null);
     const unreadCount = (notifications_count as number) ?? 0;
+
+    const toggleExpand = useCallback((label: string) => {
+        setExpandedItems((prev) => {
+            const next = new Set(prev);
+            if (next.has(label)) {
+                next.delete(label);
+            } else {
+                next.add(label);
+            }
+            return next;
+        });
+    }, []);
 
     // Close notifications dropdown on click outside
     useEffect(() => {
@@ -448,14 +584,25 @@ export default function AdminLayout({ header, children }: AdminLayoutProps) {
                         )}
                         {collapsed && <div className="mb-1 mx-auto h-px w-6 bg-slate-800" />}
                         <div className="space-y-0.5">
-                            {group.items.map((item) => (
-                                <SidebarNavItem
-                                    key={item.href}
-                                    item={item}
-                                    active={isActive(item.href, currentUrl)}
-                                    collapsed={collapsed}
-                                />
-                            ))}
+                            {group.items.map((item) => {
+                                const itemActive = item.children
+                                    ? item.children.some((c) => isActive(c.href, currentUrl))
+                                    : isActive(item.href, currentUrl);
+                                const badge = item.badgeKey ? badges[item.badgeKey] : undefined;
+                                return (
+                                    <SidebarNavItem
+                                        key={item.href}
+                                        item={item}
+                                        active={itemActive}
+                                        collapsed={collapsed}
+                                        badge={badge}
+                                        expanded={expandedItems.has(item.label)}
+                                        onToggleExpand={() => toggleExpand(item.label)}
+                                        currentUrl={currentUrl}
+                                        badges={badges}
+                                    />
+                                );
+                            })}
                         </div>
                     </div>
                 ))}

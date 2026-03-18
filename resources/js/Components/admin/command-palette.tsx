@@ -19,6 +19,18 @@ import {
     BarChart3,
     Globe,
     ArrowRight,
+    ClipboardList,
+    Mail,
+    HardDrive,
+    Sparkles,
+    Truck,
+    Receipt,
+    Star,
+    Warehouse,
+    Package,
+    ShoppingCart,
+    Ticket,
+    FolderTree,
     type LucideIcon,
 } from 'lucide-react';
 
@@ -53,6 +65,24 @@ const COMMANDS: CommandItem[] = [
     { id: 'style-book', label: 'Style Book', description: 'Design Tokens', icon: Palette, href: '/admin/design-tokens', category: 'Apparence', keywords: ['token', 'couleur', 'style'] },
     { id: 'plugins', label: 'Plugins', icon: Puzzle, href: '/admin/plugins', category: 'Apparence', keywords: ['extension'] },
     { id: 'templates', label: 'Templates', icon: LayoutTemplate, href: '/admin/templates', category: 'Apparence' },
+
+    // Boutique
+    { id: 'shop-products', label: 'Produits', icon: Package, href: '/admin/shop/products', category: 'Boutique', keywords: ['product', 'produit'] },
+    { id: 'shop-orders', label: 'Commandes', icon: ShoppingCart, href: '/admin/shop/orders', category: 'Boutique', keywords: ['order', 'commande'] },
+    { id: 'shop-coupons', label: 'Coupons', icon: Ticket, href: '/admin/shop/coupons', category: 'Boutique', keywords: ['coupon', 'promo', 'reduction'] },
+    { id: 'shop-categories', label: 'Categories boutique', icon: FolderTree, href: '/admin/shop/categories', category: 'Boutique', keywords: ['categorie'] },
+    { id: 'shop-shipping', label: 'Livraison', icon: Truck, href: '/admin/shop/shipping', category: 'Boutique', keywords: ['shipping', 'expedition'] },
+    { id: 'shop-tax', label: 'Taxes', icon: Receipt, href: '/admin/shop/tax', category: 'Boutique', keywords: ['tva', 'taxe'] },
+    { id: 'shop-stock', label: 'Stock', icon: Warehouse, href: '/admin/shop/stock', category: 'Boutique', keywords: ['inventaire'] },
+    { id: 'shop-reviews', label: 'Avis clients', icon: Star, href: '/admin/shop/reviews', category: 'Boutique', keywords: ['review', 'avis'] },
+    { id: 'shop-reports', label: 'Rapports ventes', icon: BarChart3, href: '/admin/shop/reports', category: 'Boutique', keywords: ['stats', 'ventes', 'rapport'] },
+    { id: 'shop-settings', label: 'Parametres boutique', icon: Settings, href: '/admin/shop/settings', category: 'Boutique', keywords: ['shop', 'config'] },
+
+    // Outils
+    { id: 'forms', label: 'Formulaires', icon: ClipboardList, href: '/admin/forms', category: 'Outils', keywords: ['form', 'formulaire', 'soumission'] },
+    { id: 'contact', label: 'Messages contact', icon: Mail, href: '/admin/plugins/contact-form/submissions', category: 'Outils', keywords: ['contact', 'message'] },
+    { id: 'backups', label: 'Sauvegardes', icon: HardDrive, href: '/admin/backups', category: 'Outils', keywords: ['backup', 'restore', 'sauvegarde'] },
+    { id: 'ai-settings', label: 'Assistant IA', icon: Sparkles, href: '/admin/ai/settings', category: 'Outils', keywords: ['ia', 'ai', 'openai', 'anthropic'] },
 
     // System
     { id: 'settings', label: 'Parametres', icon: Settings, href: '/admin/settings', category: 'Systeme', keywords: ['config'] },

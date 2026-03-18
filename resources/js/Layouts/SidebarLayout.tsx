@@ -108,6 +108,18 @@ function SocialIcon({ platform, url, color }: { platform: string; url: string; c
     );
 }
 
+// ─── Menu tree builder ──────────────────────────────────────────────────────
+
+type MenuItemWithChildren = MenuItemData & { children: MenuItemData[] };
+
+function buildMenuTree(items: MenuItemData[]): MenuItemWithChildren[] {
+    const roots = items.filter((i) => !i.parent_id).sort((a, b) => a.order - b.order);
+    return roots.map((root) => ({
+        ...root,
+        children: items.filter((i) => i.parent_id === root.id).sort((a, b) => a.order - b.order),
+    }));
+}
+
 // ─── Sidebar ─────────────────────────────────────────────────────────────────
 
 function Sidebar({ menu, customizations, siteName, favicon }: {
@@ -118,6 +130,7 @@ function Sidebar({ menu, customizations, siteName, favicon }: {
 }) {
     const [mobileOpen, setMobileOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const [expandedItems, setExpandedItems] = useState<Set<number>>(new Set());
     const isDesktop = useIsDesktop();
 
     const sidebarBg = c(customizations, 'sidebar.background_color', '#080808');
@@ -141,10 +154,20 @@ function Sidebar({ menu, customizations, siteName, favicon }: {
         return () => el.removeEventListener('scroll', handler);
     }, []);
 
-    const navItems = menu?.items.filter((i) => !i.parent_id).sort((a, b) => a.order - b.order) ?? [];
+    const menuTree = buildMenuTree(menu?.items ?? []);
     const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
 
+    const toggleExpand = (id: number) => {
+        setExpandedItems((prev) => {
+            const next = new Set(prev);
+            if (next.has(id)) next.delete(id); else next.add(id);
+            return next;
+        });
+    };
+
     const socialPlatforms = ['twitter', 'instagram', 'linkedin', 'github', 'dribbble'];
+
+    const getItemHref = (item: MenuItemData) => item.url || (item.type === 'page' ? `/${item.label.toLowerCase()}` : '#');
 
     const sidebarContent = (
         <div style={{
@@ -201,49 +224,174 @@ function Sidebar({ menu, customizations, siteName, favicon }: {
 
             {/* Navigation */}
             <nav style={{ flex: 1, padding: '20px 16px', overflowY: 'auto' }}>
-                {navItems.length > 0 && (
+                {menuTree.length > 0 && (
                     <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 2 }}>
-                        {navItems.map((item) => {
-                            const href = item.url || (item.type === 'page' ? `/${item.label.toLowerCase()}` : '#');
-                            const isActive = currentPath === href || currentPath.startsWith(href + '/');
+                        {menuTree.map((item) => {
+                            const href = getItemHref(item);
+                            const hasChildren = item.children.length > 0;
+                            const isItemActive = hasChildren
+                                ? item.children.some((ch) => { const h = getItemHref(ch); return currentPath === h || currentPath.startsWith(h + '/'); })
+                                : (currentPath === href || currentPath.startsWith(href + '/'));
+                            const isExpanded = expandedItems.has(item.id);
+
                             return (
                                 <li key={item.id}>
-                                    <Link
-                                        href={href}
-                                        style={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            gap: 10,
-                                            padding: '9px 12px',
-                                            borderRadius: 8,
-                                            fontSize: '0.875rem',
-                                            fontWeight: isActive ? 600 : 400,
-                                            color: isActive ? activeColor : textColor,
-                                            textDecoration: 'none',
-                                            backgroundColor: isActive ? 'rgba(255,255,255,0.06)' : 'transparent',
-                                            transition: 'all 0.15s ease',
-                                            position: 'relative',
-                                        }}
-                                        onMouseEnter={(e) => {
-                                            if (!isActive) (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.04)';
-                                            if (!isActive) (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.85)';
-                                        }}
-                                        onMouseLeave={(e) => {
-                                            if (!isActive) (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent';
-                                            if (!isActive) (e.currentTarget as HTMLElement).style.color = textColor;
-                                        }}
-                                    >
-                                        {isActive && (
-                                            <span style={{
-                                                position: 'absolute',
-                                                left: 0, top: '50%', transform: 'translateY(-50%)',
-                                                width: 3, height: '60%',
-                                                backgroundColor: primaryColor,
-                                                borderRadius: '0 2px 2px 0',
-                                            }} />
-                                        )}
-                                        <span style={{ paddingLeft: isActive ? 4 : 0 }}>{item.label}</span>
-                                    </Link>
+                                    {hasChildren ? (
+                                        <>
+                                            <button
+                                                type="button"
+                                                onClick={() => toggleExpand(item.id)}
+                                                style={{
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    width: '100%',
+                                                    gap: 10,
+                                                    padding: '9px 12px',
+                                                    borderRadius: 8,
+                                                    fontSize: '0.875rem',
+                                                    fontWeight: isItemActive ? 600 : 400,
+                                                    color: isItemActive ? activeColor : textColor,
+                                                    textDecoration: 'none',
+                                                    backgroundColor: isItemActive ? 'rgba(255,255,255,0.06)' : 'transparent',
+                                                    transition: 'all 0.15s ease',
+                                                    position: 'relative',
+                                                    border: 'none',
+                                                    cursor: 'pointer',
+                                                    textAlign: 'left',
+                                                }}
+                                            >
+                                                {isItemActive && (
+                                                    <span style={{
+                                                        position: 'absolute',
+                                                        left: 0, top: '50%', transform: 'translateY(-50%)',
+                                                        width: 3, height: '60%',
+                                                        backgroundColor: primaryColor,
+                                                        borderRadius: '0 2px 2px 0',
+                                                    }} />
+                                                )}
+                                                <span style={{ flex: 1, paddingLeft: isItemActive ? 4 : 0 }}>
+                                                    {item.label}
+                                                    {item.badge_text && (
+                                                        <span style={{
+                                                            marginLeft: 6,
+                                                            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                                                            padding: '1px 6px', borderRadius: 999,
+                                                            backgroundColor: item.badge_color || primaryColor,
+                                                            color: '#fff', fontSize: '0.625rem', fontWeight: 700,
+                                                        }}>
+                                                            {item.badge_text}
+                                                        </span>
+                                                    )}
+                                                </span>
+                                                <svg
+                                                    width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                                    stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                                                    style={{ transition: 'transform 0.2s', transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)', opacity: 0.5 }}
+                                                >
+                                                    <path d="M6 9l6 6 6-6" />
+                                                </svg>
+                                            </button>
+                                            {isExpanded && (
+                                                <ul style={{ listStyle: 'none', margin: '2px 0 0', padding: '0 0 0 24px', display: 'flex', flexDirection: 'column', gap: 1 }}>
+                                                    {item.children.map((child) => {
+                                                        const childHref = getItemHref(child);
+                                                        const childActive = currentPath === childHref || currentPath.startsWith(childHref + '/');
+                                                        return (
+                                                            <li key={child.id}>
+                                                                <Link
+                                                                    href={childHref}
+                                                                    style={{
+                                                                        display: 'flex',
+                                                                        alignItems: 'center',
+                                                                        padding: '7px 10px',
+                                                                        borderRadius: 6,
+                                                                        fontSize: '0.8125rem',
+                                                                        fontWeight: childActive ? 500 : 400,
+                                                                        color: childActive ? activeColor : textColor,
+                                                                        textDecoration: 'none',
+                                                                        opacity: childActive ? 1 : 0.75,
+                                                                        backgroundColor: childActive ? 'rgba(255,255,255,0.04)' : 'transparent',
+                                                                        transition: 'all 0.15s ease',
+                                                                    }}
+                                                                    onMouseEnter={(e) => {
+                                                                        if (!childActive) (e.currentTarget as HTMLElement).style.opacity = '1';
+                                                                        if (!childActive) (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.03)';
+                                                                    }}
+                                                                    onMouseLeave={(e) => {
+                                                                        if (!childActive) (e.currentTarget as HTMLElement).style.opacity = '0.75';
+                                                                        if (!childActive) (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent';
+                                                                    }}
+                                                                >
+                                                                    {child.label}
+                                                                    {child.badge_text && (
+                                                                        <span style={{
+                                                                            marginLeft: 6,
+                                                                            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                                                                            padding: '1px 5px', borderRadius: 999,
+                                                                            backgroundColor: child.badge_color || primaryColor,
+                                                                            color: '#fff', fontSize: '0.6rem', fontWeight: 700,
+                                                                        }}>
+                                                                            {child.badge_text}
+                                                                        </span>
+                                                                    )}
+                                                                </Link>
+                                                            </li>
+                                                        );
+                                                    })}
+                                                </ul>
+                                            )}
+                                        </>
+                                    ) : (
+                                        <Link
+                                            href={href}
+                                            style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: 10,
+                                                padding: '9px 12px',
+                                                borderRadius: 8,
+                                                fontSize: '0.875rem',
+                                                fontWeight: isItemActive ? 600 : 400,
+                                                color: isItemActive ? activeColor : textColor,
+                                                textDecoration: 'none',
+                                                backgroundColor: isItemActive ? 'rgba(255,255,255,0.06)' : 'transparent',
+                                                transition: 'all 0.15s ease',
+                                                position: 'relative',
+                                            }}
+                                            onMouseEnter={(e) => {
+                                                if (!isItemActive) (e.currentTarget as HTMLElement).style.backgroundColor = 'rgba(255,255,255,0.04)';
+                                                if (!isItemActive) (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.85)';
+                                            }}
+                                            onMouseLeave={(e) => {
+                                                if (!isItemActive) (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent';
+                                                if (!isItemActive) (e.currentTarget as HTMLElement).style.color = textColor;
+                                            }}
+                                        >
+                                            {isItemActive && (
+                                                <span style={{
+                                                    position: 'absolute',
+                                                    left: 0, top: '50%', transform: 'translateY(-50%)',
+                                                    width: 3, height: '60%',
+                                                    backgroundColor: primaryColor,
+                                                    borderRadius: '0 2px 2px 0',
+                                                }} />
+                                            )}
+                                            <span style={{ paddingLeft: isItemActive ? 4 : 0 }}>
+                                                {item.label}
+                                                {item.badge_text && (
+                                                    <span style={{
+                                                        marginLeft: 6,
+                                                        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                                                        padding: '1px 6px', borderRadius: 999,
+                                                        backgroundColor: item.badge_color || primaryColor,
+                                                        color: '#fff', fontSize: '0.625rem', fontWeight: 700,
+                                                    }}>
+                                                        {item.badge_text}
+                                                    </span>
+                                                )}
+                                            </span>
+                                        </Link>
+                                    )}
                                 </li>
                             );
                         })}
@@ -371,21 +519,89 @@ function Sidebar({ menu, customizations, siteName, favicon }: {
                         }
                     `}</style>
                     <nav style={{ flex: 1, padding: '16px 12px' }}>
-                        {navItems.map((item) => {
-                            const href = item.url || '#';
+                        {menuTree.map((item) => {
+                            const href = getItemHref(item);
+                            const hasChildren = item.children.length > 0;
                             return (
-                                <Link
-                                    key={item.id}
-                                    href={href}
-                                    style={{
-                                        display: 'block', padding: '11px 14px', borderRadius: 8,
-                                        fontSize: '0.9375rem', fontWeight: 500, color: textColor,
-                                        textDecoration: 'none', marginBottom: 2,
-                                    }}
-                                    onClick={() => setMobileOpen(false)}
-                                >
-                                    {item.label}
-                                </Link>
+                                <div key={item.id}>
+                                    {hasChildren ? (
+                                        <>
+                                            <button
+                                                type="button"
+                                                onClick={() => toggleExpand(item.id)}
+                                                style={{
+                                                    display: 'flex', alignItems: 'center', width: '100%',
+                                                    justifyContent: 'space-between',
+                                                    padding: '11px 14px', borderRadius: 8,
+                                                    fontSize: '0.9375rem', fontWeight: 500, color: textColor,
+                                                    border: 'none', background: 'transparent', cursor: 'pointer',
+                                                    textAlign: 'left', marginBottom: 2,
+                                                }}
+                                            >
+                                                <span>{item.label}</span>
+                                                <svg
+                                                    width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                                    stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                                                    style={{ transition: 'transform 0.2s', transform: expandedItems.has(item.id) ? 'rotate(180deg)' : 'rotate(0deg)', opacity: 0.5 }}
+                                                >
+                                                    <path d="M6 9l6 6 6-6" />
+                                                </svg>
+                                            </button>
+                                            {expandedItems.has(item.id) && (
+                                                <div style={{ paddingLeft: 16, marginBottom: 4 }}>
+                                                    {item.children.map((child) => (
+                                                        <Link
+                                                            key={child.id}
+                                                            href={getItemHref(child)}
+                                                            style={{
+                                                                display: 'block', padding: '9px 14px', borderRadius: 8,
+                                                                fontSize: '0.875rem', fontWeight: 400, color: textColor,
+                                                                textDecoration: 'none', marginBottom: 1, opacity: 0.8,
+                                                            }}
+                                                            onClick={() => setMobileOpen(false)}
+                                                        >
+                                                            {child.label}
+                                                            {child.badge_text && (
+                                                                <span style={{
+                                                                    marginLeft: 6,
+                                                                    display: 'inline-flex', alignItems: 'center',
+                                                                    padding: '1px 5px', borderRadius: 999,
+                                                                    backgroundColor: child.badge_color || primaryColor,
+                                                                    color: '#fff', fontSize: '0.6rem', fontWeight: 700,
+                                                                }}>
+                                                                    {child.badge_text}
+                                                                </span>
+                                                            )}
+                                                        </Link>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </>
+                                    ) : (
+                                        <Link
+                                            href={href}
+                                            style={{
+                                                display: 'block', padding: '11px 14px', borderRadius: 8,
+                                                fontSize: '0.9375rem', fontWeight: 500, color: textColor,
+                                                textDecoration: 'none', marginBottom: 2,
+                                            }}
+                                            onClick={() => setMobileOpen(false)}
+                                        >
+                                            {item.label}
+                                            {item.badge_text && (
+                                                <span style={{
+                                                    marginLeft: 6,
+                                                    display: 'inline-flex', alignItems: 'center',
+                                                    padding: '1px 6px', borderRadius: 999,
+                                                    backgroundColor: item.badge_color || primaryColor,
+                                                    color: '#fff', fontSize: '0.625rem', fontWeight: 700,
+                                                }}>
+                                                    {item.badge_text}
+                                                </span>
+                                            )}
+                                        </Link>
+                                    )}
+                                </div>
                             );
                         })}
                     </nav>
