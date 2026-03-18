@@ -500,5 +500,5 @@
     "--section-padding": "96px"
   },
   "supports": ["dark_mode", "responsive"],
-  "default_template": "shop"
+  "default_template": "terra-cbd"
 }
