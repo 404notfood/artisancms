@@ -126,31 +126,80 @@ class BackupService
         $connection = config('database.default');
         $dbConfig = config("database.connections.{$connection}");
 
-        $host = escapeshellarg($dbConfig['host'] ?? '127.0.0.1');
-        $port = escapeshellarg((string) ($dbConfig['port'] ?? '3306'));
-        $username = escapeshellarg($dbConfig['username'] ?? 'root');
+        $host = $dbConfig['host'] ?? '127.0.0.1';
+        $port = (string) ($dbConfig['port'] ?? '3306');
+        $username = $dbConfig['username'] ?? 'root';
         $password = $dbConfig['password'] ?? '';
-        $database = escapeshellarg($dbConfig['database']);
-        $outputPath = escapeshellarg($path);
+        $database = $dbConfig['database'];
 
-        $command = "mysqldump --host={$host} --port={$port} --user={$username}";
+        $mysqldump = $this->findMysqldumpBinary();
+
+        $args = [
+            $mysqldump,
+            '--host=' . $host,
+            '--port=' . $port,
+            '--user=' . $username,
+            '--single-transaction',
+            '--routines',
+            '--triggers',
+            '--add-drop-table',
+            '--result-file=' . str_replace('/', DIRECTORY_SEPARATOR, $path),
+        ];
 
         if ($password !== '') {
-            $command .= ' --password=' . escapeshellarg($password);
+            $args[] = '--password=' . $password;
         }
 
-        $command .= " --single-transaction --routines --triggers --add-drop-table {$database} > {$outputPath} 2>&1";
+        $args[] = $database;
 
-        exec($command, $output, $returnCode);
+        $process = new \Symfony\Component\Process\Process($args);
+        $process->setTimeout(120);
+        $process->run();
 
-        if ($returnCode !== 0) {
-            $errorOutput = implode("\n", $output);
-            throw new RuntimeException("Database dump failed (exit code {$returnCode}): {$errorOutput}");
+        if (!$process->isSuccessful()) {
+            throw new RuntimeException(
+                'Database dump failed (exit code ' . $process->getExitCode() . '): '
+                . mb_convert_encoding($process->getErrorOutput(), 'UTF-8', 'UTF-8')
+            );
         }
 
         if (!File::exists($path) || filesize($path) === 0) {
             throw new RuntimeException('Database dump produced an empty file.');
         }
+    }
+
+    /**
+     * Locate the mysqldump binary.
+     *
+     * Checks common Laragon/XAMPP/MAMP paths on Windows when it is not in PATH.
+     *
+     * @throws RuntimeException When mysqldump cannot be found
+     */
+    private function findMysqldumpBinary(): string
+    {
+        // Try the system PATH first
+        $finder = new \Symfony\Component\Process\ExecutableFinder();
+        $found = $finder->find('mysqldump');
+
+        if ($found !== null) {
+            return $found;
+        }
+
+        // Common Windows local dev paths (Laragon, XAMPP, MAMP)
+        $candidates = glob('D:/Logiciel/laragon/bin/mysql/*/bin/mysqldump.exe')
+            ?: glob('C:/laragon/bin/mysql/*/bin/mysqldump.exe')
+            ?: glob('C:/xampp/mysql/bin/mysqldump.exe')
+            ?: [];
+
+        foreach ($candidates as $candidate) {
+            if (is_executable($candidate) || file_exists($candidate)) {
+                return $candidate;
+            }
+        }
+
+        throw new RuntimeException(
+            'mysqldump binary not found. Ensure MySQL client tools are installed and in your PATH.'
+        );
     }
 
     /**
@@ -330,9 +379,12 @@ class BackupService
         }
 
         $files = File::allFiles($sourceDir);
+        // Normalize the source dir path for cross-platform comparison
+        $normalizedSourceDir = rtrim(str_replace('\\', '/', $sourceDir), '/');
 
         foreach ($files as $file) {
-            $relativePath = str_replace($sourceDir . '/', '', $file->getPathname());
+            $normalizedFilePath = str_replace('\\', '/', $file->getPathname());
+            $relativePath = ltrim(str_replace($normalizedSourceDir, '', $normalizedFilePath), '/');
             $zip->addFile($file->getPathname(), $relativePath);
         }
 

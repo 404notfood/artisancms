@@ -4,546 +4,313 @@ import type { EcommerceSettingsData, MenuData } from '@/types/cms';
 import { FormEvent, useState } from 'react';
 
 interface CartItemSummary {
-    id: number;
-    product_id: number;
-    variant_id: number | null;
-    name: string;
-    variant_name: string | null;
-    price: number;
-    quantity: number;
-    total: number;
-    featured_image: string | null;
+    id: number; product_id: number; variant_id: number | null;
+    name: string; variant_name: string | null;
+    price: number; quantity: number; total: number; featured_image: string | null;
 }
 
-interface CouponInfo {
-    code: string;
-    type: 'percentage' | 'fixed';
-    value: number;
-}
+interface CouponInfo { code: string; type: 'percentage' | 'fixed'; value: number; }
 
 interface CheckoutPageProps {
-    cartItems: CartItemSummary[];
-    subtotal: number;
-    tax: number;
-    shipping: number;
-    discount: number;
-    total: number;
-    settings: EcommerceSettingsData;
-    coupon: CouponInfo | null;
+    cartItems: CartItemSummary[]; subtotal: number; tax: number; shipping: number;
+    discount: number; total: number; settings: EcommerceSettingsData; coupon: CouponInfo | null;
     menus: Record<string, MenuData>;
-    theme: {
-        customizations: Record<string, string>;
-        layouts: Array<{ slug: string; name: string }>;
-    };
+    theme: { customizations: Record<string, string>; layouts: Array<{ slug: string; name: string }> };
 }
 
-function formatPrice(price: number, symbol: string): string {
-    return `${Number(price).toFixed(2)} ${symbol}`;
-}
+const T = {
+    primary: 'var(--color-primary, #1a3d1a)',
+    gold:    'var(--color-gold, #c9a84c)',
+    bg:      'var(--color-background, #fafaf5)',
+    surface: 'var(--color-surface, #f0f5ec)',
+    text:    'var(--color-text, #1a2e1a)',
+    muted:   '#5a7a5a',
+    border:  'rgba(26,61,26,0.12)',
+    heading: "var(--font-heading, 'Cormorant Garamond', Georgia, serif)",
+    body:    "var(--font-body, 'DM Sans', system-ui, sans-serif)",
+};
 
-interface AddressFormData {
-    first_name: string;
-    last_name: string;
-    address: string;
-    address2: string;
-    city: string;
-    postal_code: string;
-    country: string;
-    phone: string;
-}
+function fp(p: number, s: string) { return `${Number(p).toFixed(2)} ${s}`; }
 
-function AddressForm({
-    title,
-    prefix,
-    data,
-    errors,
-    onChange,
-}: {
-    title: string;
-    prefix: string;
-    data: AddressFormData;
-    errors: Record<string, string>;
-    onChange: (field: string, value: string) => void;
-}) {
+interface AddressFormData { first_name: string; last_name: string; address: string; address2: string; city: string; postal_code: string; country: string; phone: string; }
+
+const inputStyle = (hasError = false): React.CSSProperties => ({
+    width: '100%', fontFamily: T.body, fontSize: '14px', color: T.text,
+    background: '#fff', border: `1px solid ${hasError ? '#c0392b' : T.border}`,
+    borderRadius: '2px', padding: '11px 14px', outline: 'none', boxSizing: 'border-box',
+    transition: 'border-color 0.2s',
+});
+
+const labelStyle: React.CSSProperties = {
+    display: 'block', fontFamily: T.body, fontSize: '11px', fontWeight: 700,
+    color: T.text, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '7px',
+};
+
+function Field({ label, required, error, children }: { label: string; required?: boolean; error?: string; children: React.ReactNode }) {
     return (
         <div>
-            <h3 className="mb-4 text-lg font-semibold text-gray-900">{title}</h3>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div>
-                    <label className="mb-1 block text-sm font-medium text-gray-700">
-                        Prenom *
-                    </label>
-                    <input
-                        type="text"
-                        value={data.first_name}
-                        onChange={(e) => onChange('first_name', e.target.value)}
-                        className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-gray-500 focus:ring-1 focus:ring-gray-500 focus:outline-none"
-                    />
-                    {errors[`${prefix}.first_name`] && (
-                        <p className="mt-1 text-xs text-red-600">
-                            {errors[`${prefix}.first_name`]}
-                        </p>
-                    )}
+            <label style={labelStyle}>{label}{required && <span style={{ color: T.gold }}> *</span>}</label>
+            {children}
+            {error && <p style={{ fontFamily: T.body, fontSize: '12px', color: '#c0392b', marginTop: '5px' }}>{error}</p>}
+        </div>
+    );
+}
+
+function AddressForm({ title, prefix, data, errors, onChange }: { title: string; prefix: string; data: AddressFormData; errors: Record<string, string>; onChange: (f: string, v: string) => void }) {
+    return (
+        <div>
+            <h3 style={{ fontFamily: T.heading, fontSize: '22px', fontWeight: 600, color: T.text, margin: '0 0 20px' }}>{title}</h3>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                <Field label="Prénom" required error={errors[`${prefix}.first_name`]}>
+                    <input type="text" value={data.first_name} onChange={e => onChange('first_name', e.target.value)} style={inputStyle(!!errors[`${prefix}.first_name`])} />
+                </Field>
+                <Field label="Nom" required error={errors[`${prefix}.last_name`]}>
+                    <input type="text" value={data.last_name} onChange={e => onChange('last_name', e.target.value)} style={inputStyle(!!errors[`${prefix}.last_name`])} />
+                </Field>
+                <div style={{ gridColumn: '1 / -1' }}>
+                    <Field label="Adresse" required error={errors[`${prefix}.address`]}>
+                        <input type="text" value={data.address} onChange={e => onChange('address', e.target.value)} style={inputStyle(!!errors[`${prefix}.address`])} />
+                    </Field>
                 </div>
-                <div>
-                    <label className="mb-1 block text-sm font-medium text-gray-700">
-                        Nom *
-                    </label>
-                    <input
-                        type="text"
-                        value={data.last_name}
-                        onChange={(e) => onChange('last_name', e.target.value)}
-                        className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-gray-500 focus:ring-1 focus:ring-gray-500 focus:outline-none"
-                    />
-                    {errors[`${prefix}.last_name`] && (
-                        <p className="mt-1 text-xs text-red-600">
-                            {errors[`${prefix}.last_name`]}
-                        </p>
-                    )}
+                <div style={{ gridColumn: '1 / -1' }}>
+                    <Field label="Complément d'adresse">
+                        <input type="text" value={data.address2} onChange={e => onChange('address2', e.target.value)} placeholder="Appartement, bâtiment..." style={inputStyle()} />
+                    </Field>
                 </div>
-                <div className="sm:col-span-2">
-                    <label className="mb-1 block text-sm font-medium text-gray-700">
-                        Adresse *
-                    </label>
-                    <input
-                        type="text"
-                        value={data.address}
-                        onChange={(e) => onChange('address', e.target.value)}
-                        className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-gray-500 focus:ring-1 focus:ring-gray-500 focus:outline-none"
-                    />
-                    {errors[`${prefix}.address`] && (
-                        <p className="mt-1 text-xs text-red-600">
-                            {errors[`${prefix}.address`]}
-                        </p>
-                    )}
-                </div>
-                <div className="sm:col-span-2">
-                    <label className="mb-1 block text-sm font-medium text-gray-700">
-                        Complement d'adresse
-                    </label>
-                    <input
-                        type="text"
-                        value={data.address2}
-                        onChange={(e) => onChange('address2', e.target.value)}
-                        placeholder="Appartement, batiment, etc."
-                        className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-gray-500 focus:ring-1 focus:ring-gray-500 focus:outline-none"
-                    />
-                </div>
-                <div>
-                    <label className="mb-1 block text-sm font-medium text-gray-700">
-                        Ville *
-                    </label>
-                    <input
-                        type="text"
-                        value={data.city}
-                        onChange={(e) => onChange('city', e.target.value)}
-                        className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-gray-500 focus:ring-1 focus:ring-gray-500 focus:outline-none"
-                    />
-                    {errors[`${prefix}.city`] && (
-                        <p className="mt-1 text-xs text-red-600">
-                            {errors[`${prefix}.city`]}
-                        </p>
-                    )}
-                </div>
-                <div>
-                    <label className="mb-1 block text-sm font-medium text-gray-700">
-                        Code postal *
-                    </label>
-                    <input
-                        type="text"
-                        value={data.postal_code}
-                        onChange={(e) => onChange('postal_code', e.target.value)}
-                        className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-gray-500 focus:ring-1 focus:ring-gray-500 focus:outline-none"
-                    />
-                    {errors[`${prefix}.postal_code`] && (
-                        <p className="mt-1 text-xs text-red-600">
-                            {errors[`${prefix}.postal_code`]}
-                        </p>
-                    )}
-                </div>
-                <div>
-                    <label className="mb-1 block text-sm font-medium text-gray-700">
-                        Pays *
-                    </label>
-                    <input
-                        type="text"
-                        value={data.country}
-                        onChange={(e) => onChange('country', e.target.value)}
-                        className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-gray-500 focus:ring-1 focus:ring-gray-500 focus:outline-none"
-                    />
-                    {errors[`${prefix}.country`] && (
-                        <p className="mt-1 text-xs text-red-600">
-                            {errors[`${prefix}.country`]}
-                        </p>
-                    )}
-                </div>
-                <div>
-                    <label className="mb-1 block text-sm font-medium text-gray-700">
-                        Telephone
-                    </label>
-                    <input
-                        type="tel"
-                        value={data.phone}
-                        onChange={(e) => onChange('phone', e.target.value)}
-                        className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-gray-500 focus:ring-1 focus:ring-gray-500 focus:outline-none"
-                    />
-                </div>
+                <Field label="Ville" required error={errors[`${prefix}.city`]}>
+                    <input type="text" value={data.city} onChange={e => onChange('city', e.target.value)} style={inputStyle(!!errors[`${prefix}.city`])} />
+                </Field>
+                <Field label="Code postal" required error={errors[`${prefix}.postal_code`]}>
+                    <input type="text" value={data.postal_code} onChange={e => onChange('postal_code', e.target.value)} style={inputStyle(!!errors[`${prefix}.postal_code`])} />
+                </Field>
+                <Field label="Pays" required error={errors[`${prefix}.country`]}>
+                    <input type="text" value={data.country} onChange={e => onChange('country', e.target.value)} style={inputStyle(!!errors[`${prefix}.country`])} />
+                </Field>
+                <Field label="Téléphone">
+                    <input type="tel" value={data.phone} onChange={e => onChange('phone', e.target.value)} style={inputStyle()} />
+                </Field>
             </div>
         </div>
     );
 }
 
-export default function CheckoutPage({
-    cartItems,
-    subtotal,
-    tax,
-    shipping,
-    discount,
-    total,
-    settings,
-    coupon,
-    menus,
-    theme,
-}: CheckoutPageProps) {
-    const [billingSameAsShipping, setBillingSameAsShipping] = useState(true);
+const sectionStyle: React.CSSProperties = {
+    background: '#fff', border: `1px solid ${T.border}`, borderRadius: '2px', padding: '32px',
+};
 
+export default function CheckoutPage({ cartItems, subtotal, tax, shipping, discount, total, settings, coupon, menus, theme }: CheckoutPageProps) {
+    const [billingSame, setBillingSame] = useState(true);
     const { data, setData, post, processing, errors } = useForm({
-        shipping_address: {
-            first_name: '',
-            last_name: '',
-            address: '',
-            address2: '',
-            city: '',
-            postal_code: '',
-            country: 'France',
-            phone: '',
-        } as AddressFormData,
+        shipping_address: { first_name: '', last_name: '', address: '', address2: '', city: '', postal_code: '', country: 'France', phone: '' } as AddressFormData,
         billing_same_as_shipping: true,
-        billing_address: {
-            first_name: '',
-            last_name: '',
-            address: '',
-            address2: '',
-            city: '',
-            postal_code: '',
-            country: 'France',
-            phone: '',
-        } as AddressFormData,
+        billing_address: { first_name: '', last_name: '', address: '', address2: '', city: '', postal_code: '', country: 'France', phone: '' } as AddressFormData,
         payment_method: 'cod' as string,
         notes: '',
     });
 
-    const handleShippingChange = (field: string, value: string) => {
-        setData('shipping_address', {
-            ...data.shipping_address,
-            [field]: value,
-        });
-    };
-
-    const handleBillingChange = (field: string, value: string) => {
-        setData('billing_address', {
-            ...data.billing_address,
-            [field]: value,
-        });
-    };
-
-    const handleBillingSameToggle = (checked: boolean) => {
-        setBillingSameAsShipping(checked);
-        setData('billing_same_as_shipping', checked);
-    };
-
-    const handleSubmit = (e: FormEvent) => {
-        e.preventDefault();
-        post('/checkout');
-    };
-
     if (cartItems.length === 0) {
         return (
             <FrontLayout menus={menus} theme={theme}>
-                <Head title="Commande - Boutique" />
-                <div className="container py-20 text-center">
-                    <h2 className="text-2xl font-bold text-gray-900">
-                        Votre panier est vide
-                    </h2>
-                    <p className="mt-2 text-gray-500">
-                        Ajoutez des produits avant de passer commande.
-                    </p>
-                    <Link
-                        href="/shop"
-                        className="mt-6 inline-block rounded-md bg-gray-900 px-6 py-3 text-sm font-medium text-white hover:bg-gray-700"
-                    >
-                        Voir la boutique
-                    </Link>
+                <Head title="Commande" />
+                <div style={{ minHeight: '60vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '20px', padding: '80px 24px', textAlign: 'center' }}>
+                    <h2 style={{ fontFamily: T.heading, fontSize: '32px', color: T.text, margin: 0 }}>Votre panier est vide</h2>
+                    <Link href="/shop" style={{ background: T.primary, color: '#fff', padding: '14px 32px', textDecoration: 'none', fontFamily: T.body, fontSize: '13px', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', borderRadius: '2px' }}>Voir la boutique</Link>
                 </div>
             </FrontLayout>
         );
     }
 
+    // Steps indicator
+    const steps = ['Panier', 'Livraison', 'Paiement', 'Confirmation'];
+
     return (
         <FrontLayout menus={menus} theme={theme}>
-            <Head title="Commande - Boutique" />
+            <Head title="Passer commande" />
 
-            <div className="container py-8">
-                <h1 className="mb-8 text-3xl font-bold text-gray-900">
-                    Passer commande
-                </h1>
+            {/* Steps */}
+            <div style={{ background: '#fff', borderBottom: `1px solid ${T.border}`, padding: '16px 24px' }}>
+                <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0' }}>
+                    {steps.map((step, i) => (
+                        <div key={step} style={{ display: 'flex', alignItems: 'center' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <div style={{
+                                    width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                    background: i <= 1 ? T.primary : T.border, color: i <= 1 ? '#fff' : T.muted,
+                                    fontSize: '12px', fontFamily: T.body, fontWeight: 700,
+                                }}>{i + 1}</div>
+                                <span style={{ fontFamily: T.body, fontSize: '13px', fontWeight: i === 1 ? 600 : 400, color: i <= 1 ? T.text : T.muted }}>
+                                    {step}
+                                </span>
+                            </div>
+                            {i < steps.length - 1 && <div style={{ width: '40px', height: '1px', background: i < 1 ? T.primary : T.border, margin: '0 12px' }} />}
+                        </div>
+                    ))}
+                </div>
+            </div>
 
-                <form onSubmit={handleSubmit}>
-                    <div className="flex flex-col gap-8 lg:flex-row">
-                        {/* Left Column: Address + Payment */}
-                        <div className="flex-1 space-y-8">
-                            {/* Shipping Address */}
-                            <div className="rounded-lg border border-gray-200 p-6">
+            <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '48px 24px' }}>
+                <h1 style={{ fontFamily: T.heading, fontSize: 'clamp(28px,4vw,40px)', fontWeight: 600, color: T.text, margin: '0 0 36px' }}>Informations de livraison</h1>
+
+                <form onSubmit={(e: FormEvent) => { e.preventDefault(); post('/checkout'); }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: '40px', alignItems: 'start' }}>
+                        {/* Left */}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                            {/* Shipping */}
+                            <div style={sectionStyle}>
                                 <AddressForm
                                     title="Adresse de livraison"
                                     prefix="shipping_address"
                                     data={data.shipping_address}
-                                    errors={errors}
-                                    onChange={handleShippingChange}
+                                    errors={errors as Record<string, string>}
+                                    onChange={(f, v) => setData('shipping_address', { ...data.shipping_address, [f]: v })}
                                 />
                             </div>
 
-                            {/* Billing Address */}
-                            <div className="rounded-lg border border-gray-200 p-6">
-                                <div className="mb-4 flex items-center gap-2">
-                                    <input
-                                        type="checkbox"
-                                        id="billing-same"
-                                        checked={billingSameAsShipping}
-                                        onChange={(e) =>
-                                            handleBillingSameToggle(e.target.checked)
-                                        }
-                                        className="h-4 w-4 rounded border-gray-300 text-gray-900 focus:ring-gray-500"
-                                    />
-                                    <label
-                                        htmlFor="billing-same"
-                                        className="text-sm font-medium text-gray-700"
-                                    >
-                                        L'adresse de facturation est identique a l'adresse
-                                        de livraison
-                                    </label>
-                                </div>
-
-                                {!billingSameAsShipping && (
-                                    <AddressForm
-                                        title="Adresse de facturation"
-                                        prefix="billing_address"
-                                        data={data.billing_address}
-                                        errors={errors}
-                                        onChange={handleBillingChange}
-                                    />
+                            {/* Billing toggle */}
+                            <div style={sectionStyle}>
+                                <label style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}>
+                                    <div onClick={() => { setBillingSame(!billingSame); setData('billing_same_as_shipping', !billingSame); }} style={{
+                                        width: '20px', height: '20px', borderRadius: '3px', flexShrink: 0,
+                                        border: `2px solid ${billingSame ? T.primary : T.border}`,
+                                        background: billingSame ? T.primary : '#fff',
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'all 0.2s',
+                                    }}>
+                                        {billingSame && <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                                    </div>
+                                    <span style={{ fontFamily: T.body, fontSize: '14px', color: T.text }}>Adresse de facturation identique à la livraison</span>
+                                </label>
+                                {!billingSame && (
+                                    <div style={{ marginTop: '24px', paddingTop: '24px', borderTop: `1px solid ${T.border}` }}>
+                                        <AddressForm
+                                            title="Adresse de facturation"
+                                            prefix="billing_address"
+                                            data={data.billing_address}
+                                            errors={errors as Record<string, string>}
+                                            onChange={(f, v) => setData('billing_address', { ...data.billing_address, [f]: v })}
+                                        />
+                                    </div>
                                 )}
                             </div>
 
-                            {/* Payment Method */}
-                            <div className="rounded-lg border border-gray-200 p-6">
-                                <h3 className="mb-4 text-lg font-semibold text-gray-900">
-                                    Mode de paiement
-                                </h3>
-                                <div className="space-y-3">
-                                    <label className="flex cursor-pointer items-center gap-3 rounded-md border border-gray-200 p-4 transition-colors hover:bg-gray-50">
-                                        <input
-                                            type="radio"
-                                            name="payment_method"
-                                            value="cod"
-                                            checked={data.payment_method === 'cod'}
-                                            onChange={(e) =>
-                                                setData(
-                                                    'payment_method',
-                                                    e.target.value,
-                                                )
-                                            }
-                                            className="h-4 w-4 border-gray-300 text-gray-900 focus:ring-gray-500"
-                                        />
-                                        <div>
-                                            <span className="text-sm font-medium text-gray-900">
-                                                Paiement a la livraison
-                                            </span>
-                                            <p className="text-xs text-gray-500">
-                                                Payez en especes a la reception de votre
-                                                commande
-                                            </p>
-                                        </div>
-                                    </label>
-                                    <label className="flex cursor-pointer items-center gap-3 rounded-md border border-gray-200 p-4 transition-colors hover:bg-gray-50">
-                                        <input
-                                            type="radio"
-                                            name="payment_method"
-                                            value="card"
-                                            checked={data.payment_method === 'card'}
-                                            onChange={(e) =>
-                                                setData(
-                                                    'payment_method',
-                                                    e.target.value,
-                                                )
-                                            }
-                                            className="h-4 w-4 border-gray-300 text-gray-900 focus:ring-gray-500"
-                                        />
-                                        <div>
-                                            <span className="text-sm font-medium text-gray-900">
-                                                Carte bancaire
-                                            </span>
-                                            <p className="text-xs text-gray-500">
-                                                Paiement securise par carte
-                                            </p>
-                                        </div>
-                                    </label>
+                            {/* Payment */}
+                            <div style={sectionStyle}>
+                                <h3 style={{ fontFamily: T.heading, fontSize: '22px', fontWeight: 600, color: T.text, margin: '0 0 20px' }}>Mode de paiement</h3>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                                    {[
+                                        { value: 'cod', label: 'Paiement à la livraison', sub: 'Réglez en espèces à la réception de votre colis', icon: '💵' },
+                                        { value: 'card', label: 'Carte bancaire', sub: 'Paiement sécurisé SSL & 3D Secure', icon: '💳' },
+                                    ].map(opt => (
+                                        <label key={opt.value} style={{
+                                            display: 'flex', alignItems: 'center', gap: '14px',
+                                            padding: '16px 20px', borderRadius: '2px', cursor: 'pointer',
+                                            border: `1.5px solid ${data.payment_method === opt.value ? T.primary : T.border}`,
+                                            background: data.payment_method === opt.value ? 'rgba(26,61,26,0.04)' : '#fff',
+                                            transition: 'all 0.2s',
+                                        }}>
+                                            <input type="radio" name="payment_method" value={opt.value} checked={data.payment_method === opt.value} onChange={e => setData('payment_method', e.target.value)} style={{ accentColor: T.primary, width: '16px', height: '16px', flexShrink: 0 }} />
+                                            <span style={{ fontSize: '20px' }}>{opt.icon}</span>
+                                            <div>
+                                                <p style={{ fontFamily: T.body, fontSize: '14px', fontWeight: 600, color: T.text, margin: '0 0 2px' }}>{opt.label}</p>
+                                                <p style={{ fontFamily: T.body, fontSize: '12px', color: T.muted, margin: 0 }}>{opt.sub}</p>
+                                            </div>
+                                        </label>
+                                    ))}
                                 </div>
-                                {errors.payment_method && (
-                                    <p className="mt-2 text-xs text-red-600">
-                                        {errors.payment_method}
-                                    </p>
-                                )}
                             </div>
 
                             {/* Notes */}
-                            <div className="rounded-lg border border-gray-200 p-6">
-                                <h3 className="mb-4 text-lg font-semibold text-gray-900">
-                                    Notes de commande
-                                </h3>
+                            <div style={sectionStyle}>
+                                <h3 style={{ fontFamily: T.heading, fontSize: '22px', fontWeight: 600, color: T.text, margin: '0 0 16px' }}>Notes de commande</h3>
                                 <textarea
                                     value={data.notes}
-                                    onChange={(e) => setData('notes', e.target.value)}
+                                    onChange={e => setData('notes', e.target.value)}
                                     rows={3}
-                                    placeholder="Instructions speciales pour votre commande (optionnel)"
-                                    className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-gray-500 focus:ring-1 focus:ring-gray-500 focus:outline-none"
+                                    placeholder="Instructions spéciales pour votre commande (optionnel)"
+                                    style={{ ...inputStyle(), resize: 'vertical', fontFamily: T.body }}
                                 />
                             </div>
                         </div>
 
-                        {/* Right Column: Order Summary */}
-                        <div className="w-full lg:w-96">
-                            <div className="sticky top-24 rounded-lg border border-gray-200 bg-gray-50 p-6">
-                                <h3 className="mb-4 text-lg font-bold text-gray-900">
-                                    Votre commande
-                                </h3>
+                        {/* Right — Order summary */}
+                        <div style={{ ...sectionStyle, position: 'sticky', top: '100px' }}>
+                            <h3 style={{ fontFamily: T.heading, fontSize: '22px', fontWeight: 600, color: T.text, margin: '0 0 20px' }}>Votre commande</h3>
 
-                                {/* Items */}
-                                <div className="mb-4 space-y-3">
-                                    {cartItems.map((item) => (
-                                        <div
-                                            key={item.id}
-                                            className="flex items-center gap-3"
-                                        >
-                                            <div className="h-12 w-12 flex-shrink-0 overflow-hidden rounded bg-white">
-                                                {item.featured_image ? (
-                                                    <img
-                                                        src={item.featured_image}
-                                                        alt={item.name}
-                                                        className="h-full w-full object-cover"
-                                                    />
-                                                ) : (
-                                                    <div className="flex h-full w-full items-center justify-center bg-gray-100 text-gray-400">
-                                                        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                                        </svg>
-                                                    </div>
-                                                )}
-                                            </div>
-                                            <div className="flex-1 text-sm">
-                                                <p className="font-medium text-gray-900">
-                                                    {item.name}
-                                                    {item.variant_name && (
-                                                        <span className="text-gray-500">
-                                                            {' '}
-                                                            - {item.variant_name}
-                                                        </span>
-                                                    )}
-                                                </p>
-                                                <p className="text-gray-500">
-                                                    x{item.quantity}
-                                                </p>
-                                            </div>
-                                            <span className="text-sm font-medium text-gray-900">
-                                                {formatPrice(
-                                                    item.total,
-                                                    settings.currency_symbol,
-                                                )}
-                                            </span>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '20px' }}>
+                                {cartItems.map(item => (
+                                    <div key={item.id} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                        <div style={{ width: '52px', height: '52px', borderRadius: '2px', overflow: 'hidden', background: T.surface, flexShrink: 0, position: 'relative' }}>
+                                            {item.featured_image
+                                                ? <img src={item.featured_image} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                                : <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={T.muted} strokeWidth="1"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+                                                  </div>
+                                            }
+                                            <span style={{ position: 'absolute', top: '-6px', right: '-6px', background: T.primary, color: '#fff', borderRadius: '50%', width: '18px', height: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: 700, fontFamily: T.body }}>{item.quantity}</span>
                                         </div>
-                                    ))}
-                                </div>
-
-                                {/* Totals */}
-                                <div className="space-y-2 border-t border-gray-200 pt-4 text-sm">
-                                    <div className="flex justify-between">
-                                        <span className="text-gray-600">Sous-total</span>
-                                        <span className="text-gray-900">
-                                            {formatPrice(
-                                                subtotal,
-                                                settings.currency_symbol,
-                                            )}
-                                        </span>
-                                    </div>
-
-                                    {discount > 0 && coupon && (
-                                        <div className="flex justify-between text-green-600">
-                                            <span>
-                                                Reduction ({coupon.code})
-                                            </span>
-                                            <span>
-                                                -
-                                                {formatPrice(
-                                                    discount,
-                                                    settings.currency_symbol,
-                                                )}
-                                            </span>
+                                        <div style={{ flex: 1, minWidth: 0 }}>
+                                            <p style={{ fontFamily: T.body, fontSize: '13px', fontWeight: 600, color: T.text, margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.name}</p>
+                                            {item.variant_name && <p style={{ fontFamily: T.body, fontSize: '11px', color: T.muted, margin: 0 }}>{item.variant_name}</p>}
                                         </div>
-                                    )}
-
-                                    <div className="flex justify-between">
-                                        <span className="text-gray-600">
-                                            TVA ({settings.tax_rate}%)
-                                        </span>
-                                        <span className="text-gray-900">
-                                            {formatPrice(tax, settings.currency_symbol)}
-                                        </span>
+                                        <span style={{ fontFamily: T.body, fontSize: '13px', fontWeight: 600, color: T.text, flexShrink: 0 }}>{fp(item.total, settings.currency_symbol)}</span>
                                     </div>
-
-                                    <div className="flex justify-between">
-                                        <span className="text-gray-600">Livraison</span>
-                                        <span className="text-gray-900">
-                                            {shipping === 0
-                                                ? 'Gratuite'
-                                                : formatPrice(
-                                                      shipping,
-                                                      settings.currency_symbol,
-                                                  )}
-                                        </span>
-                                    </div>
-
-                                    <div className="flex justify-between border-t border-gray-200 pt-2 text-base font-bold">
-                                        <span className="text-gray-900">Total</span>
-                                        <span className="text-gray-900">
-                                            {formatPrice(
-                                                total,
-                                                settings.currency_symbol,
-                                            )}
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <button
-                                    type="submit"
-                                    disabled={processing}
-                                    className="mt-6 w-full rounded-md bg-gray-900 py-3 text-sm font-medium text-white transition-colors hover:bg-gray-700 disabled:cursor-not-allowed disabled:bg-gray-400"
-                                >
-                                    {processing
-                                        ? 'Traitement en cours...'
-                                        : 'Confirmer la commande'}
-                                </button>
-
-                                <Link
-                                    href="/cart"
-                                    className="mt-3 block text-center text-sm text-gray-500 hover:text-gray-700"
-                                >
-                                    Retour au panier
-                                </Link>
+                                ))}
                             </div>
+
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', paddingTop: '16px', borderTop: `1px solid ${T.border}` }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: T.body, fontSize: '13px' }}>
+                                    <span style={{ color: T.muted }}>Sous-total</span>
+                                    <span style={{ color: T.text }}>{fp(subtotal, settings.currency_symbol)}</span>
+                                </div>
+                                {discount > 0 && coupon && (
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: T.body, fontSize: '13px' }}>
+                                        <span style={{ color: '#2d7a2d' }}>Réduction ({coupon.code})</span>
+                                        <span style={{ color: '#2d7a2d' }}>−{fp(discount, settings.currency_symbol)}</span>
+                                    </div>
+                                )}
+                                <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: T.body, fontSize: '13px' }}>
+                                    <span style={{ color: T.muted }}>TVA ({settings.tax_rate}%)</span>
+                                    <span style={{ color: T.text }}>{fp(tax, settings.currency_symbol)}</span>
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: T.body, fontSize: '13px' }}>
+                                    <span style={{ color: T.muted }}>Livraison</span>
+                                    <span style={{ color: shipping === 0 ? '#2d7a2d' : T.text }}>{shipping === 0 ? 'Gratuite' : fp(shipping, settings.currency_symbol)}</span>
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '14px', marginTop: '4px', borderTop: `1px solid ${T.border}` }}>
+                                    <span style={{ fontFamily: T.heading, fontSize: '20px', fontWeight: 600, color: T.text }}>Total TTC</span>
+                                    <span style={{ fontFamily: T.heading, fontSize: '22px', fontWeight: 700, color: T.primary }}>{fp(total, settings.currency_symbol)}</span>
+                                </div>
+                            </div>
+
+                            <button type="submit" disabled={processing} style={{
+                                marginTop: '24px', width: '100%', padding: '15px',
+                                background: processing ? T.muted : T.primary, color: '#fff', border: 'none',
+                                borderRadius: '2px', cursor: processing ? 'wait' : 'pointer',
+                                fontFamily: T.body, fontSize: '13px', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase',
+                                transition: 'opacity 0.2s',
+                            }}>
+                                {processing ? 'Traitement…' : 'Confirmer la commande'}
+                            </button>
+
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', marginTop: '12px' }}>
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={T.muted} strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                                <span style={{ fontFamily: T.body, fontSize: '12px', color: T.muted }}>Paiement sécurisé SSL</span>
+                            </div>
+
+                            <Link href="/cart" style={{ display: 'block', textAlign: 'center', marginTop: '14px', fontFamily: T.body, fontSize: '12px', color: T.muted, textDecoration: 'underline' }}>
+                                ← Retour au panier
+                            </Link>
                         </div>
                     </div>
                 </form>
             </div>
+
+            <style>{`
+                @media (max-width: 900px) {
+                    form > div[style*="grid-template-columns"] { grid-template-columns: 1fr !important; }
+                    div[style*="sticky"] { position: static !important; }
+                    div[style*="1fr 1fr"] { grid-template-columns: 1fr !important; }
+                }
+            `}</style>
         </FrontLayout>
     );
 }

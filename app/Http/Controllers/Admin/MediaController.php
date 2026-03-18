@@ -34,7 +34,13 @@ class MediaController extends Controller
      */
     public function index(Request $request): Response|JsonResponse
     {
-        $filters = $request->only(['search', 'mime_type', 'folder', 'sort_by', 'sort_dir', 'per_page']);
+        $filters = $request->only(['search', 'mime_type', 'type', 'folder', 'sort_by', 'sort_dir', 'per_page']);
+
+        // Map 'type' (frontend param) to 'mime_type' (service param)
+        if (!empty($filters['type']) && empty($filters['mime_type'])) {
+            $filters['mime_type'] = $filters['type'];
+        }
+        unset($filters['type']);
 
         // JSON response for media picker (AJAX)
         if ($request->wantsJson() || $request->has('json')) {
@@ -162,7 +168,7 @@ class MediaController extends Controller
         ]);
 
         $file = $request->file('file');
-        $oldPath = $media->disk_path;
+        $oldPath = $media->path;
 
         // Store new file
         $newPath = $file->storeAs(
@@ -177,7 +183,7 @@ class MediaController extends Controller
         }
 
         $media->update([
-            'disk_path' => $newPath,
+            'path' => $newPath,
             'filename' => $file->getClientOriginalName(),
             'mime_type' => $file->getMimeType(),
             'size' => $file->getSize(),
@@ -248,7 +254,8 @@ class MediaController extends Controller
             $media = Media::create([
                 'filename' => $filename,
                 'original_filename' => $filename,
-                'disk_path' => $path,
+                'path' => $path,
+                'folder' => dirname($path),
                 'mime_type' => $response->header('Content-Type', 'image/jpeg'),
                 'size' => strlen($response->body()),
                 'alt_text' => 'Photo by ' . ($validated['author'] ?? 'Unknown'),

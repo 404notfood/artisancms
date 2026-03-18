@@ -12,8 +12,12 @@ export default function SectionRenderer({ block, children, isEditing }: BlockRen
         centered,
     } = ((block.props ?? block.settings ?? {}) as Record<string, string | number | boolean>);
 
-    const inner = centered && maxWidth ? (
-        <div style={{ maxWidth: `${maxWidth}px`, margin: '0 auto', width: '100%' }}>
+    // Par défaut : container centré avec max-width du thème
+    const effectiveMaxWidth = maxWidth ? `${maxWidth}px` : 'var(--container-width, 1280px)';
+    const shouldWrap = centered !== false; // true par défaut
+
+    const inner = shouldWrap ? (
+        <div style={{ maxWidth: effectiveMaxWidth, margin: '0 auto', width: '100%' }}>
             {children}
         </div>
     ) : children;

@@ -6,8 +6,10 @@ namespace Ecommerce\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\CmsPlugin;
+use Ecommerce\Http\Controllers\Concerns\HasThemeAndMenus;
 use Ecommerce\Models\CartItem;
 use Ecommerce\Services\CartService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -15,6 +17,8 @@ use Inertia\Response;
 
 class CartController extends Controller
 {
+    use HasThemeAndMenus;
+
     public function __construct(
         private readonly CartService $cartService,
     ) {}
@@ -52,14 +56,14 @@ class CartController extends Controller
         $taxRate = (float) ($settings['tax_rate'] ?? 20);
         $tax = round($subtotal * $taxRate / 100, 2);
 
-        return Inertia::render('Front/Shop/Cart', [
+        return Inertia::render('Front/Shop/Cart', array_merge($this->themeAndMenus(), [
             'cartItems' => $cartItems,
             'subtotal' => $subtotal,
             'tax' => $tax,
             'shipping' => $shipping,
             'total' => $subtotal + $tax + $shipping,
             'settings' => $settings,
-        ]);
+        ]));
     }
 
     /**
@@ -109,6 +113,35 @@ class CartController extends Controller
     }
 
     /**
+     * API: add item (JSON response for block renderers).
+     */
+    public function apiAdd(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'variant_id' => 'nullable|exists:product_variants,id',
+            'quantity'   => 'integer|min:1',
+        ]);
+
+        $this->cartService->addItem($validated);
+        $count = $this->cartService->getItems()->sum('quantity');
+
+        return response()->json(['success' => true, 'cart_count' => $count]);
+    }
+
+    /**
+     * API: get cart count/total (JSON response).
+     */
+    public function apiGet(): JsonResponse
+    {
+        $items = $this->cartService->getItems();
+        $count = $items->sum('quantity');
+        $total = $items->sum(fn ($item) => $item->getTotal());
+
+        return response()->json(['count' => $count, 'total' => round($total, 2)]);
+    }
+
+    /**
      * Clear the cart.
      */
     public function clear(): RedirectResponse
@@ -142,6 +175,15 @@ class CartController extends Controller
             return $defaults;
         }
 
-        return array_merge($defaults, $plugin->settings);
+        $resolved = [];
+        foreach ($plugin->settings as $key => $value) {
+            if (is_array($value) && isset($value['default'])) {
+                $resolved[$key] = $value['default'];
+            } else {
+                $resolved[$key] = $value;
+            }
+        }
+
+        return array_merge($defaults, $resolved);
     }
 }

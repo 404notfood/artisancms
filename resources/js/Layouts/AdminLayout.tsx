@@ -113,8 +113,8 @@ const navigationDefs: NavGroup[] = [
     {
         title: 'Outils',
         items: [
-            { label: 'Formulaires', href: '/admin/forms', icon: ClipboardList, requiresPlugin: 'form-builder', badgeKey: 'new_forms' },
-            { label: 'Contact', href: '/admin/plugins/contact-form/submissions', icon: Mail, requiresPlugin: 'contact-form', badgeKey: 'new_contacts' },
+            { label: 'Form Builder', href: '/admin/forms', icon: ClipboardList, requiresPlugin: 'form-builder', badgeKey: 'new_forms' },
+            { label: 'Messages contact', href: '/admin/plugins/contact-form/submissions', icon: Mail, requiresPlugin: 'contact-form', badgeKey: 'new_contacts' },
             { label: 'Sauvegardes', href: '/admin/backups', icon: HardDrive, requiresPlugin: 'backup' },
             { label: 'Assistant IA', href: '/admin/ai/settings', icon: Sparkles, requiresPlugin: 'ai-assistant' },
         ],
@@ -254,77 +254,13 @@ function SidebarNavItem({
     active,
     collapsed,
     badge,
-    expanded,
-    onToggleExpand,
-    currentUrl,
-    badges,
 }: {
     item: NavItem;
     active: boolean;
     collapsed: boolean;
     badge?: number;
-    expanded?: boolean;
-    onToggleExpand?: () => void;
-    currentUrl?: string;
-    badges?: Record<string, number>;
 }) {
     const Icon = item.icon;
-    const hasChildren = item.children && item.children.length > 0;
-
-    // Item with children (accordion)
-    if (hasChildren && !collapsed) {
-        return (
-            <div>
-                <button
-                    type="button"
-                    onClick={onToggleExpand}
-                    className={cn(
-                        'group relative flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-150',
-                        active
-                            ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/20'
-                            : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200',
-                    )}
-                >
-                    <Icon className={cn('h-5 w-5 shrink-0', active ? 'text-white' : 'text-slate-500 group-hover:text-slate-300')} />
-                    <span className="flex-1 truncate text-left">{item.label}</span>
-                    {badge != null && badge > 0 && (
-                        <span className="flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-indigo-500 px-1 text-[10px] font-bold text-white">
-                            {badge > 99 ? '99+' : badge}
-                        </span>
-                    )}
-                    <ChevronDown className={cn('h-4 w-4 shrink-0 transition-transform duration-200', expanded && 'rotate-180')} />
-                </button>
-                {expanded && (
-                    <div className="mt-0.5 space-y-0.5">
-                        {item.children!.map((child) => {
-                            const childActive = currentUrl ? isActive(child.href, currentUrl) : false;
-                            const childBadge = child.badgeKey && badges ? badges[child.badgeKey] : undefined;
-                            return (
-                                <Link
-                                    key={child.href}
-                                    href={child.href}
-                                    className={cn(
-                                        'group relative flex items-center gap-2.5 rounded-lg pl-9 pr-3 py-1.5 text-sm transition-all duration-150',
-                                        childActive
-                                            ? 'bg-indigo-600/70 text-white'
-                                            : 'text-slate-500 hover:bg-slate-800 hover:text-slate-300',
-                                    )}
-                                >
-                                    <child.icon className={cn('h-4 w-4 shrink-0', childActive ? 'text-white' : 'text-slate-600 group-hover:text-slate-400')} />
-                                    <span className="flex-1 truncate">{child.label}</span>
-                                    {childBadge != null && childBadge > 0 && (
-                                        <span className="flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-indigo-500 px-1 text-[10px] font-bold text-white">
-                                            {childBadge > 99 ? '99+' : childBadge}
-                                        </span>
-                                    )}
-                                </Link>
-                            );
-                        })}
-                    </div>
-                )}
-            </div>
-        );
-    }
 
     return (
         <Link
@@ -420,15 +356,18 @@ export default function AdminLayout({ header, children }: AdminLayoutProps) {
     const [notifOpen, setNotifOpen] = useState(false);
     const [notifications, setNotifications] = useState<NotificationItem[]>([]);
     const [notifLoading, setNotifLoading] = useState(false);
-    const [expandedItems, setExpandedItems] = useState<Set<string>>(() => {
-        // Auto-expand groups that have an active child
+    const [expandedGroups, setExpandedGroups] = useState<Set<string>>(() => {
+        // Auto-expand groups that have an active item
         const expanded = new Set<string>();
         for (const group of navigationDefs) {
             for (const item of group.items) {
+                if (isActive(item.href, currentUrl)) {
+                    expanded.add(group.title);
+                }
                 if (item.children) {
                     for (const child of item.children) {
                         if (isActive(child.href, currentUrl)) {
-                            expanded.add(item.label);
+                            expanded.add(group.title);
                         }
                     }
                 }
@@ -439,13 +378,13 @@ export default function AdminLayout({ header, children }: AdminLayoutProps) {
     const notifRef = useRef<HTMLDivElement>(null);
     const unreadCount = (notifications_count as number) ?? 0;
 
-    const toggleExpand = useCallback((label: string) => {
-        setExpandedItems((prev) => {
+    const toggleGroup = useCallback((title: string) => {
+        setExpandedGroups((prev) => {
             const next = new Set(prev);
-            if (next.has(label)) {
-                next.delete(label);
+            if (next.has(title)) {
+                next.delete(title);
             } else {
-                next.add(label);
+                next.add(title);
             }
             return next;
         });
@@ -574,38 +513,79 @@ export default function AdminLayout({ header, children }: AdminLayoutProps) {
             </div>
 
             {/* Navigation */}
-            <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-6 scrollbar-thin">
-                {navigation.map((group) => (
-                    <div key={group.title}>
-                        {!collapsed && (
-                            <h3 className="mb-2 px-3 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
-                                {group.title}
-                            </h3>
-                        )}
-                        {collapsed && <div className="mb-1 mx-auto h-px w-6 bg-slate-800" />}
-                        <div className="space-y-0.5">
-                            {group.items.map((item) => {
-                                const itemActive = item.children
-                                    ? item.children.some((c) => isActive(c.href, currentUrl))
-                                    : isActive(item.href, currentUrl);
-                                const badge = item.badgeKey ? badges[item.badgeKey] : undefined;
-                                return (
-                                    <SidebarNavItem
-                                        key={item.href}
-                                        item={item}
-                                        active={itemActive}
-                                        collapsed={collapsed}
-                                        badge={badge}
-                                        expanded={expandedItems.has(item.label)}
-                                        onToggleExpand={() => toggleExpand(item.label)}
-                                        currentUrl={currentUrl}
-                                        badges={badges}
-                                    />
-                                );
-                            })}
+            <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-1 scrollbar-thin">
+                {navigation.map((group) => {
+                    const isGroupExpanded = expandedGroups.has(group.title);
+                    const hasActiveItem = group.items.some((item) =>
+                        isActive(item.href, currentUrl) ||
+                        (item.children?.some((c) => isActive(c.href, currentUrl)) ?? false),
+                    );
+
+                    if (collapsed) {
+                        // Collapsed: just show icons, no accordion
+                        return (
+                            <div key={group.title}>
+                                <div className="mb-1 mx-auto h-px w-6 bg-slate-800" />
+                                <div className="space-y-0.5">
+                                    {group.items.map((item) => {
+                                        const itemActive = isActive(item.href, currentUrl);
+                                        const badge = item.badgeKey ? badges[item.badgeKey] : undefined;
+                                        return (
+                                            <SidebarNavItem
+                                                key={item.href}
+                                                item={item}
+                                                active={itemActive}
+                                                collapsed
+                                                badge={badge}
+                                            />
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        );
+                    }
+
+                    return (
+                        <div key={group.title}>
+                            {/* Group header — clickable accordion toggle */}
+                            <button
+                                type="button"
+                                onClick={() => toggleGroup(group.title)}
+                                className={cn(
+                                    'flex w-full items-center justify-between rounded-lg px-3 py-2 text-[11px] font-semibold uppercase tracking-wider transition-colors',
+                                    hasActiveItem
+                                        ? 'text-slate-300'
+                                        : 'text-slate-500 hover:text-slate-400',
+                                )}
+                            >
+                                <span>{group.title}</span>
+                                <ChevronDown className={cn(
+                                    'h-3.5 w-3.5 shrink-0 transition-transform duration-200',
+                                    isGroupExpanded ? 'rotate-180' : 'rotate-0',
+                                )} />
+                            </button>
+
+                            {/* Group items — visible when expanded */}
+                            {isGroupExpanded && (
+                                <div className="mt-0.5 space-y-0.5">
+                                    {group.items.map((item) => {
+                                        const itemActive = isActive(item.href, currentUrl);
+                                        const badge = item.badgeKey ? badges[item.badgeKey] : undefined;
+                                        return (
+                                            <SidebarNavItem
+                                                key={item.href}
+                                                item={item}
+                                                active={itemActive}
+                                                collapsed={false}
+                                                badge={badge}
+                                            />
+                                        );
+                                    })}
+                                </div>
+                            )}
                         </div>
-                    </div>
-                ))}
+                    );
+                })}
             </nav>
 
             {/* Collapse toggle (desktop only, hidden on mobile overlay) */}

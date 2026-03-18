@@ -79,7 +79,7 @@ const COMMANDS: CommandItem[] = [
     { id: 'shop-settings', label: 'Parametres boutique', icon: Settings, href: '/admin/shop/settings', category: 'Boutique', keywords: ['shop', 'config'] },
 
     // Outils
-    { id: 'forms', label: 'Formulaires', icon: ClipboardList, href: '/admin/forms', category: 'Outils', keywords: ['form', 'formulaire', 'soumission'] },
+    { id: 'forms', label: 'Form Builder', icon: ClipboardList, href: '/admin/forms', category: 'Outils', keywords: ['form', 'formulaire', 'soumission', 'builder'] },
     { id: 'contact', label: 'Messages contact', icon: Mail, href: '/admin/plugins/contact-form/submissions', category: 'Outils', keywords: ['contact', 'message'] },
     { id: 'backups', label: 'Sauvegardes', icon: HardDrive, href: '/admin/backups', category: 'Outils', keywords: ['backup', 'restore', 'sauvegarde'] },
     { id: 'ai-settings', label: 'Assistant IA', icon: Sparkles, href: '/admin/ai/settings', category: 'Outils', keywords: ['ia', 'ai', 'openai', 'anthropic'] },

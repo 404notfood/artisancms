@@ -148,4 +148,4 @@ Route::get('/preview/{token}', [FrontController::class, 'preview'])->name('previ
 
 Route::get('/{slug}', [FrontController::class, 'show'])
     ->name('front.page')
-    ->where('slug', '[a-zA-Z0-9\-\/]+');
+    ->where('slug', '(?!admin(?:/|$))(?!api(?:/|$))(?!shop(?:/|$))(?!cart(?:/|$))(?!checkout(?:/|$))(?!payment(?:/|$))(?!account(?:/|$))(?!wishlist(?:/|$))[a-zA-Z0-9\-\/]+');

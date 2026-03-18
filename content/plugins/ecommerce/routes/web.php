@@ -7,6 +7,7 @@ use Ecommerce\Http\Controllers\Admin\ReviewController as AdminReviewController;
 use Ecommerce\Http\Controllers\Admin\ShippingController;
 use Ecommerce\Http\Controllers\Admin\TaxController;
 use Ecommerce\Http\Controllers\Admin\StockController;
+use Ecommerce\Http\Controllers\Admin\PaymentMethodController;
 use Ecommerce\Http\Controllers\CartController;
 use Ecommerce\Http\Controllers\CheckoutController;
 use Ecommerce\Http\Controllers\CouponController;
@@ -89,6 +90,19 @@ Route::prefix('admin/shop')->middleware(['web', 'auth'])->group(function () {
     Route::get('stock', [StockController::class, 'index'])->name('admin.shop.stock.index');
     Route::post('stock/{product}/adjust', [StockController::class, 'adjust'])->name('admin.shop.stock.adjust');
     Route::get('stock/{product}/movements', [StockController::class, 'movements'])->name('admin.shop.stock.movements');
+
+    // Payment Methods
+    Route::post('payment-methods', [PaymentMethodController::class, 'store'])->name('admin.shop.payment-methods.store');
+    Route::put('payment-methods/{paymentMethod}', [PaymentMethodController::class, 'update'])->name('admin.shop.payment-methods.update');
+    Route::delete('payment-methods/{paymentMethod}', [PaymentMethodController::class, 'destroy'])->name('admin.shop.payment-methods.destroy');
+    Route::post('payment-methods/{paymentMethod}/toggle', [PaymentMethodController::class, 'toggle'])->name('admin.shop.payment-methods.toggle');
+});
+
+// ---- API JSON Routes (for block renderers) ----
+Route::middleware(['web'])->prefix('api/shop')->group(function () {
+    Route::get('products', [ProductController::class, 'apiList'])->name('api.shop.products');
+    Route::get('cart', [CartController::class, 'apiGet'])->name('api.shop.cart');
+    Route::post('cart/add', [CartController::class, 'apiAdd'])->name('api.shop.cart.add');
 });
 
 // ---- Front-end Shop Routes ----

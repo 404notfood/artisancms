@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Ecommerce\Http\Controllers;
 
+use App\CMS\Themes\ThemeManager;
 use App\Http\Controllers\Controller;
 use App\Models\CmsPlugin;
+use App\Models\Menu;
 use Ecommerce\Models\Product;
 use Ecommerce\Models\ProductCategory;
 use Illuminate\Http\Request;
@@ -14,6 +16,29 @@ use Inertia\Response;
 
 class ShopController extends Controller
 {
+    public function __construct(
+        private readonly ThemeManager $themeManager,
+    ) {}
+
+    private function getThemeAndMenus(): array
+    {
+        $menus = Menu::with(['items' => function ($query) {
+            $query->orderBy('order');
+        }])->get()->keyBy('location');
+
+        $theme = $this->themeManager->getActive();
+        $themeConfig = $theme ? $this->themeManager->getThemeConfig($theme->slug) : [];
+
+        return [
+            'menus' => $menus,
+            'theme' => [
+                'slug' => $theme?->slug ?? 'default',
+                'customizations' => $theme ? $this->themeManager->getAllCustomizations($theme->slug) : [],
+                'layouts' => $themeConfig['layouts'] ?? [],
+                'supports' => $themeConfig['supports'] ?? [],
+            ],
+        ];
+    }
     /**
      * Display the product listing page with filters.
      */
@@ -59,12 +84,12 @@ class ShopController extends Controller
 
         $settings = $this->getSettings();
 
-        return Inertia::render('Front/Shop/Index', [
+        return Inertia::render('Front/Shop/Index', array_merge($this->getThemeAndMenus(), [
             'products' => $products,
             'categories' => $categories,
             'filters' => $request->only(['search', 'category', 'min_price', 'max_price', 'sort']),
             'settings' => $settings,
-        ]);
+        ]));
     }
 
     /**
@@ -89,11 +114,11 @@ class ShopController extends Controller
 
         $settings = $this->getSettings();
 
-        return Inertia::render('Front/Shop/Show', [
+        return Inertia::render('Front/Shop/Show', array_merge($this->getThemeAndMenus(), [
             'product' => $product,
             'relatedProducts' => $relatedProducts,
             'settings' => $settings,
-        ]);
+        ]));
     }
 
     /**
@@ -137,13 +162,13 @@ class ShopController extends Controller
 
         $settings = $this->getSettings();
 
-        return Inertia::render('Front/Shop/Category', [
+        return Inertia::render('Front/Shop/Category', array_merge($this->getThemeAndMenus(), [
             'category' => $category,
             'products' => $products,
             'categories' => $categories,
             'filters' => $request->only(['search', 'min_price', 'max_price', 'sort']),
             'settings' => $settings,
-        ]);
+        ]));
     }
 
     /**
@@ -168,6 +193,16 @@ class ShopController extends Controller
             return $defaults;
         }
 
-        return array_merge($defaults, $plugin->settings);
+        // settings may be a schema (with type/label/default) or flat key=>value
+        $resolved = [];
+        foreach ($plugin->settings as $key => $value) {
+            if (is_array($value) && isset($value['default'])) {
+                $resolved[$key] = $value['default'];
+            } else {
+                $resolved[$key] = $value;
+            }
+        }
+
+        return array_merge($defaults, $resolved);
     }
 }

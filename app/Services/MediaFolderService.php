@@ -17,22 +17,22 @@ class MediaFolderService
      */
     public function getFolderTree(): array
     {
-        $folders = Media::selectRaw("SUBSTRING_INDEX(disk_path, '/', -2) as folder_path")
-            ->whereNotNull('disk_path')
-            ->groupBy('folder_path')
-            ->get()
-            ->pluck('folder_path')
-            ->unique()
-            ->values();
+        $folders = Media::whereNotNull('folder')
+            ->where('folder', '!=', '')
+            ->selectRaw('folder, COUNT(*) as media_count')
+            ->groupBy('folder')
+            ->orderBy('folder')
+            ->get();
 
         $tree = [];
-        foreach ($folders as $path) {
-            $parts = explode('/', $path);
-            $name = $parts[0] ?? 'media';
+        foreach ($folders as $row) {
+            $folder = $row->folder;
+            $parts = explode('/', $folder);
+            $name = implode('/', $parts);
             $tree[] = [
                 'name' => $name,
-                'path' => $path,
-                'count' => Media::where('disk_path', 'LIKE', $path . '%')->count(),
+                'path' => $folder,
+                'count' => (int) $row->media_count,
             ];
         }
 
@@ -44,7 +44,7 @@ class MediaFolderService
      */
     public function getMediaInFolder(string $folder): Collection
     {
-        return Media::where('disk_path', 'LIKE', $folder . '%')
+        return Media::where('folder', $folder)
             ->latest()
             ->get();
     }
@@ -54,14 +54,14 @@ class MediaFolderService
      */
     public function moveToFolder(Media $media, string $targetFolder): Media
     {
-        $filename = basename($media->disk_path ?? $media->filename);
+        $filename = basename($media->path ?? $media->filename);
         $newPath = rtrim($targetFolder, '/') . '/' . $filename;
 
-        if ($media->disk_path && Storage::disk('public')->exists($media->disk_path)) {
-            Storage::disk('public')->move($media->disk_path, $newPath);
+        if ($media->path && Storage::disk('public')->exists($media->path)) {
+            Storage::disk('public')->move($media->path, $newPath);
         }
 
-        $media->update(['disk_path' => $newPath]);
+        $media->update(['path' => $newPath]);
 
         return $media;
     }

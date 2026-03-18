@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Ecommerce\Models\Product;
 use Ecommerce\Models\ProductCategory;
 use Ecommerce\Services\ProductService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -145,5 +146,43 @@ class ProductController extends Controller
         return redirect()
             ->route('admin.shop.products.index')
             ->with('success', 'Produit supprime avec succes.');
+    }
+
+    /**
+     * API: list published products (for block renderers).
+     */
+    public function apiList(Request $request): JsonResponse
+    {
+        $categoryId = $request->integer('category_id', 0) ?: null;
+        $limit = min((int) $request->get('limit', 12), 48);
+        $featured = $request->boolean('featured');
+
+        $query = Product::with('category')
+            ->published()
+            ->orderByDesc('created_at');
+
+        if ($categoryId) {
+            $query->byCategory($categoryId);
+        }
+
+        $products = $query->limit($limit)->get()->map(fn (Product $p) => [
+            'id'             => $p->id,
+            'name'           => $p->name,
+            'slug'           => $p->slug,
+            'price'          => (float) $p->price,
+            'compare_price'  => $p->compare_price ? (float) $p->compare_price : null,
+            'featured_image' => $p->featured_image,
+            'stock'          => $p->stock,
+            'status'         => $p->status,
+            'category'       => $p->category ? ['id' => $p->category->id, 'name' => $p->category->name] : null,
+        ]);
+
+        $categories = ProductCategory::ordered()->get()->map(fn ($c) => [
+            'id'   => $c->id,
+            'name' => $c->name,
+            'slug' => $c->slug,
+        ]);
+
+        return response()->json(['products' => $products, 'categories' => $categories]);
     }
 }

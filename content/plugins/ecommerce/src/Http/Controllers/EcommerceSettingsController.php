@@ -6,6 +6,7 @@ namespace Ecommerce\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\CmsPlugin;
+use Ecommerce\Models\PaymentMethod;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -20,8 +21,24 @@ class EcommerceSettingsController extends Controller
     {
         $settings = $this->getSettings();
 
+        $paymentMethods = [];
+        try {
+            $paymentMethods = PaymentMethod::ordered()->get()->map(fn (PaymentMethod $pm) => [
+                'id' => $pm->id,
+                'name' => $pm->name,
+                'slug' => $pm->slug,
+                'driver' => $pm->driver,
+                'active' => $pm->active,
+                'order' => $pm->order,
+                'config' => $pm->config ?? [],
+            ])->toArray();
+        } catch (\Throwable) {
+            // Table may not exist yet
+        }
+
         return Inertia::render('Admin/Ecommerce/Settings', [
             'settings' => $settings,
+            'paymentMethods' => $paymentMethods,
         ]);
     }
 
@@ -75,6 +92,17 @@ class EcommerceSettingsController extends Controller
             return $defaults;
         }
 
-        return array_merge($defaults, $plugin->settings);
+        // Filter out schema objects (from artisan-plugin.json) — only merge scalar values
+        $flatSettings = [];
+        foreach ($plugin->settings as $key => $value) {
+            if (is_array($value) && isset($value['default'])) {
+                // This is a schema definition, extract the default value
+                $flatSettings[$key] = $value['default'];
+            } elseif (!is_array($value) && !is_object($value)) {
+                $flatSettings[$key] = $value;
+            }
+        }
+
+        return array_merge($defaults, $flatSettings);
     }
 }

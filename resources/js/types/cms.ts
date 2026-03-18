@@ -286,6 +286,7 @@ export interface SharedProps {
         version: string;
         enabledPlugins: string[];
     };
+    sidebar_badges?: Record<string, number>;
     cookie_consent: CookieConsentConfig;
     [key: string]: unknown;
 }
@@ -627,6 +628,7 @@ export interface PaymentMethodData {
     driver: 'stripe' | 'paypal' | 'cod' | 'bank_transfer';
     active: boolean;
     order: number;
+    config?: Record<string, string>;
 }
 
 export interface ProductReviewData {

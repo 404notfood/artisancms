@@ -14,13 +14,24 @@ use Illuminate\Support\Facades\Cache;
 
 class AiService
 {
-    protected AiDriverInterface $driver;
+    protected ?AiDriverInterface $driver = null;
     protected array $settings;
 
     public function __construct()
     {
         $this->settings = $this->loadSettings();
-        $this->driver = $this->resolveDriver();
+    }
+
+    /**
+     * Get the AI driver (lazy initialization).
+     */
+    protected function getDriver(): AiDriverInterface
+    {
+        if ($this->driver === null) {
+            $this->driver = $this->resolveDriver();
+        }
+
+        return $this->driver;
     }
 
     /**
@@ -44,7 +55,7 @@ class AiService
         // Hook : avant generation
         CMS::fireHook('ai.before_generate', 'generate', $prompt, $context);
 
-        $result = $this->driver->generateText(
+        $result = $this->getDriver()->generateText(
             systemPrompt: $systemPrompt,
             userMessage: $prompt,
             maxTokens: $maxTokens,
@@ -77,7 +88,7 @@ class AiService
 
         CMS::fireHook('ai.before_generate', 'improve', $text, ['instruction' => $instruction]);
 
-        $result = $this->driver->improveText(
+        $result = $this->getDriver()->improveText(
             text: $text,
             instruction: $instruction,
             maxTokens: max(1024, (int) (mb_strlen($text) / 2)),
@@ -108,7 +119,7 @@ class AiService
 
         CMS::fireHook('ai.before_generate', 'seo', $pageContent, []);
 
-        $result = $this->driver->generateSeoMeta(
+        $result = $this->getDriver()->generateSeoMeta(
             pageContent: $pageContent,
             maxTokens: 512,
             model: $this->settings['model'],
@@ -141,7 +152,7 @@ class AiService
 
         CMS::fireHook('ai.before_generate', 'alt_text', $imageUrl, []);
 
-        $result = $this->driver->generateAltText(
+        $result = $this->getDriver()->generateAltText(
             imageUrl: $imageUrl,
             maxTokens: 100,
             model: $this->settings['model'],
@@ -171,7 +182,7 @@ class AiService
 
         CMS::fireHook('ai.before_generate', 'translate', $text, ['target_locale' => $targetLocale]);
 
-        $result = $this->driver->translateContent(
+        $result = $this->getDriver()->translateContent(
             text: $text,
             targetLocale: $targetLocale,
             maxTokens: max(1024, (int) (mb_strlen($text) / 2)),
@@ -204,7 +215,7 @@ class AiService
 
         CMS::fireHook('ai.before_generate', 'summarize', $text, ['max_length' => $maxLength]);
 
-        $result = $this->driver->summarize(
+        $result = $this->getDriver()->summarize(
             text: $text,
             maxLength: $maxLength,
             maxTokens: 512,
@@ -238,7 +249,22 @@ class AiService
      */
     protected function resolveDriver(): AiDriverInterface
     {
-        $apiKey = decrypt($this->settings['api_key']);
+        $rawKey = $this->settings['api_key'] ?? '';
+
+        // If the value is a schema object (from artisan-plugin.json), extract the default
+        if (is_array($rawKey)) {
+            $rawKey = $rawKey['default'] ?? '';
+        }
+
+        $apiKey = '';
+        if (!empty($rawKey) && is_string($rawKey)) {
+            try {
+                $apiKey = decrypt($rawKey);
+            } catch (\Throwable) {
+                // Not encrypted or invalid — use raw value
+                $apiKey = $rawKey;
+            }
+        }
 
         return match ($this->settings['ai_driver'] ?? 'openai') {
             'anthropic' => new AnthropicDriver($apiKey),
@@ -251,10 +277,26 @@ class AiService
      */
     protected function loadSettings(): array
     {
-        return Cache::remember('ai-assistant.settings', 300, function () {
-            $plugin = CmsPlugin::where('slug', 'ai-assistant')->first();
-            return $plugin?->settings ?? [];
-        });
+        try {
+            return Cache::remember('ai-assistant.settings', 300, function () {
+                $plugin = CmsPlugin::where('slug', 'ai-assistant')->first();
+                $raw = $plugin?->settings ?? [];
+
+                // Flatten schema objects from artisan-plugin.json into scalar values
+                $settings = [];
+                foreach ($raw as $key => $value) {
+                    if (is_array($value) && isset($value['default'])) {
+                        $settings[$key] = $value['default'];
+                    } else {
+                        $settings[$key] = $value;
+                    }
+                }
+
+                return $settings;
+            });
+        } catch (\Throwable) {
+            return [];
+        }
     }
 
     /**

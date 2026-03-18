@@ -7,6 +7,7 @@ namespace Ecommerce\Http\Controllers;
 use App\CMS\Facades\CMS;
 use App\Http\Controllers\Controller;
 use App\Models\CmsPlugin;
+use Ecommerce\Http\Controllers\Concerns\HasThemeAndMenus;
 use Ecommerce\Models\Coupon;
 use Ecommerce\Models\Order;
 use Ecommerce\Models\OrderItem;
@@ -20,6 +21,8 @@ use Inertia\Response;
 
 class CheckoutController extends Controller
 {
+    use HasThemeAndMenus;
+
     public function __construct(
         private readonly CartService $cartService,
         private readonly CouponService $couponService,
@@ -33,7 +36,7 @@ class CheckoutController extends Controller
         $items = $this->cartService->getItems();
 
         if ($items->isEmpty()) {
-            return Inertia::render('Front/Shop/Checkout', [
+            return Inertia::render('Front/Shop/Checkout', array_merge($this->themeAndMenus(), [
                 'cartItems' => [],
                 'subtotal' => 0,
                 'tax' => 0,
@@ -42,7 +45,7 @@ class CheckoutController extends Controller
                 'total' => 0,
                 'settings' => $this->getSettings(),
                 'coupon' => null,
-            ]);
+            ]));
         }
 
         $settings = $this->getSettings();
@@ -90,7 +93,7 @@ class CheckoutController extends Controller
             ];
         });
 
-        return Inertia::render('Front/Shop/Checkout', [
+        return Inertia::render('Front/Shop/Checkout', array_merge($this->themeAndMenus(), [
             'cartItems' => $cartItems,
             'subtotal' => $subtotal,
             'tax' => $tax,
@@ -99,7 +102,7 @@ class CheckoutController extends Controller
             'total' => $total,
             'settings' => $settings,
             'coupon' => $couponData,
-        ]);
+        ]));
     }
 
     /**
@@ -231,10 +234,10 @@ class CheckoutController extends Controller
 
         $settings = $this->getSettings();
 
-        return Inertia::render('Front/Shop/Confirmation', [
+        return Inertia::render('Front/Shop/Confirmation', array_merge($this->themeAndMenus(), [
             'order' => $order,
             'settings' => $settings,
-        ]);
+        ]));
     }
 
     /**
@@ -306,6 +309,15 @@ class CheckoutController extends Controller
             return $defaults;
         }
 
-        return array_merge($defaults, $plugin->settings);
+        $resolved = [];
+        foreach ($plugin->settings as $key => $value) {
+            if (is_array($value) && isset($value['default'])) {
+                $resolved[$key] = $value['default'];
+            } else {
+                $resolved[$key] = $value;
+            }
+        }
+
+        return array_merge($defaults, $resolved);
     }
 }

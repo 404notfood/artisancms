@@ -49,20 +49,44 @@ class HandleInertiaRequests extends Middleware
             'cms' => [
                 'name' => config('cms.name', 'ArtisanCMS'),
                 'version' => config('cms.version', '1.0.0'),
-                'enabledPlugins' => fn () => CmsPlugin::where('enabled', true)->pluck('slug')->toArray(),
+                'enabledPlugins' => fn () => $this->safeQuery(
+                    fn () => CmsPlugin::where('enabled', true)->pluck('slug')->toArray(),
+                    [],
+                ),
             ],
-            'notifications_count' => fn () => auth()->check()
-                ? \App\Models\Notification::where('user_id', auth()->id())->whereNull('read_at')->count()
-                : 0,
+            'notifications_count' => fn () => $this->safeQuery(
+                fn () => auth()->check()
+                    ? \App\Models\Notification::where('user_id', auth()->id())->whereNull('read_at')->count()
+                    : 0,
+                0,
+            ),
             'sidebar_badges' => fn () => $this->getSidebarBadges(),
-            'popups' => fn () => \App\Models\Popup::active()->current()->get(),
-            'cookie_consent' => fn () => [
-                'enabled' => (bool) (Setting::get('cookie_consent.enabled') ?? config('cms.cookie_consent.enabled', true)),
-                'position' => (string) (Setting::get('cookie_consent.position') ?? config('cms.cookie_consent.position', 'bottom')),
-                'type' => (string) (Setting::get('cookie_consent.type') ?? config('cms.cookie_consent.type', 'opt-in')),
-                'privacy_url' => (string) (Setting::get('cookie_consent.privacy_url') ?? '/politique-de-confidentialite'),
-            ],
+            'popups' => fn () => $this->safeQuery(
+                fn () => \App\Models\Popup::active()->current()->get(),
+                [],
+            ),
+            'cookie_consent' => fn () => $this->safeQuery(
+                fn () => [
+                    'enabled' => (bool) (Setting::get('cookie_consent.enabled') ?? config('cms.cookie_consent.enabled', true)),
+                    'position' => (string) (Setting::get('cookie_consent.position') ?? config('cms.cookie_consent.position', 'bottom')),
+                    'type' => (string) (Setting::get('cookie_consent.type') ?? config('cms.cookie_consent.type', 'opt-in')),
+                    'privacy_url' => (string) (Setting::get('cookie_consent.privacy_url') ?? '/politique-de-confidentialite'),
+                ],
+                ['enabled' => true, 'position' => 'bottom', 'type' => 'opt-in', 'privacy_url' => '/politique-de-confidentialite'],
+            ),
         ];
+    }
+
+    /**
+     * Execute a query safely, returning a fallback on any error (missing table, etc.).
+     */
+    private function safeQuery(callable $callback, mixed $fallback): mixed
+    {
+        try {
+            return $callback();
+        } catch (\Throwable) {
+            return $fallback;
+        }
     }
 
     /**

@@ -25,7 +25,7 @@ export function MediaFolderTree({ currentFolder, onSelectFolder }: MediaFolderTr
         })
             .then((res) => res.json())
             .then((data) => {
-                setFolders(data);
+                setFolders(Array.isArray(data) ? data : []);
                 setLoading(false);
             })
             .catch(() => setLoading(false));

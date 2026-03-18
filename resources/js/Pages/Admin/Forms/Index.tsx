@@ -1,8 +1,5 @@
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, Link, router } from '@inertiajs/react';
-import { Card, CardContent } from '@/Components/ui/card';
-import { Button } from '@/Components/ui/button';
-import { Badge } from '@/Components/ui/badge';
 import { FileText, Plus, Eye, Settings, Trash2, BarChart2 } from 'lucide-react';
 
 interface Form {
@@ -14,11 +11,26 @@ interface Form {
     created_at: string;
 }
 
-interface Props {
-    forms: Form[];
+interface PaginatedForms {
+    data: Form[];
+    current_page: number;
+    last_page: number;
+    total: number;
+    links: { url: string | null; label: string; active: boolean }[];
 }
 
-export default function FormsIndex({ forms }: Props) {
+interface Props {
+    forms: Form[] | PaginatedForms;
+}
+
+function isPageinated(forms: Form[] | PaginatedForms): forms is PaginatedForms {
+    return forms !== null && typeof forms === 'object' && !Array.isArray(forms) && 'data' in forms;
+}
+
+export default function FormsIndex({ forms: rawForms }: Props) {
+    const forms = isPageinated(rawForms) ? rawForms.data : (Array.isArray(rawForms) ? rawForms : []);
+    const pagination = isPageinated(rawForms) ? rawForms : null;
+
     const handleDelete = (id: number, name: string) => {
         if (!confirm(`Supprimer le formulaire "${name}" ? Toutes les soumissions seront perdues.`)) return;
         router.delete(`/admin/forms/${id}`);
@@ -29,84 +41,123 @@ export default function FormsIndex({ forms }: Props) {
             header={
                 <div className="flex items-center justify-between">
                     <h1 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
-                        <FileText className="h-5 w-5" />
+                        <FileText className="h-5 w-5 text-indigo-600" />
                         Formulaires
                     </h1>
-                    <Link href="/admin/forms/create">
-                        <Button size="sm" className="gap-1.5">
-                            <Plus className="h-4 w-4" />
-                            Nouveau formulaire
-                        </Button>
+                    <Link
+                        href="/admin/forms/create"
+                        className="inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3 py-2 text-sm font-medium text-white hover:bg-indigo-700 transition-colors"
+                    >
+                        <Plus className="h-4 w-4" />
+                        Nouveau formulaire
                     </Link>
                 </div>
             }
         >
             <Head title="Formulaires" />
 
-            <div className="space-y-3">
-                {forms.map(form => (
-                    <Card key={form.id}>
-                        <CardContent className="flex items-center justify-between p-4">
-                            <div className="flex items-center gap-4">
-                                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-50">
-                                    <FileText className="h-4 w-4 text-indigo-600" />
-                                </div>
-                                <div>
-                                    <div className="flex items-center gap-2">
-                                        <p className="font-medium text-gray-900">{form.name}</p>
-                                        <Badge variant="outline" className={`text-xs ${form.is_active ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-gray-50 text-gray-500'}`}>
-                                            {form.is_active ? 'Actif' : 'Inactif'}
-                                        </Badge>
+            {forms.length === 0 ? (
+                <div className="rounded-xl border-2 border-dashed border-gray-200 bg-white px-6 py-20 text-center">
+                    <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-indigo-50">
+                        <FileText className="h-8 w-8 text-indigo-400" />
+                    </div>
+                    <h3 className="mt-4 text-base font-semibold text-gray-900">Aucun formulaire</h3>
+                    <p className="mt-1 text-sm text-gray-500">
+                        Creez votre premier formulaire pour collecter des donnees de vos visiteurs.
+                    </p>
+                    <Link
+                        href="/admin/forms/create"
+                        className="mt-5 inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-indigo-700 transition-colors"
+                    >
+                        <Plus className="h-4 w-4" />
+                        Creer un formulaire
+                    </Link>
+                </div>
+            ) : (
+                <div className="space-y-4">
+                    <div className="space-y-2">
+                        {forms.map((form) => (
+                            <div
+                                key={form.id}
+                                className="flex items-center justify-between rounded-lg border border-gray-200 bg-white px-4 py-3 hover:shadow-sm transition-shadow"
+                            >
+                                <div className="flex items-center gap-3 min-w-0">
+                                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-indigo-50">
+                                        <FileText className="h-5 w-5 text-indigo-600" />
                                     </div>
-                                    <div className="flex items-center gap-3 mt-0.5">
-                                        <span className="text-xs text-gray-500 font-mono">{form.slug}</span>
-                                        <span className="text-xs text-gray-400 flex items-center gap-1">
-                                            <BarChart2 className="h-3 w-3" />
-                                            {form.submissions_count} soumission{form.submissions_count !== 1 ? 's' : ''}
-                                        </span>
+                                    <div className="min-w-0">
+                                        <div className="flex items-center gap-2">
+                                            <p className="text-sm font-semibold text-gray-900 truncate">{form.name}</p>
+                                            <span
+                                                className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${
+                                                    form.is_active
+                                                        ? 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200'
+                                                        : 'bg-gray-100 text-gray-500 ring-1 ring-gray-200'
+                                                }`}
+                                            >
+                                                {form.is_active ? 'Actif' : 'Inactif'}
+                                            </span>
+                                        </div>
+                                        <div className="flex items-center gap-3 mt-0.5">
+                                            <span className="text-xs text-gray-400 font-mono">{form.slug}</span>
+                                            <span className="text-xs text-gray-400 flex items-center gap-1">
+                                                <BarChart2 className="h-3 w-3" />
+                                                {form.submissions_count} soumission{form.submissions_count !== 1 ? 's' : ''}
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="flex gap-2">
-                                <Link href={`/admin/forms/${form.id}/submissions`}>
-                                    <Button variant="outline" size="sm" title="Voir les soumissions">
+                                <div className="flex items-center gap-1 shrink-0 ml-4">
+                                    <Link
+                                        href={`/admin/forms/${form.id}/submissions`}
+                                        className="rounded p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+                                        title="Voir les soumissions"
+                                    >
                                         <Eye className="h-4 w-4" />
-                                    </Button>
-                                </Link>
-                                <Link href={`/admin/forms/${form.id}/edit`}>
-                                    <Button variant="outline" size="sm">
+                                    </Link>
+                                    <Link
+                                        href={`/admin/forms/${form.id}/edit`}
+                                        className="rounded p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+                                        title="Modifier"
+                                    >
                                         <Settings className="h-4 w-4" />
-                                    </Button>
-                                </Link>
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    className="text-red-600 hover:bg-red-50"
-                                    onClick={() => handleDelete(form.id, form.name)}
-                                >
-                                    <Trash2 className="h-4 w-4" />
-                                </Button>
+                                    </Link>
+                                    <button
+                                        type="button"
+                                        onClick={() => handleDelete(form.id, form.name)}
+                                        className="rounded p-1.5 text-gray-400 hover:bg-red-50 hover:text-red-600"
+                                        title="Supprimer"
+                                    >
+                                        <Trash2 className="h-4 w-4" />
+                                    </button>
+                                </div>
                             </div>
-                        </CardContent>
-                    </Card>
-                ))}
+                        ))}
+                    </div>
 
-                {forms.length === 0 && (
-                    <Card>
-                        <CardContent className="flex flex-col items-center justify-center py-16 text-center">
-                            <FileText className="h-12 w-12 text-gray-300 mb-4" />
-                            <p className="text-gray-500 font-medium">Aucun formulaire</p>
-                            <p className="text-sm text-gray-400 mt-1">Créez votre premier formulaire pour collecter des données.</p>
-                            <Link href="/admin/forms/create" className="mt-4">
-                                <Button size="sm">
-                                    <Plus className="h-4 w-4 mr-1" />
-                                    Créer un formulaire
-                                </Button>
-                            </Link>
-                        </CardContent>
-                    </Card>
-                )}
-            </div>
+                    {/* Pagination */}
+                    {pagination && pagination.last_page > 1 && (
+                        <div className="flex items-center justify-center gap-1">
+                            {pagination.links.map((link, i) => (
+                                <button
+                                    key={i}
+                                    type="button"
+                                    disabled={!link.url || link.active}
+                                    onClick={() => link.url && router.get(link.url)}
+                                    className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+                                        link.active
+                                            ? 'bg-indigo-600 text-white'
+                                            : link.url
+                                              ? 'text-gray-600 hover:bg-gray-100'
+                                              : 'text-gray-300 cursor-not-allowed'
+                                    }`}
+                                    dangerouslySetInnerHTML={{ __html: link.label }}
+                                />
+                            ))}
+                        </div>
+                    )}
+                </div>
+            )}
         </AdminLayout>
     );
 }

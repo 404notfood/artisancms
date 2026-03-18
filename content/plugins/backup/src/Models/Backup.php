@@ -174,9 +174,13 @@ class Backup extends Model
      */
     public function markAsFailed(string $errorMessage): void
     {
+        // Sanitize encoding — Windows cmd.exe outputs CP850/CP1252, MySQL expects UTF-8
+        $clean = mb_convert_encoding($errorMessage, 'UTF-8', 'UTF-8');
+        $clean = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x80-\x9F]/u', '?', $clean) ?? $clean;
+
         $this->update([
             'status' => 'failed',
-            'error_message' => $errorMessage,
+            'error_message' => mb_substr($clean, 0, 2000),
             'completed_at' => now(),
         ]);
     }
