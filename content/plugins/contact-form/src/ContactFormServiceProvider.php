@@ -39,11 +39,11 @@ class ContactFormServiceProvider extends ServiceProvider
     {
         $registry = app(BlockRegistry::class);
 
-        $registry->register('contact-form', [
-            'label' => 'Formulaire de contact',
+        $registry->register([
+            'slug' => 'contact-form',
+            'name' => 'Formulaire de contact',
             'category' => 'data',
             'icon' => 'Mail',
-            'description' => 'Formulaire de contact avec anti-spam honeypot et notifications email.',
             'schema' => [
                 'recipient_email' => ['type' => 'string', 'label' => 'Email destinataire'],
                 'success_message' => ['type' => 'string', 'label' => 'Message de succès'],
@@ -58,7 +58,8 @@ class ContactFormServiceProvider extends ServiceProvider
                 'show_subject' => true,
                 'button_text' => 'Envoyer',
             ],
-            'is_active' => true,
+            'is_core' => false,
+            'source' => 'contact-form',
         ]);
     }
 }
