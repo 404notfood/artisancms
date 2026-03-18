@@ -2,6 +2,7 @@
   "name": "Botanica",
   "slug": "botanica",
   "version": "1.0.0",
+  "style": "nature",
   "description": "Thème nature et bio — couleurs végétales douces, esthétique organique pour restaurants bio, coachs bien-être, marques naturelles et cabinets de santé.",
   "author": {
     "name": "ArtisanCMS",
@@ -132,6 +133,18 @@
           "right"
         ]
       },
+      "variant": {
+        "label": "Style du header",
+        "type": "select",
+        "default": "centered",
+        "options": [
+          "classic",
+          "centered",
+          "split",
+          "stacked",
+          "minimal"
+        ]
+      },
       "mobile_menu_style": {
         "label": "Menu mobile",
         "type": "select",
@@ -165,13 +178,15 @@
     },
     "footer": {
       "layout": {
-        "label": "Style du footer",
+        "label": "Disposition du footer",
         "type": "select",
-        "default": "columns",
+        "default": "simple",
         "options": [
           "simple",
           "columns",
-          "minimal"
+          "minimal",
+          "centered",
+          "magazine"
         ]
       },
       "columns": {

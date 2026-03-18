@@ -16,19 +16,10 @@ class StripeDriver implements PaymentDriverInterface
 {
     private const API_BASE = 'https://api.stripe.com/v1';
 
-    /**
-     * @param array<string, mixed> $config Driver configuration (secret_key, webhook_secret, etc.)
-     */
     public function __construct(
         private readonly array $config,
     ) {}
 
-    /**
-     * Create a Stripe PaymentIntent for the given order.
-     *
-     * @param Order $order
-     * @param array<string, mixed> $data Additional data (success_url, cancel_url).
-     */
     public function createPayment(Order $order, array $data): PaymentResult
     {
         $secretKey = $this->config['secret_key'] ?? '';
@@ -38,15 +29,16 @@ class StripeDriver implements PaymentDriverInterface
         }
 
         try {
+            $amountInCents = (int) round((float) $order->total * 100);
+            $currency = strtolower($this->config['currency'] ?? 'eur');
+
             $response = Http::withBasicAuth($secretKey, '')
                 ->asForm()
                 ->post(self::API_BASE . '/payment_intents', [
-                    'amount' => (int) round($order->total * 100), // Stripe uses cents
-                    'currency' => strtolower($this->config['currency'] ?? 'eur'),
-                    'metadata' => [
-                        'order_id' => (string) $order->id,
-                    ],
-                    'automatic_payment_methods' => ['enabled' => 'true'],
+                    'amount' => $amountInCents,
+                    'currency' => $currency,
+                    'metadata[order_id]' => (string) $order->id,
+                    'automatic_payment_methods[enabled]' => 'true',
                 ]);
 
             if ($response->failed()) {
@@ -60,20 +52,21 @@ class StripeDriver implements PaymentDriverInterface
             }
 
             $intent = $response->json();
-            $clientSecret = $intent['client_secret'] ?? null;
 
-            // If a success_url is provided, build a redirect URL for Checkout Session flow
             if (!empty($data['success_url'])) {
+                $separator = str_contains($data['success_url'], '?') ? '&' : '?';
+                $redirectUrl = $data['success_url'] . $separator . 'payment_intent=' . $intent['id'];
+
                 return PaymentResult::pending(
                     transactionId: $intent['id'],
-                    redirectUrl: $data['success_url'] . '?payment_intent=' . $intent['id'],
+                    redirectUrl: $redirectUrl,
                 );
             }
 
-            // For client-side confirmation (e.g. Stripe.js), return the client secret
+            // Client-side confirmation (Stripe.js)
             return PaymentResult::pending(
                 transactionId: $intent['id'],
-                redirectUrl: $clientSecret ?? '',
+                clientSecret: $intent['client_secret'] ?? null,
             );
         } catch (\Throwable $e) {
             Log::error('Stripe createPayment exception', [
@@ -85,52 +78,53 @@ class StripeDriver implements PaymentDriverInterface
         }
     }
 
-    /**
-     * Handle Stripe webhook events.
-     */
     public function handleWebhook(Request $request): WebhookResult
     {
         $payload = $request->getContent();
         $sigHeader = $request->header('Stripe-Signature', '');
         $webhookSecret = $this->config['webhook_secret'] ?? '';
 
-        // Verify webhook signature (required for security)
         if (empty($webhookSecret)) {
-            Log::warning('Stripe webhook received but no webhook_secret configured. Rejecting.');
-            return WebhookResult::failed('Webhook secret non configure. Configurez webhook_secret dans les parametres de paiement.');
+            Log::warning('Stripe webhook rejected: no webhook_secret configured.');
+            return WebhookResult::failed('Webhook secret non configure.');
         }
 
         if (!$this->verifySignature($payload, $sigHeader, $webhookSecret)) {
+            Log::warning('Stripe webhook rejected: invalid signature.');
             return WebhookResult::failed('Signature webhook invalide.');
         }
 
         $event = json_decode($payload, true);
 
-        if ($event === null) {
+        if (!is_array($event) || empty($event['type'])) {
             return WebhookResult::failed('Payload webhook invalide.');
         }
 
-        $type = $event['type'] ?? '';
+        $type = $event['type'];
         $object = $event['data']['object'] ?? [];
+        $transactionId = $object['id'] ?? '';
+
+        Log::info('Stripe webhook received', ['type' => $type, 'transaction_id' => $transactionId]);
 
         return match ($type) {
             'payment_intent.succeeded' => WebhookResult::success(
-                transactionId: $object['id'] ?? '',
+                transactionId: $transactionId,
                 status: 'paid',
             ),
             'payment_intent.payment_failed' => WebhookResult::failed(
                 $object['last_payment_error']['message'] ?? 'Paiement echoue.',
             ),
+            'charge.refunded' => WebhookResult::success(
+                transactionId: $object['payment_intent'] ?? $transactionId,
+                status: 'refunded',
+            ),
             default => WebhookResult::success(
-                transactionId: $object['id'] ?? '',
+                transactionId: $transactionId,
                 status: 'pending',
             ),
         };
     }
 
-    /**
-     * Verify Stripe webhook signature (v1).
-     */
     private function verifySignature(string $payload, string $sigHeader, string $secret): bool
     {
         $elements = explode(',', $sigHeader);

@@ -278,6 +278,9 @@ class TemplateService
             // 4. Import posts
             $this->importPostsFromData($templateData['posts'] ?? [], $userId, $mediaMap, $overwrite, $report);
 
+            // 4b. Import products (e-commerce)
+            $this->importProductsFromData($templateData['products'] ?? [], $userId, $mediaMap, $overwrite, $report);
+
             // 5. Import menus
             $this->importMenusFromData($templateData['menus'] ?? [], $pageIdMap, $overwrite, $report);
 
@@ -601,6 +604,7 @@ class TemplateService
             'settings' => [],
             'posts' => [],
             'taxonomies' => [],
+            'products' => [],
         ];
 
         // Check if template uses inline data (pages/menus/settings at root level)
@@ -612,11 +616,12 @@ class TemplateService
             $data['settings'] = $template['settings'] ?? [];
             $data['posts'] = $template['posts'] ?? [];
             $data['taxonomies'] = $template['taxonomies'] ?? [];
+            $data['products'] = $template['products'] ?? [];
         } else {
             // Load from external data files
             $dataFiles = $template['data_files'] ?? [];
 
-            foreach (['pages', 'menus', 'settings', 'posts', 'taxonomies'] as $type) {
+            foreach (['pages', 'menus', 'settings', 'posts', 'taxonomies', 'products'] as $type) {
                 $file = $templatePath . '/' . ($dataFiles[$type] ?? "data/{$type}.json");
                 if (File::exists($file)) {
                     $data[$type] = json_decode(File::get($file), true) ?? [];
@@ -901,6 +906,81 @@ class TemplateService
                 );
                 $report['taxonomies_created']++;
             }
+        }
+    }
+
+    /**
+     * Import products from resolved data (e-commerce plugin).
+     *
+     * @param array<int, array<string, mixed>> $products
+     */
+    protected function importProductsFromData(
+        array $products,
+        int $userId,
+        array $mediaMap,
+        bool $overwrite,
+        array &$report,
+    ): void {
+        if (empty($products)) {
+            return;
+        }
+
+        // Check if the ecommerce plugin models are available
+        if (!class_exists(\Ecommerce\Models\Product::class)) {
+            Log::info('Ecommerce plugin not available, skipping product import.');
+            return;
+        }
+
+        $categoryModel = \Ecommerce\Models\ProductCategory::class;
+        $productModel = \Ecommerce\Models\Product::class;
+        $report['products_created'] = 0;
+
+        // Build category map
+        $categoryMap = [];
+        foreach ($products as $productData) {
+            $catName = $productData['category'] ?? null;
+            if ($catName && !isset($categoryMap[$catName])) {
+                $cat = $categoryModel::firstOrCreate(
+                    ['slug' => Str::slug($catName)],
+                    [
+                        'name' => $catName,
+                        'description' => null,
+                    ],
+                );
+                $categoryMap[$catName] = $cat->id;
+            }
+        }
+
+        foreach ($products as $productData) {
+            $slug = $productData['slug'] ?? Str::slug($productData['name']);
+
+            $existing = $productModel::where('slug', $slug)->first();
+            if ($existing && !$overwrite) {
+                continue;
+            }
+
+            $attrs = [
+                'name' => $productData['name'],
+                'slug' => $slug,
+                'description' => $productData['description'] ?? '',
+                'price' => $productData['price'] ?? 0,
+                'compare_price' => $productData['compare_price'] ?? null,
+                'sku' => $productData['sku'] ?? strtoupper(Str::slug($productData['name'], '-')),
+                'stock' => $productData['stock'] ?? 100,
+                'status' => $productData['status'] ?? 'published',
+                'featured_image' => $productData['featured_image'] ?? null,
+                'gallery' => $productData['gallery'] ?? [],
+                'category_id' => isset($productData['category']) ? ($categoryMap[$productData['category']] ?? null) : null,
+                'created_by' => $userId,
+            ];
+
+            if ($existing && $overwrite) {
+                $existing->update($attrs);
+            } else {
+                $productModel::create($attrs);
+            }
+
+            $report['products_created']++;
         }
     }
 

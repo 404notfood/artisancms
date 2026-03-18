@@ -51,7 +51,7 @@ jobs:
           DB_DATABASE: artisan_cms_test
           DB_USERNAME: root
           DB_PASSWORD: root
-        run: php artisan test --parallel
+        run: php artisan test
 
   js-tests:
     name: JS Tests

@@ -1,4 +1,5 @@
 import { Head, router, usePage } from '@inertiajs/react';
+import type { FormDataConvertible } from '@inertiajs/core';
 import { useState } from 'react';
 import type { CustomerAddressData, EcommerceSettingsData, FlashMessages } from '@/types/cms';
 
@@ -18,7 +19,7 @@ const COUNTRIES: Record<string, string> = {
     ES: 'Espagne',
     IT: 'Italie',
     GB: 'Royaume-Uni',
-    US: 'Etats-Unis',
+    US: '\u00c9tats-Unis',
     PT: 'Portugal',
     NL: 'Pays-Bas',
     AT: 'Autriche',
@@ -53,7 +54,7 @@ const emptyForm: AddressFormData = {
 };
 
 export default function Addresses({ addresses }: AddressesProps) {
-    const { flash } = usePage().props as unknown as { flash: FlashMessages };
+    const flash = (usePage().props as { flash?: FlashMessages }).flash;
     const [showForm, setShowForm] = useState(false);
     const [editingId, setEditingId] = useState<number | null>(null);
     const [form, setForm] = useState<AddressFormData>({ ...emptyForm });
@@ -94,14 +95,14 @@ export default function Addresses({ addresses }: AddressesProps) {
         setProcessing(true);
 
         if (editingId !== null) {
-            router.put(`/account/addresses/${editingId}`, form as unknown as Record<string, string>, {
+            router.put(`/account/addresses/${editingId}`, form as unknown as Record<string, FormDataConvertible>, {
                 onFinish: () => {
                     setProcessing(false);
                     closeForm();
                 },
             });
         } else {
-            router.post('/account/addresses', form as unknown as Record<string, string>, {
+            router.post('/account/addresses', form as unknown as Record<string, FormDataConvertible>, {
                 onFinish: () => {
                     setProcessing(false);
                     closeForm();
@@ -150,7 +151,7 @@ export default function Addresses({ addresses }: AddressesProps) {
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                                    Libelle (ex: Domicile, Bureau)
+                                    Libell\u00e9 (ex: Domicile, Bureau)
                                 </label>
                                 <input
                                     type="text"
@@ -163,7 +164,7 @@ export default function Addresses({ addresses }: AddressesProps) {
 
                             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Prenom</label>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Pr\u00e9nom</label>
                                     <input
                                         type="text"
                                         value={form.first_name}
@@ -197,7 +198,7 @@ export default function Addresses({ addresses }: AddressesProps) {
 
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                                    Complement d'adresse (optionnel)
+                                    Compl\u00e9ment d'adresse (optionnel)
                                 </label>
                                 <input
                                     type="text"
@@ -247,7 +248,7 @@ export default function Addresses({ addresses }: AddressesProps) {
 
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                                    Telephone (optionnel)
+                                    T\u00e9l\u00e9phone (optionnel)
                                 </label>
                                 <input
                                     type="tel"
@@ -265,7 +266,7 @@ export default function Addresses({ addresses }: AddressesProps) {
                                         onChange={(e) => updateField('is_default_shipping', e.target.checked)}
                                         className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                     />
-                                    Adresse de livraison par defaut
+                                    Adresse de livraison par d\u00e9faut
                                 </label>
                                 <label className="flex items-center gap-2 text-sm text-gray-700">
                                     <input
@@ -274,7 +275,7 @@ export default function Addresses({ addresses }: AddressesProps) {
                                         onChange={(e) => updateField('is_default_billing', e.target.checked)}
                                         className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                     />
-                                    Adresse de facturation par defaut
+                                    Adresse de facturation par d\u00e9faut
                                 </label>
                             </div>
 
@@ -301,7 +302,7 @@ export default function Addresses({ addresses }: AddressesProps) {
                 {/* Address cards */}
                 {addresses.length === 0 ? (
                     <div className="rounded-lg border border-gray-200 bg-white p-8 text-center text-gray-500">
-                        Aucune adresse enregistree. Ajoutez votre premiere adresse.
+                        Aucune adresse enregistr\u00e9e. Ajoutez votre premi\u00e8re adresse.
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -316,12 +317,12 @@ export default function Addresses({ addresses }: AddressesProps) {
                                         <div className="mt-1 flex flex-wrap gap-1">
                                             {address.is_default_shipping && (
                                                 <span className="inline-flex items-center rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800">
-                                                    Livraison par defaut
+                                                    Livraison par d\u00e9faut
                                                 </span>
                                             )}
                                             {address.is_default_billing && (
                                                 <span className="inline-flex items-center rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-800">
-                                                    Facturation par defaut
+                                                    Facturation par d\u00e9faut
                                                 </span>
                                             )}
                                         </div>

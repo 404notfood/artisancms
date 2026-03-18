@@ -4,9 +4,29 @@ import { current } from 'immer';
 import { nanoid } from 'nanoid';
 import type { BlockNode } from '@/types/cms';
 
-// --- Tree helper functions ---
+// ────────────────────────────────────────────
+// Tree helpers (pure functions, work on both plain objects and Immer drafts)
+// ────────────────────────────────────────────
 
 const MAX_HISTORY = 50;
+const HISTORY_DEBOUNCE_MS = 500;
+
+/**
+ * Known style prop keys used by copyStyles/pasteStyles.
+ * Kept as a Set for O(1) lookup when filtering.
+ */
+const STYLE_PROP_KEYS = new Set([
+    'backgroundColor', 'color', 'fontSize', 'fontWeight', 'fontFamily',
+    'textAlign', 'lineHeight', 'letterSpacing',
+    'padding', 'paddingTop', 'paddingBottom', 'paddingLeft', 'paddingRight',
+    'margin', 'marginTop', 'marginBottom', 'marginLeft', 'marginRight',
+    'borderRadius', 'border', 'borderColor', 'borderWidth',
+    'shadow', 'boxShadow',
+    'animation',
+    'width', 'height', 'minWidth', 'minHeight', 'maxWidth', 'maxHeight',
+    'opacity', 'overflow',
+    'gap', 'display', 'flexDirection', 'alignItems', 'justifyContent',
+]);
 
 export function findBlockInTree(blocks: BlockNode[], id: string): BlockNode | null {
     for (const block of blocks) {
@@ -39,16 +59,14 @@ export function insertBlockInTree(
     block: BlockNode,
 ): boolean {
     if (parentId === null) {
-        const clampedIndex = Math.max(0, Math.min(index, blocks.length));
-        blocks.splice(clampedIndex, 0, block);
+        blocks.splice(clamp(index, 0, blocks.length), 0, block);
         return true;
     }
 
     for (const node of blocks) {
         if (node.id === parentId) {
             if (!node.children) node.children = [];
-            const clampedIndex = Math.max(0, Math.min(index, node.children.length));
-            node.children.splice(clampedIndex, 0, block);
+            node.children.splice(clamp(index, 0, node.children.length), 0, block);
             return true;
         }
         if (node.children?.length) {
@@ -59,17 +77,14 @@ export function insertBlockInTree(
 }
 
 export function cloneBlockDeep(block: BlockNode): BlockNode {
-    const cloned: BlockNode = {
+    return {
         id: nanoid(),
         type: block.type,
         props: structuredClone(block.props),
+        children: block.children?.length
+            ? block.children.map(cloneBlockDeep)
+            : [],
     };
-    if (block.children?.length) {
-        cloned.children = block.children.map(cloneBlockDeep);
-    } else {
-        cloned.children = [];
-    }
-    return cloned;
 }
 
 export function getBlockPathInTree(
@@ -99,73 +114,102 @@ export function flattenTree(blocks: BlockNode[]): BlockNode[] {
 }
 
 /**
- * Find the parent block and the index of a given block within its parent's children.
- * Returns null if the block is at root level or not found.
+ * Locate a block's parent and its index among siblings.
+ * Returns { parentId: null, index } for root-level blocks.
  */
 export function findParentInfo(
     blocks: BlockNode[],
     id: string,
+    parentId: string | null = null,
 ): { parentId: string | null; index: number } | null {
     for (let i = 0; i < blocks.length; i++) {
         if (blocks[i].id === id) {
-            return { parentId: null, index: i };
+            return { parentId, index: i };
         }
         if (blocks[i].children?.length) {
-            for (let j = 0; j < blocks[i].children!.length; j++) {
-                if (blocks[i].children![j].id === id) {
-                    return { parentId: blocks[i].id, index: j };
-                }
-            }
-            const found = findParentInfo(blocks[i].children!, id);
+            const found = findParentInfo(blocks[i].children!, id, blocks[i].id);
             if (found) return found;
         }
     }
     return null;
 }
 
-// --- Internal helper to push history on a draft ---
-function _pushHistoryOnDraft(state: {
-    blocks: BlockNode[];
-    history: BlockNode[][];
-    historyIndex: number;
-}) {
-    const newHistory = state.history.slice(0, state.historyIndex + 1);
-    // Use current() to get plain JS from Immer draft, then structuredClone
-    const snapshot = structuredClone(current(state.blocks)) as BlockNode[];
-    newHistory.push(snapshot);
-
-    if (newHistory.length > MAX_HISTORY) {
-        newHistory.shift();
-    }
-
-    state.history = newHistory;
-    state.historyIndex = newHistory.length - 1;
+/** Get the siblings array for a given parentId (or root). */
+function getSiblings(blocks: BlockNode[], parentId: string | null): BlockNode[] | null {
+    if (parentId === null) return blocks;
+    const parent = findBlockInTree(blocks, parentId);
+    return parent?.children ?? null;
 }
 
-// --- Store ---
+function clamp(value: number, min: number, max: number): number {
+    return Math.max(min, Math.min(value, max));
+}
+
+// ────────────────────────────────────────────
+// History helper (operates on Immer drafts)
+// ────────────────────────────────────────────
+
+/**
+ * Snapshot the current blocks into the undo history.
+ *
+ * @param debounce - When true, skips the push if the last one was less than
+ *                   HISTORY_DEBOUNCE_MS ago. Useful for rapid edits (typing).
+ */
+function pushSnapshot(
+    state: {
+        blocks: BlockNode[];
+        history: BlockNode[][];
+        historyIndex: number;
+        _lastSnapshotAt: number;
+    },
+    { debounce = false } = {},
+) {
+    const now = Date.now();
+    if (debounce && now - state._lastSnapshotAt < HISTORY_DEBOUNCE_MS) {
+        return;
+    }
+    state._lastSnapshotAt = now;
+
+    // Truncate any "future" entries after the current index (they're invalidated)
+    const history = state.history.slice(0, state.historyIndex + 1);
+
+    // current() unwraps the Immer proxy; structuredClone ensures a fully independent copy
+    history.push(structuredClone(current(state.blocks)));
+
+    // Cap the history length
+    if (history.length > MAX_HISTORY) {
+        history.shift();
+    }
+
+    state.history = history;
+    state.historyIndex = history.length - 1;
+}
+
+// ────────────────────────────────────────────
+// Store types
+// ────────────────────────────────────────────
+
+type Viewport = 'desktop' | 'tablet' | 'mobile';
 
 interface BuilderState {
-    // State
+    // -- State --
     blocks: BlockNode[];
     selectedBlockId: string | null;
     hoveredBlockId: string | null;
     isDragging: boolean;
-    viewport: 'desktop' | 'tablet' | 'mobile';
+    viewport: Viewport;
     history: BlockNode[][];
     historyIndex: number;
     isDirty: boolean;
     clipboard: BlockNode | null;
     styleClipboard: Record<string, unknown> | null;
     pendingDeleteId: string | null;
+    /** @internal timestamp of the last history snapshot */
+    _lastSnapshotAt: number;
 
-    // Block operations
+    // -- Block operations --
     setBlocks: (blocks: BlockNode[]) => void;
-    addBlock: (
-        type: string,
-        parentId?: string,
-        index?: number,
-        defaultProps?: Record<string, unknown>,
-    ) => string;
+    addBlock: (type: string, parentId?: string, index?: number, defaultProps?: Record<string, unknown>) => string;
     updateBlock: (id: string, props: Partial<BlockNode['props']>) => void;
     removeBlock: (id: string) => void;
     moveBlock: (id: string, newParentId: string | null, newIndex: number) => void;
@@ -179,45 +223,49 @@ interface BuilderState {
     setPendingDeleteId: (id: string | null) => void;
     confirmDelete: () => void;
 
-    // Selection
+    // -- Selection --
     selectBlock: (id: string | null) => void;
     setHoveredBlock: (id: string | null) => void;
 
-    // Drag
+    // -- Drag --
     setIsDragging: (dragging: boolean) => void;
 
-    // Viewport
-    setViewport: (viewport: 'desktop' | 'tablet' | 'mobile') => void;
+    // -- Viewport --
+    setViewport: (viewport: Viewport) => void;
 
-    // History (undo/redo)
+    // -- History --
     undo: () => void;
     redo: () => void;
     canUndo: () => boolean;
     canRedo: () => boolean;
     pushHistory: () => void;
 
-    // Helpers
+    // -- Read helpers (outside of drafts) --
     findBlock: (id: string) => BlockNode | null;
     getBlockPath: (id: string) => string[];
     flattenBlocks: () => BlockNode[];
 }
 
+// ────────────────────────────────────────────
+// Store implementation
+// ────────────────────────────────────────────
+
 export const useBuilderStore = create<BuilderState>()(
     immer((set, get) => ({
-        // Initial state
         blocks: [],
         selectedBlockId: null,
         hoveredBlockId: null,
         isDragging: false,
-        viewport: 'desktop',
-        history: [[]],
+        viewport: 'desktop' as Viewport,
+        history: [[]] as BlockNode[][],
         historyIndex: 0,
         isDirty: false,
         clipboard: null,
         styleClipboard: null,
         pendingDeleteId: null,
+        _lastSnapshotAt: 0,
 
-        // Block operations
+        // ── Block operations ──────────────────────
 
         setBlocks: (blocks) => {
             set((state) => {
@@ -225,7 +273,6 @@ export const useBuilderStore = create<BuilderState>()(
                 state.selectedBlockId = null;
                 state.hoveredBlockId = null;
                 state.isDirty = false;
-                // blocks here is a plain array (not a draft), safe to structuredClone
                 state.history = [structuredClone(blocks)];
                 state.historyIndex = 0;
             });
@@ -241,10 +288,13 @@ export const useBuilderStore = create<BuilderState>()(
             };
 
             set((state) => {
-                _pushHistoryOnDraft(state);
+                pushSnapshot(state);
+
+                // Default: append at the end of the target container
                 const targetIndex = index ?? (parentId
                     ? (findBlockInTree(state.blocks, parentId)?.children?.length ?? 0)
                     : state.blocks.length);
+
                 insertBlockInTree(state.blocks, parentId ?? null, targetIndex, newBlock);
                 state.selectedBlockId = id;
                 state.isDirty = true;
@@ -256,24 +306,21 @@ export const useBuilderStore = create<BuilderState>()(
         updateBlock: (id, props) => {
             set((state) => {
                 const block = findBlockInTree(state.blocks, id);
-                if (block) {
-                    _pushHistoryOnDraft(state);
-                    Object.assign(block.props, props);
-                    state.isDirty = true;
-                }
+                if (!block) return;
+
+                pushSnapshot(state, { debounce: true });
+                Object.assign(block.props, props);
+                state.isDirty = true;
             });
         },
 
         removeBlock: (id) => {
             set((state) => {
-                _pushHistoryOnDraft(state);
+                pushSnapshot(state);
                 removeBlockFromTree(state.blocks, id);
-                if (state.selectedBlockId === id) {
-                    state.selectedBlockId = null;
-                }
-                if (state.hoveredBlockId === id) {
-                    state.hoveredBlockId = null;
-                }
+
+                if (state.selectedBlockId === id) state.selectedBlockId = null;
+                if (state.hoveredBlockId === id) state.hoveredBlockId = null;
                 state.isDirty = true;
             });
         },
@@ -283,33 +330,40 @@ export const useBuilderStore = create<BuilderState>()(
                 const block = findBlockInTree(state.blocks, id);
                 if (!block) return;
 
-                // Use current() to get plain JS from Immer draft before cloning
-                const blockClone = structuredClone(current(block)) as BlockNode;
+                // Figure out where the block currently lives (before any mutation)
+                const origin = findParentInfo(state.blocks, id);
 
-                _pushHistoryOnDraft(state);
+                // Unwrap the Immer proxy into a plain object before removing
+                const blockData = structuredClone(current(block));
+
+                pushSnapshot(state);
                 removeBlockFromTree(state.blocks, id);
-                insertBlockInTree(state.blocks, newParentId, newIndex, blockClone);
+
+                // If we're moving within the same parent and the original index was
+                // before the target, the target needs to shift down by one because
+                // the removal shortened the array.
+                let adjustedIndex = newIndex;
+                if (origin && origin.parentId === newParentId && origin.index < newIndex) {
+                    adjustedIndex--;
+                }
+
+                insertBlockInTree(state.blocks, newParentId, adjustedIndex, blockData);
                 state.isDirty = true;
             });
         },
 
         duplicateBlock: (id) => {
-            const state = get();
-            const block = findBlockInTree(state.blocks, id);
+            const { blocks } = get();
+            const block = findBlockInTree(blocks, id);
             if (!block) return null;
 
             const cloned = cloneBlockDeep(block);
-            const parentInfo = findParentInfo(state.blocks, id);
+            const info = findParentInfo(blocks, id);
 
             set((draft) => {
-                _pushHistoryOnDraft(draft);
-                const insertIndex = parentInfo ? parentInfo.index + 1 : draft.blocks.length;
-                insertBlockInTree(
-                    draft.blocks,
-                    parentInfo?.parentId ?? null,
-                    insertIndex,
-                    cloned,
-                );
+                pushSnapshot(draft);
+                const insertIndex = info ? info.index + 1 : draft.blocks.length;
+                insertBlockInTree(draft.blocks, info?.parentId ?? null, insertIndex, cloned);
                 draft.selectedBlockId = cloned.id;
                 draft.isDirty = true;
             });
@@ -320,9 +374,8 @@ export const useBuilderStore = create<BuilderState>()(
         copyBlock: (id) => {
             const block = findBlockInTree(get().blocks, id);
             if (!block) return;
-            // get().blocks is plain (not a draft), so structuredClone is safe here
             set((state) => {
-                state.clipboard = structuredClone(block) as BlockNode;
+                state.clipboard = structuredClone(block);
             });
         },
 
@@ -333,7 +386,7 @@ export const useBuilderStore = create<BuilderState>()(
             const cloned = cloneBlockDeep(clipboard);
 
             set((state) => {
-                _pushHistoryOnDraft(state);
+                pushSnapshot(state);
                 insertBlockInTree(state.blocks, parentId, index, cloned);
                 state.selectedBlockId = cloned.id;
                 state.isDirty = true;
@@ -345,65 +398,60 @@ export const useBuilderStore = create<BuilderState>()(
         copyStyles: (id) => {
             const block = findBlockInTree(get().blocks, id);
             if (!block) return;
-            // Extract style-related props (exclude content like text, src, items, etc.)
-            const styleKeys = ['backgroundColor', 'color', 'fontSize', 'fontWeight', 'textAlign', 'padding', 'paddingTop', 'paddingBottom', 'paddingLeft', 'paddingRight', 'margin', 'borderRadius', 'border', 'shadow', 'animation', 'width', 'height', 'maxWidth', 'opacity'];
+
             const styles: Record<string, unknown> = {};
-            for (const key of styleKeys) {
-                if (block.props[key] !== undefined) {
-                    styles[key] = structuredClone(block.props[key]);
+            for (const [key, value] of Object.entries(block.props)) {
+                if (STYLE_PROP_KEYS.has(key)) {
+                    styles[key] = structuredClone(value);
                 }
             }
-            set((state) => { state.styleClipboard = styles; });
+
+            set((state) => {
+                state.styleClipboard = styles;
+            });
         },
 
         pasteStyles: (id) => {
             const { styleClipboard } = get();
             if (!styleClipboard || Object.keys(styleClipboard).length === 0) return;
+
             set((state) => {
                 const block = findBlockInTree(state.blocks, id);
-                if (block) {
-                    _pushHistoryOnDraft(state);
-                    Object.assign(block.props, styleClipboard);
-                    state.isDirty = true;
-                }
+                if (!block) return;
+
+                pushSnapshot(state);
+                Object.assign(block.props, styleClipboard);
+                state.isDirty = true;
             });
         },
 
         moveBlockUp: (id) => {
-            const state = get();
-            const info = findParentInfo(state.blocks, id);
-            if (!info || info.index === 0) return;
-
             set((draft) => {
-                _pushHistoryOnDraft(draft);
-                const siblings = info.parentId
-                    ? findBlockInTree(draft.blocks, info.parentId)!.children!
-                    : draft.blocks;
-                const temp = siblings[info.index];
-                siblings[info.index] = siblings[info.index - 1];
-                siblings[info.index - 1] = temp;
+                const info = findParentInfo(draft.blocks, id);
+                if (!info || info.index === 0) return;
+
+                const siblings = getSiblings(draft.blocks, info.parentId);
+                if (!siblings) return;
+
+                pushSnapshot(draft);
+                // Swap with the previous sibling
+                const i = info.index;
+                [siblings[i - 1], siblings[i]] = [siblings[i], siblings[i - 1]];
                 draft.isDirty = true;
             });
         },
 
         moveBlockDown: (id) => {
-            const state = get();
-            const info = findParentInfo(state.blocks, id);
-            if (!info) return;
-
-            const siblings = info.parentId
-                ? findBlockInTree(state.blocks, info.parentId)?.children ?? []
-                : state.blocks;
-            if (info.index >= siblings.length - 1) return;
-
             set((draft) => {
-                _pushHistoryOnDraft(draft);
-                const draftSiblings = info.parentId
-                    ? findBlockInTree(draft.blocks, info.parentId)!.children!
-                    : draft.blocks;
-                const temp = draftSiblings[info.index];
-                draftSiblings[info.index] = draftSiblings[info.index + 1];
-                draftSiblings[info.index + 1] = temp;
+                const info = findParentInfo(draft.blocks, id);
+                if (!info) return;
+
+                const siblings = getSiblings(draft.blocks, info.parentId);
+                if (!siblings || info.index >= siblings.length - 1) return;
+
+                pushSnapshot(draft);
+                const i = info.index;
+                [siblings[i], siblings[i + 1]] = [siblings[i + 1], siblings[i]];
                 draft.isDirty = true;
             });
         },
@@ -415,24 +463,16 @@ export const useBuilderStore = create<BuilderState>()(
         },
 
         confirmDelete: () => {
-            const { pendingDeleteId } = get();
+            const { pendingDeleteId, removeBlock } = get();
             if (!pendingDeleteId) return;
 
+            removeBlock(pendingDeleteId);
             set((state) => {
-                _pushHistoryOnDraft(state);
-                removeBlockFromTree(state.blocks, pendingDeleteId);
-                if (state.selectedBlockId === pendingDeleteId) {
-                    state.selectedBlockId = null;
-                }
-                if (state.hoveredBlockId === pendingDeleteId) {
-                    state.hoveredBlockId = null;
-                }
                 state.pendingDeleteId = null;
-                state.isDirty = true;
             });
         },
 
-        // Selection
+        // ── Selection ─────────────────────────────
 
         selectBlock: (id) => {
             set((state) => {
@@ -446,7 +486,7 @@ export const useBuilderStore = create<BuilderState>()(
             });
         },
 
-        // Drag
+        // ── Drag ──────────────────────────────────
 
         setIsDragging: (dragging) => {
             set((state) => {
@@ -454,7 +494,7 @@ export const useBuilderStore = create<BuilderState>()(
             });
         },
 
-        // Viewport
+        // ── Viewport ──────────────────────────────
 
         setViewport: (viewport) => {
             set((state) => {
@@ -462,57 +502,52 @@ export const useBuilderStore = create<BuilderState>()(
             });
         },
 
-        // History
+        // ── History ───────────────────────────────
 
         pushHistory: () => {
             set((state) => {
-                _pushHistoryOnDraft(state);
+                pushSnapshot(state);
             });
         },
 
         undo: () => {
             set((state) => {
-                if (state.historyIndex > 0) {
-                    state.historyIndex -= 1;
-                    state.blocks = structuredClone(current(state.history)[state.historyIndex]) as BlockNode[];
-                    state.selectedBlockId = null;
-                    state.isDirty = true;
-                }
+                if (state.historyIndex <= 0) return;
+
+                state.historyIndex--;
+                const snapshot = current(state.history)[state.historyIndex];
+                state.blocks = structuredClone(snapshot);
+                state.selectedBlockId = null;
+                // Index 0 is the initial state set by setBlocks, so we're back to "clean"
+                state.isDirty = state.historyIndex > 0;
             });
         },
 
         redo: () => {
             set((state) => {
-                if (state.historyIndex < state.history.length - 1) {
-                    state.historyIndex += 1;
-                    state.blocks = structuredClone(current(state.history)[state.historyIndex]) as BlockNode[];
-                    state.selectedBlockId = null;
-                    state.isDirty = true;
-                }
+                if (state.historyIndex >= state.history.length - 1) return;
+
+                state.historyIndex++;
+                const snapshot = current(state.history)[state.historyIndex];
+                state.blocks = structuredClone(snapshot);
+                state.selectedBlockId = null;
+                state.isDirty = true;
             });
         },
 
-        canUndo: () => {
-            return get().historyIndex > 0;
-        },
+        canUndo: () => get().historyIndex > 0,
 
         canRedo: () => {
-            const state = get();
-            return state.historyIndex < state.history.length - 1;
+            const { historyIndex, history } = get();
+            return historyIndex < history.length - 1;
         },
 
-        // Helpers
+        // ── Read helpers ──────────────────────────
 
-        findBlock: (id) => {
-            return findBlockInTree(get().blocks, id);
-        },
+        findBlock: (id) => findBlockInTree(get().blocks, id),
 
-        getBlockPath: (id) => {
-            return getBlockPathInTree(get().blocks, id) ?? [];
-        },
+        getBlockPath: (id) => getBlockPathInTree(get().blocks, id) ?? [],
 
-        flattenBlocks: () => {
-            return flattenTree(get().blocks);
-        },
+        flattenBlocks: () => flattenTree(get().blocks),
     })),
 );

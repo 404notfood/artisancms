@@ -393,8 +393,1717 @@
           }
         ]
       }
+    },
+    {
+      "id": "a-propos",
+      "title": "À propos",
+      "slug": "a-propos",
+      "template": "default",
+      "meta_title": "À propos — Thomas Laurent, Designer & Développeur",
+      "meta_description": "Découvrez mon parcours, mes compétences et ma philosophie de travail. 7 ans d'expérience en design UI/UX et développement frontend.",
+      "content": {
+        "blocks": [
+          {
+            "type": "section",
+            "id": "portfolio-about-hero",
+            "props": {
+              "backgroundColor": "#0a0a0a",
+              "paddingTop": 100,
+              "paddingBottom": 80,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 900,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "portfolio-about-kicker",
+                "props": {
+                  "content": "<p style='font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#6366f1;margin-bottom:16px'>À propos</p>"
+                }
+              },
+              {
+                "type": "heading",
+                "id": "portfolio-about-title",
+                "props": {
+                  "text": "Designer par passion, développeur par conviction",
+                  "level": 1,
+                  "alignment": "left",
+                  "color": "#ffffff"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "portfolio-about-sp1",
+                "props": { "height": 24 }
+              },
+              {
+                "type": "text",
+                "id": "portfolio-about-intro",
+                "props": {
+                  "content": "<p style='color:#a1a1aa;font-size:1.15rem;line-height:1.8;max-width:700px'>Depuis 7 ans, je conçois des interfaces qui allient esthétique et fonctionnalité. Ancien directeur artistique en agence, je me suis spécialisé dans le design produit et le développement frontend pour accompagner les startups et PME dans leur transformation digitale.</p>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "portfolio-about-bio",
+            "props": {
+              "backgroundColor": "#0d0d0d",
+              "paddingTop": 80,
+              "paddingBottom": 80,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 960,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "grid",
+                "id": "portfolio-about-bio-grid",
+                "props": {
+                  "columns": 2,
+                  "gap": 64
+                },
+                "children": [
+                  {
+                    "type": "text",
+                    "id": "portfolio-about-photo",
+                    "props": {
+                      "content": "<div style='background:linear-gradient(135deg,#1e1b4b,#312e81);border-radius:20px;aspect-ratio:3/4;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;border:1px solid rgba(99,102,241,0.2)'><div style='position:absolute;inset:0;background:radial-gradient(circle at 50% 40%,rgba(99,102,241,0.25),transparent 60%)'></div><div style='position:relative;text-align:center'><div style='width:120px;height:120px;background:rgba(99,102,241,0.3);border-radius:50%;margin:0 auto 20px;border:2px solid rgba(99,102,241,0.4)'></div><p style='color:#a5b4fc;font-size:0.875rem;font-weight:600'>Thomas Laurent</p><p style='color:#6366f1;font-size:0.75rem'>Paris, France</p></div></div>"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "id": "portfolio-about-story",
+                    "props": {
+                      "content": "<div><h3 style='color:#f4f4f5;font-size:1.25rem;font-weight:700;margin-bottom:20px'>Mon parcours</h3><p style='color:#71717a;line-height:1.8;margin-bottom:16px'>Diplômé de l'École de Design Nantes Atlantique en 2017, j'ai débuté ma carrière comme directeur artistique junior chez BETC Digital. Pendant 3 ans, j'ai travaillé sur des campagnes digitales pour des marques comme Air France, Lacoste et Canal+.</p><p style='color:#71717a;line-height:1.8;margin-bottom:16px'>En 2020, j'ai fait le choix du freelance pour me concentrer sur ce qui me passionne vraiment : la conception de produits digitaux. J'ai appris le développement frontend en autodidacte — React, TypeScript, Next.js — pour maîtriser l'ensemble de la chaîne de création.</p><p style='color:#71717a;line-height:1.8;margin-bottom:32px'>Aujourd'hui, je combine design et code pour livrer des interfaces pixel-perfect, performantes et accessibles. Chaque projet est une occasion de résoudre des problèmes complexes avec élégance.</p><div style='display:flex;gap:10px;flex-wrap:wrap'><span style='background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.2);color:#a5b4fc;font-size:0.75rem;font-weight:600;padding:4px 12px;border-radius:100px'>Design UI/UX</span><span style='background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.2);color:#a5b4fc;font-size:0.75rem;font-weight:600;padding:4px 12px;border-radius:100px'>React / Next.js</span><span style='background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.2);color:#a5b4fc;font-size:0.75rem;font-weight:600;padding:4px 12px;border-radius:100px'>Design System</span><span style='background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.2);color:#a5b4fc;font-size:0.75rem;font-weight:600;padding:4px 12px;border-radius:100px'>Accessibilité</span></div></div>"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "portfolio-about-skills",
+            "props": {
+              "backgroundColor": "#0a0a0a",
+              "paddingTop": 80,
+              "paddingBottom": 80,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 960,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "portfolio-about-skills-label",
+                "props": {
+                  "content": "<p style='color:#6366f1;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:16px'>Compétences</p>"
+                }
+              },
+              {
+                "type": "heading",
+                "id": "portfolio-about-skills-title",
+                "props": {
+                  "text": "Expertise technique",
+                  "level": 2,
+                  "alignment": "left",
+                  "color": "#f4f4f5"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "portfolio-about-sp2",
+                "props": { "height": 40 }
+              },
+              {
+                "type": "grid",
+                "id": "portfolio-about-skills-grid",
+                "props": {
+                  "columns": 2,
+                  "gap": 32
+                },
+                "children": [
+                  {
+                    "type": "progress-bar",
+                    "id": "portfolio-about-skill1",
+                    "props": {
+                      "label": "Figma / Design UI",
+                      "value": 95,
+                      "color": "#6366f1",
+                      "backgroundColor": "rgba(99,102,241,0.15)"
+                    }
+                  },
+                  {
+                    "type": "progress-bar",
+                    "id": "portfolio-about-skill2",
+                    "props": {
+                      "label": "React / Next.js",
+                      "value": 90,
+                      "color": "#6366f1",
+                      "backgroundColor": "rgba(99,102,241,0.15)"
+                    }
+                  },
+                  {
+                    "type": "progress-bar",
+                    "id": "portfolio-about-skill3",
+                    "props": {
+                      "label": "TypeScript",
+                      "value": 88,
+                      "color": "#6366f1",
+                      "backgroundColor": "rgba(99,102,241,0.15)"
+                    }
+                  },
+                  {
+                    "type": "progress-bar",
+                    "id": "portfolio-about-skill4",
+                    "props": {
+                      "label": "Tailwind CSS",
+                      "value": 92,
+                      "color": "#6366f1",
+                      "backgroundColor": "rgba(99,102,241,0.15)"
+                    }
+                  },
+                  {
+                    "type": "progress-bar",
+                    "id": "portfolio-about-skill5",
+                    "props": {
+                      "label": "Design System / Storybook",
+                      "value": 85,
+                      "color": "#6366f1",
+                      "backgroundColor": "rgba(99,102,241,0.15)"
+                    }
+                  },
+                  {
+                    "type": "progress-bar",
+                    "id": "portfolio-about-skill6",
+                    "props": {
+                      "label": "UX Research / Tests utilisateurs",
+                      "value": 80,
+                      "color": "#6366f1",
+                      "backgroundColor": "rgba(99,102,241,0.15)"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "portfolio-about-stats",
+            "props": {
+              "backgroundColor": "#111111",
+              "paddingTop": 80,
+              "paddingBottom": 80,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 960,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "grid",
+                "id": "portfolio-about-stats-grid",
+                "props": {
+                  "columns": 4,
+                  "gap": 24
+                },
+                "children": [
+                  {
+                    "type": "counter",
+                    "id": "portfolio-about-counter1",
+                    "props": {
+                      "value": 7,
+                      "suffix": " ans",
+                      "label": "d'expérience",
+                      "color": "#6366f1"
+                    }
+                  },
+                  {
+                    "type": "counter",
+                    "id": "portfolio-about-counter2",
+                    "props": {
+                      "value": 45,
+                      "suffix": "+",
+                      "label": "projets livrés",
+                      "color": "#6366f1"
+                    }
+                  },
+                  {
+                    "type": "counter",
+                    "id": "portfolio-about-counter3",
+                    "props": {
+                      "value": 30,
+                      "suffix": "+",
+                      "label": "clients satisfaits",
+                      "color": "#6366f1"
+                    }
+                  },
+                  {
+                    "type": "counter",
+                    "id": "portfolio-about-counter4",
+                    "props": {
+                      "value": 3,
+                      "label": "design awards",
+                      "color": "#6366f1"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "portfolio-about-tools",
+            "props": {
+              "backgroundColor": "#0a0a0a",
+              "paddingTop": 80,
+              "paddingBottom": 80,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 960,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "portfolio-about-tools-label",
+                "props": {
+                  "content": "<p style='color:#6366f1;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:16px'>Outils</p>"
+                }
+              },
+              {
+                "type": "heading",
+                "id": "portfolio-about-tools-title",
+                "props": {
+                  "text": "Mon environnement de travail",
+                  "level": 2,
+                  "alignment": "left",
+                  "color": "#f4f4f5"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "portfolio-about-sp3",
+                "props": { "height": 40 }
+              },
+              {
+                "type": "grid",
+                "id": "portfolio-about-tools-grid",
+                "props": {
+                  "columns": 4,
+                  "gap": 20
+                },
+                "children": [
+                  {
+                    "type": "icon-box",
+                    "id": "portfolio-about-tool1",
+                    "props": {
+                      "icon": "figma",
+                      "title": "Figma",
+                      "description": "Design & Prototypage",
+                      "iconColor": "#6366f1",
+                      "backgroundColor": "rgba(99,102,241,0.08)",
+                      "borderColor": "rgba(99,102,241,0.15)"
+                    }
+                  },
+                  {
+                    "type": "icon-box",
+                    "id": "portfolio-about-tool2",
+                    "props": {
+                      "icon": "code",
+                      "title": "VS Code",
+                      "description": "Éditeur de code",
+                      "iconColor": "#6366f1",
+                      "backgroundColor": "rgba(99,102,241,0.08)",
+                      "borderColor": "rgba(99,102,241,0.15)"
+                    }
+                  },
+                  {
+                    "type": "icon-box",
+                    "id": "portfolio-about-tool3",
+                    "props": {
+                      "icon": "layers",
+                      "title": "Storybook",
+                      "description": "Documentation UI",
+                      "iconColor": "#6366f1",
+                      "backgroundColor": "rgba(99,102,241,0.08)",
+                      "borderColor": "rgba(99,102,241,0.15)"
+                    }
+                  },
+                  {
+                    "type": "icon-box",
+                    "id": "portfolio-about-tool4",
+                    "props": {
+                      "icon": "git-branch",
+                      "title": "GitHub",
+                      "description": "Versioning & CI/CD",
+                      "iconColor": "#6366f1",
+                      "backgroundColor": "rgba(99,102,241,0.08)",
+                      "borderColor": "rgba(99,102,241,0.15)"
+                    }
+                  },
+                  {
+                    "type": "icon-box",
+                    "id": "portfolio-about-tool5",
+                    "props": {
+                      "icon": "image",
+                      "title": "Adobe CC",
+                      "description": "Photoshop & Illustrator",
+                      "iconColor": "#6366f1",
+                      "backgroundColor": "rgba(99,102,241,0.08)",
+                      "borderColor": "rgba(99,102,241,0.15)"
+                    }
+                  },
+                  {
+                    "type": "icon-box",
+                    "id": "portfolio-about-tool6",
+                    "props": {
+                      "icon": "bar-chart",
+                      "title": "Hotjar",
+                      "description": "Analytics UX",
+                      "iconColor": "#6366f1",
+                      "backgroundColor": "rgba(99,102,241,0.08)",
+                      "borderColor": "rgba(99,102,241,0.15)"
+                    }
+                  },
+                  {
+                    "type": "icon-box",
+                    "id": "portfolio-about-tool7",
+                    "props": {
+                      "icon": "monitor",
+                      "title": "Notion",
+                      "description": "Gestion de projet",
+                      "iconColor": "#6366f1",
+                      "backgroundColor": "rgba(99,102,241,0.08)",
+                      "borderColor": "rgba(99,102,241,0.15)"
+                    }
+                  },
+                  {
+                    "type": "icon-box",
+                    "id": "portfolio-about-tool8",
+                    "props": {
+                      "icon": "terminal",
+                      "title": "Vercel",
+                      "description": "Déploiement",
+                      "iconColor": "#6366f1",
+                      "backgroundColor": "rgba(99,102,241,0.08)",
+                      "borderColor": "rgba(99,102,241,0.15)"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "services",
+      "title": "Services",
+      "slug": "services",
+      "template": "default",
+      "meta_title": "Services — Thomas Laurent, Designer & Développeur Freelance",
+      "meta_description": "Web design, branding, UX/UI, développement frontend. Découvrez mes prestations et ma méthodologie de travail.",
+      "content": {
+        "blocks": [
+          {
+            "type": "section",
+            "id": "portfolio-services-hero",
+            "props": {
+              "backgroundColor": "#0a0a0a",
+              "paddingTop": 100,
+              "paddingBottom": 80,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 900,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "portfolio-services-kicker",
+                "props": {
+                  "content": "<p style='font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#6366f1;margin-bottom:16px'>Services</p>"
+                }
+              },
+              {
+                "type": "heading",
+                "id": "portfolio-services-title",
+                "props": {
+                  "text": "Des solutions sur mesure pour chaque besoin digital",
+                  "level": 1,
+                  "alignment": "left",
+                  "color": "#ffffff"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "portfolio-services-sp1",
+                "props": { "height": 16 }
+              },
+              {
+                "type": "text",
+                "id": "portfolio-services-intro",
+                "props": {
+                  "content": "<p style='color:#71717a;font-size:1.1rem;line-height:1.7;max-width:640px'>Du concept initial au déploiement, je vous accompagne à chaque étape avec une approche centrée sur l'utilisateur et la performance.</p>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "portfolio-services-grid-section",
+            "props": {
+              "backgroundColor": "#0d0d0d",
+              "paddingTop": 80,
+              "paddingBottom": 80,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 1080,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "grid",
+                "id": "portfolio-services-grid",
+                "props": {
+                  "columns": 2,
+                  "gap": 24
+                },
+                "children": [
+                  {
+                    "type": "text",
+                    "id": "portfolio-services-card1",
+                    "props": {
+                      "content": "<div style='background:#111;border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:40px;position:relative;overflow:hidden'><div style='position:absolute;top:-20px;right:-20px;width:100px;height:100px;background:rgba(99,102,241,0.08);border-radius:50%;filter:blur(30px)'></div><div style='width:48px;height:48px;background:rgba(99,102,241,0.15);border-radius:12px;margin-bottom:24px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;border:1px solid rgba(99,102,241,0.2)'>&#9670;</div><h3 style='color:#f4f4f5;font-size:1.2rem;font-weight:700;margin-bottom:12px'>Design UI/UX</h3><p style='color:#71717a;font-size:0.9rem;line-height:1.75;margin-bottom:24px'>Audit d'interface, recherche utilisateur, wireframes, maquettes haute fidélité et prototypes interactifs. Je conçois des interfaces intuitives qui convertissent.</p><ul style='list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px'><li style='color:#a1a1aa;font-size:0.8rem;display:flex;align-items:center;gap:8px'><span style='color:#6366f1'>&#10003;</span> Audit UX & recommandations</li><li style='color:#a1a1aa;font-size:0.8rem;display:flex;align-items:center;gap:8px'><span style='color:#6366f1'>&#10003;</span> Wireframes & user flows</li><li style='color:#a1a1aa;font-size:0.8rem;display:flex;align-items:center;gap:8px'><span style='color:#6366f1'>&#10003;</span> Maquettes Figma HD</li><li style='color:#a1a1aa;font-size:0.8rem;display:flex;align-items:center;gap:8px'><span style='color:#6366f1'>&#10003;</span> Prototypes interactifs</li></ul></div>"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "id": "portfolio-services-card2",
+                    "props": {
+                      "content": "<div style='background:#111;border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:40px;position:relative;overflow:hidden'><div style='position:absolute;top:-20px;right:-20px;width:100px;height:100px;background:rgba(139,92,246,0.08);border-radius:50%;filter:blur(30px)'></div><div style='width:48px;height:48px;background:rgba(139,92,246,0.15);border-radius:12px;margin-bottom:24px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;border:1px solid rgba(139,92,246,0.2)'>&#9672;</div><h3 style='color:#f4f4f5;font-size:1.2rem;font-weight:700;margin-bottom:12px'>Développement Frontend</h3><p style='color:#71717a;font-size:0.9rem;line-height:1.75;margin-bottom:24px'>Intégration pixel-perfect en React, Next.js et TypeScript. Code propre, performant, maintenable et testé. Animations fluides avec Framer Motion.</p><ul style='list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px'><li style='color:#a1a1aa;font-size:0.8rem;display:flex;align-items:center;gap:8px'><span style='color:#8b5cf6'>&#10003;</span> React / Next.js / TypeScript</li><li style='color:#a1a1aa;font-size:0.8rem;display:flex;align-items:center;gap:8px'><span style='color:#8b5cf6'>&#10003;</span> Tailwind CSS / CSS Modules</li><li style='color:#a1a1aa;font-size:0.8rem;display:flex;align-items:center;gap:8px'><span style='color:#8b5cf6'>&#10003;</span> Animations & micro-interactions</li><li style='color:#a1a1aa;font-size:0.8rem;display:flex;align-items:center;gap:8px'><span style='color:#8b5cf6'>&#10003;</span> Tests unitaires & e2e</li></ul></div>"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "id": "portfolio-services-card3",
+                    "props": {
+                      "content": "<div style='background:#111;border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:40px;position:relative;overflow:hidden'><div style='position:absolute;top:-20px;right:-20px;width:100px;height:100px;background:rgba(16,185,129,0.08);border-radius:50%;filter:blur(30px)'></div><div style='width:48px;height:48px;background:rgba(16,185,129,0.15);border-radius:12px;margin-bottom:24px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;border:1px solid rgba(16,185,129,0.2)'>&#9673;</div><h3 style='color:#f4f4f5;font-size:1.2rem;font-weight:700;margin-bottom:12px'>Branding & Identité visuelle</h3><p style='color:#71717a;font-size:0.9rem;line-height:1.75;margin-bottom:24px'>Création d'identités visuelles mémorables et cohérentes. Du logo à la charte graphique complète, en passant par les supports print et digitaux.</p><ul style='list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px'><li style='color:#a1a1aa;font-size:0.8rem;display:flex;align-items:center;gap:8px'><span style='color:#10b981'>&#10003;</span> Logo & déclinaisons</li><li style='color:#a1a1aa;font-size:0.8rem;display:flex;align-items:center;gap:8px'><span style='color:#10b981'>&#10003;</span> Charte graphique</li><li style='color:#a1a1aa;font-size:0.8rem;display:flex;align-items:center;gap:8px'><span style='color:#10b981'>&#10003;</span> Palette & typographie</li><li style='color:#a1a1aa;font-size:0.8rem;display:flex;align-items:center;gap:8px'><span style='color:#10b981'>&#10003;</span> Guidelines brand</li></ul></div>"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "id": "portfolio-services-card4",
+                    "props": {
+                      "content": "<div style='background:#111;border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:40px;position:relative;overflow:hidden'><div style='position:absolute;top:-20px;right:-20px;width:100px;height:100px;background:rgba(249,115,22,0.08);border-radius:50%;filter:blur(30px)'></div><div style='width:48px;height:48px;background:rgba(249,115,22,0.15);border-radius:12px;margin-bottom:24px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;border:1px solid rgba(249,115,22,0.2)'>&#9671;</div><h3 style='color:#f4f4f5;font-size:1.2rem;font-weight:700;margin-bottom:12px'>Design System</h3><p style='color:#71717a;font-size:0.9rem;line-height:1.75;margin-bottom:24px'>Construction de systèmes de design scalables avec tokens, composants, patterns et documentation. Garant de la cohérence visuelle à long terme.</p><ul style='list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px'><li style='color:#a1a1aa;font-size:0.8rem;display:flex;align-items:center;gap:8px'><span style='color:#f97316'>&#10003;</span> Design tokens</li><li style='color:#a1a1aa;font-size:0.8rem;display:flex;align-items:center;gap:8px'><span style='color:#f97316'>&#10003;</span> Bibliothèque de composants</li><li style='color:#a1a1aa;font-size:0.8rem;display:flex;align-items:center;gap:8px'><span style='color:#f97316'>&#10003;</span> Documentation Storybook</li><li style='color:#a1a1aa;font-size:0.8rem;display:flex;align-items:center;gap:8px'><span style='color:#f97316'>&#10003;</span> Migration & onboarding</li></ul></div>"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "portfolio-services-process",
+            "props": {
+              "backgroundColor": "#0a0a0a",
+              "paddingTop": 80,
+              "paddingBottom": 80,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 960,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "portfolio-services-process-label",
+                "props": {
+                  "content": "<p style='color:#6366f1;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:16px'>Méthodologie</p>"
+                }
+              },
+              {
+                "type": "heading",
+                "id": "portfolio-services-process-title",
+                "props": {
+                  "text": "Comment je travaille",
+                  "level": 2,
+                  "alignment": "left",
+                  "color": "#f4f4f5"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "portfolio-services-sp2",
+                "props": { "height": 40 }
+              },
+              {
+                "type": "grid",
+                "id": "portfolio-services-process-grid",
+                "props": {
+                  "columns": 4,
+                  "gap": 20
+                },
+                "children": [
+                  {
+                    "type": "text",
+                    "id": "portfolio-services-step1",
+                    "props": {
+                      "content": "<div style='text-align:center;padding:32px 20px'><div style='width:56px;height:56px;background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.25);border-radius:50%;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;color:#a5b4fc;font-weight:800;font-size:1.1rem'>01</div><h4 style='color:#f4f4f5;font-size:0.95rem;font-weight:700;margin-bottom:8px'>Découverte</h4><p style='color:#71717a;font-size:0.8rem;line-height:1.7'>Analyse de vos besoins, objectifs business, public cible et contraintes techniques.</p></div>"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "id": "portfolio-services-step2",
+                    "props": {
+                      "content": "<div style='text-align:center;padding:32px 20px'><div style='width:56px;height:56px;background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.25);border-radius:50%;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;color:#a5b4fc;font-weight:800;font-size:1.1rem'>02</div><h4 style='color:#f4f4f5;font-size:0.95rem;font-weight:700;margin-bottom:8px'>Conception</h4><p style='color:#71717a;font-size:0.8rem;line-height:1.7'>Wireframes, architecture d'information, maquettes et prototypes itératifs.</p></div>"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "id": "portfolio-services-step3",
+                    "props": {
+                      "content": "<div style='text-align:center;padding:32px 20px'><div style='width:56px;height:56px;background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.25);border-radius:50%;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;color:#a5b4fc;font-weight:800;font-size:1.1rem'>03</div><h4 style='color:#f4f4f5;font-size:0.95rem;font-weight:700;margin-bottom:8px'>Développement</h4><p style='color:#71717a;font-size:0.8rem;line-height:1.7'>Intégration React, animations, responsive design, tests et optimisation.</p></div>"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "id": "portfolio-services-step4",
+                    "props": {
+                      "content": "<div style='text-align:center;padding:32px 20px'><div style='width:56px;height:56px;background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.25);border-radius:50%;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;color:#a5b4fc;font-weight:800;font-size:1.1rem'>04</div><h4 style='color:#f4f4f5;font-size:0.95rem;font-weight:700;margin-bottom:8px'>Livraison</h4><p style='color:#71717a;font-size:0.8rem;line-height:1.7'>Déploiement, documentation, formation équipe et support post-lancement.</p></div>"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "portfolio-services-pricing",
+            "props": {
+              "backgroundColor": "#111111",
+              "paddingTop": 80,
+              "paddingBottom": 80,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 960,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "portfolio-services-pricing-label",
+                "props": {
+                  "content": "<p style='color:#6366f1;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:16px'>Tarifs</p>"
+                }
+              },
+              {
+                "type": "heading",
+                "id": "portfolio-services-pricing-title",
+                "props": {
+                  "text": "Investissement transparent",
+                  "level": 2,
+                  "alignment": "left",
+                  "color": "#f4f4f5"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "portfolio-services-sp3",
+                "props": { "height": 16 }
+              },
+              {
+                "type": "text",
+                "id": "portfolio-services-pricing-desc",
+                "props": {
+                  "content": "<p style='color:#71717a;font-size:1rem;line-height:1.7;margin-bottom:40px'>Chaque projet est unique. Mes tarifs s'adaptent à la complexité et à la durée de la mission. Voici des fourchettes indicatives :</p>"
+                }
+              },
+              {
+                "type": "grid",
+                "id": "portfolio-services-pricing-grid",
+                "props": {
+                  "columns": 3,
+                  "gap": 24
+                },
+                "children": [
+                  {
+                    "type": "text",
+                    "id": "portfolio-services-price1",
+                    "props": {
+                      "content": "<div style='background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:36px;text-align:center'><p style='color:#71717a;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:16px'>Landing Page</p><p style='color:#f4f4f5;font-size:2.5rem;font-weight:800;margin-bottom:4px'>2 500<span style='font-size:1rem;color:#6366f1'>&#8364;</span></p><p style='color:#52525b;font-size:0.8rem;margin-bottom:24px'>Design + Développement</p><p style='color:#71717a;font-size:0.85rem;line-height:1.7'>1 page responsive, animations, formulaire de contact, SEO de base.</p></div>"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "id": "portfolio-services-price2",
+                    "props": {
+                      "content": "<div style='background:rgba(99,102,241,0.06);border:1px solid rgba(99,102,241,0.2);border-radius:16px;padding:36px;text-align:center;position:relative'><div style='position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:#6366f1;color:#fff;font-size:0.7rem;font-weight:700;padding:4px 16px;border-radius:0 0 8px 8px;letter-spacing:0.05em'>POPULAIRE</div><p style='color:#71717a;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:16px'>Site Vitrine</p><p style='color:#f4f4f5;font-size:2.5rem;font-weight:800;margin-bottom:4px'>5 000<span style='font-size:1rem;color:#6366f1'>&#8364;</span></p><p style='color:#52525b;font-size:0.8rem;margin-bottom:24px'>Design + Développement</p><p style='color:#71717a;font-size:0.85rem;line-height:1.7'>5-8 pages, CMS, blog, formulaires, SEO avancé, analytics.</p></div>"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "id": "portfolio-services-price3",
+                    "props": {
+                      "content": "<div style='background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:36px;text-align:center'><p style='color:#71717a;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:16px'>Application Web</p><p style='color:#f4f4f5;font-size:2.5rem;font-weight:800;margin-bottom:4px'>Sur devis</p><p style='color:#52525b;font-size:0.8rem;margin-bottom:24px'>Design + Développement</p><p style='color:#71717a;font-size:0.85rem;line-height:1.7'>Dashboard SaaS, e-commerce, application métier. Complexité sur mesure.</p></div>"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "portfolio-services-cta",
+            "props": {
+              "backgroundColor": "#0a0a0a",
+              "paddingTop": 80,
+              "paddingBottom": 80,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 700,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "portfolio-services-cta-content",
+                "props": {
+                  "content": "<div style='text-align:center;position:relative'><div style='position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:500px;height:250px;background:radial-gradient(ellipse,rgba(99,102,241,0.1),transparent 70%);pointer-events:none'></div><h2 style='color:#fff;font-size:2rem;font-weight:800;line-height:1.2;margin-bottom:16px;letter-spacing:-0.02em;position:relative'>Un projet en tête ?</h2><p style='color:#71717a;font-size:1rem;line-height:1.7;margin-bottom:36px;position:relative'>Décrivez votre besoin en quelques lignes. Je vous recontacte sous 24h avec une première estimation.</p><a href='/contact' style='display:inline-flex;align-items:center;gap:10px;background:#6366f1;color:#fff;padding:16px 32px;border-radius:10px;font-weight:700;text-decoration:none;font-size:0.95rem;box-shadow:0 0 30px rgba(99,102,241,0.35);position:relative'>Demander un devis gratuit &#8594;</a></div>"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "blog",
+      "title": "Blog",
+      "slug": "blog",
+      "template": "default",
+      "meta_title": "Blog — Thomas Laurent, Designer & Développeur",
+      "meta_description": "Articles sur le design UI/UX, le développement frontend, la créativité et les outils du designer moderne.",
+      "content": {
+        "blocks": [
+          {
+            "type": "section",
+            "id": "portfolio-blog-hero",
+            "props": {
+              "backgroundColor": "#0a0a0a",
+              "paddingTop": 100,
+              "paddingBottom": 60,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 900,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "portfolio-blog-kicker",
+                "props": {
+                  "content": "<p style='font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#6366f1;margin-bottom:16px'>Blog</p>"
+                }
+              },
+              {
+                "type": "heading",
+                "id": "portfolio-blog-title",
+                "props": {
+                  "text": "Réflexions, tutoriels & retours d'expérience",
+                  "level": 1,
+                  "alignment": "left",
+                  "color": "#ffffff"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "portfolio-blog-sp1",
+                "props": { "height": 16 }
+              },
+              {
+                "type": "text",
+                "id": "portfolio-blog-intro",
+                "props": {
+                  "content": "<p style='color:#71717a;font-size:1.1rem;line-height:1.7;max-width:640px'>Je partage ici mes découvertes, mes processus de travail et mes opinions sur le design et le développement web. Un article par semaine en moyenne.</p>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "portfolio-blog-categories",
+            "props": {
+              "backgroundColor": "#0d0d0d",
+              "paddingTop": 40,
+              "paddingBottom": 80,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 900,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "portfolio-blog-cat-nav",
+                "props": {
+                  "content": "<div style='display:flex;gap:10px;flex-wrap:wrap;margin-bottom:48px'><a href='/blog' style='background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.3);color:#a5b4fc;font-size:0.8rem;font-weight:600;padding:8px 16px;border-radius:100px;text-decoration:none'>Tous</a><a href='/blog?cat=process' style='background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:#71717a;font-size:0.8rem;font-weight:600;padding:8px 16px;border-radius:100px;text-decoration:none'>Process</a><a href='/blog?cat=etudes-de-cas' style='background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:#71717a;font-size:0.8rem;font-weight:600;padding:8px 16px;border-radius:100px;text-decoration:none'>Études de cas</a><a href='/blog?cat=outils' style='background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:#71717a;font-size:0.8rem;font-weight:600;padding:8px 16px;border-radius:100px;text-decoration:none'>Outils</a><a href='/blog?cat=design' style='background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:#71717a;font-size:0.8rem;font-weight:600;padding:8px 16px;border-radius:100px;text-decoration:none'>Design</a><a href='/blog?cat=developpement' style='background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:#71717a;font-size:0.8rem;font-weight:600;padding:8px 16px;border-radius:100px;text-decoration:none'>Développement</a></div>"
+                }
+              },
+              {
+                "type": "text",
+                "id": "portfolio-blog-note",
+                "props": {
+                  "content": "<div style='background:rgba(99,102,241,0.06);border:1px solid rgba(99,102,241,0.15);border-radius:12px;padding:24px 28px;text-align:center'><p style='color:#a5b4fc;font-size:0.9rem;line-height:1.7;margin:0'>Les derniers articles du blog apparaissent automatiquement ici une fois publiés. Consultez les catégories ci-dessus pour filtrer.</p></div>"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "journal",
+      "title": "Journal",
+      "slug": "journal",
+      "template": "default",
+      "meta_title": "Journal de projets — Thomas Laurent",
+      "meta_description": "Études de cas détaillées de mes projets : problématique, processus de conception, résultats mesurables.",
+      "content": {
+        "blocks": [
+          {
+            "type": "section",
+            "id": "portfolio-journal-hero",
+            "props": {
+              "backgroundColor": "#0a0a0a",
+              "paddingTop": 100,
+              "paddingBottom": 60,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 900,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "portfolio-journal-kicker",
+                "props": {
+                  "content": "<p style='font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#6366f1;margin-bottom:16px'>Journal</p>"
+                }
+              },
+              {
+                "type": "heading",
+                "id": "portfolio-journal-title",
+                "props": {
+                  "text": "Études de cas & coulisses de projets",
+                  "level": 1,
+                  "alignment": "left",
+                  "color": "#ffffff"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "portfolio-journal-sp1",
+                "props": { "height": 16 }
+              },
+              {
+                "type": "text",
+                "id": "portfolio-journal-intro",
+                "props": {
+                  "content": "<p style='color:#71717a;font-size:1.1rem;line-height:1.7;max-width:640px'>Plongez dans les coulisses de mes projets. Chaque étude de cas détaille la problématique, le processus de conception et les résultats obtenus.</p>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "portfolio-journal-cases",
+            "props": {
+              "backgroundColor": "#0d0d0d",
+              "paddingTop": 40,
+              "paddingBottom": 80,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 960,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "portfolio-journal-case1",
+                "props": {
+                  "content": "<div style='background:#111;border:1px solid rgba(255,255,255,0.07);border-radius:16px;overflow:hidden;margin-bottom:24px'><div style='display:grid;grid-template-columns:1fr 1fr'><div style='background:linear-gradient(135deg,#1e1b4b,#312e81);padding:48px;display:flex;flex-direction:column;justify-content:center'><span style='color:rgba(165,180,252,0.5);font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px'>Étude de cas #1</span><h3 style='color:#fff;font-size:1.5rem;font-weight:800;margin-bottom:12px;line-height:1.3'>Refonte du dashboard DataViz</h3><p style='color:rgba(255,255,255,0.5);font-size:0.875rem;line-height:1.7;margin-bottom:20px'>Comment j'ai repensé l'expérience analytique pour 2 000 utilisateurs quotidiens.</p><div style='display:flex;gap:16px'><div><p style='color:#a5b4fc;font-weight:800;font-size:1.2rem;margin:0'>-60%</p><p style='color:rgba(255,255,255,0.35);font-size:0.7rem;margin:0'>Temps de tâche</p></div><div><p style='color:#a5b4fc;font-weight:800;font-size:1.2rem;margin:0'>+45%</p><p style='color:rgba(255,255,255,0.35);font-size:0.7rem;margin:0'>Adoption</p></div></div></div><div style='background:linear-gradient(135deg,#1a1744,#252063);display:flex;align-items:center;justify-content:center;min-height:280px'><div style='width:180px;height:120px;background:rgba(99,102,241,0.2);border-radius:12px;border:1px solid rgba(99,102,241,0.3)'></div></div></div></div>"
+                }
+              },
+              {
+                "type": "text",
+                "id": "portfolio-journal-case2",
+                "props": {
+                  "content": "<div style='background:#111;border:1px solid rgba(255,255,255,0.07);border-radius:16px;overflow:hidden;margin-bottom:24px'><div style='display:grid;grid-template-columns:1fr 1fr'><div style='background:linear-gradient(135deg,#0f2a0f,#14532d);display:flex;align-items:center;justify-content:center;min-height:280px'><div style='display:grid;grid-template-columns:1fr 1fr;gap:8px;width:160px'><div style='background:rgba(16,185,129,0.25);border-radius:8px;height:56px;border:1px solid rgba(16,185,129,0.35)'></div><div style='background:rgba(16,185,129,0.12);border-radius:8px;height:56px'></div><div style='background:rgba(16,185,129,0.12);border-radius:8px;height:56px'></div><div style='background:rgba(16,185,129,0.25);border-radius:8px;height:56px;border:1px solid rgba(16,185,129,0.35)'></div></div></div><div style='background:#111;padding:48px;display:flex;flex-direction:column;justify-content:center'><span style='color:rgba(110,231,183,0.5);font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px'>Étude de cas #2</span><h3 style='color:#f4f4f5;font-size:1.5rem;font-weight:800;margin-bottom:12px;line-height:1.3'>E-commerce mode éco-responsable</h3><p style='color:#71717a;font-size:0.875rem;line-height:1.7;margin-bottom:20px'>Création d'une boutique en ligne premium avec un tunnel de conversion optimisé.</p><div style='display:flex;gap:16px'><div><p style='color:#6ee7b7;font-weight:800;font-size:1.2rem;margin:0'>+38%</p><p style='color:#52525b;font-size:0.7rem;margin:0'>Conversion</p></div><div><p style='color:#6ee7b7;font-weight:800;font-size:1.2rem;margin:0'>1.2M</p><p style='color:#52525b;font-size:0.7rem;margin:0'>CA an 1</p></div></div></div></div></div>"
+                }
+              },
+              {
+                "type": "text",
+                "id": "portfolio-journal-case3",
+                "props": {
+                  "content": "<div style='background:#111;border:1px solid rgba(255,255,255,0.07);border-radius:16px;overflow:hidden'><div style='display:grid;grid-template-columns:1fr 1fr'><div style='background:#111;padding:48px;display:flex;flex-direction:column;justify-content:center'><span style='color:rgba(196,181,253,0.5);font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px'>Étude de cas #3</span><h3 style='color:#f4f4f5;font-size:1.5rem;font-weight:800;margin-bottom:12px;line-height:1.3'>Application bien-être mobile</h3><p style='color:#71717a;font-size:0.875rem;line-height:1.7;margin-bottom:20px'>Design système complet et développement React Native d'une app de méditation gamifiée.</p><div style='display:flex;gap:16px'><div><p style='color:#c4b5fd;font-weight:800;font-size:1.2rem;margin:0'>50K</p><p style='color:#52525b;font-size:0.7rem;margin:0'>Downloads</p></div><div><p style='color:#c4b5fd;font-weight:800;font-size:1.2rem;margin:0'>82%</p><p style='color:#52525b;font-size:0.7rem;margin:0'>Rétention J7</p></div></div></div><div style='background:linear-gradient(135deg,#0c0a1a,#2d1b69);display:flex;align-items:center;justify-content:center;min-height:280px'><div style='width:75px;height:140px;background:rgba(139,92,246,0.25);border-radius:18px;border:1px solid rgba(139,92,246,0.4)'></div></div></div></div>"
+                }
+              }
+            ]
+          }
+        ]
+      }
     }
   ],
+  "posts": [
+    {
+      "title": "Mon processus créatif : de l'idée au pixel",
+      "slug": "processus-creatif-idee-pixel",
+      "status": "published",
+      "excerpt": "Découvrez les 5 étapes clés de mon processus de création, de la première esquisse au livrable final pixel-perfect.",
+      "taxonomies": {
+        "categories": ["process"],
+        "tags": ["creativite", "ux-ui", "portfolio"]
+      },
+      "content": {
+        "blocks": [
+          {
+            "type": "section",
+            "id": "post1-intro",
+            "props": {
+              "backgroundColor": "#0a0a0a",
+              "paddingTop": 60,
+              "paddingBottom": 40,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 720,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "post1-intro-text",
+                "props": {
+                  "content": "<p style='color:#a1a1aa;font-size:1.1rem;line-height:1.9'>Après 7 ans de pratique et plus de 45 projets livrés, j'ai développé un processus créatif qui me permet de passer de l'idée au pixel final de manière structurée et efficace. Ce n'est pas une recette magique, mais une méthodologie éprouvée que j'adapte à chaque projet.</p>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "post1-phase1",
+            "props": {
+              "backgroundColor": "#0d0d0d",
+              "paddingTop": 40,
+              "paddingBottom": 40,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 720,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "heading",
+                "id": "post1-h2-1",
+                "props": {
+                  "text": "1. L'immersion : comprendre avant de créer",
+                  "level": 2,
+                  "color": "#f4f4f5"
+                }
+              },
+              {
+                "type": "text",
+                "id": "post1-p1",
+                "props": {
+                  "content": "<p style='color:#a1a1aa;line-height:1.85;margin-top:16px'>Avant d'ouvrir Figma, je passe au minimum deux jours en immersion. Interviews stakeholders, analyse de la concurrence, études de marché. Je crée un document de brief structuré qui contient les objectifs business, les personas utilisateur, les contraintes techniques et les KPIs à atteindre.</p><p style='color:#a1a1aa;line-height:1.85;margin-top:16px'>Cette phase est souvent sous-estimée, pourtant elle conditionne tout le reste. Un brief mal défini, c'est un projet qui dérive. J'utilise un template Notion que j'ai peaufiné au fil des années pour ne rien oublier.</p>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "post1-phase2",
+            "props": {
+              "backgroundColor": "#0a0a0a",
+              "paddingTop": 40,
+              "paddingBottom": 40,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 720,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "heading",
+                "id": "post1-h2-2",
+                "props": {
+                  "text": "2. L'exploration : diverger pour mieux converger",
+                  "level": 2,
+                  "color": "#f4f4f5"
+                }
+              },
+              {
+                "type": "text",
+                "id": "post1-p2",
+                "props": {
+                  "content": "<p style='color:#a1a1aa;line-height:1.85;margin-top:16px'>Vient ensuite la phase d'exploration. Mood boards, sketches papier, mind maps. Je m'autorise à explorer sans filtre pendant une journée complète. Pas de jugement, pas de \"c'est pas faisable\". L'objectif est de générer un maximum de pistes créatives.</p><p style='color:#a1a1aa;line-height:1.85;margin-top:16px'>Puis je converge : je sélectionne les 2-3 directions les plus prometteuses et je les développe en wireframes basse fidélité. Ces wireframes sont présentés au client pour validation de la direction avant de passer au design détaillé.</p>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "post1-phase3",
+            "props": {
+              "backgroundColor": "#0d0d0d",
+              "paddingTop": 40,
+              "paddingBottom": 40,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 720,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "heading",
+                "id": "post1-h2-3",
+                "props": {
+                  "text": "3. Le design : du wireframe au pixel-perfect",
+                  "level": 2,
+                  "color": "#f4f4f5"
+                }
+              },
+              {
+                "type": "text",
+                "id": "post1-p3",
+                "props": {
+                  "content": "<p style='color:#a1a1aa;line-height:1.85;margin-top:16px'>C'est la phase que tout le monde attend. Je traduis les wireframes validés en maquettes haute fidélité. Chaque pixel compte : la hiérarchie visuelle, les espaces blancs, la typographie, les couleurs. Je travaille avec un design system dès le départ, même pour les petits projets, car cela garantit la cohérence et accélère les itérations.</p><p style='color:#a1a1aa;line-height:1.85;margin-top:16px'>Je livre toujours un prototype interactif Figma. Pas un PDF statique, mais une expérience navigable qui permet au client de ressentir le produit final avant la première ligne de code.</p>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "post1-conclusion",
+            "props": {
+              "backgroundColor": "#0a0a0a",
+              "paddingTop": 40,
+              "paddingBottom": 60,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 720,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "heading",
+                "id": "post1-h2-4",
+                "props": {
+                  "text": "4 & 5. Développement et itération",
+                  "level": 2,
+                  "color": "#f4f4f5"
+                }
+              },
+              {
+                "type": "text",
+                "id": "post1-p4",
+                "props": {
+                  "content": "<p style='color:#a1a1aa;line-height:1.85;margin-top:16px'>L'avantage d'être designer et développeur, c'est que la transition du design au code est fluide. Je développe en React/Next.js avec une attention particulière à la fidélité visuelle, aux animations et à la performance. Le code est typé, testé et documenté.</p><p style='color:#a1a1aa;line-height:1.85;margin-top:16px'>Enfin, l'itération post-lancement est cruciale. Je mets en place du tracking, j'analyse les comportements utilisateurs avec Hotjar, et je propose des ajustements data-driven. Un bon produit n'est jamais \"fini\" -- il évolue avec ses utilisateurs.</p>"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "title": "Redesign complet : étude de cas e-commerce",
+      "slug": "redesign-etude-de-cas-ecommerce",
+      "status": "published",
+      "excerpt": "Comment la refonte UX/UI d'une boutique de mode éco-responsable a généré +38% de conversion et 1.2M de CA en première année.",
+      "taxonomies": {
+        "categories": ["etudes-de-cas"],
+        "tags": ["ux-ui", "portfolio"]
+      },
+      "content": {
+        "blocks": [
+          {
+            "type": "section",
+            "id": "post2-intro",
+            "props": {
+              "backgroundColor": "#0a0a0a",
+              "paddingTop": 60,
+              "paddingBottom": 40,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 720,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "post2-intro-text",
+                "props": {
+                  "content": "<p style='color:#a1a1aa;font-size:1.1rem;line-height:1.9'>Quand Élodie, fondatrice de NatureLine, m'a contacté en mars 2025, sa boutique en ligne peinait à convertir. Un taux de conversion de 0.8%, un panier moyen de 42 euros et un taux d'abandon de panier de 78%. Six mois plus tard, les chiffres avaient radicalement changé.</p>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "post2-audit",
+            "props": {
+              "backgroundColor": "#0d0d0d",
+              "paddingTop": 40,
+              "paddingBottom": 40,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 720,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "heading",
+                "id": "post2-h2-1",
+                "props": {
+                  "text": "L'audit initial : identifier les points de friction",
+                  "level": 2,
+                  "color": "#f4f4f5"
+                }
+              },
+              {
+                "type": "text",
+                "id": "post2-p1",
+                "props": {
+                  "content": "<p style='color:#a1a1aa;line-height:1.85;margin-top:16px'>L'audit UX a révélé trois problèmes majeurs. Premièrement, la navigation : les catégories étaient mal organisées et les filtres produits quasi inexistants. Deuxièmement, les fiches produit manquaient d'informations clés (composition, guide des tailles, avis clients). Troisièmement, le tunnel de paiement comptait 5 étapes au lieu des 3 recommandées.</p><p style='color:#a1a1aa;line-height:1.85;margin-top:16px'>J'ai complété cet audit par des tests utilisateurs avec 8 participants. Les recordings Hotjar ont confirmé mes hypothèses : 60% des visiteurs quittaient le site avant même d'atteindre une fiche produit.</p>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "post2-solution",
+            "props": {
+              "backgroundColor": "#0a0a0a",
+              "paddingTop": 40,
+              "paddingBottom": 40,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 720,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "heading",
+                "id": "post2-h2-2",
+                "props": {
+                  "text": "La solution : simplicité et confiance",
+                  "level": 2,
+                  "color": "#f4f4f5"
+                }
+              },
+              {
+                "type": "text",
+                "id": "post2-p2",
+                "props": {
+                  "content": "<p style='color:#a1a1aa;line-height:1.85;margin-top:16px'>La refonte s'est articulée autour de deux axes : simplifier le parcours d'achat et renforcer la confiance. J'ai repensé l'architecture d'information avec seulement 4 catégories principales, des filtres dynamiques par matière, taille et prix, et une recherche prédictive.</p><p style='color:#a1a1aa;line-height:1.85;margin-top:16px'>Les fiches produit ont été enrichies : photos en contexte, zoom HD, guide des tailles interactif, avis vérifiés avec photos clients, et un storytelling sur la fabrication éthique de chaque pièce. Le checkout est passé à 3 étapes avec guest checkout, Apple Pay et une barre de progression claire.</p>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "post2-results",
+            "props": {
+              "backgroundColor": "#0d0d0d",
+              "paddingTop": 40,
+              "paddingBottom": 40,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 720,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "heading",
+                "id": "post2-h2-3",
+                "props": {
+                  "text": "Les résultats : au-delà des attentes",
+                  "level": 2,
+                  "color": "#f4f4f5"
+                }
+              },
+              {
+                "type": "text",
+                "id": "post2-p3",
+                "props": {
+                  "content": "<p style='color:#a1a1aa;line-height:1.85;margin-top:16px'>Trois mois après le lancement, les résultats étaient spectaculaires. Le taux de conversion est passé de 0.8% à 2.1% -- une augmentation de 162%. Le panier moyen a grimpé à 68 euros grâce aux recommandations intelligentes et au cross-selling. L'abandon de panier a chuté à 45%.</p><p style='color:#a1a1aa;line-height:1.85;margin-top:16px'>Sur la première année complète, NatureLine a généré 1.2 millions d'euros de chiffre d'affaires. Élodie a pu embaucher deux personnes et lancer une deuxième collection. Ce projet illustre parfaitement l'impact business d'un design UX bien pensé.</p>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "post2-takeaway",
+            "props": {
+              "backgroundColor": "#0a0a0a",
+              "paddingTop": 40,
+              "paddingBottom": 60,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 720,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "heading",
+                "id": "post2-h2-4",
+                "props": {
+                  "text": "Ce que ce projet m'a appris",
+                  "level": 2,
+                  "color": "#f4f4f5"
+                }
+              },
+              {
+                "type": "text",
+                "id": "post2-p4",
+                "props": {
+                  "content": "<p style='color:#a1a1aa;line-height:1.85;margin-top:16px'>La leçon principale : en e-commerce, chaque micro-friction coûte de l'argent. Un bouton mal placé, un formulaire trop long, un temps de chargement de 500ms en trop -- tout cela se traduit directement en ventes perdues. L'obsession du détail n'est pas du perfectionnisme, c'est du pragmatisme business.</p>"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "title": "Les outils indispensables du designer en 2026",
+      "slug": "outils-indispensables-designer-2026",
+      "status": "published",
+      "excerpt": "Ma sélection d'outils pour le design, le prototypage, la collaboration et le développement en 2026.",
+      "taxonomies": {
+        "categories": ["outils"],
+        "tags": ["figma", "creativite"]
+      },
+      "content": {
+        "blocks": [
+          {
+            "type": "section",
+            "id": "post3-intro",
+            "props": {
+              "backgroundColor": "#0a0a0a",
+              "paddingTop": 60,
+              "paddingBottom": 40,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 720,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "post3-intro-text",
+                "props": {
+                  "content": "<p style='color:#a1a1aa;font-size:1.1rem;line-height:1.9'>L'écosystème d'outils pour designers évolue à une vitesse folle. Après avoir testé des dizaines de solutions, voici la stack que j'utilise au quotidien en 2026 -- et pourquoi chaque outil a gagné sa place.</p>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "post3-design",
+            "props": {
+              "backgroundColor": "#0d0d0d",
+              "paddingTop": 40,
+              "paddingBottom": 40,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 720,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "heading",
+                "id": "post3-h2-1",
+                "props": {
+                  "text": "Design & prototypage : Figma reste le roi",
+                  "level": 2,
+                  "color": "#f4f4f5"
+                }
+              },
+              {
+                "type": "text",
+                "id": "post3-p1",
+                "props": {
+                  "content": "<p style='color:#a1a1aa;line-height:1.85;margin-top:16px'>Malgré la montée en puissance de Penpot (open source) et les nouvelles fonctionnalités de Framer, Figma reste mon outil principal. Les dernières mises à jour -- variables avancées, prototypage conditionnel, auto-layout v5 -- en font un outil complet de la conception au hand-off développeur.</p><p style='color:#a1a1aa;line-height:1.85;margin-top:16px'>Pour les animations complexes, j'utilise Rive en complément. Son intégration avec React est excellente et les fichiers générés sont légers. Pour les illustrations, Adobe Illustrator reste incontournable malgré son âge.</p>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "post3-dev",
+            "props": {
+              "backgroundColor": "#0a0a0a",
+              "paddingTop": 40,
+              "paddingBottom": 40,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 720,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "heading",
+                "id": "post3-h2-2",
+                "props": {
+                  "text": "Développement : VS Code, Cursor et l'IA",
+                  "level": 2,
+                  "color": "#f4f4f5"
+                }
+              },
+              {
+                "type": "text",
+                "id": "post3-p2",
+                "props": {
+                  "content": "<p style='color:#a1a1aa;line-height:1.85;margin-top:16px'>VS Code reste mon éditeur principal, mais j'utilise de plus en plus Cursor pour les tâches répétitives. L'autocomplétion IA me fait gagner un temps considérable sur le boilerplate React et les types TypeScript. Je ne l'utilise pas pour la logique métier -- l'IA fait encore trop d'erreurs subtiles -- mais pour le scaffolding et les tests, c'est un game changer.</p><p style='color:#a1a1aa;line-height:1.85;margin-top:16px'>Ma stack frontend en 2026 : React 19, Next.js 15, TypeScript 5.5, Tailwind CSS v4, Framer Motion. Pour le state management, Zustand a définitivement remplacé Redux dans tous mes projets. Plus simple, plus léger, plus intuitif.</p>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "post3-collab",
+            "props": {
+              "backgroundColor": "#0d0d0d",
+              "paddingTop": 40,
+              "paddingBottom": 40,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 720,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "heading",
+                "id": "post3-h2-3",
+                "props": {
+                  "text": "Collaboration & productivité",
+                  "level": 2,
+                  "color": "#f4f4f5"
+                }
+              },
+              {
+                "type": "text",
+                "id": "post3-p3",
+                "props": {
+                  "content": "<p style='color:#a1a1aa;line-height:1.85;margin-top:16px'>Notion pour la gestion de projet et la documentation. Linear pour le suivi des tâches techniques. Loom pour les retours vidéo asynchrones -- beaucoup plus efficace qu'un long email. Vercel pour le déploiement et les previews de PR.</p><p style='color:#a1a1aa;line-height:1.85;margin-top:16px'>Et pour l'analytics UX : Hotjar pour les heatmaps et recordings, PostHog pour les feature flags et l'analytics produit, Sentry pour le monitoring d'erreurs. Cet ensemble me permet de suivre l'impact réel du design sur les métriques business.</p>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "post3-conclusion",
+            "props": {
+              "backgroundColor": "#0a0a0a",
+              "paddingTop": 40,
+              "paddingBottom": 60,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 720,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "post3-p4",
+                "props": {
+                  "content": "<p style='color:#a1a1aa;line-height:1.85'>Le meilleur outil est celui que vous maîtrisez. Ne sautez pas sur chaque nouveauté -- choisissez votre stack, apprenez-la en profondeur, et changez uniquement quand un outil apporte un gain mesurable à votre workflow.</p>"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "title": "Typographie web : guide des bonnes pratiques",
+      "slug": "typographie-web-guide-bonnes-pratiques",
+      "status": "published",
+      "excerpt": "Choix des polices, échelle typographique, lisibilité et performance : tout ce qu'il faut savoir pour une typographie web réussie.",
+      "taxonomies": {
+        "categories": ["design"],
+        "tags": ["typographie", "ux-ui"]
+      },
+      "content": {
+        "blocks": [
+          {
+            "type": "section",
+            "id": "post4-intro",
+            "props": {
+              "backgroundColor": "#0a0a0a",
+              "paddingTop": 60,
+              "paddingBottom": 40,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 720,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "post4-intro-text",
+                "props": {
+                  "content": "<p style='color:#a1a1aa;font-size:1.1rem;line-height:1.9'>La typographie représente 95% du web design. C'est une affirmation d'Oliver Reichenstein qui date de 2006, mais qui n'a jamais été aussi vraie. Une typographie bien pensée transforme une page ordinaire en une expérience de lecture mémorable.</p>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "post4-choice",
+            "props": {
+              "backgroundColor": "#0d0d0d",
+              "paddingTop": 40,
+              "paddingBottom": 40,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 720,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "heading",
+                "id": "post4-h2-1",
+                "props": {
+                  "text": "Choisir ses polices : moins c'est plus",
+                  "level": 2,
+                  "color": "#f4f4f5"
+                }
+              },
+              {
+                "type": "text",
+                "id": "post4-p1",
+                "props": {
+                  "content": "<p style='color:#a1a1aa;line-height:1.85;margin-top:16px'>Règle d'or : ne jamais utiliser plus de deux familles de polices. Une pour les titres, une pour le corps de texte. En 2026, mes combinaisons préférées sont : Space Grotesk + Inter pour un style tech/moderne, Fraunces + DM Sans pour un style éditorial élégant, et Syne + Outfit pour un style créatif audacieux.</p><p style='color:#a1a1aa;line-height:1.85;margin-top:16px'>Pour la performance, privilégiez les polices variables. Une seule fichier variable peut remplacer 6 à 8 fichiers de graisses différentes, soit 200 à 400 Ko économisés. Google Fonts propose de plus en plus de polices variables, et la prise en charge navigateur est désormais universelle.</p>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "post4-scale",
+            "props": {
+              "backgroundColor": "#0a0a0a",
+              "paddingTop": 40,
+              "paddingBottom": 40,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 720,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "heading",
+                "id": "post4-h2-2",
+                "props": {
+                  "text": "L'échelle typographique : créer une hiérarchie claire",
+                  "level": 2,
+                  "color": "#f4f4f5"
+                }
+              },
+              {
+                "type": "text",
+                "id": "post4-p2",
+                "props": {
+                  "content": "<p style='color:#a1a1aa;line-height:1.85;margin-top:16px'>J'utilise l'échelle 1.25 (Major Third) pour la plupart de mes projets. Concrètement : body à 16px, h6 à 20px, h5 à 25px, h4 à 31px, h3 à 39px, h2 à 49px, h1 à 61px. Cette progression naturelle crée une hiérarchie visuelle immédiatement lisible.</p><p style='color:#a1a1aa;line-height:1.85;margin-top:16px'>Pour les projets mobiles, je passe à une échelle 1.2 (Minor Third) pour éviter que les titres deviennent trop grands sur petit écran. L'utilisation de clamp() en CSS permet de créer une taille fluide qui s'adapte naturellement entre les breakpoints.</p>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "post4-readability",
+            "props": {
+              "backgroundColor": "#0d0d0d",
+              "paddingTop": 40,
+              "paddingBottom": 40,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 720,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "heading",
+                "id": "post4-h2-3",
+                "props": {
+                  "text": "Lisibilité : les règles non négociables",
+                  "level": 2,
+                  "color": "#f4f4f5"
+                }
+              },
+              {
+                "type": "text",
+                "id": "post4-p3",
+                "props": {
+                  "content": "<p style='color:#a1a1aa;line-height:1.85;margin-top:16px'>La longueur de ligne idéale est de 60 à 80 caractères. Au-delà, l'oeil se fatigue et perd sa position lors du retour à la ligne. C'est pourquoi je limite systématiquement la largeur du contenu texte à 720px maximum.</p><p style='color:#a1a1aa;line-height:1.85;margin-top:16px'>Le line-height pour le corps de texte doit être entre 1.6 et 1.8. Pour les titres, 1.1 à 1.3 suffit. L'espacement entre les paragraphes doit être au minimum égal à la hauteur de ligne du texte pour créer une respiration visuelle suffisante.</p><p style='color:#a1a1aa;line-height:1.85;margin-top:16px'>Enfin, le contraste. Sur fond sombre, évitez le blanc pur (#fff) pour le texte courant : utilisez plutôt un gris clair (#a1a1aa ou #d4d4d8) pour réduire la fatigue oculaire. Réservez le blanc pur aux titres et éléments à forte hiérarchie.</p>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "post4-conclusion",
+            "props": {
+              "backgroundColor": "#0a0a0a",
+              "paddingTop": 40,
+              "paddingBottom": 60,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 720,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "post4-p4",
+                "props": {
+                  "content": "<p style='color:#a1a1aa;line-height:1.85'>La typographie est un art subtil qui demande de la pratique et de l'attention aux détails. Maîtrisez ces fondamentaux, et la qualité perçue de vos interfaces fera un bond considérable. Comme le disait Massimo Vignelli : \"La typographie n'est pas un art parce qu'elle est utile. Elle est utile parce qu'elle est un art.\"</p>"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "title": "L'accessibilité web, un enjeu majeur",
+      "slug": "accessibilite-web-enjeu-majeur",
+      "status": "published",
+      "excerpt": "Pourquoi l'accessibilité web n'est pas une option mais une responsabilité. Guide pratique pour des interfaces inclusives.",
+      "taxonomies": {
+        "categories": ["developpement"],
+        "tags": ["accessibilite", "ux-ui"]
+      },
+      "content": {
+        "blocks": [
+          {
+            "type": "section",
+            "id": "post5-intro",
+            "props": {
+              "backgroundColor": "#0a0a0a",
+              "paddingTop": 60,
+              "paddingBottom": 40,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 720,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "post5-intro-text",
+                "props": {
+                  "content": "<p style='color:#a1a1aa;font-size:1.1rem;line-height:1.9'>12 millions de Français vivent avec un handicap. 80% des handicaps sont invisibles. L'accessibilité web n'est pas un \"nice to have\" -- c'est une obligation légale depuis la directive européenne 2019/882, et surtout une question d'éthique professionnelle.</p>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "post5-why",
+            "props": {
+              "backgroundColor": "#0d0d0d",
+              "paddingTop": 40,
+              "paddingBottom": 40,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 720,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "heading",
+                "id": "post5-h2-1",
+                "props": {
+                  "text": "L'accessibilité profite à tout le monde",
+                  "level": 2,
+                  "color": "#f4f4f5"
+                }
+              },
+              {
+                "type": "text",
+                "id": "post5-p1",
+                "props": {
+                  "content": "<p style='color:#a1a1aa;line-height:1.85;margin-top:16px'>L'accessibilité n'est pas un frein créatif. Au contraire, elle pousse à concevoir des interfaces plus claires, plus structurées et plus performantes. Un bon contraste de couleurs améliore la lisibilité pour tout le monde, pas seulement pour les daltoniens. Une navigation au clavier profite aux power users autant qu'aux personnes en situation de handicap moteur.</p><p style='color:#a1a1aa;line-height:1.85;margin-top:16px'>Les rampes d'accès dans les bâtiments sont aussi utilisées par les parents avec poussette, les livreurs avec chariot, les voyageurs avec valise. Le même principe s'applique au web : concevoir pour l'accessibilité, c'est concevoir pour l'utilisabilité.</p>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "post5-checklist",
+            "props": {
+              "backgroundColor": "#0a0a0a",
+              "paddingTop": 40,
+              "paddingBottom": 40,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 720,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "heading",
+                "id": "post5-h2-2",
+                "props": {
+                  "text": "Ma checklist accessibilité minimum",
+                  "level": 2,
+                  "color": "#f4f4f5"
+                }
+              },
+              {
+                "type": "text",
+                "id": "post5-p2",
+                "props": {
+                  "content": "<p style='color:#a1a1aa;line-height:1.85;margin-top:16px'>Voici les points que je vérifie systématiquement sur chaque projet. Premièrement, le contraste : ratio minimum de 4.5:1 pour le texte courant, 3:1 pour les textes grands (+24px ou +18px bold). J'utilise le plugin Figma \"A11y\" pour valider en phase de design.</p><p style='color:#a1a1aa;line-height:1.85;margin-top:16px'>Deuxièmement, la sémantique HTML. Utiliser les bonnes balises (h1-h6, nav, main, article, button vs div) n'est pas juste une bonne pratique -- c'est ce qui permet aux lecteurs d'écran de naviguer dans le contenu. Un site construit avec des div partout est inaccessible par défaut.</p><p style='color:#a1a1aa;line-height:1.85;margin-top:16px'>Troisièmement, la navigation au clavier. Chaque élément interactif doit être atteignable et activable au clavier. Le focus doit être visible (jamais de outline:none sans alternative). L'ordre de tabulation doit être logique et correspondre à l'ordre visuel.</p>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "post5-react",
+            "props": {
+              "backgroundColor": "#0d0d0d",
+              "paddingTop": 40,
+              "paddingBottom": 40,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 720,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "heading",
+                "id": "post5-h2-3",
+                "props": {
+                  "text": "Accessibilité en React : les outils",
+                  "level": 2,
+                  "color": "#f4f4f5"
+                }
+              },
+              {
+                "type": "text",
+                "id": "post5-p3",
+                "props": {
+                  "content": "<p style='color:#a1a1aa;line-height:1.85;margin-top:16px'>En React, j'utilise systématiquement Radix UI ou React Aria pour les composants interactifs (modals, menus, tabs, tooltips). Ces librairies headless gèrent toute la complexité ARIA nativement : focus trapping, rôles, états, navigation clavier. Ne réinventez pas la roue.</p><p style='color:#a1a1aa;line-height:1.85;margin-top:16px'>Pour les tests, eslint-plugin-jsx-a11y en linting, axe-core en tests automatisés, et des tests manuels réguliers avec NVDA (Windows) ou VoiceOver (Mac). L'automatisation détecte environ 30% des problèmes d'accessibilité -- le reste nécessite une revue humaine.</p>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "post5-conclusion",
+            "props": {
+              "backgroundColor": "#0a0a0a",
+              "paddingTop": 40,
+              "paddingBottom": 60,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 720,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "post5-p4",
+                "props": {
+                  "content": "<p style='color:#a1a1aa;line-height:1.85'>L'accessibilité est un muscle : plus on la pratique, plus elle devient naturelle. Intégrez-la dès le début de vos projets, pas comme une couche ajoutée à la fin. Un web accessible est un web meilleur pour tout le monde.</p>"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "taxonomies": [
+    {
+      "name": "Catégories",
+      "slug": "categories",
+      "type": "category",
+      "description": "Catégories des articles du blog",
+      "terms": [
+        { "name": "Process", "slug": "process", "description": "Méthodologie et processus créatif", "order": 1 },
+        { "name": "Études de cas", "slug": "etudes-de-cas", "description": "Analyses détaillées de projets réalisés", "order": 2 },
+        { "name": "Outils", "slug": "outils", "description": "Logiciels, frameworks et outils du designer moderne", "order": 3 },
+        { "name": "Design", "slug": "design", "description": "Typographie, couleurs, UI design et tendances", "order": 4 },
+        { "name": "Développement", "slug": "developpement", "description": "Frontend, performance et bonnes pratiques code", "order": 5 }
+      ]
+    },
+    {
+      "name": "Tags",
+      "slug": "tags",
+      "type": "tag",
+      "description": "Tags pour les articles du blog",
+      "terms": [
+        { "name": "UX/UI", "slug": "ux-ui", "description": "Design d'interface et expérience utilisateur", "order": 1 },
+        { "name": "Typographie", "slug": "typographie", "description": "Polices, échelles et lisibilité", "order": 2 },
+        { "name": "Accessibilité", "slug": "accessibilite", "description": "WCAG, ARIA et inclusion numérique", "order": 3 },
+        { "name": "Créativité", "slug": "creativite", "description": "Processus créatif et inspiration", "order": 4 },
+        { "name": "Portfolio", "slug": "portfolio", "description": "Projets et réalisations", "order": 5 },
+        { "name": "Figma", "slug": "figma", "description": "Tips et workflows Figma", "order": 6 }
+      ]
+    }
+  ],
+  "menus": [
+    {
+      "name": "Navigation principale",
+      "location": "header",
+      "items": [
+        { "label": "Accueil", "url": "/", "order": 1 },
+        { "label": "Projets", "url": "/projets", "order": 2 },
+        { "label": "Services", "url": "/services", "order": 3 },
+        { "label": "Journal", "url": "/journal", "order": 4 },
+        { "label": "À propos", "url": "/a-propos", "order": 5 },
+        { "label": "Contact", "url": "/contact", "order": 6 }
+      ]
+    },
+    {
+      "name": "Footer",
+      "location": "footer",
+      "items": [
+        { "label": "Mentions légales", "url": "/mentions-legales", "order": 1 },
+        { "label": "Confidentialité", "url": "/confidentialite", "order": 2 },
+        { "label": "Contact", "url": "/contact", "order": 3 }
+      ]
+    }
+  ],
+  "settings": {
+    "site_name": "Thomas Laurent — Portfolio",
+    "tagline": "Designer UI/UX & Développeur Frontend",
+    "description": "Je conçois et développe des interfaces web élégantes et performantes. Basé à Paris, disponible pour des missions freelance.",
+    "theme": "noir",
+    "colors": {
+      "primary": "#6366f1",
+      "secondary": "#8b5cf6",
+      "accent": "#a5b4fc"
+    },
+    "fonts": {
+      "heading": "Space Grotesk",
+      "body": "Inter"
+    }
+  },
   "compatible_themes": [
     "noir",
     "default"

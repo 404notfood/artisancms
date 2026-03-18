@@ -2,6 +2,7 @@
   "name": "Forge",
   "slug": "forge",
   "version": "1.0.0",
+  "style": "dark",
   "description": "Thème industrie & artisanat — fond charbon, accent orange brûlé, typographie musclée pour artisans, plombiers, électriciens et entreprises BTP. Impact visuel maximal, confiance immédiate.",
   "author": {
     "name": "ArtisanCMS",
@@ -21,8 +22,13 @@
       "regions": ["header", "content", "footer"]
     },
     {
-      "slug": "full",
+      "slug": "full-width",
       "name": "Pleine largeur",
+      "regions": ["header", "content", "footer"]
+    },
+    {
+      "slug": "landing",
+      "name": "Landing page",
       "regions": ["content"]
     }
   ],
@@ -38,6 +44,23 @@
   ],
   "customization": {
     "header": {
+      "logo_url": {
+        "label": "Logo",
+        "type": "image",
+        "default": ""
+      },
+      "height": {
+        "label": "Hauteur du header",
+        "type": "select",
+        "default": "64px",
+        "options": ["56px", "64px", "72px", "80px"]
+      },
+      "style": {
+        "label": "Style",
+        "type": "select",
+        "default": "solid",
+        "options": ["solid", "transparent"]
+      },
       "background_color": {
         "label": "Fond header",
         "type": "color",
@@ -47,11 +70,6 @@
         "label": "Texte navigation",
         "type": "color",
         "default": "#e0e0e0"
-      },
-      "logo_url": {
-        "label": "Logo",
-        "type": "image",
-        "default": ""
       },
       "company_name": {
         "label": "Nom de l'entreprise",
@@ -69,7 +87,95 @@
         "default": "06 XX XX XX XX"
       },
       "sticky": {
-        "label": "Header sticky",
+        "label": "Header fixe",
+        "type": "boolean",
+        "default": true
+      },
+      "menu_alignment": {
+        "label": "Alignement du menu",
+        "type": "select",
+        "default": "right",
+        "options": ["left", "center", "right"]
+      },
+      "variant": {
+        "label": "Style du header",
+        "type": "select",
+        "default": "stacked",
+        "options": ["classic", "centered", "split", "stacked", "minimal"]
+      },
+      "mobile_menu_style": {
+        "label": "Menu mobile",
+        "type": "select",
+        "default": "hamburger",
+        "options": ["hamburger", "slide", "fullscreen"]
+      },
+      "cta_text": {
+        "label": "Texte du bouton CTA",
+        "type": "text",
+        "default": "Devis gratuit"
+      },
+      "cta_url": {
+        "label": "URL du bouton CTA",
+        "type": "text",
+        "default": "/contact"
+      },
+      "cta_style": {
+        "label": "Style du CTA",
+        "type": "select",
+        "default": "primary",
+        "options": ["primary", "secondary", "outline"]
+      }
+    },
+    "footer": {
+      "layout": {
+        "label": "Disposition du footer",
+        "type": "select",
+        "default": "columns",
+        "options": ["simple", "columns", "minimal", "centered", "magazine"]
+      },
+      "columns": {
+        "label": "Nombre de colonnes",
+        "type": "select",
+        "default": "3",
+        "options": ["2", "3", "4"]
+      },
+      "background_color": {
+        "label": "Couleur de fond",
+        "type": "color",
+        "default": "#0a0a0a"
+      },
+      "text_color": {
+        "label": "Couleur du texte",
+        "type": "color",
+        "default": "#9ca3af"
+      },
+      "accent_color": {
+        "label": "Couleur accent (liens)",
+        "type": "color",
+        "default": "#f97316"
+      },
+      "copyright_text": {
+        "label": "Texte copyright",
+        "type": "text",
+        "default": "© {year} {site_name}. Tous droits réservés."
+      },
+      "show_social_links": {
+        "label": "Afficher les liens sociaux",
+        "type": "boolean",
+        "default": true
+      },
+      "social_facebook": {
+        "label": "Facebook URL",
+        "type": "text",
+        "default": ""
+      },
+      "social_instagram": {
+        "label": "Instagram URL",
+        "type": "text",
+        "default": ""
+      },
+      "show_powered_by": {
+        "label": "Afficher Propulsé par ArtisanCMS",
         "type": "boolean",
         "default": true
       }
@@ -119,6 +225,31 @@
         "label": "Bordures",
         "type": "color",
         "default": "rgba(255,255,255,0.08)"
+      },
+      "link": {
+        "label": "Couleur des liens",
+        "type": "color",
+        "default": "#f97316"
+      },
+      "link_hover": {
+        "label": "Liens au survol",
+        "type": "color",
+        "default": "#fb923c"
+      },
+      "success": {
+        "label": "Succès",
+        "type": "color",
+        "default": "#22c55e"
+      },
+      "warning": {
+        "label": "Avertissement",
+        "type": "color",
+        "default": "#f59e0b"
+      },
+      "error": {
+        "label": "Erreur",
+        "type": "color",
+        "default": "#ef4444"
       }
     },
     "fonts": {
@@ -137,10 +268,58 @@
         "type": "select",
         "default": "16px",
         "options": ["15px", "16px", "17px", "18px"]
+      },
+      "h1_size": {
+        "label": "Taille H1",
+        "type": "text",
+        "default": "3.5rem"
+      },
+      "h2_size": {
+        "label": "Taille H2",
+        "type": "text",
+        "default": "2.5rem"
+      },
+      "h3_size": {
+        "label": "Taille H3",
+        "type": "text",
+        "default": "1.75rem"
+      },
+      "h4_size": {
+        "label": "Taille H4",
+        "type": "text",
+        "default": "1.25rem"
+      },
+      "h5_size": {
+        "label": "Taille H5",
+        "type": "text",
+        "default": "1.125rem"
+      },
+      "h6_size": {
+        "label": "Taille H6",
+        "type": "text",
+        "default": "1rem"
+      },
+      "heading_weight": {
+        "label": "Graisse titres",
+        "type": "select",
+        "default": "400",
+        "options": ["400", "500", "600", "700"]
+      },
+      "line_height": {
+        "label": "Interligne",
+        "type": "select",
+        "default": "1.6",
+        "options": ["1.4", "1.5", "1.6", "1.7", "1.8"]
+      },
+      "letter_spacing": {
+        "label": "Espacement lettres",
+        "type": "select",
+        "default": "0",
+        "options": ["-0.025em", "0", "0.025em", "0.05em"]
       }
     },
     "layout": {
-      "max_width": {
+      "container_width": {
         "label": "Largeur max contenu",
         "type": "select",
         "default": "1200px",
@@ -151,6 +330,49 @@
         "type": "select",
         "default": "0.25rem",
         "options": ["0", "0.25rem", "0.5rem", "0.75rem"]
+      },
+      "section_spacing": {
+        "label": "Espacement sections",
+        "type": "select",
+        "default": "large",
+        "options": ["compact", "normal", "large", "xlarge"]
+      },
+      "sidebar_position": {
+        "label": "Position sidebar",
+        "type": "select",
+        "default": "none",
+        "options": ["left", "right", "none"]
+      },
+      "content_width": {
+        "label": "Largeur contenu",
+        "type": "select",
+        "default": "65ch",
+        "options": ["55ch", "60ch", "65ch", "70ch", "75ch"]
+      }
+    },
+    "global_styles": {
+      "button_style": {
+        "label": "Style des boutons",
+        "type": "select",
+        "default": "square",
+        "options": ["square", "rounded", "pill"]
+      },
+      "card_style": {
+        "label": "Style des cartes",
+        "type": "select",
+        "default": "bordered",
+        "options": ["flat", "shadow", "bordered"]
+      },
+      "shadow_intensity": {
+        "label": "Intensité des ombres",
+        "type": "select",
+        "default": "medium",
+        "options": ["none", "light", "medium", "strong"]
+      },
+      "enable_animations": {
+        "label": "Activer les animations",
+        "type": "boolean",
+        "default": true
       }
     }
   },
@@ -168,11 +390,12 @@
     "--font-body": "'DM Sans', system-ui, sans-serif",
     "--font-size-base": "16px",
     "--border-radius": "0.25rem",
-    "--max-width": "1200px"
+    "--container-width": "1200px",
+    "--section-padding": "80px"
   },
   "font_imports": [
     "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap"
   ],
-  "supports": ["responsive"],
+  "supports": ["dark_mode", "responsive"],
   "default_template": "forge-btp"
 }

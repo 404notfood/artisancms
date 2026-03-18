@@ -4,25 +4,25 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Front;
 
-use App\CMS\Themes\ThemeManager;
+use App\Http\Controllers\Concerns\HasFrontData;
 use App\Http\Controllers\Controller;
-use App\Models\Menu;
 use App\Models\Post;
 use App\Models\TaxonomyTerm;
+use App\Services\CommentService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class BlogController extends Controller
 {
+    use HasFrontData;
+
     public function __construct(
-        private readonly ThemeManager $themeManager,
+        private readonly CommentService $commentService,
     ) {}
 
-    /**
-     * List all published posts with pagination.
-     */
     public function index(Request $request): Response
     {
         $posts = Post::published()
@@ -30,22 +30,15 @@ class BlogController extends Controller
             ->orderByDesc('published_at')
             ->paginate(15);
 
-        $categories = $this->getCategories();
-        $recentPosts = $this->getRecentPosts();
-        $archives = $this->getArchiveList();
-
         return Inertia::render('Front/Blog/Index', [
             ...$this->frontData(),
             'posts' => $posts,
-            'categories' => $categories,
-            'recentPosts' => $recentPosts,
-            'archives' => $archives,
+            'categories' => $this->getCategories(),
+            'recentPosts' => $this->getRecentPosts(),
+            'archives' => $this->getArchiveList(),
         ]);
     }
 
-    /**
-     * Show a single published post by slug.
-     */
     public function show(string $slug): Response
     {
         $post = Post::published()
@@ -53,118 +46,68 @@ class BlogController extends Controller
             ->where('slug', $slug)
             ->firstOrFail();
 
-        $comments = $post->comments()
-            ->approved()
-            ->whereNull('parent_id')
-            ->with(['replies' => function ($query): void {
-                $query->approved()->with('user')->orderBy('created_at');
-            }, 'user'])
-            ->orderBy('created_at')
-            ->get();
-
-        $categories = $this->getCategories();
-        $recentPosts = $this->getRecentPosts(5, $post->id);
+        $comments = $this->commentService->getForPost($post->id);
 
         return Inertia::render('Front/Blog/Show', [
             ...$this->frontData(),
             'post' => $post,
             'comments' => $comments,
-            'categories' => $categories,
-            'recentPosts' => $recentPosts,
+            'categories' => $this->getCategories(),
+            'recentPosts' => $this->getRecentPosts(5, $post->id),
         ]);
     }
 
-    /**
-     * Store a comment on a post.
-     */
     public function storeComment(Request $request, string $slug): RedirectResponse
     {
-        $post = Post::published()
-            ->where('slug', $slug)
-            ->where('allow_comments', true)
-            ->firstOrFail();
-
         $validated = $request->validate([
             'author_name' => ['required', 'string', 'max:255'],
             'author_email' => ['required', 'email', 'max:255'],
             'content' => ['required', 'string', 'max:5000'],
             'parent_id' => ['nullable', 'integer', 'exists:comments,id'],
+            'honeypot' => ['nullable', 'max:0'],
         ]);
 
-        $post->comments()->create([
-            ...$validated,
-            'user_id' => $request->user()?->id,
-            'status' => 'pending',
+        if (! empty($validated['honeypot'])) {
+            return redirect()->back()->with('success', __('cms.comments.submitted'));
+        }
+
+        $post = Post::published()
+            ->where('slug', $slug)
+            ->where('allow_comments', true)
+            ->firstOrFail();
+
+        $data = [
+            'post_id' => $post->id,
+            'parent_id' => $validated['parent_id'] ?? null,
+            'author_name' => $validated['author_name'],
+            'author_email' => $validated['author_email'],
+            'content' => strip_tags($validated['content']),
             'ip_address' => $request->ip(),
             'user_agent' => $request->userAgent(),
-        ]);
+        ];
 
-        return redirect()
-            ->back()
-            ->with('success', __('cms.blog.comment_submitted'));
+        if (Auth::check()) {
+            $user = Auth::user();
+            $data['user_id'] = $user->id;
+            $data['author_name'] = $user->name;
+            $data['author_email'] = $user->email;
+        }
+
+        $this->commentService->store($data);
+
+        return redirect()->back()->with('success', __('cms.comments.submitted'));
     }
 
-    /**
-     * List posts by category taxonomy term.
-     */
     public function category(string $slug): Response
     {
-        $term = TaxonomyTerm::whereHas('taxonomy', function ($query): void {
-            $query->where('slug', 'categories');
-        })->where('slug', $slug)->firstOrFail();
-
-        $posts = Post::published()
-            ->with(['author', 'terms.taxonomy'])
-            ->whereHas('terms', function ($query) use ($term): void {
-                $query->where('taxonomy_terms.id', $term->id);
-            })
-            ->orderByDesc('published_at')
-            ->paginate(15);
-
-        $categories = $this->getCategories();
-        $recentPosts = $this->getRecentPosts();
-
-        return Inertia::render('Front/Blog/Category', [
-            ...$this->frontData(),
-            'term' => $term,
-            'posts' => $posts,
-            'categories' => $categories,
-            'recentPosts' => $recentPosts,
-        ]);
+        return $this->byTaxonomy('categories', $slug, 'Front/Blog/Category');
     }
 
-    /**
-     * List posts by tag taxonomy term.
-     */
     public function tag(string $slug): Response
     {
-        $term = TaxonomyTerm::whereHas('taxonomy', function ($query): void {
-            $query->where('slug', 'tags');
-        })->where('slug', $slug)->firstOrFail();
-
-        $posts = Post::published()
-            ->with(['author', 'terms.taxonomy'])
-            ->whereHas('terms', function ($query) use ($term): void {
-                $query->where('taxonomy_terms.id', $term->id);
-            })
-            ->orderByDesc('published_at')
-            ->paginate(15);
-
-        $categories = $this->getCategories();
-        $recentPosts = $this->getRecentPosts();
-
-        return Inertia::render('Front/Blog/Tag', [
-            ...$this->frontData(),
-            'term' => $term,
-            'posts' => $posts,
-            'categories' => $categories,
-            'recentPosts' => $recentPosts,
-        ]);
+        return $this->byTaxonomy('tags', $slug, 'Front/Blog/Tag');
     }
 
-    /**
-     * List posts by year and optional month.
-     */
     public function archive(int $year, ?int $month = null): Response
     {
         $query = Post::published()
@@ -177,59 +120,67 @@ class BlogController extends Controller
 
         $posts = $query->orderByDesc('published_at')->paginate(15);
 
-        $categories = $this->getCategories();
-        $recentPosts = $this->getRecentPosts();
-        $archives = $this->getArchiveList();
-
         return Inertia::render('Front/Blog/Archive', [
             ...$this->frontData(),
             'posts' => $posts,
             'year' => $year,
             'month' => $month,
-            'categories' => $categories,
-            'recentPosts' => $recentPosts,
-            'archives' => $archives,
+            'categories' => $this->getCategories(),
+            'recentPosts' => $this->getRecentPosts(),
+            'archives' => $this->getArchiveList(),
+        ]);
+    }
+
+    private function byTaxonomy(string $taxonomySlug, string $termSlug, string $component): Response
+    {
+        $term = TaxonomyTerm::whereHas(
+            'taxonomy',
+            fn ($q) => $q->where('slug', $taxonomySlug),
+        )->where('slug', $termSlug)->firstOrFail();
+
+        $posts = Post::published()
+            ->with(['author', 'terms.taxonomy'])
+            ->whereHas('terms', fn ($q) => $q->where('taxonomy_terms.id', $term->id))
+            ->orderByDesc('published_at')
+            ->paginate(15);
+
+        return Inertia::render($component, [
+            ...$this->frontData(),
+            'term' => $term,
+            'posts' => $posts,
+            'categories' => $this->getCategories(),
+            'recentPosts' => $this->getRecentPosts(),
         ]);
     }
 
     /**
-     * Get all category terms with post counts.
-     *
      * @return \Illuminate\Database\Eloquent\Collection<int, TaxonomyTerm>
      */
     private function getCategories(): \Illuminate\Database\Eloquent\Collection
     {
-        return TaxonomyTerm::whereHas('taxonomy', function ($query): void {
-            $query->where('slug', 'categories');
-        })
-            ->withCount(['posts' => function ($query): void {
-                $query->published();
-            }])
+        return TaxonomyTerm::whereHas(
+            'taxonomy',
+            fn ($q) => $q->where('slug', 'categories'),
+        )
+            ->withCount(['posts' => fn ($q) => $q->published()])
             ->orderBy('name')
             ->get();
     }
 
     /**
-     * Get recent published posts for the sidebar.
-     *
      * @return \Illuminate\Database\Eloquent\Collection<int, Post>
      */
     private function getRecentPosts(int $limit = 5, ?int $excludeId = null): \Illuminate\Database\Eloquent\Collection
     {
-        $query = Post::published()
+        return Post::published()
             ->select(['id', 'title', 'slug', 'featured_image', 'published_at'])
-            ->orderByDesc('published_at');
-
-        if ($excludeId !== null) {
-            $query->where('id', '!=', $excludeId);
-        }
-
-        return $query->limit($limit)->get();
+            ->when($excludeId, fn ($q) => $q->where('id', '!=', $excludeId))
+            ->orderByDesc('published_at')
+            ->limit($limit)
+            ->get();
     }
 
     /**
-     * Get archive list grouped by year/month.
-     *
      * @return array<int, array{year: int, month: int, count: int}>
      */
     private function getArchiveList(): array
@@ -246,28 +197,5 @@ class BlogController extends Controller
                 'count' => (int) $row->count,
             ])
             ->toArray();
-    }
-
-    /**
-     * Get shared front-end data (menus, theme).
-     *
-     * @return array<string, mixed>
-     */
-    private function frontData(): array
-    {
-        $menus = Menu::with(['items' => function ($query): void {
-            $query->orderBy('order');
-        }])->get()->keyBy('location');
-
-        $theme = $this->themeManager->getActive();
-        $themeConfig = $theme ? $this->themeManager->getThemeConfig($theme->slug) : [];
-
-        return [
-            'menus' => $menus,
-            'theme' => [
-                'customizations' => $theme?->customizations ?? [],
-                'layouts' => $themeConfig['layouts'] ?? [],
-            ],
-        ];
     }
 }

@@ -13,7 +13,7 @@ interface DashboardProps {
 }
 
 export default function Dashboard({ recentOrders, stats, settings }: DashboardProps) {
-    const { auth } = usePage().props as { auth: { user: { name: string } } };
+    const auth = (usePage().props as { auth: { user: { name: string } } }).auth;
 
     function formatPrice(price: number): string {
         return new Intl.NumberFormat('fr-FR', {
@@ -33,10 +33,10 @@ export default function Dashboard({ recentOrders, stats, settings }: DashboardPr
     const statusLabels: Record<string, string> = {
         pending: 'En attente',
         processing: 'En traitement',
-        shipped: 'Expediee',
-        completed: 'Terminee',
-        cancelled: 'Annulee',
-        refunded: 'Remboursee',
+        shipped: 'Exp\u00e9di\u00e9e',
+        completed: 'Termin\u00e9e',
+        cancelled: 'Annul\u00e9e',
+        refunded: 'Rembours\u00e9e',
     };
 
     const statusColors: Record<string, string> = {
@@ -68,7 +68,7 @@ export default function Dashboard({ recentOrders, stats, settings }: DashboardPr
                         icon={<OrderIcon />}
                     />
                     <StatCard
-                        label="Total depense"
+                        label="Total d\u00e9pens\u00e9"
                         value={formatPrice(stats.total_spent)}
                         icon={<MoneyIcon />}
                     />
@@ -94,12 +94,12 @@ export default function Dashboard({ recentOrders, stats, settings }: DashboardPr
                     <QuickLink
                         href="/account/addresses"
                         label="Mes adresses"
-                        description="Gerer vos adresses"
+                        description="G\u00e9rer vos adresses"
                     />
                     <QuickLink
                         href="/account/wishlist"
                         label="Ma liste de souhaits"
-                        description="Produits sauvegardes"
+                        description="Produits sauvegard\u00e9s"
                     />
                 </div>
 
@@ -107,7 +107,7 @@ export default function Dashboard({ recentOrders, stats, settings }: DashboardPr
                 <div className="rounded-lg border border-gray-200 bg-white">
                     <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
                         <h2 className="text-lg font-semibold text-gray-900">
-                            Commandes recentes
+                            Commandes r\u00e9centes
                         </h2>
                         <Link
                             href="/account/orders"

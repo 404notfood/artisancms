@@ -2,6 +2,7 @@
   "name": "Terra CBD",
   "slug": "terra-cbd",
   "version": "1.0.0",
+  "style": "nature",
   "description": "Thème e-commerce CBD premium — vert profond et or chaud, esthétique naturelle & moderne pour boutiques CBD, huiles essentielles, bien-être et cosmétiques bio.",
   "author": {
     "name": "ArtisanCMS",
@@ -95,6 +96,12 @@
         "default": "center",
         "options": ["left", "center", "right"]
       },
+      "variant": {
+        "label": "Style du header",
+        "type": "select",
+        "default": "classic",
+        "options": ["classic", "centered", "split", "stacked", "minimal"]
+      },
       "mobile_menu_style": {
         "label": "Menu mobile",
         "type": "select",
@@ -140,10 +147,10 @@
     },
     "footer": {
       "layout": {
-        "label": "Style du footer",
+        "label": "Disposition du footer",
         "type": "select",
-        "default": "columns",
-        "options": ["simple", "columns", "minimal"]
+        "default": "magazine",
+        "options": ["simple", "columns", "minimal", "centered", "magazine"]
       },
       "columns": {
         "label": "Nombre de colonnes",

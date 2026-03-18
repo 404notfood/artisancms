@@ -9,31 +9,39 @@ use Backup\Models\Backup;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 use RuntimeException;
+use Symfony\Component\Process\ExecutableFinder;
+use Symfony\Component\Process\Process;
 use ZipArchive;
 
 class BackupService
 {
+    private const ALLOWED_TYPES = ['full', 'database', 'media'];
+
     /**
-     * Create a new backup.
-     *
-     * @param string  $type    One of: full, database, media
-     * @param int|null $userId The user who triggered the backup (null for CLI / scheduler)
-     *
-     * @return Backup The created backup record
+     * Create a new backup of the given type.
      *
      * @throws RuntimeException When the backup process fails
+     * @throws \InvalidArgumentException When an invalid type is given
      */
     public function create(string $type = 'full', ?int $userId = null): Backup
     {
+        if (!in_array($type, self::ALLOWED_TYPES, true)) {
+            throw new \InvalidArgumentException(
+                "Invalid backup type '{$type}'. Allowed: " . implode(', ', self::ALLOWED_TYPES)
+            );
+        }
+
         $config = config('backup');
+        if (!$config || !isset($config['destination'])) {
+            throw new RuntimeException('Backup configuration is missing. Is the backup plugin loaded?');
+        }
+
         $destination = $config['destination'];
         File::ensureDirectoryExists($destination);
 
         $timestamp = now()->format('Y-m-d-His');
-        $prefix = $config['filename_prefix'];
-        $filename = "{$prefix}-{$type}-{$timestamp}.zip";
+        $filename = "{$config['filename_prefix']}-{$type}-{$timestamp}.zip";
         $path = $destination . '/' . $filename;
 
         $backup = Backup::create([
@@ -49,65 +57,54 @@ class BackupService
             $backup->markAsRunning();
             $startTime = microtime(true);
 
-            $tempDir = storage_path('app/temp/backup-' . uniqid());
+            $tempDir = storage_path('app/temp/backup-' . uniqid('', true));
             File::ensureDirectoryExists($tempDir);
 
             try {
-                // Create database dump if needed
-                if (in_array($type, ['full', 'database'], true) && $config['include_database']) {
-                    $this->createDatabaseDump($tempDir . '/database.sql');
+                if (in_array($type, ['full', 'database'], true) && ($config['include_database'] ?? true)) {
+                    $this->dumpDatabase($tempDir . '/database.sql');
                 }
 
-                // Create media archive content if needed
-                if (in_array($type, ['full', 'media'], true) && $config['include_media']) {
-                    $this->createMediaArchive($tempDir . '/media');
+                if (in_array($type, ['full', 'media'], true) && ($config['include_media'] ?? true)) {
+                    $this->copyMedia($tempDir . '/media');
                 }
 
-                // Package everything into a ZIP
                 $this->createZipArchive($tempDir, $path);
             } finally {
-                // Always clean up the temp directory
                 File::deleteDirectory($tempDir);
             }
 
-            $duration = (int) round(microtime(true) - $startTime);
-            $size = (int) filesize($path);
+            $size = filesize($path);
+            if ($size === false) {
+                throw new RuntimeException("Cannot read backup file size: {$path}");
+            }
 
-            // Validate max size
             $maxSizeBytes = ($config['max_size_mb'] ?? 500) * 1024 * 1024;
             if ($size > $maxSizeBytes) {
                 File::delete($path);
+                $sizeMb = round($size / 1024 / 1024, 1);
                 throw new RuntimeException(
-                    "Backup size ({$size} bytes) exceeds maximum allowed size ({$maxSizeBytes} bytes)."
+                    "Backup is {$sizeMb} MB, exceeding the {$config['max_size_mb']} MB limit."
                 );
             }
 
+            $duration = (int) round(microtime(true) - $startTime);
             $checksum = 'sha256:' . hash_file('sha256', $path);
             $metadata = $this->collectMetadata($type, $checksum, $duration);
 
             $backup->markAsCompleted($size, $metadata);
 
             CMS::fire('backup.created', $backup);
-
-            Log::info("Backup completed: {$filename}", [
-                'type' => $type,
-                'size' => $size,
-                'duration' => $duration,
-            ]);
+            Log::info("Backup completed: {$filename}", compact('type', 'size', 'duration'));
 
         } catch (\Throwable $e) {
             $backup->markAsFailed($e->getMessage());
 
-            // Clean up partial file if it exists
             if (File::exists($path)) {
                 File::delete($path);
             }
 
-            Log::error("Backup failed: {$filename}", [
-                'type' => $type,
-                'error' => $e->getMessage(),
-            ]);
-
+            Log::error("Backup failed: {$filename}", ['type' => $type, 'error' => $e->getMessage()]);
             throw $e;
         }
 
@@ -115,114 +112,57 @@ class BackupService
     }
 
     /**
-     * Create a MySQL database dump at the given path.
+     * Create a MySQL dump file using mysqldump.
      *
-     * Uses the mysqldump command-line tool with proper escaping.
-     *
-     * @throws RuntimeException When the dump command fails
+     * @throws RuntimeException When the dump fails
      */
-    public function createDatabaseDump(string $path): void
+    public function dumpDatabase(string $path): void
     {
         $connection = config('database.default');
         $dbConfig = config("database.connections.{$connection}");
 
-        $host = $dbConfig['host'] ?? '127.0.0.1';
-        $port = (string) ($dbConfig['port'] ?? '3306');
-        $username = $dbConfig['username'] ?? 'root';
-        $password = $dbConfig['password'] ?? '';
-        $database = $dbConfig['database'];
+        if (!$dbConfig || empty($dbConfig['database'])) {
+            throw new RuntimeException("Database connection '{$connection}' is not configured.");
+        }
 
         $mysqldump = $this->findMysqldumpBinary();
 
         $args = [
             $mysqldump,
-            '--host=' . $host,
-            '--port=' . $port,
-            '--user=' . $username,
+            '--host=' . ($dbConfig['host'] ?? '127.0.0.1'),
+            '--port=' . ($dbConfig['port'] ?? '3306'),
+            '--user=' . ($dbConfig['username'] ?? 'root'),
             '--single-transaction',
             '--routines',
             '--triggers',
             '--add-drop-table',
             '--result-file=' . str_replace('/', DIRECTORY_SEPARATOR, $path),
+            $dbConfig['database'],
         ];
 
+        // Pass password via environment variable to avoid exposing it in process list
+        $env = null;
+        $password = $dbConfig['password'] ?? '';
         if ($password !== '') {
-            $args[] = '--password=' . $password;
+            $env = array_merge(getenv() ?: [], ['MYSQL_PWD' => $password]);
         }
 
-        $args[] = $database;
-
-        $process = new \Symfony\Component\Process\Process($args);
-        $process->setTimeout(120);
+        $process = new Process($args, null, $env);
+        $process->setTimeout(300);
         $process->run();
 
         if (!$process->isSuccessful()) {
+            $stderr = mb_convert_encoding($process->getErrorOutput(), 'UTF-8', 'UTF-8');
             throw new RuntimeException(
-                'Database dump failed (exit code ' . $process->getExitCode() . '): '
-                . mb_convert_encoding($process->getErrorOutput(), 'UTF-8', 'UTF-8')
+                "mysqldump failed (exit {$process->getExitCode()}): {$stderr}"
             );
         }
 
         if (!File::exists($path) || filesize($path) === 0) {
-            throw new RuntimeException('Database dump produced an empty file.');
+            throw new RuntimeException('mysqldump produced an empty file.');
         }
     }
 
-    /**
-     * Locate the mysqldump binary.
-     *
-     * Checks common Laragon/XAMPP/MAMP paths on Windows when it is not in PATH.
-     *
-     * @throws RuntimeException When mysqldump cannot be found
-     */
-    private function findMysqldumpBinary(): string
-    {
-        // Try the system PATH first
-        $finder = new \Symfony\Component\Process\ExecutableFinder();
-        $found = $finder->find('mysqldump');
-
-        if ($found !== null) {
-            return $found;
-        }
-
-        // Common Windows local dev paths (Laragon, XAMPP, MAMP)
-        $candidates = glob('D:/Logiciel/laragon/bin/mysql/*/bin/mysqldump.exe')
-            ?: glob('C:/laragon/bin/mysql/*/bin/mysqldump.exe')
-            ?: glob('C:/xampp/mysql/bin/mysqldump.exe')
-            ?: [];
-
-        foreach ($candidates as $candidate) {
-            if (is_executable($candidate) || file_exists($candidate)) {
-                return $candidate;
-            }
-        }
-
-        throw new RuntimeException(
-            'mysqldump binary not found. Ensure MySQL client tools are installed and in your PATH.'
-        );
-    }
-
-    /**
-     * Copy media files into the given directory for archiving.
-     *
-     * Copies the contents of storage/app/public/media into the target path.
-     */
-    public function createMediaArchive(string $path): void
-    {
-        $mediaSource = storage_path('app/public/media');
-
-        if (!File::isDirectory($mediaSource)) {
-            Log::warning('Media directory does not exist. Skipping media backup.');
-            return;
-        }
-
-        File::ensureDirectoryExists($path);
-        File::copyDirectory($mediaSource, $path);
-    }
-
-    /**
-     * Delete a backup record and its associated file.
-     */
     public function delete(Backup $backup): void
     {
         CMS::fire('backup.deleting', $backup);
@@ -236,34 +176,25 @@ class BackupService
         CMS::fire('backup.deleted', $backup);
     }
 
-    /**
-     * Get all backups with pagination.
-     *
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator<Backup>
-     */
-    public function getAll(): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    /** @return \Illuminate\Contracts\Pagination\LengthAwarePaginator<Backup> */
+    public function getAll(int $perPage = 20): \Illuminate\Contracts\Pagination\LengthAwarePaginator
     {
-        return Backup::orderByDesc('created_at')->paginate(20);
+        return Backup::orderByDesc('created_at')->paginate($perPage);
     }
 
-    /**
-     * Get the latest completed backup.
-     */
     public function getLatest(): ?Backup
     {
-        return Backup::completed()
-            ->orderByDesc('created_at')
-            ->first();
+        return Backup::completed()->orderByDesc('created_at')->first();
     }
 
     /**
-     * Apply the retention policy and delete old backups.
+     * Apply the retention policy: keep daily/weekly/monthly backups within
+     * their respective windows, delete everything else.
      *
-     * @return int The number of backups deleted
+     * @return int Number of backups deleted
      */
     public function cleanup(): int
     {
-        $deleted = 0;
         $retention = config('backup.retention', [
             'daily' => 7,
             'weekly' => 4,
@@ -274,90 +205,91 @@ class BackupService
         $weeklyCutoff = now()->subWeeks($retention['weekly']);
         $monthlyCutoff = now()->subMonths($retention['monthly']);
 
-        // Get all completed backups older than daily retention
-        $candidates = Backup::completed()
+        $deleted = 0;
+
+        // Collect IDs already handled to avoid double-deleting
+        $processedIds = [];
+
+        // Pass 1: backups older than daily retention but potentially kept as weekly/monthly
+        $expired = Backup::completed()
             ->where('created_at', '<', $dailyCutoff)
             ->orderBy('created_at')
             ->get();
 
-        foreach ($candidates as $backup) {
-            $dayOfWeek = $backup->created_at->dayOfWeek; // 0=Sunday, 1=Monday
-            $dayOfMonth = $backup->created_at->day;
-
-            // Keep weekly backups (Monday) if within weekly retention
-            $isWeeklyCandidate = ($dayOfWeek === 1)
+        foreach ($expired as $backup) {
+            $isWeeklyKeep = $backup->created_at->dayOfWeek === 1
                 && $backup->created_at->gte($weeklyCutoff);
 
-            // Keep monthly backups (1st of month) if within monthly retention
-            $isMonthlyCandidate = ($dayOfMonth === 1)
+            $isMonthlyKeep = $backup->created_at->day === 1
                 && $backup->created_at->gte($monthlyCutoff);
 
-            if (!$isWeeklyCandidate && !$isMonthlyCandidate) {
+            if (!$isWeeklyKeep && !$isMonthlyKeep) {
                 $this->delete($backup);
                 $deleted++;
             }
+
+            $processedIds[] = $backup->id;
         }
 
-        // Delete weekly backups beyond weekly retention (except monthly candidates)
+        // Pass 2: weekly backups that exceeded weekly retention (keep monthly ones)
         $weeklyExpired = Backup::completed()
             ->where('created_at', '<', $weeklyCutoff)
+            ->whereNotIn('id', $processedIds)
             ->orderBy('created_at')
-            ->get()
-            ->filter(fn (Backup $b) => $b->created_at->dayOfWeek === 1);
+            ->get();
 
         foreach ($weeklyExpired as $backup) {
-            $isMonthlyCandidate = ($backup->created_at->day === 1)
+            if ($backup->created_at->dayOfWeek !== 1) {
+                continue;
+            }
+
+            $isMonthlyKeep = $backup->created_at->day === 1
                 && $backup->created_at->gte($monthlyCutoff);
 
-            if (!$isMonthlyCandidate) {
+            if (!$isMonthlyKeep) {
                 $this->delete($backup);
                 $deleted++;
+                $processedIds[] = $backup->id;
             }
         }
 
-        // Delete monthly backups beyond monthly retention
-        $monthlyExpired = Backup::completed()
+        // Pass 3: monthly backups beyond monthly retention
+        Backup::completed()
             ->where('created_at', '<', $monthlyCutoff)
+            ->whereNotIn('id', $processedIds)
             ->orderBy('created_at')
-            ->get()
-            ->filter(fn (Backup $b) => $b->created_at->day === 1);
+            ->chunk(50, function ($backups) use (&$deleted) {
+                foreach ($backups as $backup) {
+                    $this->delete($backup);
+                    $deleted++;
+                }
+            });
 
-        foreach ($monthlyExpired as $backup) {
-            $this->delete($backup);
-            $deleted++;
-        }
-
-        // Delete failed backups older than 24 hours
-        $failedExpired = Backup::failed()
+        // Pass 4: failed backups older than 24h
+        Backup::failed()
             ->where('created_at', '<', now()->subDay())
-            ->get();
-
-        foreach ($failedExpired as $backup) {
-            $this->delete($backup);
-            $deleted++;
-        }
+            ->chunk(50, function ($backups) use (&$deleted) {
+                foreach ($backups as $backup) {
+                    $this->delete($backup);
+                    $deleted++;
+                }
+            });
 
         return $deleted;
     }
 
     /**
-     * Verify the integrity of a backup file via SHA-256 checksum.
+     * Verify a backup file's integrity against its stored SHA-256 checksum.
      */
     public function verifyIntegrity(Backup $backup): bool
     {
         $storedChecksum = $backup->metadata['checksum'] ?? null;
 
-        if ($storedChecksum === null) {
+        if (!$storedChecksum || !File::exists($backup->path)) {
             return false;
         }
 
-        if (!File::exists($backup->path)) {
-            return false;
-        }
-
-        $currentChecksum = 'sha256:' . hash_file('sha256', $backup->path);
-
-        return $storedChecksum === $currentChecksum;
+        return $storedChecksum === 'sha256:' . hash_file('sha256', $backup->path);
     }
 
     // -------------------------------------------------------------------------
@@ -365,9 +297,67 @@ class BackupService
     // -------------------------------------------------------------------------
 
     /**
-     * Create a ZIP archive from the contents of a temporary directory.
+     * Locate the mysqldump binary, checking PATH first then common local dev paths.
      *
-     * @throws RuntimeException When the ZIP archive cannot be created
+     * @throws RuntimeException When not found
+     */
+    private function findMysqldumpBinary(): string
+    {
+        $finder = new ExecutableFinder();
+        $found = $finder->find('mysqldump');
+
+        if ($found !== null) {
+            return $found;
+        }
+
+        // Common local dev paths on Windows
+        $patterns = [
+            'C:/laragon/bin/mysql/*/bin/mysqldump.exe',
+            'C:/xampp/mysql/bin/mysqldump.exe',
+            'C:/wamp64/bin/mysql/*/bin/mysqldump.exe',
+        ];
+
+        // Try to detect Laragon from the project path
+        $basePath = base_path();
+        if (preg_match('#([A-Za-z]:[/\\\\].*?[/\\\\]laragon)[/\\\\]#i', $basePath, $m)) {
+            array_unshift($patterns, str_replace('\\', '/', $m[1]) . '/bin/mysql/*/bin/mysqldump.exe');
+        }
+
+        foreach ($patterns as $pattern) {
+            $matches = glob($pattern);
+            if (!$matches) {
+                continue;
+            }
+            foreach ($matches as $candidate) {
+                if (file_exists($candidate)) {
+                    return $candidate;
+                }
+            }
+        }
+
+        throw new RuntimeException(
+            'mysqldump not found. Install MySQL client tools or add them to your PATH.'
+        );
+    }
+
+    /**
+     * Copy media files into a temp directory for archiving.
+     */
+    private function copyMedia(string $targetDir): void
+    {
+        $mediaSource = storage_path('app/public/media');
+
+        if (!File::isDirectory($mediaSource)) {
+            Log::info('No media directory found, skipping media backup.');
+            return;
+        }
+
+        File::ensureDirectoryExists($targetDir);
+        File::copyDirectory($mediaSource, $targetDir);
+    }
+
+    /**
+     * @throws RuntimeException When the ZIP cannot be created
      */
     private function createZipArchive(string $sourceDir, string $zipPath): void
     {
@@ -375,16 +365,14 @@ class BackupService
         $result = $zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
         if ($result !== true) {
-            throw new RuntimeException("Failed to create ZIP archive. Error code: {$result}");
+            throw new RuntimeException("Failed to create ZIP archive (error code: {$result})");
         }
 
-        $files = File::allFiles($sourceDir);
-        // Normalize the source dir path for cross-platform comparison
-        $normalizedSourceDir = rtrim(str_replace('\\', '/', $sourceDir), '/');
+        $basePath = rtrim(str_replace('\\', '/', $sourceDir), '/');
 
-        foreach ($files as $file) {
-            $normalizedFilePath = str_replace('\\', '/', $file->getPathname());
-            $relativePath = ltrim(str_replace($normalizedSourceDir, '', $normalizedFilePath), '/');
+        foreach (File::allFiles($sourceDir) as $file) {
+            $filePath = str_replace('\\', '/', $file->getPathname());
+            $relativePath = ltrim(str_replace($basePath, '', $filePath), '/');
             $zip->addFile($file->getPathname(), $relativePath);
         }
 
@@ -392,35 +380,34 @@ class BackupService
     }
 
     /**
-     * Collect system metadata for the backup record.
+     * Gather system metadata to store alongside the backup record.
      *
      * @return array<string, mixed>
      */
     private function collectMetadata(string $type, string $checksum, int $duration): array
     {
+        $dbDriver = config('database.default');
+
         $metadata = [
             'cms_version' => config('cms.version', '1.0.0'),
             'php_version' => PHP_VERSION,
             'laravel_version' => app()->version(),
-            'db_driver' => config('database.default'),
-            'db_name' => config('database.connections.' . config('database.default') . '.database'),
+            'db_driver' => $dbDriver,
+            'db_name' => config("database.connections.{$dbDriver}.database"),
             'checksum' => $checksum,
             'duration_seconds' => $duration,
         ];
 
         if (in_array($type, ['full', 'database'], true)) {
-            $tables = DB::select('SHOW TABLES');
-            $metadata['tables_count'] = count($tables);
-            $metadata['total_rows'] = $this->countTotalRows($tables);
+            $metadata['tables_count'] = $this->getTableCount();
         }
 
         if (in_array($type, ['full', 'media'], true)) {
             $mediaPath = storage_path('app/public/media');
             if (File::isDirectory($mediaPath)) {
-                $mediaFiles = File::allFiles($mediaPath);
-                $metadata['media_files_count'] = count($mediaFiles);
-                $metadata['media_total_size'] = collect($mediaFiles)
-                    ->sum(fn (\SplFileInfo $file) => $file->getSize());
+                $files = File::allFiles($mediaPath);
+                $metadata['media_files_count'] = count($files);
+                $metadata['media_total_size'] = collect($files)->sum(fn (\SplFileInfo $f) => $f->getSize());
             }
         }
 
@@ -428,25 +415,21 @@ class BackupService
     }
 
     /**
-     * Count total rows across all database tables.
-     *
-     * @param array<object> $tables
+     * Get the number of tables in the current database using information_schema
+     * (avoids running COUNT(*) on every table just for metadata).
      */
-    private function countTotalRows(array $tables): int
+    private function getTableCount(): int
     {
-        $total = 0;
+        $dbName = config('database.connections.' . config('database.default') . '.database');
 
-        if (empty($tables)) {
-            return $total;
+        try {
+            $result = DB::selectOne(
+                'SELECT COUNT(*) as cnt FROM information_schema.tables WHERE table_schema = ?',
+                [$dbName]
+            );
+            return (int) ($result->cnt ?? 0);
+        } catch (\Throwable) {
+            return 0;
         }
-
-        $key = array_key_first((array) $tables[0]);
-
-        foreach ($tables as $table) {
-            $name = $table->$key;
-            $total += DB::table($name)->count();
-        }
-
-        return $total;
     }
 }

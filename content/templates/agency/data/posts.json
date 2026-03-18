@@ -1,0 +1,452 @@
+[
+  {
+    "title": "Les tendances du web design en 2026",
+    "slug": "tendances-web-design-2026",
+    "status": "published",
+    "excerpt": "Découvrez les dernières tendances en matière de web design qui redéfinissent l'expérience utilisateur en 2026 : IA générative, interfaces immersives et micro-interactions.",
+    "category": "Design",
+    "tags": ["design", "tendances", "UI/UX"],
+    "author": "admin",
+    "published_at": "2026-03-15",
+    "featured_image": null,
+    "content": {
+      "blocks": [
+        {
+          "type": "heading",
+          "id": "post1-h1",
+          "props": {
+            "text": "Les tendances du web design en 2026",
+            "level": 1,
+            "color": "#f1f5f9"
+          }
+        },
+        {
+          "type": "text",
+          "id": "post1-intro",
+          "props": {
+            "content": "<p style='color:#94a3b8;font-size:1.1rem;line-height:1.8'>Le web design évolue à une vitesse fulgurante. En 2026, les frontières entre design, technologie et intelligence artificielle s'estompent pour donner naissance à des expériences numériques toujours plus immersives et personnalisées. Chez Nexus, nous observons et adoptons ces tendances au quotidien pour offrir à nos clients des sites qui ne sont pas seulement beaux, mais véritablement performants.</p>"
+          }
+        },
+        {
+          "type": "heading",
+          "id": "post1-h2a",
+          "props": {
+            "text": "1. L'IA générative au service du design",
+            "level": 2,
+            "color": "#e2e8f0"
+          }
+        },
+        {
+          "type": "text",
+          "id": "post1-p2",
+          "props": {
+            "content": "<p style='color:#94a3b8;line-height:1.8'>L'intelligence artificielle ne remplace pas les designers — elle les augmente. Les outils d'IA générative permettent désormais de créer des maquettes en quelques minutes, de générer des variations de couleurs harmonieuses et de proposer des layouts optimisés pour la conversion. Le designer devient un directeur créatif qui orchestre l'IA plutôt qu'un exécutant pixel par pixel.</p>"
+          }
+        },
+        {
+          "type": "heading",
+          "id": "post1-h2b",
+          "props": {
+            "text": "2. Les micro-interactions comme signature de marque",
+            "level": 2,
+            "color": "#e2e8f0"
+          }
+        },
+        {
+          "type": "text",
+          "id": "post1-p3",
+          "props": {
+            "content": "<p style='color:#94a3b8;line-height:1.8'>Les animations subtiles et les micro-interactions sont devenues un élément différenciant majeur. Un bouton qui réagit au survol, un formulaire qui valide en temps réel avec des transitions fluides, un scroll qui révèle progressivement le contenu — ces détails créent une expérience mémorable et renforcent l'identité de marque. L'important est de rester subtil : chaque animation doit avoir un objectif fonctionnel.</p>"
+          }
+        },
+        {
+          "type": "text",
+          "id": "post1-quote",
+          "props": {
+            "content": "<blockquote style='border-left:4px solid #6366f1;padding:20px 24px;margin:32px 0;background:rgba(99,102,241,0.08);border-radius:0 8px 8px 0'><p style='color:#e2e8f0;font-size:1.1rem;font-style:italic;line-height:1.7;margin:0'>« Le meilleur design est celui que l'utilisateur ne remarque pas. Il doit guider naturellement, sans effort apparent. »</p></blockquote>"
+          }
+        },
+        {
+          "type": "heading",
+          "id": "post1-h2c",
+          "props": {
+            "text": "3. Le dark mode comme standard",
+            "level": 2,
+            "color": "#e2e8f0"
+          }
+        },
+        {
+          "type": "text",
+          "id": "post1-p4",
+          "props": {
+            "content": "<p style='color:#94a3b8;line-height:1.8'>Le mode sombre n'est plus une option — c'est une attente. En 2026, plus de 70% des utilisateurs préfèrent le dark mode pour sa lisibilité et son confort visuel. Les sites qui proposent un switch intelligent entre les modes clair et sombre montrent une attention au détail qui rassure les visiteurs. Chez Nexus, nous concevons systématiquement nos interfaces en dark-first, avec une adaptation soignée pour le mode clair.</p>"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "title": "Comment améliorer le SEO de votre site",
+    "slug": "ameliorer-seo-site",
+    "status": "published",
+    "excerpt": "Le référencement naturel reste le levier d'acquisition le plus rentable sur le long terme. Voici nos conseils concrets pour améliorer votre positionnement en 2026.",
+    "category": "SEO",
+    "tags": ["seo", "conseils", "tendances"],
+    "author": "admin",
+    "published_at": "2026-03-12",
+    "featured_image": null,
+    "content": {
+      "blocks": [
+        {
+          "type": "heading",
+          "id": "post2-h1",
+          "props": {
+            "text": "Comment améliorer le SEO de votre site en 2026",
+            "level": 1,
+            "color": "#f1f5f9"
+          }
+        },
+        {
+          "type": "text",
+          "id": "post2-intro",
+          "props": {
+            "content": "<p style='color:#94a3b8;font-size:1.1rem;line-height:1.8'>Le SEO a considérablement évolué ces dernières années. Google utilise désormais des algorithmes basés sur l'IA pour comprendre l'intention de recherche, et les critères techniques comme les Core Web Vitals sont devenus déterminants. Voici les stratégies qui fonctionnent réellement en 2026.</p>"
+          }
+        },
+        {
+          "type": "heading",
+          "id": "post2-h2a",
+          "props": {
+            "text": "Les fondamentaux techniques",
+            "level": 2,
+            "color": "#e2e8f0"
+          }
+        },
+        {
+          "type": "text",
+          "id": "post2-list",
+          "props": {
+            "content": "<ul style='color:#94a3b8;line-height:2;padding-left:24px'><li><strong style='color:#e2e8f0'>Performance</strong> — Un site qui charge en moins de 2 secondes est impératif. Optimisez vos images (WebP, lazy loading), minifiez vos ressources et utilisez un CDN.</li><li><strong style='color:#e2e8f0'>Mobile-first</strong> — Google indexe en priorité la version mobile. Votre site doit être irréprochable sur smartphone.</li><li><strong style='color:#e2e8f0'>Structure sémantique</strong> — Utilisez les balises HTML correctement (H1 unique, H2/H3 hiérarchiques, schema.org).</li><li><strong style='color:#e2e8f0'>Core Web Vitals</strong> — LCP < 2.5s, FID < 100ms, CLS < 0.1. Ces métriques impactent directement votre ranking.</li></ul>"
+          }
+        },
+        {
+          "type": "heading",
+          "id": "post2-h2b",
+          "props": {
+            "text": "Le contenu reste roi",
+            "level": 2,
+            "color": "#e2e8f0"
+          }
+        },
+        {
+          "type": "text",
+          "id": "post2-p2",
+          "props": {
+            "content": "<p style='color:#94a3b8;line-height:1.8'>Malgré tous les changements algorithmiques, un contenu de qualité reste le facteur numéro un de positionnement. Rédigez pour vos utilisateurs, pas pour les robots. Répondez clairement aux questions que se posent vos prospects, apportez de la valeur ajoutée et structurez vos articles avec des titres clairs. Un article de 1500 mots bien structuré et documenté surpassera toujours dix articles superficiels de 300 mots.</p>"
+          }
+        },
+        {
+          "type": "text",
+          "id": "post2-quote",
+          "props": {
+            "content": "<blockquote style='border-left:4px solid #6366f1;padding:20px 24px;margin:32px 0;background:rgba(99,102,241,0.08);border-radius:0 8px 8px 0'><p style='color:#e2e8f0;font-size:1.05rem;font-style:italic;line-height:1.7;margin:0'>Chez Nexus, nous intégrons le SEO dès la conception du site, pas en afterthought. C'est la clé d'un référencement naturel durable.</p></blockquote>"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "title": "L'importance du branding pour votre entreprise",
+    "slug": "importance-branding-entreprise",
+    "status": "published",
+    "excerpt": "Votre marque est bien plus qu'un logo. Découvrez pourquoi un branding cohérent est essentiel pour vous démarquer et fidéliser vos clients.",
+    "category": "Branding",
+    "tags": ["branding", "conseils"],
+    "author": "admin",
+    "published_at": "2026-03-08",
+    "featured_image": null,
+    "content": {
+      "blocks": [
+        {
+          "type": "heading",
+          "id": "post3-h1",
+          "props": {
+            "text": "L'importance du branding pour votre entreprise",
+            "level": 1,
+            "color": "#f1f5f9"
+          }
+        },
+        {
+          "type": "text",
+          "id": "post3-intro",
+          "props": {
+            "content": "<p style='color:#94a3b8;font-size:1.1rem;line-height:1.8'>Dans un marché saturé où les consommateurs sont exposés à plus de 5 000 messages publicitaires par jour, votre marque est votre principal atout de différenciation. Le branding ne se résume pas à un joli logo — c'est l'ensemble des perceptions, émotions et expériences que votre entreprise évoque chez vos clients.</p>"
+          }
+        },
+        {
+          "type": "heading",
+          "id": "post3-h2a",
+          "props": {
+            "text": "Les piliers d'un branding réussi",
+            "level": 2,
+            "color": "#e2e8f0"
+          }
+        },
+        {
+          "type": "text",
+          "id": "post3-p2",
+          "props": {
+            "content": "<p style='color:#94a3b8;line-height:1.8'>Un branding efficace repose sur trois piliers fondamentaux. D'abord, <strong style='color:#e2e8f0'>l'identité visuelle</strong> : logo, palette de couleurs, typographie et iconographie doivent former un système cohérent et reconnaissable en un instant. Ensuite, <strong style='color:#e2e8f0'>le ton de voix</strong> : la façon dont vous communiquez — formelle, décontractée, experte — doit être constante sur tous vos canaux. Enfin, <strong style='color:#e2e8f0'>les valeurs</strong> : ce que votre entreprise défend et incarne au quotidien crée un lien émotionnel durable avec votre audience.</p>"
+          }
+        },
+        {
+          "type": "text",
+          "id": "post3-quote",
+          "props": {
+            "content": "<blockquote style='border-left:4px solid #6366f1;padding:20px 24px;margin:32px 0;background:rgba(99,102,241,0.08);border-radius:0 8px 8px 0'><p style='color:#e2e8f0;font-size:1.05rem;font-style:italic;line-height:1.7;margin:0'>« Une marque forte ne se construit pas en un jour, mais chaque point de contact avec vos clients est une opportunité de la renforcer. »</p></blockquote>"
+          }
+        },
+        {
+          "type": "heading",
+          "id": "post3-h2b",
+          "props": {
+            "text": "L'impact mesurable du branding",
+            "level": 2,
+            "color": "#e2e8f0"
+          }
+        },
+        {
+          "type": "text",
+          "id": "post3-p3",
+          "props": {
+            "content": "<p style='color:#94a3b8;line-height:1.8'>Les chiffres parlent d'eux-mêmes : les entreprises avec un branding cohérent voient leur chiffre d'affaires augmenter de 23% en moyenne. La reconnaissance de marque réduit le coût d'acquisition client de 50% et augmente la valeur perçue de vos produits. Investir dans votre branding n'est pas une dépense — c'est un investissement avec un ROI mesurable et durable.</p>"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "title": "5 erreurs à éviter lors de la refonte de votre site",
+    "slug": "erreurs-refonte-site",
+    "status": "published",
+    "excerpt": "La refonte d'un site web est un projet stratégique. Voici les pièges les plus courants et comment les éviter pour garantir le succès de votre projet.",
+    "category": "Développement",
+    "tags": ["conseils", "tendances"],
+    "author": "admin",
+    "published_at": "2026-03-05",
+    "featured_image": null,
+    "content": {
+      "blocks": [
+        {
+          "type": "heading",
+          "id": "post4-h1",
+          "props": {
+            "text": "5 erreurs à éviter lors de la refonte de votre site",
+            "level": 1,
+            "color": "#f1f5f9"
+          }
+        },
+        {
+          "type": "text",
+          "id": "post4-intro",
+          "props": {
+            "content": "<p style='color:#94a3b8;font-size:1.1rem;line-height:1.8'>La refonte d'un site web est un moment charnière pour toute entreprise. Bien menée, elle peut transformer votre présence digitale et booster votre croissance. Mal gérée, elle peut détruire votre référencement et frustrer vos utilisateurs fidèles. Après plus de 120 projets accompagnés, voici les erreurs que nous voyons le plus souvent — et comment les éviter.</p>"
+          }
+        },
+        {
+          "type": "heading",
+          "id": "post4-h2a",
+          "props": {
+            "text": "Erreur n°1 : Négliger les redirections 301",
+            "level": 2,
+            "color": "#e2e8f0"
+          }
+        },
+        {
+          "type": "text",
+          "id": "post4-p2",
+          "props": {
+            "content": "<p style='color:#94a3b8;line-height:1.8'>C'est de loin l'erreur la plus destructrice. Si vos URLs changent sans redirections, vous perdez instantanément tout votre référencement acquis. Avant toute refonte, cartographiez l'intégralité de vos URLs existantes et préparez un plan de redirections 301. Chaque ancienne URL doit pointer vers son équivalent sur le nouveau site.</p>"
+          }
+        },
+        {
+          "type": "heading",
+          "id": "post4-h2b",
+          "props": {
+            "text": "Erreur n°2 : Oublier l'analyse de l'existant",
+            "level": 2,
+            "color": "#e2e8f0"
+          }
+        },
+        {
+          "type": "text",
+          "id": "post4-p3",
+          "props": {
+            "content": "<p style='color:#94a3b8;line-height:1.8'>Trop d'entreprises se lancent dans une refonte en partant de zéro, sans analyser ce qui fonctionne déjà. Étudiez vos analytics : quelles pages génèrent du trafic ? Quels parcours convertissent ? Quels contenus engagent ? Conservez et améliorez ce qui marche, remplacez ce qui ne fonctionne pas.</p>"
+          }
+        },
+        {
+          "type": "heading",
+          "id": "post4-h2c",
+          "props": {
+            "text": "Erreur n°3 : Prioriser l'esthétique sur la performance",
+            "level": 2,
+            "color": "#e2e8f0"
+          }
+        },
+        {
+          "type": "text",
+          "id": "post4-p4",
+          "props": {
+            "content": "<p style='color:#94a3b8;line-height:1.8'>Un site magnifique qui met 8 secondes à charger ne convertira jamais. La performance technique doit être une priorité dès la phase de conception : images optimisées, code minifié, hébergement performant, CDN. Visez un score PageSpeed supérieur à 90 sur mobile et desktop.</p>"
+          }
+        },
+        {
+          "type": "text",
+          "id": "post4-list",
+          "props": {
+            "content": "<div style='background:rgba(99,102,241,0.08);border-radius:12px;padding:28px 32px;margin:24px 0'><p style='color:#a5b4fc;font-weight:700;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:16px'>Les deux autres erreurs fréquentes :</p><ul style='color:#94a3b8;line-height:2;padding-left:20px;margin:0'><li><strong style='color:#e2e8f0'>Erreur n°4</strong> — Ne pas impliquer les utilisateurs finaux dans les tests avant le lancement.</li><li><strong style='color:#e2e8f0'>Erreur n°5</strong> — Sous-estimer le budget de maintenance post-lancement (mises à jour, contenu, monitoring).</li></ul></div>"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "title": "Le marketing digital : guide complet pour les PME",
+    "slug": "marketing-digital-guide-pme",
+    "status": "published",
+    "excerpt": "Le marketing digital est devenu incontournable pour les PME. Ce guide pratique vous donne les clés pour construire une stratégie efficace avec un budget maîtrisé.",
+    "category": "Marketing",
+    "tags": ["pme", "conseils", "tendances"],
+    "author": "admin",
+    "published_at": "2026-03-01",
+    "featured_image": null,
+    "content": {
+      "blocks": [
+        {
+          "type": "heading",
+          "id": "post5-h1",
+          "props": {
+            "text": "Le marketing digital : guide complet pour les PME",
+            "level": 1,
+            "color": "#f1f5f9"
+          }
+        },
+        {
+          "type": "text",
+          "id": "post5-intro",
+          "props": {
+            "content": "<p style='color:#94a3b8;font-size:1.1rem;line-height:1.8'>En tant que PME, vous n'avez pas les budgets des grands groupes — mais vous avez l'agilité. Le marketing digital offre des leviers puissants et mesurables, accessibles à toutes les tailles d'entreprise. La clé ? Une stratégie claire, des actions ciblées et une mesure rigoureuse des résultats.</p>"
+          }
+        },
+        {
+          "type": "heading",
+          "id": "post5-h2a",
+          "props": {
+            "text": "Les 4 piliers du marketing digital pour les PME",
+            "level": 2,
+            "color": "#e2e8f0"
+          }
+        },
+        {
+          "type": "text",
+          "id": "post5-p2",
+          "props": {
+            "content": "<p style='color:#94a3b8;line-height:1.8'><strong style='color:#e2e8f0'>1. Un site web performant</strong> — C'est votre vitrine 24h/24. Il doit charger vite, être responsive et guider le visiteur vers l'action souhaitée (contact, achat, inscription). <strong style='color:#e2e8f0'>2. Le référencement naturel (SEO)</strong> — Le canal d'acquisition le plus rentable sur le long terme. Investissez dans du contenu de qualité et une structure technique solide.</p>"
+          }
+        },
+        {
+          "type": "text",
+          "id": "post5-p3",
+          "props": {
+            "content": "<p style='color:#94a3b8;line-height:1.8'><strong style='color:#e2e8f0'>3. Les réseaux sociaux</strong> — Choisissez 2-3 plateformes où se trouvent vos clients et soyez régulier. La qualité prime sur la quantité. Un post par semaine bien travaillé vaut mieux que du contenu quotidien bâclé. <strong style='color:#e2e8f0'>4. L'email marketing</strong> — Avec un ROI moyen de 42€ pour 1€ investi, l'email reste le canal le plus performant. Construisez votre liste, segmentez et personnalisez vos messages.</p>"
+          }
+        },
+        {
+          "type": "text",
+          "id": "post5-cta",
+          "props": {
+            "content": "<div style='background:linear-gradient(135deg,rgba(99,102,241,0.15),rgba(124,58,237,0.15));border-radius:12px;padding:32px;text-align:center;margin:32px 0;border:1px solid rgba(99,102,241,0.2)'><p style='color:#e2e8f0;font-size:1.1rem;font-weight:600;margin-bottom:16px'>Besoin d'aide pour votre stratégie digitale ?</p><p style='color:#94a3b8;margin-bottom:20px'>Nos experts vous accompagnent dans la mise en place d'un plan marketing adapté à votre budget et vos objectifs.</p><a href='/contact' style='display:inline-block;background:#6366f1;color:#fff;padding:12px 28px;border-radius:8px;font-weight:700;text-decoration:none'>Demander un audit gratuit →</a></div>"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "title": "Pourquoi investir dans une application mobile en 2026",
+    "slug": "investir-application-mobile-2026",
+    "status": "published",
+    "excerpt": "Le mobile représente 65% du trafic web mondial. Découvrez pourquoi une application mobile peut transformer la relation avec vos clients.",
+    "category": "Développement",
+    "tags": ["mobile", "tendances", "conseils"],
+    "author": "admin",
+    "published_at": "2026-02-25",
+    "featured_image": null,
+    "content": {
+      "blocks": [
+        {
+          "type": "heading",
+          "id": "post6-h1",
+          "props": {
+            "text": "Pourquoi investir dans une application mobile en 2026",
+            "level": 1,
+            "color": "#f1f5f9"
+          }
+        },
+        {
+          "type": "text",
+          "id": "post6-intro",
+          "props": {
+            "content": "<p style='color:#94a3b8;font-size:1.1rem;line-height:1.8'>Le smartphone est devenu le premier écran des Français. Avec un temps moyen passé sur mobile de 3h45 par jour, les applications mobiles représentent une opportunité majeure pour les entreprises qui souhaitent créer un lien direct et durable avec leurs clients.</p>"
+          }
+        },
+        {
+          "type": "heading",
+          "id": "post6-h2a",
+          "props": {
+            "text": "Application mobile vs site responsive : que choisir ?",
+            "level": 2,
+            "color": "#e2e8f0"
+          }
+        },
+        {
+          "type": "text",
+          "id": "post6-p2",
+          "props": {
+            "content": "<p style='color:#94a3b8;line-height:1.8'>Un site responsive est indispensable, mais une application mobile offre des avantages uniques : notifications push (taux d'ouverture de 90% vs 20% pour l'email), accès hors ligne, intégration avec les fonctionnalités du téléphone (caméra, GPS, biométrie) et une expérience utilisateur supérieure grâce aux composants natifs.</p>"
+          }
+        },
+        {
+          "type": "heading",
+          "id": "post6-h2b",
+          "props": {
+            "text": "React Native : le meilleur compromis",
+            "level": 2,
+            "color": "#e2e8f0"
+          }
+        },
+        {
+          "type": "text",
+          "id": "post6-p3",
+          "props": {
+            "content": "<p style='color:#94a3b8;line-height:1.8'>Chez Nexus, nous recommandons React Native pour la majorité des projets mobiles. Cette technologie permet de développer une seule base de code pour iOS et Android, réduisant les coûts de 40% par rapport au développement natif séparé, tout en offrant des performances quasi identiques. Des applications comme Instagram, Airbnb et Discord utilisent React Native.</p>"
+          }
+        },
+        {
+          "type": "text",
+          "id": "post6-stats",
+          "props": {
+            "content": "<div style='display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin:32px 0'><div style='background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:24px;text-align:center'><p style='color:#6366f1;font-size:2rem;font-weight:800;margin-bottom:4px'>65%</p><p style='color:#64748b;font-size:0.85rem'>du trafic web est mobile</p></div><div style='background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:24px;text-align:center'><p style='color:#6366f1;font-size:2rem;font-weight:800;margin-bottom:4px'>90%</p><p style='color:#64748b;font-size:0.85rem'>taux d'ouverture push</p></div><div style='background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:24px;text-align:center'><p style='color:#6366f1;font-size:2rem;font-weight:800;margin-bottom:4px'>-40%</p><p style='color:#64748b;font-size:0.85rem'>coût vs natif séparé</p></div></div>"
+          }
+        },
+        {
+          "type": "text",
+          "id": "post6-conclusion",
+          "props": {
+            "content": "<p style='color:#94a3b8;line-height:1.8'>L'investissement dans une application mobile n'est plus réservé aux grandes entreprises. Avec les bons outils et la bonne stratégie, une PME peut lancer une application performante en 3-4 mois pour un budget de 15 000 à 40 000 euros — un investissement qui se rentabilise rapidement grâce à la fidélisation et l'engagement accru de vos clients.</p>"
+          }
+        }
+      ]
+    }
+  }
+]

@@ -2,6 +2,7 @@
   "name": "Noir",
   "slug": "noir",
   "version": "1.0.0",
+  "style": "dark",
   "description": "Thème dark luxury — fond charbon, accents néon, pour portfolios créatifs, agences premium et studios d'artistes. Typographie Space Grotesk + DM Sans.",
   "author": {
     "name": "ArtisanCMS",
@@ -125,6 +126,18 @@
           "right"
         ]
       },
+      "variant": {
+        "label": "Style du header",
+        "type": "select",
+        "default": "classic",
+        "options": [
+          "classic",
+          "centered",
+          "split",
+          "stacked",
+          "minimal"
+        ]
+      },
       "mobile_menu_style": {
         "label": "Menu mobile",
         "type": "select",
@@ -158,13 +171,15 @@
     },
     "footer": {
       "layout": {
-        "label": "Style du footer",
+        "label": "Disposition du footer",
         "type": "select",
         "default": "columns",
         "options": [
           "simple",
           "columns",
-          "minimal"
+          "minimal",
+          "centered",
+          "magazine"
         ]
       },
       "columns": {
@@ -585,6 +600,7 @@
     "--section-padding": "96px"
   },
   "supports": [
+    "dark_mode",
     "responsive"
   ],
   "default_template": "agency"

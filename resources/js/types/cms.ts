@@ -173,6 +173,8 @@ export interface BlockNode {
     id: string;
     type: string;
     props: Record<string, unknown>;
+    /** @deprecated Legacy alias for props — some stored JSON uses "settings" */
+    settings?: Record<string, unknown>;
     children?: BlockNode[];
 }
 

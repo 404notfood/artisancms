@@ -1,5 +1,11 @@
 import type { BlockRendererProps } from '../block-registry';
 
+const ALIGNMENT_CLASSES: Record<string, string> = {
+    left: 'items-start text-left',
+    right: 'items-end text-right',
+    center: 'items-center text-center',
+};
+
 export default function HeroRenderer({ block }: BlockRendererProps) {
     const title = (block.props.title as string) || 'Titre principal';
     const subtitle = (block.props.subtitle as string) || '';
@@ -13,11 +19,7 @@ export default function HeroRenderer({ block }: BlockRendererProps) {
     const minHeight = (block.props.minHeight as string) || '520px';
     const eyebrow = (block.props.eyebrow as string) || '';
 
-    const alignClass = alignment === 'left'
-        ? 'items-start text-left'
-        : alignment === 'right'
-            ? 'items-end text-right'
-            : 'items-center text-center';
+    const alignClass = ALIGNMENT_CLASSES[alignment] ?? ALIGNMENT_CLASSES.center;
 
     return (
         <div
@@ -30,7 +32,6 @@ export default function HeroRenderer({ block }: BlockRendererProps) {
                 backgroundColor: backgroundImage ? undefined : 'var(--color-background, #0a0a0a)',
             }}
         >
-            {/* Overlay */}
             {overlay && (
                 <div
                     className="absolute inset-0"
@@ -42,34 +43,26 @@ export default function HeroRenderer({ block }: BlockRendererProps) {
                 />
             )}
 
-            {/* Decorative background pattern (no background image) */}
             {!backgroundImage && (
                 <>
-                    {/* Radial glow */}
                     <div
-                        className="absolute inset-0 pointer-events-none"
+                        className="absolute inset-0 pointer-events-none opacity-50"
                         style={{
-                            background: 'radial-gradient(ellipse 80% 60% at 50% 0%, var(--color-primary, #6366f1)18 0%, transparent 70%)',
-                            opacity: 0.5,
+                            background: 'radial-gradient(ellipse 80% 60% at 50% 0%, color-mix(in srgb, var(--color-primary, #6366f1) 18%, transparent) 0%, transparent 70%)',
                         }}
                     />
-                    {/* Grid lines */}
                     <div
                         className="absolute inset-0 pointer-events-none"
                         style={{
-                            backgroundImage: `linear-gradient(var(--color-primary, #6366f1)08 1px, transparent 1px),
-                                              linear-gradient(90deg, var(--color-primary, #6366f1)08 1px, transparent 1px)`,
+                            backgroundImage: `linear-gradient(color-mix(in srgb, var(--color-primary, #6366f1) 8%, transparent) 1px, transparent 1px),
+                                              linear-gradient(90deg, color-mix(in srgb, var(--color-primary, #6366f1) 8%, transparent) 1px, transparent 1px)`,
                             backgroundSize: '60px 60px',
                         }}
                     />
                 </>
             )}
 
-            {/* Content */}
-            <div
-                className={`relative z-10 flex flex-col px-6 py-20 max-w-4xl w-full mx-auto ${alignClass}`}
-                style={{ gap: '1.25rem' }}
-            >
+            <div className={`relative z-10 flex flex-col gap-5 px-6 py-20 max-w-4xl w-full mx-auto ${alignClass}`}>
                 {eyebrow && (
                     <p style={{
                         fontSize: '0.75rem',
@@ -113,9 +106,7 @@ export default function HeroRenderer({ block }: BlockRendererProps) {
                 )}
 
                 {(ctaText || ctaSecondaryText) && (
-                    <div
-                        className={`flex flex-wrap gap-3 mt-2 ${alignment === 'center' ? 'justify-center' : ''}`}
-                    >
+                    <div className={`flex flex-wrap gap-3 mt-2 ${alignment === 'center' ? 'justify-center' : ''}`}>
                         {ctaText && (
                             <a
                                 href={ctaUrl}
@@ -134,12 +125,12 @@ export default function HeroRenderer({ block }: BlockRendererProps) {
                                     transition: 'transform 0.15s ease, box-shadow 0.15s ease',
                                 }}
                                 onMouseEnter={(e) => {
-                                    (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)';
-                                    (e.currentTarget as HTMLElement).style.boxShadow = '0 0 40px var(--color-primary, #6366f1)70';
+                                    e.currentTarget.style.transform = 'translateY(-2px)';
+                                    e.currentTarget.style.boxShadow = '0 0 40px var(--color-primary, #6366f1)70';
                                 }}
                                 onMouseLeave={(e) => {
-                                    (e.currentTarget as HTMLElement).style.transform = '';
-                                    (e.currentTarget as HTMLElement).style.boxShadow = '0 0 30px var(--color-primary, #6366f1)50';
+                                    e.currentTarget.style.transform = '';
+                                    e.currentTarget.style.boxShadow = '0 0 30px var(--color-primary, #6366f1)50';
                                 }}
                             >
                                 {ctaText}
@@ -165,12 +156,12 @@ export default function HeroRenderer({ block }: BlockRendererProps) {
                                     transition: 'border-color 0.15s ease, background 0.15s ease',
                                 }}
                                 onMouseEnter={(e) => {
-                                    (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.4)';
-                                    (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.05)';
+                                    e.currentTarget.style.borderColor = 'rgba(255,255,255,0.4)';
+                                    e.currentTarget.style.background = 'rgba(255,255,255,0.05)';
                                 }}
                                 onMouseLeave={(e) => {
-                                    (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.2)';
-                                    (e.currentTarget as HTMLElement).style.background = 'transparent';
+                                    e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)';
+                                    e.currentTarget.style.background = 'transparent';
                                 }}
                             >
                                 {ctaSecondaryText}

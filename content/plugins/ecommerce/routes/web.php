@@ -12,7 +12,6 @@ use Ecommerce\Http\Controllers\CartController;
 use Ecommerce\Http\Controllers\CheckoutController;
 use Ecommerce\Http\Controllers\CouponController;
 use Ecommerce\Http\Controllers\CustomerAccountController;
-use Ecommerce\Http\Controllers\CustomerController;
 use Ecommerce\Http\Controllers\EcommerceSettingsController;
 use Ecommerce\Http\Controllers\InvoiceController;
 use Ecommerce\Http\Controllers\OrderController;
@@ -25,27 +24,31 @@ use Ecommerce\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
 
 // ---- Admin Routes ----
-Route::prefix('admin/shop')->middleware(['web', 'auth'])->group(function () {
+Route::prefix('admin/shop')->middleware(['web', 'auth', 'cms.admin'])->group(function () {
     // Products
-    Route::get('products', [ProductController::class, 'index'])->name('admin.shop.products.index');
-    Route::get('products/create', [ProductController::class, 'create'])->name('admin.shop.products.create');
-    Route::post('products', [ProductController::class, 'store'])->name('admin.shop.products.store');
-    Route::get('products/{product}/edit', [ProductController::class, 'edit'])->name('admin.shop.products.edit');
-    Route::put('products/{product}', [ProductController::class, 'update'])->name('admin.shop.products.update');
-    Route::delete('products/{product}', [ProductController::class, 'destroy'])->name('admin.shop.products.destroy');
+    Route::resource('products', ProductController::class)->except(['show'])->names([
+        'index' => 'admin.shop.products.index',
+        'create' => 'admin.shop.products.create',
+        'store' => 'admin.shop.products.store',
+        'edit' => 'admin.shop.products.edit',
+        'update' => 'admin.shop.products.update',
+        'destroy' => 'admin.shop.products.destroy',
+    ]);
 
     // Orders
     Route::get('orders', [OrderController::class, 'index'])->name('admin.shop.orders.index');
     Route::get('orders/{order}', [OrderController::class, 'show'])->name('admin.shop.orders.show');
-    Route::put('orders/{order}/status', [OrderController::class, 'updateStatus'])->name('admin.shop.orders.update-status');
+    Route::patch('orders/{order}/status', [OrderController::class, 'updateStatus'])->name('admin.shop.orders.update-status');
 
     // Coupons
-    Route::get('coupons', [CouponController::class, 'index'])->name('admin.shop.coupons.index');
-    Route::get('coupons/create', [CouponController::class, 'create'])->name('admin.shop.coupons.create');
-    Route::post('coupons', [CouponController::class, 'store'])->name('admin.shop.coupons.store');
-    Route::get('coupons/{coupon}/edit', [CouponController::class, 'edit'])->name('admin.shop.coupons.edit');
-    Route::put('coupons/{coupon}', [CouponController::class, 'update'])->name('admin.shop.coupons.update');
-    Route::delete('coupons/{coupon}', [CouponController::class, 'destroy'])->name('admin.shop.coupons.destroy');
+    Route::resource('coupons', CouponController::class)->except(['show'])->names([
+        'index' => 'admin.shop.coupons.index',
+        'create' => 'admin.shop.coupons.create',
+        'store' => 'admin.shop.coupons.store',
+        'edit' => 'admin.shop.coupons.edit',
+        'update' => 'admin.shop.coupons.update',
+        'destroy' => 'admin.shop.coupons.destroy',
+    ]);
 
     // Settings
     Route::get('settings', [EcommerceSettingsController::class, 'index'])->name('admin.shop.settings');
@@ -78,15 +81,15 @@ Route::prefix('admin/shop')->middleware(['web', 'auth'])->group(function () {
 
     // Reviews
     Route::get('reviews', [AdminReviewController::class, 'index'])->name('admin.shop.reviews.index');
-    Route::post('reviews/{productReview}/approve', [AdminReviewController::class, 'approve'])->name('admin.shop.reviews.approve');
-    Route::post('reviews/{productReview}/reject', [AdminReviewController::class, 'reject'])->name('admin.shop.reviews.reject');
+    Route::patch('reviews/{productReview}/approve', [AdminReviewController::class, 'approve'])->name('admin.shop.reviews.approve');
+    Route::patch('reviews/{productReview}/reject', [AdminReviewController::class, 'reject'])->name('admin.shop.reviews.reject');
     Route::post('reviews/{productReview}/reply', [AdminReviewController::class, 'reply'])->name('admin.shop.reviews.reply');
     Route::delete('reviews/{productReview}', [AdminReviewController::class, 'destroy'])->name('admin.shop.reviews.destroy');
 
-    // Reports / Analytics
+    // Reports
     Route::get('reports', [ReportController::class, 'index'])->name('admin.shop.reports');
 
-    // Stock Management
+    // Stock
     Route::get('stock', [StockController::class, 'index'])->name('admin.shop.stock.index');
     Route::post('stock/{product}/adjust', [StockController::class, 'adjust'])->name('admin.shop.stock.adjust');
     Route::get('stock/{product}/movements', [StockController::class, 'movements'])->name('admin.shop.stock.movements');
@@ -95,11 +98,11 @@ Route::prefix('admin/shop')->middleware(['web', 'auth'])->group(function () {
     Route::post('payment-methods', [PaymentMethodController::class, 'store'])->name('admin.shop.payment-methods.store');
     Route::put('payment-methods/{paymentMethod}', [PaymentMethodController::class, 'update'])->name('admin.shop.payment-methods.update');
     Route::delete('payment-methods/{paymentMethod}', [PaymentMethodController::class, 'destroy'])->name('admin.shop.payment-methods.destroy');
-    Route::post('payment-methods/{paymentMethod}/toggle', [PaymentMethodController::class, 'toggle'])->name('admin.shop.payment-methods.toggle');
+    Route::patch('payment-methods/{paymentMethod}/toggle', [PaymentMethodController::class, 'toggle'])->name('admin.shop.payment-methods.toggle');
 });
 
 // ---- API JSON Routes (for block renderers) ----
-Route::middleware(['web'])->prefix('api/shop')->group(function () {
+Route::middleware(['web', 'throttle:60,1'])->prefix('api/shop')->group(function () {
     Route::get('products', [ProductController::class, 'apiList'])->name('api.shop.products');
     Route::get('cart', [CartController::class, 'apiGet'])->name('api.shop.cart');
     Route::post('cart/add', [CartController::class, 'apiAdd'])->name('api.shop.cart.add');
@@ -146,13 +149,17 @@ Route::middleware(['web'])->group(function () {
 
         // Wishlist
         Route::get('account/wishlist', [WishlistController::class, 'index'])->name('shop.wishlist');
-        Route::post('wishlist', [WishlistController::class, 'store'])->name('shop.wishlist.store');
-        Route::delete('wishlist/{wishlistItem}', [WishlistController::class, 'destroy'])->name('shop.wishlist.destroy');
-        Route::post('wishlist/{wishlistItem}/cart', [WishlistController::class, 'moveToCart'])->name('shop.wishlist.to-cart');
+        Route::post('account/wishlist', [WishlistController::class, 'store'])->name('shop.wishlist.store');
+        Route::delete('account/wishlist/{wishlistItem}', [WishlistController::class, 'destroy'])->name('shop.wishlist.destroy');
+        Route::post('account/wishlist/{wishlistItem}/cart', [WishlistController::class, 'moveToCart'])->name('shop.wishlist.to-cart');
     });
 });
 
-// Payment webhooks (public, no auth, no CSRF - signature verified by driver)
-Route::post('payment/webhook/{driver}', [PaymentController::class, 'webhook'])
-    ->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class])
-    ->name('payment.webhook');
+// Payment webhooks (no auth, no CSRF - signature verified by driver)
+Route::middleware(['web'])
+    ->withoutMiddleware([\Illuminate\Http\Middleware\ValidateCsrfToken::class])
+    ->group(function () {
+        Route::post('payment/webhook/{driver}', [PaymentController::class, 'webhook'])
+            ->where('driver', '[a-z]+')
+            ->name('payment.webhook');
+    });

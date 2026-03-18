@@ -13,10 +13,10 @@ interface PostsIndexProps {
 
 const statusTabs = [
     { label: 'Tout', value: '' },
-    { label: 'Publies', value: 'published' },
+    { label: 'Publiés', value: 'published' },
     { label: 'Brouillons', value: 'draft' },
     { label: 'En revue', value: 'pending_review' },
-    { label: 'Approuves', value: 'approved' },
+    { label: 'Approuvés', value: 'approved' },
     { label: 'Corbeille', value: 'trash' },
 ];
 
@@ -42,12 +42,12 @@ export default function PostsIndex({ posts, filters }: PostsIndexProps) {
     }
 
     function handleForceDelete(post: PostData) {
-        if (!confirm(`Êtes-vous sûr de vouloir supprimer definitivement l'article "${post.title}" ? Cette action est irreversible.`)) return;
+        if (!confirm(`Êtes-vous sûr de vouloir supprimer définitivement l'article "${post.title}" ? Cette action est irréversible.`)) return;
         router.delete(`/admin/posts/${post.id}/force-delete`);
     }
 
     function handleEmptyTrash() {
-        if (!confirm('Êtes-vous sûr de vouloir vider la corbeille ? Tous les articles seront supprimes definitivement.')) return;
+        if (!confirm('Êtes-vous sûr de vouloir vider la corbeille ? Tous les articles seront supprimés définitivement.')) return;
         router.post('/admin/posts/empty-trash');
     }
 
@@ -75,7 +75,6 @@ export default function PostsIndex({ posts, filters }: PostsIndexProps) {
             <Head title="Articles" />
 
             <div className="rounded-lg border border-gray-200 bg-white">
-                {/* Tabs + Search */}
                 <div className="flex flex-col gap-4 border-b border-gray-200 p-4 sm:flex-row sm:items-center sm:justify-between">
                     <div className="flex gap-1">
                         {statusTabs.map((tab) => (
@@ -119,7 +118,6 @@ export default function PostsIndex({ posts, filters }: PostsIndexProps) {
                     </form>
                 </div>
 
-                {/* Table */}
                 <div className="overflow-x-auto">
                     <table className="w-full text-left text-sm">
                         <thead className="border-b border-gray-200 bg-gray-50">
@@ -190,9 +188,9 @@ export default function PostsIndex({ posts, filters }: PostsIndexProps) {
                                                         <button
                                                             onClick={() => handleForceDelete(post)}
                                                             className="rounded bg-red-100 px-2 py-1 text-xs font-medium text-red-700 hover:bg-red-200 transition-colors"
-                                                            title="Supprimer definitivement"
+                                                            title="Supprimer définitivement"
                                                         >
-                                                            Supprimer definitivement
+                                                            Supprimer définitivement
                                                         </button>
                                                     </>
                                                 ) : (
@@ -229,7 +227,6 @@ export default function PostsIndex({ posts, filters }: PostsIndexProps) {
                     </table>
                 </div>
 
-                {/* Pagination */}
                 {posts.last_page > 1 && (
                     <div className="flex items-center justify-between border-t border-gray-200 px-4 py-3">
                         <p className="text-sm text-gray-600">
@@ -267,11 +264,11 @@ function StatusBadge({ status }: { status: string }) {
         trash: 'bg-red-100 text-red-800',
     };
     const labels: Record<string, string> = {
-        published: 'Publie',
+        published: 'Publié',
         draft: 'Brouillon',
         pending_review: 'En revue',
-        approved: 'Approuve',
-        scheduled: 'Planifie',
+        approved: 'Approuvé',
+        scheduled: 'Planifié',
         trash: 'Corbeille',
     };
     return (

@@ -2,6 +2,7 @@
   "name": "Lumière",
   "slug": "lumiere",
   "version": "1.0.0",
+  "style": "luxury",
   "description": "Thème luxury blanc et or — élégance intemporelle pour hôtels, spas, boutiques premium et maisons de haute gamme. Typographie Cormorant Garamond + Jost.",
   "author": {
     "name": "ArtisanCMS",
@@ -129,6 +130,18 @@
           "right"
         ]
       },
+      "variant": {
+        "label": "Style du header",
+        "type": "select",
+        "default": "split",
+        "options": [
+          "classic",
+          "centered",
+          "split",
+          "stacked",
+          "minimal"
+        ]
+      },
       "mobile_menu_style": {
         "label": "Menu mobile",
         "type": "select",
@@ -162,13 +175,15 @@
     },
     "footer": {
       "layout": {
-        "label": "Style du footer",
+        "label": "Disposition du footer",
         "type": "select",
-        "default": "columns",
+        "default": "centered",
         "options": [
           "simple",
           "columns",
           "minimal",
+          "centered",
+          "magazine",
           "luxury"
         ]
       },

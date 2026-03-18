@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Ecommerce\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\CmsPlugin;
+use Ecommerce\Http\Controllers\Concerns\HasEcommerceSettings;
+use Ecommerce\Http\Controllers\Concerns\HasThemeAndMenus;
 use Ecommerce\Models\CustomerAddress;
 use Ecommerce\Models\Order;
 use Ecommerce\Services\CustomerService;
@@ -17,18 +18,17 @@ use Inertia\Response;
 
 class CustomerAccountController extends Controller
 {
+    use HasEcommerceSettings;
+    use HasThemeAndMenus;
+
     public function __construct(
         private readonly CustomerService $customerService,
         private readonly WishlistService $wishlistService,
     ) {}
 
-    /**
-     * Customer dashboard with recent orders and stats.
-     */
-    public function dashboard(Request $request): Response
+    public function dashboard(): Response
     {
-        /** @var int $userId */
-        $userId = (int) auth()->id();
+        $userId = $this->userId();
 
         $recentOrders = Order::where('user_id', $userId)
             ->with('items')
@@ -43,78 +43,107 @@ class CustomerAccountController extends Controller
         $pendingOrders = Order::where('user_id', $userId)
             ->whereIn('status', ['pending', 'processing'])
             ->count();
-        $wishlistCount = $this->wishlistService->count($userId);
 
-        $settings = $this->getSettings();
-
-        return Inertia::render('Front/Shop/Account/Dashboard', [
+        return Inertia::render('Front/Shop/Account/Dashboard', array_merge($this->themeAndMenus(), [
             'recentOrders' => $recentOrders,
             'stats' => [
                 'total_orders' => $totalOrders,
                 'total_spent' => $totalSpent,
                 'pending_orders' => $pendingOrders,
-                'wishlist_count' => $wishlistCount,
+                'wishlist_count' => $this->wishlistService->count($userId),
             ],
-            'settings' => $settings,
-        ]);
+            'settings' => $this->getSettings(),
+        ]));
     }
 
-    /**
-     * List saved addresses.
-     */
     public function addresses(): Response
     {
-        /** @var int $userId */
-        $userId = (int) auth()->id();
-
-        $addresses = $this->customerService->getAddresses($userId);
-        $settings = $this->getSettings();
-
-        return Inertia::render('Front/Shop/Account/Addresses', [
-            'addresses' => $addresses,
-            'settings' => $settings,
-        ]);
+        return Inertia::render('Front/Shop/Account/Addresses', array_merge($this->themeAndMenus(), [
+            'addresses' => $this->customerService->getAddresses($this->userId()),
+            'settings' => $this->getSettings(),
+        ]));
     }
 
-    /**
-     * Store a new address.
-     */
     public function storeAddress(Request $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'label' => 'required|string|max:100',
-            'first_name' => 'required|string|max:100',
-            'last_name' => 'required|string|max:100',
-            'address' => 'required|string|max:255',
-            'address2' => 'nullable|string|max:255',
-            'city' => 'required|string|max:100',
-            'postal_code' => 'required|string|max:20',
-            'country' => 'required|string|max:2',
-            'phone' => 'nullable|string|max:30',
-            'is_default_shipping' => 'boolean',
-            'is_default_billing' => 'boolean',
-        ]);
+        $validated = $request->validate($this->addressRules());
 
-        /** @var int $userId */
-        $userId = (int) auth()->id();
-
-        $this->customerService->createAddress($userId, $validated);
+        $this->customerService->createAddress($this->userId(), $validated);
 
         return redirect()
             ->route('shop.account.addresses')
             ->with('success', 'Adresse ajoutee avec succes.');
     }
 
-    /**
-     * Update an existing address.
-     */
-    public function updateAddress(Request $request, CustomerAddress $customerAddress): RedirectResponse
+    public function updateAddress(Request $request, CustomerAddress $address): RedirectResponse
     {
-        if ($customerAddress->user_id !== (int) auth()->id()) {
+        $this->authorizeAddress($address);
+
+        $validated = $request->validate($this->addressRules());
+
+        $this->customerService->updateAddress($address, $validated);
+
+        return redirect()
+            ->route('shop.account.addresses')
+            ->with('success', 'Adresse mise a jour avec succes.');
+    }
+
+    public function destroyAddress(CustomerAddress $address): RedirectResponse
+    {
+        $this->authorizeAddress($address);
+
+        $this->customerService->deleteAddress($address);
+
+        return redirect()
+            ->route('shop.account.addresses')
+            ->with('success', 'Adresse supprimee avec succes.');
+    }
+
+    public function orders(Request $request): Response
+    {
+        $filters = $request->only(['status', 'per_page']);
+
+        return Inertia::render('Front/Shop/Account/Orders', array_merge($this->themeAndMenus(), [
+            'orders' => $this->customerService->getOrderHistory($this->userId(), $filters),
+            'filters' => $filters,
+            'settings' => $this->getSettings(),
+        ]));
+    }
+
+    public function orderShow(Order $order): Response
+    {
+        $this->authorizeOrder($order);
+
+        $order->load('items');
+
+        return Inertia::render('Front/Shop/Account/OrderShow', array_merge($this->themeAndMenus(), [
+            'order' => $order,
+            'settings' => $this->getSettings(),
+        ]));
+    }
+
+    private function userId(): int
+    {
+        return (int) auth()->id();
+    }
+
+    private function authorizeAddress(CustomerAddress $address): void
+    {
+        if ($address->user_id !== $this->userId()) {
             abort(403);
         }
+    }
 
-        $validated = $request->validate([
+    private function authorizeOrder(Order $order): void
+    {
+        if ($order->user_id !== $this->userId()) {
+            abort(403);
+        }
+    }
+
+    private function addressRules(): array
+    {
+        return [
             'label' => 'required|string|max:100',
             'first_name' => 'required|string|max:100',
             'last_name' => 'required|string|max:100',
@@ -126,92 +155,6 @@ class CustomerAccountController extends Controller
             'phone' => 'nullable|string|max:30',
             'is_default_shipping' => 'boolean',
             'is_default_billing' => 'boolean',
-        ]);
-
-        $this->customerService->updateAddress($customerAddress, $validated);
-
-        return redirect()
-            ->route('shop.account.addresses')
-            ->with('success', 'Adresse mise a jour avec succes.');
-    }
-
-    /**
-     * Delete an address.
-     */
-    public function destroyAddress(CustomerAddress $customerAddress): RedirectResponse
-    {
-        if ($customerAddress->user_id !== (int) auth()->id()) {
-            abort(403);
-        }
-
-        $this->customerService->deleteAddress($customerAddress);
-
-        return redirect()
-            ->route('shop.account.addresses')
-            ->with('success', 'Adresse supprimee avec succes.');
-    }
-
-    /**
-     * Order history listing.
-     */
-    public function orders(Request $request): Response
-    {
-        /** @var int $userId */
-        $userId = (int) auth()->id();
-
-        $filters = $request->only(['status', 'per_page']);
-        $orders = $this->customerService->getOrderHistory($userId, $filters);
-
-        $settings = $this->getSettings();
-
-        return Inertia::render('Front/Shop/Account/Orders', [
-            'orders' => $orders,
-            'filters' => $filters,
-            'settings' => $settings,
-        ]);
-    }
-
-    /**
-     * Order detail (verify ownership).
-     */
-    public function orderShow(Order $order): Response
-    {
-        if ($order->user_id !== (int) auth()->id()) {
-            abort(403);
-        }
-
-        $order->load('items');
-
-        $settings = $this->getSettings();
-
-        return Inertia::render('Front/Shop/Account/OrderShow', [
-            'order' => $order,
-            'settings' => $settings,
-        ]);
-    }
-
-    /**
-     * Get current e-commerce settings with defaults.
-     *
-     * @return array<string, mixed>
-     */
-    private function getSettings(): array
-    {
-        $defaults = [
-            'store_name' => 'Ma Boutique',
-            'currency' => 'EUR',
-            'currency_symbol' => "\u{20AC}",
-            'tax_rate' => 20,
-            'shipping_cost' => 5.99,
-            'free_shipping_threshold' => 50,
         ];
-
-        $plugin = CmsPlugin::where('slug', 'ecommerce')->first();
-
-        if (!$plugin || empty($plugin->settings)) {
-            return $defaults;
-        }
-
-        return array_merge($defaults, $plugin->settings);
     }
 }

@@ -31,8 +31,8 @@ export function MegaMenuRenderer({ items, className }: MegaMenuRendererProps) {
 
 function MegaMenuTopItem({ item }: { item: MegaMenuItem }) {
     const [open, setOpen] = useState(false);
-    const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
-    const containerRef = useRef<HTMLLIElement>(null);
+    const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+    const containerRef = useRef<HTMLLIElement | null>(null);
 
     const hasChildren = item.children && item.children.length > 0;
     const isMega = item.mega_menu && hasChildren;

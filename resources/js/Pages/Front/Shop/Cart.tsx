@@ -15,6 +15,7 @@ interface CartPageProps {
     theme: { customizations: Record<string, string>; layouts: Array<{ slug: string; name: string }> };
 }
 
+/** Theme CSS variable tokens used for inline styles */
 const T = {
     primary: 'var(--color-primary, #1a3d1a)',
     gold:    'var(--color-gold, #c9a84c)',
@@ -27,7 +28,7 @@ const T = {
     body:    "var(--font-body, 'DM Sans', system-ui, sans-serif)",
 };
 
-function fp(p: number, s: string) { return `${Number(p).toFixed(2)} ${s}`; }
+function formatPrice(price: number, symbol: string) { return `${Number(price).toFixed(2)} ${symbol}`; }
 
 function CartRow({ item, settings }: { item: CartItemData; settings: EcommerceSettingsData }) {
     const [qty, setQty] = useState(item.quantity);
@@ -39,7 +40,7 @@ function CartRow({ item, settings }: { item: CartItemData; settings: EcommerceSe
     };
 
     return (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr auto auto auto', gap: '24px', alignItems: 'center', padding: '24px 0', borderBottom: `1px solid ${T.border}` }}>
+        <div className="cart-row" style={{ display: 'grid', gridTemplateColumns: '1fr auto auto auto', gap: '24px', alignItems: 'center', padding: '24px 0', borderBottom: `1px solid ${T.border}` }}>
             {/* Product */}
             <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
                 <Link href={`/shop/${item.slug}`} style={{ textDecoration: 'none', flexShrink: 0 }}>
@@ -66,7 +67,7 @@ function CartRow({ item, settings }: { item: CartItemData; settings: EcommerceSe
             {/* Unit price */}
             <div style={{ textAlign: 'center' }}>
                 <p style={{ fontFamily: T.body, fontSize: '11px', color: T.muted, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '4px' }}>Prix</p>
-                <p style={{ fontFamily: T.body, fontSize: '15px', fontWeight: 600, color: T.text }}>{fp(item.price, settings.currency_symbol)}</p>
+                <p style={{ fontFamily: T.body, fontSize: '15px', fontWeight: 600, color: T.text }}>{formatPrice(item.price, settings.currency_symbol)}</p>
             </div>
 
             {/* Qty */}
@@ -82,7 +83,7 @@ function CartRow({ item, settings }: { item: CartItemData; settings: EcommerceSe
             {/* Total */}
             <div style={{ textAlign: 'right', minWidth: '80px' }}>
                 <p style={{ fontFamily: T.body, fontSize: '11px', color: T.muted, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '4px' }}>Total</p>
-                <p style={{ fontFamily: T.body, fontSize: '16px', fontWeight: 700, color: T.primary }}>{fp(item.price * qty, settings.currency_symbol)}</p>
+                <p style={{ fontFamily: T.body, fontSize: '16px', fontWeight: 700, color: T.primary }}>{formatPrice(item.price * qty, settings.currency_symbol)}</p>
             </div>
         </div>
     );
@@ -96,18 +97,34 @@ export default function CartPage({ cartItems, subtotal, tax, shipping, total, se
 
     const applyCoupon = async () => {
         if (!couponCode.trim()) return;
-        setApplying(true); setCouponMsg(null);
+        setApplying(true);
+        setCouponMsg(null);
+
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+
         try {
-            const r = await fetch('/checkout/apply-coupon', {
+            const response = await fetch('/checkout/apply-coupon', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '', Accept: 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    Accept: 'application/json',
+                },
                 body: JSON.stringify({ code: couponCode, subtotal }),
             });
-            const d = await r.json();
-            if (r.ok && d.success) { setDiscount(d.discount); setCouponMsg({ type: 'ok', text: d.message }); }
-            else setCouponMsg({ type: 'err', text: d.message || 'Code invalide.' });
-        } catch { setCouponMsg({ type: 'err', text: 'Erreur réseau.' }); }
-        finally { setApplying(false); }
+            const result = await response.json();
+
+            if (response.ok && result.success) {
+                setDiscount(result.discount);
+                setCouponMsg({ type: 'ok', text: result.message });
+            } else {
+                setCouponMsg({ type: 'err', text: result.message || 'Code invalide.' });
+            }
+        } catch {
+            setCouponMsg({ type: 'err', text: 'Erreur r\u00e9seau.' });
+        } finally {
+            setApplying(false);
+        }
     };
 
     const adjustedTotal = Math.max(0, total - discount);
@@ -157,7 +174,7 @@ export default function CartPage({ cartItems, subtotal, tax, shipping, total, se
                     </p>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 360px', gap: '48px', alignItems: 'start' }}>
+                <div className="cart-layout" style={{ display: 'grid', gridTemplateColumns: '1fr 360px', gap: '48px', alignItems: 'start' }}>
                     {/* Items */}
                     <div>
                         <div style={{ borderTop: `1px solid ${T.border}` }}>
@@ -191,25 +208,25 @@ export default function CartPage({ cartItems, subtotal, tax, shipping, total, se
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', paddingTop: '16px', borderTop: `1px solid ${T.border}` }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: T.body, fontSize: '14px' }}>
                                 <span style={{ color: T.muted }}>Sous-total</span>
-                                <span style={{ color: T.text, fontWeight: 500 }}>{fp(subtotal, settings.currency_symbol)}</span>
+                                <span style={{ color: T.text, fontWeight: 500 }}>{formatPrice(subtotal, settings.currency_symbol)}</span>
                             </div>
                             {discount > 0 && (
                                 <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: T.body, fontSize: '14px' }}>
                                     <span style={{ color: '#2d7a2d' }}>Réduction</span>
-                                    <span style={{ color: '#2d7a2d', fontWeight: 500 }}>−{fp(discount, settings.currency_symbol)}</span>
+                                    <span style={{ color: '#2d7a2d', fontWeight: 500 }}>−{formatPrice(discount, settings.currency_symbol)}</span>
                                 </div>
                             )}
                             <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: T.body, fontSize: '14px' }}>
                                 <span style={{ color: T.muted }}>TVA ({settings.tax_rate}%)</span>
-                                <span style={{ color: T.text, fontWeight: 500 }}>{fp(tax, settings.currency_symbol)}</span>
+                                <span style={{ color: T.text, fontWeight: 500 }}>{formatPrice(tax, settings.currency_symbol)}</span>
                             </div>
                             <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: T.body, fontSize: '14px' }}>
                                 <span style={{ color: T.muted }}>Livraison</span>
-                                <span style={{ color: shipping === 0 ? '#2d7a2d' : T.text, fontWeight: 500 }}>{shipping === 0 ? 'Gratuite 🎁' : fp(shipping, settings.currency_symbol)}</span>
+                                <span style={{ color: shipping === 0 ? '#2d7a2d' : T.text, fontWeight: 500 }}>{shipping === 0 ? 'Gratuite 🎁' : formatPrice(shipping, settings.currency_symbol)}</span>
                             </div>
                             <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '16px', marginTop: '4px', borderTop: `1px solid ${T.border}` }}>
                                 <span style={{ fontFamily: T.heading, fontSize: '20px', fontWeight: 600, color: T.text }}>Total</span>
-                                <span style={{ fontFamily: T.heading, fontSize: '22px', fontWeight: 700, color: T.primary }}>{fp(adjustedTotal, settings.currency_symbol)}</span>
+                                <span style={{ fontFamily: T.heading, fontSize: '22px', fontWeight: 700, color: T.primary }}>{formatPrice(adjustedTotal, settings.currency_symbol)}</span>
                             </div>
                         </div>
 

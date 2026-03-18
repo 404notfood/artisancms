@@ -4,29 +4,28 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Concerns\HasFrontData;
 use App\Models\AnnouncementBar;
 use App\Models\Page;
-use App\Models\Menu;
 use App\Models\Post;
-use App\Models\Setting;
 use App\Models\PreviewToken;
-use App\CMS\Themes\ThemeManager;
 use App\Services\DesignTokenService;
+use App\Services\SettingService;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class FrontController extends Controller
 {
+    use HasFrontData;
+
     public function __construct(
-        private readonly ThemeManager $themeManager,
+        private readonly SettingService $settingService,
         private readonly DesignTokenService $designTokenService,
     ) {}
 
     public function home(): Response
     {
-        $homepageId = Setting::where('key', 'homepage_id')
-            ->orderByDesc('id')
-            ->value('value');
+        $homepageId = $this->settingService->get('content.homepage_id');
 
         $page = null;
 
@@ -36,7 +35,7 @@ class FrontController extends Controller
                 ->first();
         }
 
-        if (!$page) {
+        if (! $page) {
             $page = Page::where('status', 'published')
                 ->orderBy('created_at')
                 ->first();
@@ -62,23 +61,12 @@ class FrontController extends Controller
 
         $previewable = $previewToken->previewable;
 
-        if (!$previewable) {
+        if (! $previewable) {
             abort(404);
         }
 
-        $menus = Menu::with(['items' => function ($query) {
-            $query->orderBy('order');
-        }])->get()->keyBy('location');
-
-        $theme = $this->themeManager->getActive();
-        $themeConfig = $theme ? $this->themeManager->getThemeConfig($theme->slug) : [];
-
         $data = [
-            'menus' => $menus,
-            'theme' => [
-                'customizations' => $theme ? $this->themeManager->getAllCustomizations($theme->slug) : [],
-                'layouts' => $themeConfig['layouts'] ?? [],
-            ],
+            ...$this->frontData(),
             'isPreview' => true,
         ];
 
@@ -98,13 +86,6 @@ class FrontController extends Controller
 
     private function renderPage(?Page $page): Response
     {
-        $menus = Menu::with(['items' => function ($query) {
-            $query->orderBy('order');
-        }])->get()->keyBy('location');
-
-        $theme = $this->themeManager->getActive();
-        $themeConfig = $theme ? $this->themeManager->getThemeConfig($theme->slug) : [];
-
         try {
             $announcement = AnnouncementBar::current()->first();
         } catch (\Throwable) {
@@ -112,18 +93,10 @@ class FrontController extends Controller
         }
 
         return Inertia::render('Front/Page', [
+            ...$this->frontData(),
             'page' => $page,
-            'menus' => $menus,
-            'theme' => [
-                'slug' => $theme?->slug ?? 'default',
-                'customizations' => $theme ? $this->themeManager->getAllCustomizations($theme->slug) : [],
-                'layouts' => $themeConfig['layouts'] ?? [],
-                'supports' => $themeConfig['supports'] ?? [],
-            ],
             'designTokensCss' => $this->designTokenService->generateCssVariables(),
             'announcement' => $announcement,
         ]);
     }
-
-
 }

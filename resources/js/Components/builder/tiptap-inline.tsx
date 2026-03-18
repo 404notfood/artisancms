@@ -20,9 +20,9 @@ interface TipTapInlineProps {
 }
 
 export default function TipTapInline({ content, onUpdate, className, style }: TipTapInlineProps) {
-    const debounceRef = useRef<ReturnType<typeof setTimeout>>();
+    const debounceRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
     const [bubblePos, setBubblePos] = useState<{ top: number; left: number } | null>(null);
-    const bubbleRef = useRef<HTMLDivElement>(null);
+    const bubbleRef = useRef<HTMLDivElement | null>(null);
 
     const editor = useEditor({
         extensions: [
@@ -64,7 +64,7 @@ export default function TipTapInline({ content, onUpdate, className, style }: Ti
 
     useEffect(() => {
         if (editor && content !== editor.getHTML()) {
-            editor.commands.setContent(content, false);
+            editor.commands.setContent(content, { emitUpdate: false });
         }
     }, [content]);
 

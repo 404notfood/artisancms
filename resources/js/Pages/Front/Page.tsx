@@ -1,5 +1,5 @@
 import { Head } from '@inertiajs/react';
-import type { PageData, MenuData } from '@/types/cms';
+import type { PageData, MenuData, BlockNode } from '@/types/cms';
 import FrontLayout from '@/Layouts/FrontLayout';
 import SidebarLayout from '@/Layouts/SidebarLayout';
 import BlockRenderer from '@/Components/front/block-renderer';
@@ -24,9 +24,10 @@ export default function FrontPage({ page, menus, theme }: FrontPageProps) {
     const isLegal = LEGAL_SLUGS.includes(page.slug ?? '');
     const useSidebar = theme.slug ? SIDEBAR_THEMES.includes(theme.slug) : (theme.supports ?? []).includes('sidebar');
 
-    const blocks = Array.isArray(page.content)
-        ? page.content
-        : (page.content as { blocks?: unknown[] })?.blocks;
+    const rawContent = page.content;
+    const blocks: BlockNode[] | undefined = Array.isArray(rawContent)
+        ? rawContent
+        : (rawContent as unknown as { blocks?: BlockNode[] } | null)?.blocks ?? undefined;
 
     const content = (
         <>
@@ -62,7 +63,7 @@ export default function FrontPage({ page, menus, theme }: FrontPageProps) {
 
                 <div className={isLegal ? 'legal-page-content' : undefined}>
                     {blocks && blocks.length > 0
-                        ? blocks.map((block: { id: string; [key: string]: unknown }) => (
+                        ? blocks.map((block) => (
                             <BlockRenderer key={block.id} block={block} />
                         ))
                         : (

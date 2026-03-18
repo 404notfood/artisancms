@@ -4,24 +4,23 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Front;
 
-use App\CMS\Themes\ThemeManager;
+use App\Http\Controllers\Concerns\HasFrontData;
 use App\Http\Controllers\Controller;
-use App\Models\Menu;
 use App\Models\Page;
 use App\Models\Post;
-use App\Models\Setting;
+use App\Services\SettingService;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class ErrorController extends Controller
 {
+    use HasFrontData;
+
     public function __construct(
-        private readonly ThemeManager $themeManager,
+        private readonly SettingService $settingService,
     ) {}
 
-    /**
-     * Render the custom 404 page with Inertia.
-     */
     public function notFound(): Response
     {
         $recentPages = Page::where('status', 'published')
@@ -51,43 +50,17 @@ class ErrorController extends Controller
         ]);
     }
 
-    /**
-     * Render the maintenance page with Inertia.
-     */
-    public function maintenance(): Response|\Illuminate\Http\RedirectResponse
+    public function maintenance(): Response|RedirectResponse
     {
-        $settingService = app(\App\Services\SettingService::class);
-        $enabled = $settingService->get('maintenance.enabled');
-
-        if ($enabled !== '1' && $enabled !== 'true' && $enabled !== true) {
+        if (! $this->settingService->get('maintenance.enabled')) {
             return redirect('/');
         }
 
         return Inertia::render('Front/Maintenance', [
-            'message' => $settingService->get('maintenance.message', 'Le site est actuellement en maintenance. Merci de votre patience.'),
+            'message' => $this->settingService->get(
+                'maintenance.message',
+                __('cms.maintenance.default_message'),
+            ),
         ]);
-    }
-
-    /**
-     * Get shared front-end data (menus, theme).
-     *
-     * @return array<string, mixed>
-     */
-    private function frontData(): array
-    {
-        $menus = Menu::with(['items' => function ($query): void {
-            $query->orderBy('order');
-        }])->get()->keyBy('location');
-
-        $theme = $this->themeManager->getActive();
-        $themeConfig = $theme ? $this->themeManager->getThemeConfig($theme->slug) : [];
-
-        return [
-            'menus' => $menus,
-            'theme' => [
-                'customizations' => $theme?->customizations ?? [],
-                'layouts' => $themeConfig['layouts'] ?? [],
-            ],
-        ];
     }
 }

@@ -5,7 +5,9 @@
   "category": "portfolio",
   "description": "Portfolio créatif premium avec navigation sidebar — mise en page latérale fixe, sections épurées, galerie de projets avec overlays, témoignages et contact minimaliste.",
   "author": "ArtisanCMS",
-  "compatible_themes": ["studio"],
+  "compatible_themes": [
+    "studio"
+  ],
   "suggested_theme": "studio",
   "pages": [
     {
@@ -204,6 +206,110 @@
           }
         ]
       }
+    },
+    {
+      "id": "blog",
+      "title": "Blog",
+      "slug": "blog",
+      "template": "sidebar",
+      "meta_title": "Journal — Studio Portfolio",
+      "meta_description": "Reflexions sur le design, le developpement web et la creation visuelle. Coulisses de projets et tendances du secteur creatif.",
+      "content": {
+        "blocks": [
+          {
+            "type": "section",
+            "id": "sp-blog-hero",
+            "props": {
+              "backgroundColor": "#0c0c0e",
+              "paddingTop": 0,
+              "paddingBottom": 0,
+              "paddingLeft": 0,
+              "paddingRight": 0
+            },
+            "children": [
+              {
+                "type": "custom-html",
+                "id": "sp-blog-hero-inner",
+                "props": {
+                  "html": "<div style=\"max-width:900px;margin:0 auto;padding:80px 48px\"><p style=\"font-family:'Inter',system-ui,sans-serif;font-size:11px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#7c3aed;margin:0 0 16px 0\">-- Journal</p><h1 style=\"font-family:'Syne',system-ui,sans-serif;font-size:72px;font-weight:800;color:#fafafa;margin:0 0 16px 0;line-height:1\">Blog</h1><p style=\"font-family:'Inter',system-ui,sans-serif;font-size:17px;color:#71717a;margin:0;line-height:1.7\">Reflexions, coulisses de projets et tendances du secteur creatif. Un regard personnel sur le design et le developpement web.</p></div>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "sp-blog-note",
+            "props": {
+              "backgroundColor": "#141416",
+              "paddingTop": 0,
+              "paddingBottom": 0,
+              "paddingLeft": 0,
+              "paddingRight": 0
+            },
+            "children": [
+              {
+                "type": "custom-html",
+                "id": "sp-blog-note-inner",
+                "props": {
+                  "html": "<div style=\"max-width:900px;margin:0 auto;padding:40px 48px\"><p style=\"font-family:'Inter',system-ui,sans-serif;font-size:14px;color:#71717a;line-height:1.7;margin:0;border-left:2px solid #7c3aed;padding-left:20px;\">Les articles de ce journal partagent mon experience en tant que designer et developpeur freelance. Retrouvez des analyses de projets, des reflexions sur les tendances et des conseils pratiques pour les creatifs.</p></div>"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "services",
+      "title": "Services",
+      "slug": "services",
+      "template": "sidebar",
+      "meta_title": "Services — Studio Portfolio",
+      "meta_description": "UX/UI Design, Developpement Front-End, Identite de Marque et Motion Design. Des services creatifs sur mesure.",
+      "content": {
+        "blocks": [
+          {
+            "type": "section",
+            "id": "sp-svc-hero",
+            "props": {
+              "backgroundColor": "#0c0c0e",
+              "paddingTop": 0,
+              "paddingBottom": 0,
+              "paddingLeft": 0,
+              "paddingRight": 0
+            },
+            "children": [
+              {
+                "type": "custom-html",
+                "id": "sp-svc-hero-inner",
+                "props": {
+                  "html": "<div style=\"max-width:900px;margin:0 auto;padding:80px 48px\"><p style=\"font-family:'Inter',system-ui,sans-serif;font-size:11px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#7c3aed;margin:0 0 16px 0\">-- Expertise</p><h1 style=\"font-family:'Syne',system-ui,sans-serif;font-size:72px;font-weight:800;color:#fafafa;margin:0 0 16px 0;line-height:1\">Services</h1><p style=\"font-family:'Inter',system-ui,sans-serif;font-size:17px;color:#71717a;margin:0 0 48px 0;line-height:1.7;max-width:540px\">Je propose un accompagnement creatif complet, de la conception a la realisation. Chaque projet est unique et merite une approche sur mesure.</p></div>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "sp-svc-list",
+            "props": {
+              "backgroundColor": "#0c0c0e",
+              "paddingTop": 0,
+              "paddingBottom": 0,
+              "paddingLeft": 0,
+              "paddingRight": 0
+            },
+            "children": [
+              {
+                "type": "custom-html",
+                "id": "sp-svc-list-inner",
+                "props": {
+                  "html": "<div style=\"max-width:900px;margin:0 auto;padding:0 48px 80px 48px\"><div style=\"display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:48px\"><div style=\"background:#141416;border-radius:8px;padding:40px\"><div style=\"width:48px;height:48px;background:rgba(124,58,237,0.12);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:20px\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#7c3aed\" stroke-width=\"2\"><rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\" ry=\"2\"/><circle cx=\"8.5\" cy=\"8.5\" r=\"1.5\"/><polyline points=\"21 15 16 10 5 21\"/></svg></div><h3 style=\"font-family:'Syne',system-ui,sans-serif;font-size:22px;font-weight:700;color:#fafafa;margin:0 0 12px\">UX/UI Design</h3><p style=\"font-family:'Inter',system-ui,sans-serif;font-size:14px;color:#71717a;line-height:1.7;margin:0 0 16px\">Conception d'interfaces intuitives centrees sur l'utilisateur. User research, wireframes, prototypage interactif Figma, tests utilisateurs et design systems complets.</p><p style=\"font-family:'Inter',system-ui,sans-serif;font-size:13px;color:#7c3aed;font-weight:500;margin:0\">A partir de 3 000 EUR</p></div><div style=\"background:#141416;border-radius:8px;padding:40px\"><div style=\"width:48px;height:48px;background:rgba(6,182,212,0.12);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:20px\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#06b6d4\" stroke-width=\"2\"><polyline points=\"16 18 22 12 16 6\"/><polyline points=\"8 6 2 12 8 18\"/></svg></div><h3 style=\"font-family:'Syne',system-ui,sans-serif;font-size:22px;font-weight:700;color:#fafafa;margin:0 0 12px\">Developpement Front-End</h3><p style=\"font-family:'Inter',system-ui,sans-serif;font-size:14px;color:#71717a;line-height:1.7;margin:0 0 16px\">React, Next.js, TypeScript. Code propre, performant, accessible. Integration pixel-perfect des maquettes, animations fluides et optimisation Lighthouse 100.</p><p style=\"font-family:'Inter',system-ui,sans-serif;font-size:13px;color:#06b6d4;font-weight:500;margin:0\">A partir de 4 000 EUR</p></div><div style=\"background:#141416;border-radius:8px;padding:40px\"><div style=\"width:48px;height:48px;background:rgba(245,158,11,0.12);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:20px\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#f59e0b\" stroke-width=\"2\"><path d=\"M12 19l7-7 3 3-7 7-3-3z\"/><path d=\"M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z\"/><path d=\"M2 2l7.586 7.586\"/><circle cx=\"11\" cy=\"11\" r=\"2\"/></svg></div><h3 style=\"font-family:'Syne',system-ui,sans-serif;font-size:22px;font-weight:700;color:#fafafa;margin:0 0 12px\">Identite de Marque</h3><p style=\"font-family:'Inter',system-ui,sans-serif;font-size:14px;color:#71717a;line-height:1.7;margin:0 0 16px\">Logos, chartes graphiques, design systems complets. Une identite visuelle coherente et memorable sur tous vos supports print et digitaux.</p><p style=\"font-family:'Inter',system-ui,sans-serif;font-size:13px;color:#f59e0b;font-weight:500;margin:0\">A partir de 2 500 EUR</p></div><div style=\"background:#141416;border-radius:8px;padding:40px\"><div style=\"width:48px;height:48px;background:rgba(236,72,153,0.12);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:20px\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#ec4899\" stroke-width=\"2\"><polygon points=\"23 7 16 12 23 17 23 7\"/><rect x=\"1\" y=\"5\" width=\"15\" height=\"14\" rx=\"2\" ry=\"2\"/></svg></div><h3 style=\"font-family:'Syne',system-ui,sans-serif;font-size:22px;font-weight:700;color:#fafafa;margin:0 0 12px\">Motion & Animation</h3><p style=\"font-family:'Inter',system-ui,sans-serif;font-size:14px;color:#71717a;line-height:1.7;margin:0 0 16px\">Animations UI, transitions, micro-interactions, motion design. Les details qui transforment une bonne interface en une experience memorable.</p><p style=\"font-family:'Inter',system-ui,sans-serif;font-size:13px;color:#ec4899;font-weight:500;margin:0\">A partir de 1 500 EUR</p></div></div><div style=\"text-align:center;padding:40px;background:#141416;border-radius:8px\"><p style=\"font-family:'Syne',system-ui,sans-serif;font-size:28px;font-weight:700;color:#fafafa;margin:0 0 16px\">Un projet en tete ?</p><p style=\"font-family:'Inter',system-ui,sans-serif;font-size:15px;color:#71717a;margin:0 0 24px;line-height:1.7\">Chaque projet est unique. Discutons de vos besoins pour definir un accompagnement sur mesure.</p><a href=\"/contact\" style=\"background:#7c3aed;color:#fff;padding:14px 28px;border-radius:4px;font-family:'Inter',system-ui,sans-serif;font-size:15px;font-weight:600;text-decoration:none;display:inline-block\">Prendre rendez-vous</a></div></div>"
+                }
+              }
+            ]
+          }
+        ]
+      }
     }
   ],
   "menus": [
@@ -211,11 +317,328 @@
       "name": "Navigation sidebar",
       "location": "sidebar",
       "items": [
-        {"title": "Accueil", "url": "/accueil", "order": 1},
-        {"title": "Projets", "url": "/projets", "order": 2},
-        {"title": "Contact", "url": "/contact", "order": 3}
+        {
+          "title": "Accueil",
+          "url": "/accueil",
+          "order": 1
+        },
+        {
+          "title": "Projets",
+          "url": "/projets",
+          "order": 2
+        },
+        {
+          "title": "Services",
+          "url": "/services",
+          "order": 3
+        },
+        {
+          "title": "Blog",
+          "url": "/blog",
+          "order": 4
+        },
+        {
+          "title": "Contact",
+          "url": "/contact",
+          "order": 5
+        }
+      ]
+    },
+    {
+      "name": "Menu footer",
+      "location": "footer",
+      "items": [
+        {
+          "title": "Mentions legales",
+          "url": "/mentions-legales",
+          "order": 1
+        },
+        {
+          "title": "Politique de confidentialite",
+          "url": "/politique-de-confidentialite",
+          "order": 2
+        },
+        {
+          "title": "Contact",
+          "url": "/contact",
+          "order": 3
+        }
       ]
     }
   ],
-  "settings": {}
+  "settings": {},
+  "taxonomies": [
+    {
+      "name": "Categories",
+      "slug": "categories",
+      "type": "category",
+      "description": "Categories du blog creatif",
+      "terms": [
+        {
+          "name": "Design",
+          "slug": "design",
+          "description": "Articles sur le design",
+          "order": 1
+        },
+        {
+          "name": "Branding",
+          "slug": "branding",
+          "description": "Articles sur le branding et l'identite visuelle",
+          "order": 2
+        },
+        {
+          "name": "Coulisses",
+          "slug": "coulisses",
+          "description": "Behind the scenes de projets",
+          "order": 3
+        },
+        {
+          "name": "Tendances",
+          "slug": "tendances",
+          "description": "Tendances graphiques et web",
+          "order": 4
+        }
+      ]
+    },
+    {
+      "name": "Tags",
+      "slug": "tags",
+      "type": "tag",
+      "description": "Tags des articles",
+      "terms": [
+        {
+          "name": "UX",
+          "slug": "ux",
+          "order": 1
+        },
+        {
+          "name": "Typographie",
+          "slug": "typographie",
+          "order": 2
+        },
+        {
+          "name": "Freelance",
+          "slug": "freelance",
+          "order": 3
+        },
+        {
+          "name": "Inspiration",
+          "slug": "inspiration",
+          "order": 4
+        }
+      ]
+    }
+  ],
+  "posts": [
+    {
+      "title": "Notre collaboration avec la marque XYZ",
+      "slug": "collaboration-marque-xyz",
+      "status": "published",
+      "excerpt": "Retour sur notre collaboration avec XYZ : de la strategie de marque au deploiement digital, les coulisses d'un projet d'envergure.",
+      "featured_image": null,
+      "taxonomies": {
+        "categories": [
+          "coulisses"
+        ],
+        "tags": [
+          "freelance"
+        ]
+      },
+      "content": {
+        "blocks": [
+          {
+            "id": "sp-p1-b1",
+            "type": "heading",
+            "props": {
+              "text": "Notre collaboration avec la marque XYZ : retour d'experience",
+              "level": 1
+            },
+            "children": []
+          },
+          {
+            "id": "sp-p1-b2",
+            "type": "text",
+            "props": {
+              "content": "<p>Quand l'equipe de XYZ m'a contacte pour repenser entierement leur identite digitale, le defi etait de taille : transformer une marque de niche en une reference sur son marche, tout en conservant l'authenticite qui faisait sa force. Ce projet a mobilise six mois de travail intense, de la phase de recherche strategique au deploiement final.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "sp-p1-b3",
+            "type": "text",
+            "props": {
+              "content": "<h2>La phase de decouverte</h2><p>Tout a commence par une immersion complete dans l'univers de la marque. Interviews avec les fondateurs, analyse de la concurrence, etude des cibles utilisateurs. Cette phase de recherche, souvent sous-estimee, est pourtant la cle d'un design reussi. Elle nous a permis d'identifier trois insights majeurs qui ont guide l'ensemble du projet : l'importance de l'artisanat, la transparence des processus et l'engagement ecologique de la marque.</p><h2>Du concept a la realisation</h2><p>A partir de ces insights, j'ai developpe trois directions creatives. Chacune explorait un angle different : le minimalisme japonais, l'elegance brute des materiaux et l'approche narrative. C'est cette derniere direction qui a ete retenue, car elle permettait de raconter l'histoire de chaque produit a travers le design. Le site web est devenu un veritable recit visuel, ou chaque scroll revele une nouvelle facette de la marque.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "sp-p1-b4",
+            "type": "text",
+            "props": {
+              "content": "<h2>Les resultats</h2><p>Six mois apres le lancement, les resultats parlent d'eux-memes : le trafic organique a augmente de 180%, le taux de conversion a triple et le temps passe sur le site a double. Mais au-dela des chiffres, c'est la reaction des clients qui nous a le plus touches : nombreux sont ceux qui mentionnent l'experience de navigation comme un element distinctif de la marque. Ce projet illustre parfaitement comment un design strategique peut transformer la perception d'une marque et generer un impact business mesurable.</p>"
+            },
+            "children": []
+          }
+        ]
+      }
+    },
+    {
+      "title": "Direction artistique : les coulisses d'un shooting",
+      "slug": "direction-artistique-coulisses-shooting",
+      "status": "published",
+      "excerpt": "Decouvrez les coulisses d'un shooting photo professionnel : de la preparation du moodboard a la post-production, toutes les etapes revelees.",
+      "featured_image": null,
+      "taxonomies": {
+        "categories": [
+          "coulisses"
+        ],
+        "tags": [
+          "inspiration"
+        ]
+      },
+      "content": {
+        "blocks": [
+          {
+            "id": "sp-p2-b1",
+            "type": "heading",
+            "props": {
+              "text": "Direction artistique : les coulisses d'un shooting photo",
+              "level": 1
+            },
+            "children": []
+          },
+          {
+            "id": "sp-p2-b2",
+            "type": "text",
+            "props": {
+              "content": "<p>La direction artistique d'un shooting photo ne se resume pas a choisir un fond et a placer des produits devant un objectif. C'est un processus creatif complet qui commence bien avant le jour J et se prolonge longtemps apres. Dans cet article, je vous emmene dans les coulisses d'un shooting que j'ai recemment dirige pour une marque de cosmetiques naturels.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "sp-p2-b3",
+            "type": "text",
+            "props": {
+              "content": "<h2>Le moodboard : la boussole creative</h2><p>Tout commence par le moodboard. C'est l'outil fondamental de toute direction artistique. Pour ce projet, j'ai constitue un tableau d'inspiration de plus de 200 references : photographies, textures, palettes de couleurs, typographies, compositions. L'objectif etait de definir un univers visuel coherent qui traduise les valeurs de la marque : naturalite, sophistication et sensorialite. Le moodboard a ete presente au client en reunion, itere trois fois avant d'arriver a la version finale.</p><h2>La preparation technique</h2><p>Un shooting reussi est un shooting prepare dans les moindres details. Choix du photographe, du styliste, du maquilleur. Selection du studio, de l'eclairage, des accessoires. Chaque element est pense pour servir la direction artistique definie. Pour ce projet, nous avons opte pour un eclairage naturel diffus, des fonds en papier texture et des accessoires vegetaux pour renforcer le positionnement naturel de la marque.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "sp-p2-b4",
+            "type": "text",
+            "props": {
+              "content": "<h2>Le jour du shooting</h2><p>Le jour J, mon role de directeur artistique est d'assurer la coherence visuelle de l'ensemble. Je verifie chaque cadrage, chaque composition, chaque detail. C'est un travail d'equilibriste entre la vision artistique initiale et les opportunites creatives qui emergent spontanement. Les meilleures photos naissent souvent de cet equilibre entre preparation et improvisation.</p><h2>La post-production</h2><p>Apres le shooting, la post-production est une etape cruciale. Retouches chromatiques pour uniformiser les teintes, nettoyage des imperfections, recadrage pour les differents formats (web, reseaux sociaux, print). C'est a ce moment que l'univers visuel prend sa forme definitive et que chaque image s'inscrit dans une narration coherente.</p>"
+            },
+            "children": []
+          }
+        ]
+      }
+    },
+    {
+      "title": "Identite visuelle : comment creer une marque forte",
+      "slug": "identite-visuelle-creer-marque-forte",
+      "status": "published",
+      "excerpt": "Les fondamentaux pour creer une identite de marque qui se demarque : strategie, logo, charte graphique, design system et coherence visuelle.",
+      "featured_image": null,
+      "taxonomies": {
+        "categories": [
+          "branding"
+        ],
+        "tags": [
+          "typographie",
+          "ux"
+        ]
+      },
+      "content": {
+        "blocks": [
+          {
+            "id": "sp-p3-b1",
+            "type": "heading",
+            "props": {
+              "text": "Identite visuelle : les cles pour creer une marque forte",
+              "level": 1
+            },
+            "children": []
+          },
+          {
+            "id": "sp-p3-b2",
+            "type": "text",
+            "props": {
+              "content": "<p>Une identite visuelle reussie ne se limite pas a un joli logo. C'est un systeme complet et coherent qui communique instantanement les valeurs, la personnalite et le positionnement d'une marque. Apres sept ans a creer des identites pour des clients de tous secteurs, voici les principes fondamentaux que j'applique a chaque projet.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "sp-p3-b3",
+            "type": "text",
+            "props": {
+              "content": "<h2>Commencer par la strategie, pas par le design</h2><p>L'erreur la plus frequente est de se precipiter sur le design sans avoir defini la strategie de marque. Avant de toucher a Figma, il faut repondre a des questions fondamentales : qui etes-vous ? Quelle est votre mission ? En quoi etes-vous different ? Qui sont vos clients ideaux ? Quelles emotions voulez-vous susciter ? Ces reponses constituent le brief strategique qui guidera toutes les decisions creatives.</p><h2>Le logo : simple, memorable, intemporel</h2><p>Un bon logo doit fonctionner en noir et blanc, a 16 pixels comme sur un panneau de 4 metres. Il doit etre reconnaissable instantanement et resister a l'epreuve du temps. Les logos les plus iconiques (Apple, Nike, Chanel) partagent une qualite commune : la simplicite. Un logo trop complexe est un logo qui vieillit mal.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "sp-p3-b4",
+            "type": "text",
+            "props": {
+              "content": "<h2>Le design system : la coherence a grande echelle</h2><p>Au-dela du logo, une identite forte repose sur un design system complet : palette de couleurs (primaires, secondaires, neutres), hierarchie typographique (headings, body, captions), grille de mise en page, iconographie, style photographique, ton de voix. Chaque element doit s'articuler avec les autres pour creer une experience de marque fluide et reconnaissable, quel que soit le support.</p><h2>L'evolution, pas la revolution</h2><p>Une identite visuelle n'est jamais figee. Elle doit evoluer avec la marque et son marche, mais toujours par touches subtiles. Les refontes radicales sont risquees car elles rompent le lien de reconnaissance construit avec les clients. La meilleure approche est l'evolution progressive : affiner la typographie, moderniser la palette, simplifier le logo, tout en conservant l'ADN visuel qui fait l'identite de la marque.</p>"
+            },
+            "children": []
+          }
+        ]
+      }
+    },
+    {
+      "title": "Tendances graphiques 2026",
+      "slug": "tendances-graphiques-2026",
+      "status": "published",
+      "excerpt": "Les grandes tendances du design graphique et web en 2026 : AI-generated art, typographie experimentale, neo-brutalism et design 3D.",
+      "featured_image": null,
+      "taxonomies": {
+        "categories": [
+          "tendances"
+        ],
+        "tags": [
+          "inspiration",
+          "ux"
+        ]
+      },
+      "content": {
+        "blocks": [
+          {
+            "id": "sp-p4-b1",
+            "type": "heading",
+            "props": {
+              "text": "Tendances graphiques 2026 : ce qui va marquer le design cette annee",
+              "level": 1
+            },
+            "children": []
+          },
+          {
+            "id": "sp-p4-b2",
+            "type": "text",
+            "props": {
+              "content": "<p>Chaque annee apporte son lot de nouvelles tendances graphiques. 2026 ne fait pas exception, avec des evolutions marquantes dans la typographie, l'illustration, le design web et l'integration de l'intelligence artificielle dans les processus creatifs. Voici mon analyse des tendances qui vont marquer cette annee.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "sp-p4-b3",
+            "type": "text",
+            "props": {
+              "content": "<h2>La typographie experimentale</h2><p>La typographie sort definitivement de sa zone de confort en 2026. Les polices a empattements exageres, les caracteres deformes, les typographies variables qui reagissent au scroll ou au mouvement de la souris : l'experimentation typographique est partout. Les marques les plus audacieuses utilisent la typo comme element de design principal, parfois au detriment de la lisibilite, mais toujours au service de l'emotion et de la differenciation.</p><h2>Le retour du maximalisme</h2><p>Apres des annees de minimalisme dominant, le maximalisme fait un retour en force. Gradients complexes, textures riches, superpositions de calques, collages numeriques, couleurs saturees : le design web en 2026 ose l'exuberance visuelle. Cette tendance est portee par une generation de designers qui a grandi avec le minimalisme et cherche a s'en emanciper pour creer des experiences plus immersives et emotionnelles.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "sp-p4-b4",
+            "type": "text",
+            "props": {
+              "content": "<h2>L'IA comme outil creatif</h2><p>L'intelligence artificielle n'est plus une menace pour les designers : c'est un outil creatif a part entiere. En 2026, les meilleurs designers integrent l'IA dans leur workflow pour accelerer la phase d'exploration, generer des variations, creer des textures ou des illustrations d'ambiance. L'IA ne remplace pas la vision artistique, elle l'amplifie. Le role du designer evolue vers celui de directeur creatif qui orchestre les outputs de l'IA pour atteindre sa vision.</p><h2>Le design 3D immersif</h2><p>Les experiences 3D interactives dans le navigateur deviennent la norme pour les marques premium. Grâce aux progres de WebGL et des bibliotheques comme Three.js et Spline, les sites web proposent des scenes 3D fluides et engageantes. Produits en 3D manipulables, environnements immersifs, elements d'interface avec profondeur : la frontiere entre web design et experience spatiale s'estompe progressivement.</p>"
+            },
+            "children": []
+          }
+        ]
+      }
+    }
+  ]
 }

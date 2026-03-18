@@ -12,6 +12,7 @@ interface ShopIndexProps {
     theme: { customizations: Record<string, string>; layouts: Array<{ slug: string; name: string }> };
 }
 
+/** Theme CSS variable tokens used for inline styles */
 const T = {
     primary: 'var(--color-primary, #1a3d1a)',
     gold:    'var(--color-gold, #c9a84c)',
@@ -24,7 +25,7 @@ const T = {
     body:    "var(--font-body, 'DM Sans', system-ui, sans-serif)",
 };
 
-function fp(p: number, s: string) { return `${Number(p).toFixed(2)} ${s}`; }
+function formatPrice(price: number, symbol: string) { return `${Number(price).toFixed(2)} ${symbol}`; }
 
 function ProductCard({ product, settings }: { product: ProductData; settings: EcommerceSettingsData }) {
     const [hovered, setHovered] = useState(false);
@@ -97,8 +98,8 @@ function ProductCard({ product, settings }: { product: ProductData; settings: Ec
                     </h3>
                 </Link>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '14px' }}>
-                    <span style={{ fontFamily: T.body, fontSize: '16px', fontWeight: 700, color: T.primary }}>{fp(product.price, settings.currency_symbol)}</span>
-                    {hasPromo && <span style={{ fontFamily: T.body, fontSize: '12px', color: '#aaa', textDecoration: 'line-through' }}>{fp(product.compare_price!, settings.currency_symbol)}</span>}
+                    <span style={{ fontFamily: T.body, fontSize: '16px', fontWeight: 700, color: T.primary }}>{formatPrice(product.price, settings.currency_symbol)}</span>
+                    {hasPromo && <span style={{ fontFamily: T.body, fontSize: '12px', color: '#aaa', textDecoration: 'line-through' }}>{formatPrice(product.compare_price!, settings.currency_symbol)}</span>}
                 </div>
                 <button
                     onClick={addToCart}

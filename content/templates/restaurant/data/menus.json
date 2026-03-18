@@ -1,0 +1,72 @@
+[
+  {
+    "name": "Menu principal",
+    "location": "header",
+    "items": [
+      {
+        "label": "Accueil",
+        "url": "/",
+        "page_slug": "accueil",
+        "order": 0
+      },
+      {
+        "label": "La Carte",
+        "url": "/la-carte",
+        "page_slug": "la-carte",
+        "order": 1
+      },
+      {
+        "label": "À propos",
+        "url": "/a-propos",
+        "page_slug": "a-propos",
+        "order": 2
+      },
+      {
+        "label": "Galerie",
+        "url": "/galerie",
+        "page_slug": "galerie",
+        "order": 3
+      },
+      {
+        "label": "Réservation",
+        "url": "/reservation",
+        "page_slug": "reservation",
+        "order": 4
+      },
+      {
+        "label": "Actualités",
+        "url": "/actualites",
+        "page_slug": "actualites",
+        "order": 5
+      },
+      {
+        "label": "Contact",
+        "url": "/contact",
+        "page_slug": "contact",
+        "order": 6
+      }
+    ]
+  },
+  {
+    "name": "Menu pied de page",
+    "location": "footer",
+    "items": [
+      {
+        "label": "Mentions légales",
+        "url": "/mentions-legales",
+        "order": 0
+      },
+      {
+        "label": "Politique de confidentialité",
+        "url": "/politique-de-confidentialite",
+        "order": 1
+      },
+      {
+        "label": "Nous trouver",
+        "url": "/contact",
+        "page_slug": "contact",
+        "order": 2
+      }
+    ]
+  }
+]

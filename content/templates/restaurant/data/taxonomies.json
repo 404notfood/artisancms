@@ -1,0 +1,84 @@
+[
+  {
+    "name": "Catégories",
+    "slug": "categories",
+    "type": "category",
+    "description": "Catégories des articles du blog du restaurant",
+    "terms": [
+      {
+        "name": "Actualités",
+        "slug": "actualites",
+        "description": "Les dernières nouvelles du restaurant",
+        "order": 0
+      },
+      {
+        "name": "Portraits",
+        "slug": "portraits",
+        "description": "À la rencontre de notre équipe et de nos partenaires",
+        "order": 1
+      },
+      {
+        "name": "Cuisine",
+        "slug": "cuisine",
+        "description": "Les coulisses de nos créations culinaires",
+        "order": 2
+      },
+      {
+        "name": "Œnologie",
+        "slug": "oenologie",
+        "description": "Vins, accords et découvertes œnologiques",
+        "order": 3
+      },
+      {
+        "name": "Événements",
+        "slug": "evenements",
+        "description": "Soirées spéciales, dégustations et événements privés",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "name": "Tags",
+    "slug": "tags",
+    "type": "tag",
+    "description": "Étiquettes pour les articles du blog",
+    "terms": [
+      {
+        "name": "Gastronomie",
+        "slug": "gastronomie",
+        "description": "Articles liés à la haute gastronomie",
+        "order": 0
+      },
+      {
+        "name": "Chef",
+        "slug": "chef",
+        "description": "Articles mettant en avant notre chef et sa brigade",
+        "order": 1
+      },
+      {
+        "name": "Saison",
+        "slug": "saison",
+        "description": "Actualités liées aux saisons et aux arrivages",
+        "order": 2
+      },
+      {
+        "name": "Terroir",
+        "slug": "terroir",
+        "description": "Produits du terroir et producteurs locaux",
+        "order": 3
+      },
+      {
+        "name": "Bio",
+        "slug": "bio",
+        "description": "Agriculture biologique et responsable",
+        "order": 4
+      },
+      {
+        "name": "Local",
+        "slug": "local",
+        "description": "Circuit court et partenaires de proximité",
+        "order": 5
+      }
+    ]
+  }
+]

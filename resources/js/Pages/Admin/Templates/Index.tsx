@@ -216,9 +216,9 @@ export default function TemplatesIndex({ templates }: Props) {
             text_color: textColor,
             include_legal_pages: includeLegalPages,
             typography_preset: typographyConfig.presetId,
-            typography_config: typographyConfig,
+            typography_config: JSON.stringify(typographyConfig),
             animation_preset: animationConfig.presetId,
-            animation_config: animationConfig.config,
+            animation_config: JSON.stringify(animationConfig.config),
         }, {
             onFinish: () => setInstalling(null),
         });

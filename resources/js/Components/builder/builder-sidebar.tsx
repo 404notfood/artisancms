@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useBuilderStore } from '@/stores/builder-store';
-import { getBlock, getBlocksByCategory } from './blocks/block-registry';
+import { getAllBlocks, getBlock, getBlocksByCategory } from './blocks/block-registry';
 import DraggableBlockItem from './draggable-block-item';
 import BlockBreadcrumb from './block-breadcrumb';
 import BlockTree from './block-tree';
@@ -8,16 +8,32 @@ import PatternLibrary from './pattern-library';
 
 type TabId = 'blocks' | 'structure' | 'settings' | 'patterns';
 
+const CATEGORIES = [
+    { key: 'layout', label: 'Mise en page' },
+    { key: 'content', label: 'Contenu' },
+    { key: 'media', label: 'Média' },
+    { key: 'interactive', label: 'Interactif' },
+    { key: 'marketing', label: 'Marketing' },
+    { key: 'data', label: 'Données' },
+] as const;
+
+const TABS: { id: TabId; label: string }[] = [
+    { id: 'blocks', label: 'Blocs' },
+    { id: 'structure', label: 'Structure' },
+    { id: 'settings', label: 'Propriétés' },
+    { id: 'patterns', label: 'Patterns' },
+];
+
 export default function BuilderSidebar() {
     const [activeTab, setActiveTab] = useState<TabId>('blocks');
+    const [blockSearch, setBlockSearch] = useState('');
     const { selectedBlockId, findBlock, updateBlock } = useBuilderStore();
     const prevSelectedRef = useRef(selectedBlockId);
 
     const selectedBlock = selectedBlockId ? findBlock(selectedBlockId) : null;
-    const entry = selectedBlock ? getBlock(selectedBlock.type) : null;
-    const SettingsComponent = entry?.settings;
+    const registryEntry = selectedBlock ? getBlock(selectedBlock.type) : null;
+    const SettingsComponent = registryEntry?.settings;
 
-    // Auto-switch to settings when a block is selected from the Blocks tab
     useEffect(() => {
         if (selectedBlockId && !prevSelectedRef.current && activeTab === 'blocks') {
             setActiveTab('settings');
@@ -25,27 +41,10 @@ export default function BuilderSidebar() {
         prevSelectedRef.current = selectedBlockId;
     }, [selectedBlockId, activeTab]);
 
-    const categories = [
-        { key: 'layout', label: 'Mise en page' },
-        { key: 'content', label: 'Contenu' },
-        { key: 'media', label: 'Media' },
-        { key: 'interactive', label: 'Interactif' },
-        { key: 'marketing', label: 'Marketing' },
-        { key: 'data', label: 'Donnees' },
-    ];
-
-    const tabs: { id: TabId; label: string }[] = [
-        { id: 'blocks', label: 'Blocs' },
-        { id: 'structure', label: 'Structure' },
-        { id: 'settings', label: 'Proprietes' },
-        { id: 'patterns', label: 'Patterns' },
-    ];
-
     return (
         <div className="w-72 bg-white border-r flex flex-col shrink-0 h-full">
-            {/* Tabs */}
             <div className="flex border-b shrink-0">
-                {tabs.map((tab) => (
+                {TABS.map((tab) => (
                     <button
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
@@ -56,24 +55,46 @@ export default function BuilderSidebar() {
                 ))}
             </div>
 
-            {/* Content */}
             <div className="flex-1 overflow-y-auto p-4">
                 {activeTab === 'blocks' && (
-                    <div className="space-y-6">
-                        {categories.map(({ key, label }) => {
-                            const blocks = getBlocksByCategory(key);
-                            if (!blocks.length) return null;
-                            return (
-                                <div key={key}>
-                                    <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">{label}</h3>
-                                    <div className="space-y-1.5">
-                                        {blocks.map(([slug, blockEntry]) => (
-                                            <DraggableBlockItem key={slug} slug={slug} label={blockEntry.label} icon={blockEntry.icon} />
-                                        ))}
-                                    </div>
-                                </div>
-                            );
-                        })}
+                    <div className="space-y-4">
+                        <input
+                            type="text"
+                            value={blockSearch}
+                            onChange={(e) => setBlockSearch(e.target.value)}
+                            placeholder="Rechercher un bloc..."
+                            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        />
+
+                        {blockSearch.trim() ? (
+                            <div className="space-y-1.5">
+                                {getAllBlocks()
+                                    .filter(([slug, b]) => {
+                                        const q = blockSearch.toLowerCase();
+                                        return slug.includes(q) || b.label.toLowerCase().includes(q);
+                                    })
+                                    .map(([slug, b]) => (
+                                        <DraggableBlockItem key={slug} slug={slug} label={b.label} icon={b.icon} />
+                                    ))}
+                            </div>
+                        ) : (
+                            <div className="space-y-6">
+                                {CATEGORIES.map(({ key, label }) => {
+                                    const blocks = getBlocksByCategory(key);
+                                    if (!blocks.length) return null;
+                                    return (
+                                        <div key={key}>
+                                            <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">{label}</h3>
+                                            <div className="space-y-1.5">
+                                                {blocks.map(([slug, b]) => (
+                                                    <DraggableBlockItem key={slug} slug={slug} label={b.label} icon={b.icon} />
+                                                ))}
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        )}
                     </div>
                 )}
 
@@ -86,12 +107,12 @@ export default function BuilderSidebar() {
                         {selectedBlock && SettingsComponent ? (
                             <div>
                                 <BlockBreadcrumb />
-                                <h3 className="text-sm font-semibold text-gray-800 mb-3">{entry?.label || selectedBlock.type}</h3>
+                                <h3 className="text-sm font-semibold text-gray-800 mb-3">{registryEntry?.label || selectedBlock.type}</h3>
                                 <SettingsComponent block={selectedBlock} onUpdate={(props) => updateBlock(selectedBlock.id, props)} />
                             </div>
                         ) : (
                             <div className="text-center text-gray-400 text-sm mt-12">
-                                <p>Selectionnez un bloc pour modifier ses proprietes</p>
+                                <p>Sélectionnez un bloc pour modifier ses propriétés</p>
                             </div>
                         )}
                     </>

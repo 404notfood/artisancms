@@ -4,7 +4,15 @@
   "description": "Template one-page pour artisans, plombiers, electriciens et entreprises BTP. Design sombre impactant, sections services, temoignages et contact optimise.",
   "version": "1.0.0",
   "category": "business",
-  "tags": ["onepage", "btp", "artisan", "plombier", "electricien", "construction", "dark"],
+  "tags": [
+    "onepage",
+    "btp",
+    "artisan",
+    "plombier",
+    "electricien",
+    "construction",
+    "dark"
+  ],
   "preview": "preview.png",
   "theme": "forge",
   "pages": [
@@ -152,18 +160,321 @@
           }
         ]
       }
+    },
+    {
+      "id": "services",
+      "title": "Nos Services",
+      "slug": "services",
+      "status": "published",
+      "meta_title": "Nos Services — ProArtisan BTP Lyon",
+      "meta_description": "Decouvrez nos services de construction, renovation, gros oeuvre et second oeuvre. Entreprise certifiee RGE, Qualifelec et Qualibat a Lyon.",
+      "content": {
+        "blocks": [
+          {
+            "id": "forge-svc-hero",
+            "type": "section",
+            "settings": {
+              "backgroundColor": "#0d0d0d",
+              "paddingTop": 0,
+              "paddingBottom": 0,
+              "fullWidth": true
+            },
+            "children": [
+              {
+                "id": "forge-svc-hero-inner",
+                "type": "custom-html",
+                "settings": {
+                  "html": "<div style=\"background:#0d0d0d;padding:120px 24px 80px;text-align:center;\"><div style=\"max-width:900px;margin:0 auto;\"><span style=\"font-family:DM Sans,system-ui,sans-serif;font-size:12px;font-weight:600;color:#f97316;text-transform:uppercase;letter-spacing:0.12em;\">Nos expertises</span><h1 style=\"font-family:Bebas Neue,Impact,sans-serif;font-size:clamp(48px,8vw,96px);color:#f5f5f5;margin:12px 0 24px;line-height:0.95;\">NOS <span style=\"color:#f97316;\">SERVICES</span></h1><p style=\"font-family:DM Sans,system-ui,sans-serif;font-size:18px;color:#9ca3af;max-width:600px;margin:0 auto;line-height:1.7;\">De la construction neuve a la renovation complete, nous intervenons sur tous types de chantiers avec le meme niveau d'exigence et de professionnalisme.</p></div></div>"
+                }
+              }
+            ]
+          },
+          {
+            "id": "forge-svc-body",
+            "type": "section",
+            "settings": {
+              "backgroundColor": "#161616",
+              "paddingTop": 80,
+              "paddingBottom": 80,
+              "fullWidth": true
+            },
+            "children": [
+              {
+                "id": "forge-svc-body-inner",
+                "type": "custom-html",
+                "settings": {
+                  "html": "<div style=\"max-width:1100px;margin:0 auto;padding:0 24px;\"><div style=\"display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;margin-bottom:80px;\"><div><span style=\"font-family:DM Sans,system-ui,sans-serif;font-size:12px;font-weight:600;color:#f97316;text-transform:uppercase;letter-spacing:0.12em;\">Gros oeuvre</span><h2 style=\"font-family:Bebas Neue,Impact,sans-serif;font-size:48px;color:#f5f5f5;margin:12px 0 24px;line-height:1;\">CONSTRUCTION NEUVE</h2><p style=\"font-family:DM Sans,system-ui,sans-serif;font-size:15px;color:#9ca3af;line-height:1.7;margin:0 0 20px;\">Nous prenons en charge la construction de votre batiment de A a Z : fondations, elevation des murs, charpente, toiture et mise hors d'eau. Notre equipe maitrise les techniques traditionnelles comme les solutions modernes (beton arme, ossature bois, construction metallique).</p><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px;\"><li style=\"display:flex;align-items:center;gap:10px;font-family:DM Sans,system-ui,sans-serif;font-size:14px;color:#d1d5db;\"><span style=\"color:#f97316;\">&#10003;</span> Maisons individuelles et collectives</li><li style=\"display:flex;align-items:center;gap:10px;font-family:DM Sans,system-ui,sans-serif;font-size:14px;color:#d1d5db;\"><span style=\"color:#f97316;\">&#10003;</span> Batiments commerciaux et industriels</li><li style=\"display:flex;align-items:center;gap:10px;font-family:DM Sans,system-ui,sans-serif;font-size:14px;color:#d1d5db;\"><span style=\"color:#f97316;\">&#10003;</span> Extensions et surelevations</li><li style=\"display:flex;align-items:center;gap:10px;font-family:DM Sans,system-ui,sans-serif;font-size:14px;color:#d1d5db;\"><span style=\"color:#f97316;\">&#10003;</span> Terrassement et VRD</li></ul></div><div style=\"background:#1a1a1a;border-radius:12px;height:360px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.06);\"><span style=\"color:#6b7280;font-family:DM Sans,system-ui,sans-serif;font-size:14px;font-style:italic;\">[Photo chantier construction]</span></div></div><div style=\"display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;margin-bottom:80px;\"><div style=\"background:#1a1a1a;border-radius:12px;height:360px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.06);\"><span style=\"color:#6b7280;font-family:DM Sans,system-ui,sans-serif;font-size:14px;font-style:italic;\">[Photo renovation interieure]</span></div><div><span style=\"font-family:DM Sans,system-ui,sans-serif;font-size:12px;font-weight:600;color:#ea580c;text-transform:uppercase;letter-spacing:0.12em;\">Second oeuvre</span><h2 style=\"font-family:Bebas Neue,Impact,sans-serif;font-size:48px;color:#f5f5f5;margin:12px 0 24px;line-height:1;\">RENOVATION COMPLETE</h2><p style=\"font-family:DM Sans,system-ui,sans-serif;font-size:15px;color:#9ca3af;line-height:1.7;margin:0 0 20px;\">Transformez votre habitat avec nos services de renovation : amenagement interieur, isolation thermique et phonique, plomberie, electricite, carrelage, peinture et finitions. Nous coordonnons l'ensemble des corps de metier pour un resultat cle en main.</p><ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px;\"><li style=\"display:flex;align-items:center;gap:10px;font-family:DM Sans,system-ui,sans-serif;font-size:14px;color:#d1d5db;\"><span style=\"color:#ea580c;\">&#10003;</span> Renovation energetique (RGE)</li><li style=\"display:flex;align-items:center;gap:10px;font-family:DM Sans,system-ui,sans-serif;font-size:14px;color:#d1d5db;\"><span style=\"color:#ea580c;\">&#10003;</span> Salle de bain et cuisine</li><li style=\"display:flex;align-items:center;gap:10px;font-family:DM Sans,system-ui,sans-serif;font-size:14px;color:#d1d5db;\"><span style=\"color:#ea580c;\">&#10003;</span> Amenagement de combles</li><li style=\"display:flex;align-items:center;gap:10px;font-family:DM Sans,system-ui,sans-serif;font-size:14px;color:#d1d5db;\"><span style=\"color:#ea580c;\">&#10003;</span> Isolation ITE et ITI</li></ul></div></div><div style=\"display:grid;grid-template-columns:repeat(3,1fr);gap:24px;\"><div style=\"background:#1a1a1a;padding:32px;border-radius:8px;border-top:3px solid #f97316;\"><h3 style=\"font-family:Bebas Neue,Impact,sans-serif;font-size:24px;color:#f5f5f5;margin:0 0 12px;\">PLOMBERIE</h3><p style=\"font-family:DM Sans,system-ui,sans-serif;font-size:14px;color:#9ca3af;line-height:1.6;margin:0;\">Installation et reparation de reseaux d'eau, sanitaires, chauffage central et VMC.</p></div><div style=\"background:#1a1a1a;padding:32px;border-radius:8px;border-top:3px solid #ea580c;\"><h3 style=\"font-family:Bebas Neue,Impact,sans-serif;font-size:24px;color:#f5f5f5;margin:0 0 12px;\">ELECTRICITE</h3><p style=\"font-family:DM Sans,system-ui,sans-serif;font-size:14px;color:#9ca3af;line-height:1.6;margin:0;\">Mise aux normes NF C 15-100, tableau electrique, domotique, eclairage LED professionnel.</p></div><div style=\"background:#1a1a1a;padding:32px;border-radius:8px;border-top:3px solid #fbbf24;\"><h3 style=\"font-family:Bebas Neue,Impact,sans-serif;font-size:24px;color:#f5f5f5;margin:0 0 12px;\">FINITIONS</h3><p style=\"font-family:DM Sans,system-ui,sans-serif;font-size:14px;color:#9ca3af;line-height:1.6;margin:0;\">Peinture, carrelage, parquet, faux plafond, menuiseries interieures et exterieures.</p></div></div></div>"
+                }
+              }
+            ]
+          },
+          {
+            "id": "forge-svc-cta",
+            "type": "section",
+            "settings": {
+              "backgroundColor": "#0d0d0d",
+              "paddingTop": 80,
+              "paddingBottom": 80,
+              "fullWidth": true
+            },
+            "children": [
+              {
+                "id": "forge-svc-cta-inner",
+                "type": "custom-html",
+                "settings": {
+                  "html": "<div style=\"max-width:700px;margin:0 auto;text-align:center;padding:0 24px;\"><h2 style=\"font-family:Bebas Neue,Impact,sans-serif;font-size:48px;color:#f5f5f5;margin:0 0 16px;line-height:1;\">UN PROJET EN TETE ?</h2><p style=\"font-family:DM Sans,system-ui,sans-serif;font-size:16px;color:#9ca3af;margin:0 0 32px;line-height:1.7;\">Contactez-nous pour un devis gratuit et sans engagement. Notre equipe etudie chaque projet avec attention.</p><a href=\"/contact\" style=\"display:inline-flex;align-items:center;gap:10px;background:#f97316;color:#fff;font-family:DM Sans,system-ui,sans-serif;font-size:16px;font-weight:600;padding:16px 36px;border-radius:4px;text-decoration:none;\">Demander un devis gratuit</a></div>"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "realisations",
+      "title": "Realisations",
+      "slug": "realisations",
+      "status": "published",
+      "meta_title": "Nos Realisations — ProArtisan BTP Lyon",
+      "meta_description": "Galerie de nos chantiers termines : renovation, construction, extension. Avant/apres de nos projets a Lyon.",
+      "content": {
+        "blocks": [
+          {
+            "id": "forge-real-hero",
+            "type": "section",
+            "settings": {
+              "backgroundColor": "#0d0d0d",
+              "paddingTop": 0,
+              "paddingBottom": 0,
+              "fullWidth": true
+            },
+            "children": [
+              {
+                "id": "forge-real-hero-inner",
+                "type": "custom-html",
+                "settings": {
+                  "html": "<div style=\"background:#0d0d0d;padding:120px 24px 80px;text-align:center;\"><div style=\"max-width:900px;margin:0 auto;\"><span style=\"font-family:DM Sans,system-ui,sans-serif;font-size:12px;font-weight:600;color:#f97316;text-transform:uppercase;letter-spacing:0.12em;\">Portfolio</span><h1 style=\"font-family:Bebas Neue,Impact,sans-serif;font-size:clamp(48px,8vw,96px);color:#f5f5f5;margin:12px 0 24px;line-height:0.95;\">NOS <span style=\"color:#f97316;\">REALISATIONS</span></h1><p style=\"font-family:DM Sans,system-ui,sans-serif;font-size:18px;color:#9ca3af;max-width:600px;margin:0 auto;line-height:1.7;\">Decouvrez une selection de nos chantiers realises a Lyon et dans l'agglomeration. Chaque projet est mene avec rigueur, dans le respect des delais et du budget.</p></div></div>"
+                }
+              }
+            ]
+          },
+          {
+            "id": "forge-real-grid",
+            "type": "section",
+            "settings": {
+              "backgroundColor": "#161616",
+              "paddingTop": 80,
+              "paddingBottom": 80,
+              "fullWidth": true
+            },
+            "children": [
+              {
+                "id": "forge-real-grid-inner",
+                "type": "custom-html",
+                "settings": {
+                  "html": "<div style=\"max-width:1100px;margin:0 auto;padding:0 24px;\"><div style=\"display:grid;grid-template-columns:repeat(2,1fr);gap:24px;\"><div style=\"background:#1a1a1a;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.06);\"><div style=\"height:280px;background:linear-gradient(135deg,#1a0f00,#3d2200);display:flex;align-items:center;justify-content:center;\"><span style=\"color:#6b7280;font-size:14px;font-style:italic;font-family:DM Sans,system-ui,sans-serif;\">[Photo avant/apres renovation]</span></div><div style=\"padding:28px;\"><div style=\"display:flex;gap:8px;margin-bottom:12px;\"><span style=\"background:rgba(249,115,22,0.15);color:#f97316;padding:4px 12px;border-radius:999px;font-family:DM Sans,system-ui,sans-serif;font-size:11px;font-weight:600;\">Renovation</span><span style=\"background:rgba(251,191,36,0.15);color:#fbbf24;padding:4px 12px;border-radius:999px;font-family:DM Sans,system-ui,sans-serif;font-size:11px;font-weight:600;\">Salle de bain</span></div><h3 style=\"font-family:Bebas Neue,Impact,sans-serif;font-size:24px;color:#f5f5f5;margin:0 0 8px;\">RENOVATION SALLE DE BAIN - LYON 6E</h3><p style=\"font-family:DM Sans,system-ui,sans-serif;font-size:14px;color:#9ca3af;line-height:1.6;margin:0;\">Transformation complete d'une salle de bain de 12m2. Douche a l'italienne, double vasque, carrelage grand format et eclairage LED. Duree : 3 semaines.</p></div></div><div style=\"background:#1a1a1a;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.06);\"><div style=\"height:280px;background:linear-gradient(135deg,#0a1a0a,#1a3d1a);display:flex;align-items:center;justify-content:center;\"><span style=\"color:#6b7280;font-size:14px;font-style:italic;font-family:DM Sans,system-ui,sans-serif;\">[Photo extension maison]</span></div><div style=\"padding:28px;\"><div style=\"display:flex;gap:8px;margin-bottom:12px;\"><span style=\"background:rgba(234,88,12,0.15);color:#ea580c;padding:4px 12px;border-radius:999px;font-family:DM Sans,system-ui,sans-serif;font-size:11px;font-weight:600;\">Construction</span><span style=\"background:rgba(249,115,22,0.15);color:#f97316;padding:4px 12px;border-radius:999px;font-family:DM Sans,system-ui,sans-serif;font-size:11px;font-weight:600;\">Extension</span></div><h3 style=\"font-family:Bebas Neue,Impact,sans-serif;font-size:24px;color:#f5f5f5;margin:0 0 8px;\">EXTENSION BOIS - CALUIRE</h3><p style=\"font-family:DM Sans,system-ui,sans-serif;font-size:14px;color:#9ca3af;line-height:1.6;margin:0;\">Extension de 35m2 en ossature bois avec baies vitrees. Isolation haute performance, toiture vegetalisee. Duree : 8 semaines.</p></div></div><div style=\"background:#1a1a1a;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.06);\"><div style=\"height:280px;background:linear-gradient(135deg,#1a1a00,#3d3d00);display:flex;align-items:center;justify-content:center;\"><span style=\"color:#6b7280;font-size:14px;font-style:italic;font-family:DM Sans,system-ui,sans-serif;\">[Photo renovation electrique]</span></div><div style=\"padding:28px;\"><div style=\"display:flex;gap:8px;margin-bottom:12px;\"><span style=\"background:rgba(234,88,12,0.15);color:#ea580c;padding:4px 12px;border-radius:999px;font-family:DM Sans,system-ui,sans-serif;font-size:11px;font-weight:600;\">Electricite</span></div><h3 style=\"font-family:Bebas Neue,Impact,sans-serif;font-size:24px;color:#f5f5f5;margin:0 0 8px;\">MISE AUX NORMES - VILLEURBANNE</h3><p style=\"font-family:DM Sans,system-ui,sans-serif;font-size:14px;color:#9ca3af;line-height:1.6;margin:0;\">Refonte complete de l'installation electrique d'un appartement de 80m2. Nouveau tableau, prises, eclairage et certification Consuel. Duree : 2 semaines.</p></div></div><div style=\"background:#1a1a1a;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.06);\"><div style=\"height:280px;background:linear-gradient(135deg,#0d0a1a,#1a0d3d);display:flex;align-items:center;justify-content:center;\"><span style=\"color:#6b7280;font-size:14px;font-style:italic;font-family:DM Sans,system-ui,sans-serif;\">[Photo isolation exterieure]</span></div><div style=\"padding:28px;\"><div style=\"display:flex;gap:8px;margin-bottom:12px;\"><span style=\"background:rgba(251,191,36,0.15);color:#fbbf24;padding:4px 12px;border-radius:999px;font-family:DM Sans,system-ui,sans-serif;font-size:11px;font-weight:600;\">Renovation energetique</span></div><h3 style=\"font-family:Bebas Neue,Impact,sans-serif;font-size:24px;color:#f5f5f5;margin:0 0 8px;\">ITE MAISON INDIVIDUELLE - BRON</h3><p style=\"font-family:DM Sans,system-ui,sans-serif;font-size:14px;color:#9ca3af;line-height:1.6;margin:0;\">Isolation thermique par l'exterieur d'une maison de 120m2. Economie de 40% sur la facture energetique. Duree : 4 semaines.</p></div></div></div></div>"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "a-propos",
+      "title": "A propos",
+      "slug": "a-propos",
+      "status": "published",
+      "meta_title": "A propos — ProArtisan BTP Lyon",
+      "meta_description": "Decouvrez l'histoire, les valeurs et l'equipe de ProArtisan. 15 ans d'experience dans le BTP a Lyon.",
+      "content": {
+        "blocks": [
+          {
+            "id": "forge-about-hero",
+            "type": "section",
+            "settings": {
+              "backgroundColor": "#0d0d0d",
+              "paddingTop": 0,
+              "paddingBottom": 0,
+              "fullWidth": true
+            },
+            "children": [
+              {
+                "id": "forge-about-hero-inner",
+                "type": "custom-html",
+                "settings": {
+                  "html": "<div style=\"background:#0d0d0d;padding:120px 24px 80px;text-align:center;\"><div style=\"max-width:900px;margin:0 auto;\"><span style=\"font-family:DM Sans,system-ui,sans-serif;font-size:12px;font-weight:600;color:#f97316;text-transform:uppercase;letter-spacing:0.12em;\">Notre histoire</span><h1 style=\"font-family:Bebas Neue,Impact,sans-serif;font-size:clamp(48px,8vw,96px);color:#f5f5f5;margin:12px 0 24px;line-height:0.95;\">A <span style=\"color:#f97316;\">PROPOS</span></h1><p style=\"font-family:DM Sans,system-ui,sans-serif;font-size:18px;color:#9ca3af;max-width:600px;margin:0 auto;line-height:1.7;\">Depuis 2010, ProArtisan accompagne les particuliers et les professionnels dans tous leurs projets de construction et de renovation sur Lyon et son agglomeration.</p></div></div>"
+                }
+              }
+            ]
+          },
+          {
+            "id": "forge-about-body",
+            "type": "section",
+            "settings": {
+              "backgroundColor": "#161616",
+              "paddingTop": 80,
+              "paddingBottom": 80,
+              "fullWidth": true
+            },
+            "children": [
+              {
+                "id": "forge-about-body-inner",
+                "type": "custom-html",
+                "settings": {
+                  "html": "<div style=\"max-width:1100px;margin:0 auto;padding:0 24px;\"><div style=\"display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;margin-bottom:80px;\"><div><h2 style=\"font-family:Bebas Neue,Impact,sans-serif;font-size:48px;color:#f5f5f5;margin:0 0 24px;line-height:1;\">NOTRE <span style=\"color:#f97316;\">HISTOIRE</span></h2><p style=\"font-family:DM Sans,system-ui,sans-serif;font-size:15px;color:#9ca3af;line-height:1.8;margin:0 0 16px;\">Fondee en 2010 par Jean-Marc Duval, compagnon du devoir et maitre artisan, ProArtisan est nee de la conviction qu'un artisanat de qualite doit etre accessible a tous. Ce qui a commence comme une entreprise de plomberie individuelle est devenu en 15 ans une equipe de 25 professionnels qualifies.</p><p style=\"font-family:DM Sans,system-ui,sans-serif;font-size:15px;color:#9ca3af;line-height:1.8;margin:0 0 16px;\">Notre croissance repose sur un principe simple : la satisfaction client avant tout. Chaque chantier est suivi personnellement, chaque devis est transparent, chaque intervention est garantie.</p><p style=\"font-family:DM Sans,system-ui,sans-serif;font-size:15px;color:#9ca3af;line-height:1.8;margin:0;\">Aujourd'hui, ProArtisan intervient dans tous les corps de metier du batiment : plomberie, electricite, renovation, construction, chauffage et isolation. Nous sommes certifies RGE, Qualifelec et Qualibat.</p></div><div style=\"background:#1a1a1a;border-radius:12px;padding:40px;border:1px solid rgba(255,255,255,0.06);\"><div style=\"text-align:center;margin-bottom:32px;\"><div style=\"width:80px;height:80px;background:linear-gradient(135deg,#f97316,#ea580c);border-radius:50%;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-family:Bebas Neue,Impact,sans-serif;font-size:32px;color:#fff;\">JD</div><h3 style=\"font-family:Bebas Neue,Impact,sans-serif;font-size:28px;color:#f5f5f5;margin:0 0 4px;\">JEAN-MARC DUVAL</h3><p style=\"font-family:DM Sans,system-ui,sans-serif;font-size:14px;color:#f97316;font-weight:500;margin:0;\">Fondateur - Maitre artisan</p></div><div style=\"display:grid;grid-template-columns:1fr 1fr;gap:20px;\"><div style=\"text-align:center;padding:16px;background:rgba(249,115,22,0.08);border-radius:8px;\"><div style=\"font-family:Bebas Neue,Impact,sans-serif;font-size:32px;color:#f97316;\">2010</div><div style=\"font-family:DM Sans,system-ui,sans-serif;font-size:12px;color:#6b7280;text-transform:uppercase;\">Creation</div></div><div style=\"text-align:center;padding:16px;background:rgba(249,115,22,0.08);border-radius:8px;\"><div style=\"font-family:Bebas Neue,Impact,sans-serif;font-size:32px;color:#f97316;\">25</div><div style=\"font-family:DM Sans,system-ui,sans-serif;font-size:12px;color:#6b7280;text-transform:uppercase;\">Collaborateurs</div></div></div></div></div><h2 style=\"font-family:Bebas Neue,Impact,sans-serif;font-size:36px;color:#f5f5f5;margin:0 0 32px;text-align:center;\">NOS <span style=\"color:#f97316;\">CERTIFICATIONS</span></h2><div style=\"display:grid;grid-template-columns:repeat(4,1fr);gap:16px;\"><div style=\"background:#1a1a1a;padding:24px;border-radius:8px;text-align:center;border:1px solid rgba(255,255,255,0.06);\"><div style=\"font-family:Bebas Neue,Impact,sans-serif;font-size:24px;color:#f97316;margin-bottom:8px;\">RGE</div><p style=\"font-family:DM Sans,system-ui,sans-serif;font-size:12px;color:#9ca3af;margin:0;\">Reconnu Garant de l'Environnement</p></div><div style=\"background:#1a1a1a;padding:24px;border-radius:8px;text-align:center;border:1px solid rgba(255,255,255,0.06);\"><div style=\"font-family:Bebas Neue,Impact,sans-serif;font-size:24px;color:#ea580c;margin-bottom:8px;\">QUALIFELEC</div><p style=\"font-family:DM Sans,system-ui,sans-serif;font-size:12px;color:#9ca3af;margin:0;\">Qualification electricite</p></div><div style=\"background:#1a1a1a;padding:24px;border-radius:8px;text-align:center;border:1px solid rgba(255,255,255,0.06);\"><div style=\"font-family:Bebas Neue,Impact,sans-serif;font-size:24px;color:#fbbf24;margin-bottom:8px;\">QUALIBAT</div><p style=\"font-family:DM Sans,system-ui,sans-serif;font-size:12px;color:#9ca3af;margin:0;\">Qualification batiment</p></div><div style=\"background:#1a1a1a;padding:24px;border-radius:8px;text-align:center;border:1px solid rgba(255,255,255,0.06);\"><div style=\"font-family:Bebas Neue,Impact,sans-serif;font-size:24px;color:#f97316;margin-bottom:8px;\">DECENNALE</div><p style=\"font-family:DM Sans,system-ui,sans-serif;font-size:12px;color:#9ca3af;margin:0;\">Assurance garantie 10 ans</p></div></div></div>"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "contact-page",
+      "title": "Contact",
+      "slug": "contact",
+      "status": "published",
+      "meta_title": "Contact — ProArtisan BTP Lyon",
+      "meta_description": "Contactez ProArtisan pour un devis gratuit. Intervention rapide a Lyon. Tel : 04 XX XX XX XX.",
+      "content": {
+        "blocks": [
+          {
+            "id": "forge-ctp-hero",
+            "type": "section",
+            "settings": {
+              "backgroundColor": "#0d0d0d",
+              "paddingTop": 0,
+              "paddingBottom": 0,
+              "fullWidth": true
+            },
+            "children": [
+              {
+                "id": "forge-ctp-hero-inner",
+                "type": "custom-html",
+                "settings": {
+                  "html": "<div style=\"background:#0d0d0d;padding:120px 24px 80px;text-align:center;\"><div style=\"max-width:900px;margin:0 auto;\"><span style=\"font-family:DM Sans,system-ui,sans-serif;font-size:12px;font-weight:600;color:#f97316;text-transform:uppercase;letter-spacing:0.12em;\">Nous contacter</span><h1 style=\"font-family:Bebas Neue,Impact,sans-serif;font-size:clamp(48px,8vw,96px);color:#f5f5f5;margin:12px 0 24px;line-height:0.95;\">CONTACT <span style=\"color:#f97316;\">ET DEVIS</span></h1><p style=\"font-family:DM Sans,system-ui,sans-serif;font-size:18px;color:#9ca3af;max-width:600px;margin:0 auto;line-height:1.7;\">Besoin d'un devis, d'une information ou d'une intervention urgente ? Notre equipe est a votre disposition.</p></div></div>"
+                }
+              }
+            ]
+          },
+          {
+            "id": "forge-ctp-body",
+            "type": "section",
+            "settings": {
+              "backgroundColor": "#161616",
+              "paddingTop": 80,
+              "paddingBottom": 80,
+              "fullWidth": true
+            },
+            "children": [
+              {
+                "id": "forge-ctp-body-inner",
+                "type": "custom-html",
+                "settings": {
+                  "html": "<div style=\"max-width:1100px;margin:0 auto;padding:0 24px;\"><div style=\"display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:64px;\"><div style=\"background:#1a1a1a;padding:32px;border-radius:8px;text-align:center;border:1px solid rgba(255,255,255,0.06);\"><div style=\"width:56px;height:56px;background:rgba(249,115,22,0.12);border-radius:12px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#f97316\" stroke-width=\"2\"><path d=\"M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.53 3.37 2 2 0 0 1 3.5 1.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 9.9a16 16 0 0 0 6.18 6.18l1.8-1.8a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z\"/></svg></div><h3 style=\"font-family:Bebas Neue,Impact,sans-serif;font-size:22px;color:#f5f5f5;margin:0 0 8px;\">TELEPHONE</h3><p style=\"font-family:DM Sans,system-ui,sans-serif;font-size:16px;color:#f97316;font-weight:600;margin:0 0 4px;\">04 XX XX XX XX</p><p style=\"font-family:DM Sans,system-ui,sans-serif;font-size:13px;color:#6b7280;margin:0;\">Lun-Ven 7h30-19h / Sam 8h-17h</p></div><div style=\"background:#1a1a1a;padding:32px;border-radius:8px;text-align:center;border:1px solid rgba(255,255,255,0.06);\"><div style=\"width:56px;height:56px;background:rgba(249,115,22,0.12);border-radius:12px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#f97316\" stroke-width=\"2\"><path d=\"M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z\"/><polyline points=\"22,6 12,13 2,6\"/></svg></div><h3 style=\"font-family:Bebas Neue,Impact,sans-serif;font-size:22px;color:#f5f5f5;margin:0 0 8px;\">EMAIL</h3><p style=\"font-family:DM Sans,system-ui,sans-serif;font-size:16px;color:#f97316;font-weight:600;margin:0 0 4px;\">contact@proartisan.fr</p><p style=\"font-family:DM Sans,system-ui,sans-serif;font-size:13px;color:#6b7280;margin:0;\">Reponse sous 4 heures</p></div><div style=\"background:#1a1a1a;padding:32px;border-radius:8px;text-align:center;border:1px solid rgba(249,115,22,0.2);\"><div style=\"width:56px;height:56px;background:rgba(249,115,22,0.2);border-radius:12px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#f97316\" stroke-width=\"2\"><path d=\"M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z\"/><circle cx=\"12\" cy=\"10\" r=\"3\"/></svg></div><h3 style=\"font-family:Bebas Neue,Impact,sans-serif;font-size:22px;color:#f5f5f5;margin:0 0 8px;\">ADRESSE</h3><p style=\"font-family:DM Sans,system-ui,sans-serif;font-size:16px;color:#f97316;font-weight:600;margin:0 0 4px;\">Lyon, France</p><p style=\"font-family:DM Sans,system-ui,sans-serif;font-size:13px;color:#6b7280;margin:0;\">Intervention Grand Lyon</p></div></div><div style=\"background:#1a1a1a;border-radius:12px;padding:48px;border:1px solid rgba(255,255,255,0.06);\"><h2 style=\"font-family:Bebas Neue,Impact,sans-serif;font-size:36px;color:#f5f5f5;margin:0 0 32px;text-align:center;\">DEMANDE DE <span style=\"color:#f97316;\">DEVIS GRATUIT</span></h2><form style=\"display:grid;grid-template-columns:1fr 1fr;gap:20px;\"><div><label style=\"display:block;font-family:DM Sans,system-ui,sans-serif;font-size:12px;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;\">Nom complet</label><input type=\"text\" placeholder=\"Jean Dupont\" style=\"width:100%;background:#161616;border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:14px 16px;font-family:DM Sans,system-ui,sans-serif;font-size:15px;color:#f5f5f5;outline:none;box-sizing:border-box;\"/></div><div><label style=\"display:block;font-family:DM Sans,system-ui,sans-serif;font-size:12px;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;\">Telephone</label><input type=\"tel\" placeholder=\"06 XX XX XX XX\" style=\"width:100%;background:#161616;border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:14px 16px;font-family:DM Sans,system-ui,sans-serif;font-size:15px;color:#f5f5f5;outline:none;box-sizing:border-box;\"/></div><div><label style=\"display:block;font-family:DM Sans,system-ui,sans-serif;font-size:12px;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;\">Email</label><input type=\"email\" placeholder=\"jean@email.fr\" style=\"width:100%;background:#161616;border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:14px 16px;font-family:DM Sans,system-ui,sans-serif;font-size:15px;color:#f5f5f5;outline:none;box-sizing:border-box;\"/></div><div><label style=\"display:block;font-family:DM Sans,system-ui,sans-serif;font-size:12px;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;\">Type de travaux</label><select style=\"width:100%;background:#161616;border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:14px 16px;font-family:DM Sans,system-ui,sans-serif;font-size:15px;color:#f5f5f5;outline:none;box-sizing:border-box;\"><option style=\"background:#161616;\">Construction</option><option style=\"background:#161616;\">Renovation</option><option style=\"background:#161616;\">Extension</option><option style=\"background:#161616;\">Plomberie</option><option style=\"background:#161616;\">Electricite</option></select></div><div style=\"grid-column:span 2;\"><label style=\"display:block;font-family:DM Sans,system-ui,sans-serif;font-size:12px;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;\">Description du projet</label><textarea rows=\"5\" placeholder=\"Decrivez votre projet...\" style=\"width:100%;background:#161616;border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:14px 16px;font-family:DM Sans,system-ui,sans-serif;font-size:15px;color:#f5f5f5;outline:none;resize:vertical;box-sizing:border-box;\"></textarea></div><div style=\"grid-column:span 2;text-align:center;\"><button type=\"submit\" style=\"background:#f97316;color:#fff;font-family:DM Sans,system-ui,sans-serif;font-size:16px;font-weight:700;padding:18px 48px;border-radius:4px;border:none;cursor:pointer;text-transform:uppercase;\">Envoyer ma demande</button></div></form></div></div>"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "actualites",
+      "title": "Actualites",
+      "slug": "actualites",
+      "status": "published",
+      "meta_title": "Actualites BTP — ProArtisan Lyon",
+      "meta_description": "Retrouvez nos actualites, conseils et guides pratiques sur la construction et la renovation.",
+      "content": {
+        "blocks": [
+          {
+            "id": "forge-blog-hero",
+            "type": "section",
+            "settings": {
+              "backgroundColor": "#0d0d0d",
+              "paddingTop": 0,
+              "paddingBottom": 0,
+              "fullWidth": true
+            },
+            "children": [
+              {
+                "id": "forge-blog-hero-inner",
+                "type": "custom-html",
+                "settings": {
+                  "html": "<div style=\"background:#0d0d0d;padding:120px 24px 80px;text-align:center;\"><div style=\"max-width:900px;margin:0 auto;\"><span style=\"font-family:DM Sans,system-ui,sans-serif;font-size:12px;font-weight:600;color:#f97316;text-transform:uppercase;letter-spacing:0.12em;\">Blog</span><h1 style=\"font-family:Bebas Neue,Impact,sans-serif;font-size:clamp(48px,8vw,96px);color:#f5f5f5;margin:12px 0 24px;line-height:0.95;\">NOS <span style=\"color:#f97316;\">ACTUALITES</span></h1><p style=\"font-family:DM Sans,system-ui,sans-serif;font-size:18px;color:#9ca3af;max-width:600px;margin:0 auto;line-height:1.7;\">Conseils, guides pratiques et actualites du BTP. Restez informe sur les dernieres tendances et les aides disponibles.</p></div></div>"
+                }
+              }
+            ]
+          }
+        ]
+      }
     }
   ],
   "menus": [
     {
       "name": "Navigation principale",
       "slug": "main-nav",
+      "location": "header",
       "items": [
-        { "label": "Services", "url": "#services", "order": 1 },
-        { "label": "Pourquoi nous", "url": "#why", "order": 2 },
-        { "label": "Temoignages", "url": "#temoignages", "order": 3 },
-        { "label": "Zone intervention", "url": "#zones", "order": 4 },
-        { "label": "Contact", "url": "#contact", "order": 5 }
+        {
+          "label": "Accueil",
+          "url": "/",
+          "order": 1
+        },
+        {
+          "label": "Services",
+          "url": "/services",
+          "order": 2
+        },
+        {
+          "label": "Realisations",
+          "url": "/realisations",
+          "order": 3
+        },
+        {
+          "label": "A propos",
+          "url": "/a-propos",
+          "order": 4
+        },
+        {
+          "label": "Actualites",
+          "url": "/actualites",
+          "order": 5
+        },
+        {
+          "label": "Contact",
+          "url": "/contact",
+          "order": 6
+        }
+      ]
+    },
+    {
+      "name": "Menu footer",
+      "slug": "footer-nav",
+      "location": "footer",
+      "items": [
+        {
+          "label": "Mentions legales",
+          "url": "/mentions-legales",
+          "order": 1
+        },
+        {
+          "label": "CGV",
+          "url": "/cgv",
+          "order": 2
+        },
+        {
+          "label": "Politique de confidentialite",
+          "url": "/politique-de-confidentialite",
+          "order": 3
+        },
+        {
+          "label": "Contact",
+          "url": "/contact",
+          "order": 4
+        }
       ]
     }
   ],
@@ -181,5 +492,300 @@
     "tagline": "Plomberie, Electricite et Renovation",
     "phone": "04 XX XX XX XX",
     "email": "contact@proartisan.fr"
-  }
+  },
+  "taxonomies": [
+    {
+      "name": "Categories",
+      "slug": "categories",
+      "type": "category",
+      "description": "Categories des articles du blog BTP",
+      "terms": [
+        {
+          "name": "Renovation",
+          "slug": "renovation",
+          "description": "Articles sur la renovation",
+          "order": 1
+        },
+        {
+          "name": "Construction",
+          "slug": "construction",
+          "description": "Articles sur la construction",
+          "order": 2
+        },
+        {
+          "name": "Securite",
+          "slug": "securite",
+          "description": "Articles sur la securite chantier",
+          "order": 3
+        },
+        {
+          "name": "Guides",
+          "slug": "guides",
+          "description": "Guides pratiques et conseils",
+          "order": 4
+        }
+      ]
+    },
+    {
+      "name": "Tags",
+      "slug": "tags",
+      "type": "tag",
+      "description": "Tags des articles",
+      "terms": [
+        {
+          "name": "Aides financieres",
+          "slug": "aides-financieres",
+          "order": 1
+        },
+        {
+          "name": "Materiaux",
+          "slug": "materiaux",
+          "order": 2
+        },
+        {
+          "name": "Normes",
+          "slug": "normes",
+          "order": 3
+        },
+        {
+          "name": "Ecologie",
+          "slug": "ecologie",
+          "order": 4
+        }
+      ]
+    }
+  ],
+  "posts": [
+    {
+      "title": "Renovation energetique : les aides en 2026",
+      "slug": "renovation-energetique-aides-2026",
+      "status": "published",
+      "excerpt": "Decouvrez toutes les aides financieres disponibles en 2026 pour vos travaux de renovation energetique : MaPrimeRenov, CEE, eco-PTZ et aides locales.",
+      "featured_image": null,
+      "taxonomies": {
+        "categories": [
+          "renovation"
+        ],
+        "tags": [
+          "aides-financieres",
+          "ecologie"
+        ]
+      },
+      "content": {
+        "blocks": [
+          {
+            "id": "fbtp-p1-b1",
+            "type": "heading",
+            "props": {
+              "text": "Renovation energetique : toutes les aides disponibles en 2026",
+              "level": 1,
+              "color": "#f5f5f5"
+            },
+            "children": []
+          },
+          {
+            "id": "fbtp-p1-b2",
+            "type": "text",
+            "props": {
+              "content": "<p>La renovation energetique est au coeur des preoccupations des proprietaires francais. Face a la hausse des couts de l'energie et aux enjeux climatiques, l'Etat a renforce son dispositif d'aides en 2026. Chez ProArtisan, nous accompagnons nos clients dans toutes les demarches pour beneficier de ces financements.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "fbtp-p1-b3",
+            "type": "text",
+            "props": {
+              "content": "<h2>MaPrimeRenov 2026 : ce qui change</h2><p>Le dispositif MaPrimeRenov a ete simplifie en 2026. Desormais, deux parcours existent : le parcours par geste (isolation, chauffage, ventilation) et le parcours accompagne pour les renovations globales. Les montants ont ete revus a la hausse pour les menages modestes, avec des primes pouvant atteindre 90% du montant des travaux. Les plafonds de ressources ont ete actualises pour inclure davantage de menages dans les categories aidees.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "fbtp-p1-b4",
+            "type": "text",
+            "props": {
+              "content": "<h2>Les Certificats d'Economie d'Energie (CEE)</h2><p>Les CEE restent un levier majeur de financement. Cumulables avec MaPrimeRenov, ils permettent d'obtenir des primes complementaires pour l'isolation des combles, des murs, le remplacement de fenetres ou l'installation d'un systeme de chauffage performant. En tant qu'entreprise certifiee RGE, ProArtisan vous aide a constituer vos dossiers et a maximiser les primes.</p><h2>L'eco-pret a taux zero (eco-PTZ)</h2><p>L'eco-PTZ permet de financer le reste a charge sans payer d'interets. En 2026, le plafond a ete releve a 50 000 euros pour les renovations globales, remboursable sur 20 ans. Aucune condition de ressources n'est requise.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "fbtp-p1-b5",
+            "type": "text",
+            "props": {
+              "content": "<h2>Nos conseils pour en profiter</h2><p>Pour beneficier de ces aides, il est imperatif de faire appel a une entreprise certifiee RGE comme ProArtisan. Nous vous accompagnons de A a Z : diagnostic energetique, devis detaille, constitution des dossiers d'aide et realisation des travaux dans les regles de l'art. Contactez-nous pour un diagnostic gratuit et personnalise de votre habitation.</p>"
+            },
+            "children": []
+          }
+        ]
+      }
+    },
+    {
+      "title": "Construction durable : materiaux innovants",
+      "slug": "construction-durable-materiaux-innovants",
+      "status": "published",
+      "excerpt": "Tour d'horizon des materiaux de construction ecologiques et innovants en 2026 : beton bas carbone, isolants biosources, bois lamelle-croise.",
+      "featured_image": null,
+      "taxonomies": {
+        "categories": [
+          "construction"
+        ],
+        "tags": [
+          "materiaux",
+          "ecologie"
+        ]
+      },
+      "content": {
+        "blocks": [
+          {
+            "id": "fbtp-p2-b1",
+            "type": "heading",
+            "props": {
+              "text": "Construction durable : les materiaux innovants qui changent le BTP",
+              "level": 1,
+              "color": "#f5f5f5"
+            },
+            "children": []
+          },
+          {
+            "id": "fbtp-p2-b2",
+            "type": "text",
+            "props": {
+              "content": "<p>Le secteur du batiment est responsable de 40% des emissions de CO2 en France. Face a cet enjeu, les materiaux de construction evoluent rapidement pour reduire l'empreinte carbone des batiments. Chez ProArtisan, nous integrons progressivement ces innovations dans nos chantiers.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "fbtp-p2-b3",
+            "type": "text",
+            "props": {
+              "content": "<h2>Le beton bas carbone</h2><p>Le beton reste incontournable dans la construction, mais sa fabrication est tres polluante. Les betons bas carbone, qui integrent des ciments alternatifs (laitiers de haut fourneau, cendres volantes, metakaolin), permettent de reduire les emissions de 30 a 50%. Certains fabricants proposent des betons de chanvre ou des betons geopolymeres qui divisent l'impact carbone par quatre.</p><h2>Les isolants biosources</h2><p>Fibre de bois, laine de chanvre, ouate de cellulose, paille compressee : les isolants biosources offrent d'excellentes performances thermiques tout en stockant du carbone. Leur bilan environnemental est nettement superieur aux isolants synthetiques. Nous les recommandons systematiquement pour les projets de renovation et de construction neuve.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "fbtp-p2-b4",
+            "type": "text",
+            "props": {
+              "content": "<h2>Le bois lamelle-croise (CLT)</h2><p>Le CLT revolutionne la construction bois. Ces panneaux massifs permettent de construire des batiments de grande hauteur en bois, avec une rapidite de mise en oeuvre remarquable. Le bois stocke le carbone pendant toute la duree de vie du batiment. ProArtisan realise des extensions et des surelevations en CLT sur la region lyonnaise.</p><h2>Les briques en terre crue</h2><p>Materiau ancestral remis au gout du jour, la brique en terre crue ne necessite aucune cuisson. Elle offre une excellente inertie thermique et une regulation naturelle de l'humidite. Associee a une isolation biosourcee, elle permet de construire des habitations saines et confortables en toute saison.</p>"
+            },
+            "children": []
+          }
+        ]
+      }
+    },
+    {
+      "title": "Securite sur les chantiers : nos engagements",
+      "slug": "securite-chantiers-engagements",
+      "status": "published",
+      "excerpt": "La securite est notre priorite absolue. Decouvrez nos engagements, nos certifications et les mesures mises en place sur chaque chantier.",
+      "featured_image": null,
+      "taxonomies": {
+        "categories": [
+          "securite"
+        ],
+        "tags": [
+          "normes"
+        ]
+      },
+      "content": {
+        "blocks": [
+          {
+            "id": "fbtp-p3-b1",
+            "type": "heading",
+            "props": {
+              "text": "Securite sur les chantiers : nos engagements au quotidien",
+              "level": 1,
+              "color": "#f5f5f5"
+            },
+            "children": []
+          },
+          {
+            "id": "fbtp-p3-b2",
+            "type": "text",
+            "props": {
+              "content": "<p>Dans le BTP, la securite n'est pas une option : c'est un imperatif absolu. Chaque annee, des milliers d'accidents du travail surviennent sur les chantiers francais. Chez ProArtisan, nous avons fait de la prevention des risques une valeur fondamentale, avec des resultats concrets : zero accident grave depuis notre creation en 2010.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "fbtp-p3-b3",
+            "type": "text",
+            "props": {
+              "content": "<h2>Formation continue de nos equipes</h2><p>Tous nos techniciens suivent des formations regulieres en matiere de securite : habilitations electriques (B1V, B2V, BR, BC), travail en hauteur, manipulation de produits chimiques, gestes et postures. Chaque nouveau collaborateur beneficie d'un parcours d'integration qui inclut deux jours complets dedies a la securite.</p><h2>Equipements de protection individuelle</h2><p>Nous fournissons a chaque intervenant des EPI de derniere generation : casques avec protection auditive integree, chaussures de securite montantes, gants adaptes, lunettes de protection, harnais antichute. Le renouvellement est systematique des qu'un equipement montre des signes d'usure.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "fbtp-p3-b4",
+            "type": "text",
+            "props": {
+              "content": "<h2>Plan de prevention sur chaque chantier</h2><p>Avant chaque intervention, un plan de prevention est etabli. Ce document identifie les risques specifiques au chantier, definit les mesures de protection et designe un responsable securite. Pour les chantiers importants, un coordonnateur SPS est nomme conformement a la reglementation.</p><h2>Votre securite, notre responsabilite</h2><p>La securite ne concerne pas que nos equipes : elle protege aussi les occupants et les riverains du chantier. Balisage, protection des sols, mise hors tension, ventilation des espaces confines... chaque detail compte pour garantir un chantier sur et respectueux de votre environnement.</p>"
+            },
+            "children": []
+          }
+        ]
+      }
+    },
+    {
+      "title": "Extension de maison : guide complet",
+      "slug": "extension-maison-guide-complet",
+      "status": "published",
+      "excerpt": "Tout ce qu'il faut savoir avant d'agrandir sa maison : reglementation, materiaux, budget, delais et etapes cles.",
+      "featured_image": null,
+      "taxonomies": {
+        "categories": [
+          "guides"
+        ],
+        "tags": [
+          "materiaux",
+          "normes"
+        ]
+      },
+      "content": {
+        "blocks": [
+          {
+            "id": "fbtp-p4-b1",
+            "type": "heading",
+            "props": {
+              "text": "Extension de maison : le guide complet pour agrandir votre habitat",
+              "level": 1,
+              "color": "#f5f5f5"
+            },
+            "children": []
+          },
+          {
+            "id": "fbtp-p4-b2",
+            "type": "text",
+            "props": {
+              "content": "<p>Votre famille s'agrandit, vous avez besoin d'un bureau pour le teletravail ou vous revez d'une piece de vie plus spacieuse ? L'extension de maison est souvent la solution ideale pour gagner en surface sans demenager. Mais un tel projet ne s'improvise pas. Voici notre guide complet.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "fbtp-p4-b3",
+            "type": "text",
+            "props": {
+              "content": "<h2>Les demarches administratives</h2><p>Selon la surface creee, les demarches varient. Pour une extension inferieure a 20m2 (40m2 en zone urbaine), une declaration prealable suffit. Au-dela, un permis de construire est necessaire, et le recours a un architecte devient obligatoire pour les surfaces totales depassant 150m2. Le PLU de votre commune definit les regles d'implantation a respecter.</p><h2>Quel type d'extension choisir ?</h2><p>Plusieurs solutions s'offrent a vous : l'extension laterale (la plus courante), la surelevation (ideale en zone urbaine dense), l'extension en sous-sol, ou encore la veranda. Le choix depend de la configuration de votre terrain, de vos besoins et de votre budget.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "fbtp-p4-b4",
+            "type": "text",
+            "props": {
+              "content": "<h2>Le budget a prevoir</h2><p>Comptez en moyenne 1 500 a 2 500 euros par m2 pour une extension en parpaing, 1 800 a 3 000 euros par m2 pour une ossature bois, et 2 500 a 4 000 euros par m2 pour une surelevation. Ces estimations incluent le gros oeuvre, le second oeuvre et les finitions standard.</p><h2>Les etapes cles du projet</h2><p>Un projet d'extension se deroule en cinq grandes phases : l'etude de faisabilite, la conception, les demarches administratives, la realisation des travaux (4 a 12 semaines) et la reception du chantier. Chez ProArtisan, nous vous accompagnons a chaque etape avec un interlocuteur unique et un planning detaille.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "fbtp-p4-b5",
+            "type": "text",
+            "props": {
+              "content": "<h2>Pourquoi choisir ProArtisan ?</h2><p>Avec plus de 50 extensions realisees sur le Grand Lyon, ProArtisan maitrise parfaitement ce type de projet. Nous coordonnons l'ensemble des corps de metier pour une prestation cle en main. Un seul interlocuteur, un devis detaille, un planning respecte et une garantie decennale sur l'ensemble des travaux.</p>"
+            },
+            "children": []
+          }
+        ]
+      }
+    }
+  ]
 }

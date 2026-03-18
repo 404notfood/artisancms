@@ -1,6 +1,6 @@
 import { Head, Link } from '@inertiajs/react';
 import FrontLayout from '@/Layouts/FrontLayout';
-import type { OrderData, EcommerceSettingsData, MenuData } from '@/types/cms';
+import type { OrderData, EcommerceSettingsData, MenuData, AddressData } from '@/types/cms';
 
 interface ConfirmationPageProps {
     order: OrderData;
@@ -39,10 +39,10 @@ function StatusBadge({ status }: { status: string }) {
     const labels: Record<string, string> = {
         pending: 'En attente',
         processing: 'En cours',
-        shipped: 'Expediee',
-        completed: 'Terminee',
-        cancelled: 'Annulee',
-        refunded: 'Remboursee',
+        shipped: 'Exp\u00e9di\u00e9e',
+        completed: 'Termin\u00e9e',
+        cancelled: 'Annul\u00e9e',
+        refunded: 'Rembours\u00e9e',
     };
 
     return (
@@ -61,16 +61,7 @@ function AddressBlock({
     address,
 }: {
     title: string;
-    address: {
-        first_name: string;
-        last_name: string;
-        address: string;
-        address2?: string;
-        city: string;
-        postal_code: string;
-        country: string;
-        phone?: string;
-    } | null;
+    address: AddressData | null;
 }) {
     if (!address) return null;
 
@@ -101,7 +92,7 @@ export default function ConfirmationPage({
 }: ConfirmationPageProps) {
     return (
         <FrontLayout menus={menus} theme={theme}>
-            <Head title={`Commande #${order.id} confirmee - ${settings.store_name}`} />
+            <Head title={`Commande #${order.id} confirm\u00e9e - ${settings.store_name}`} />
 
             <div className="container py-12">
                 <div className="mx-auto max-w-3xl">
@@ -123,7 +114,7 @@ export default function ConfirmationPage({
                             </svg>
                         </div>
                         <h1 className="text-3xl font-bold text-gray-900">
-                            Commande confirmee
+                            Commande confirm\u00e9e
                         </h1>
                         <p className="mt-2 text-gray-600">
                             Merci pour votre commande ! Vous recevrez un email de
@@ -149,7 +140,7 @@ export default function ConfirmationPage({
                         {/* Items */}
                         <div className="mb-6">
                             <h3 className="mb-3 text-sm font-semibold text-gray-900">
-                                Articles commandes
+                                Articles command\u00e9s
                             </h3>
                             <div className="space-y-3">
                                 {order.items?.map((item) => (
@@ -244,7 +235,7 @@ export default function ConfirmationPage({
                                 </h4>
                                 <p className="text-sm text-gray-600">
                                     {order.payment_method === 'cod'
-                                        ? 'Paiement a la livraison'
+                                        ? 'Paiement \u00e0 la livraison'
                                         : 'Carte bancaire'}
                                 </p>
                             </div>
@@ -273,7 +264,7 @@ export default function ConfirmationPage({
                             href="/shop"
                             className="rounded-md bg-gray-900 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-gray-700"
                         >
-                            Retour a la boutique
+                            Retour \u00e0 la boutique
                         </Link>
                     </div>
                 </div>

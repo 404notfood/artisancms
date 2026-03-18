@@ -1,0 +1,140 @@
+[
+  {
+    "name": "Catégories",
+    "slug": "categories",
+    "type": "category",
+    "description": "Catégories des articles du blog Terra CBD",
+    "terms": [
+      {
+        "name": "Guide",
+        "slug": "guide",
+        "description": "Guides pratiques et complets sur le CBD",
+        "order": 0
+      },
+      {
+        "name": "Bien-être",
+        "slug": "bien-etre",
+        "description": "Astuces et routines bien-être avec le CBD",
+        "order": 1
+      },
+      {
+        "name": "Santé",
+        "slug": "sante",
+        "description": "Actualités et études scientifiques sur le CBD et la santé",
+        "order": 2
+      },
+      {
+        "name": "Notre marque",
+        "slug": "notre-marque",
+        "description": "Actualités et engagements de Terra CBD",
+        "order": 3
+      },
+      {
+        "name": "Recettes",
+        "slug": "recettes",
+        "description": "Recettes gourmandes à base de CBD",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "name": "Tags",
+    "slug": "tags",
+    "type": "tag",
+    "description": "Étiquettes des articles du blog Terra CBD",
+    "terms": [
+      {
+        "name": "CBD",
+        "slug": "cbd",
+        "description": "Articles traitant du CBD en général",
+        "order": 0
+      },
+      {
+        "name": "Huile",
+        "slug": "huile",
+        "description": "Articles sur les huiles de CBD",
+        "order": 1
+      },
+      {
+        "name": "Bien-être",
+        "slug": "bien-etre",
+        "description": "Articles sur le bien-être naturel",
+        "order": 2
+      },
+      {
+        "name": "Bio",
+        "slug": "bio",
+        "description": "Articles sur l'agriculture biologique et le chanvre bio",
+        "order": 3
+      },
+      {
+        "name": "Naturel",
+        "slug": "naturel",
+        "description": "Articles sur les produits naturels et la naturalité",
+        "order": 4
+      },
+      {
+        "name": "Sommeil",
+        "slug": "sommeil",
+        "description": "Articles sur le CBD et le sommeil",
+        "order": 5
+      },
+      {
+        "name": "Relaxation",
+        "slug": "relaxation",
+        "description": "Articles sur la relaxation et la gestion du stress",
+        "order": 6
+      },
+      {
+        "name": "Cuisine",
+        "slug": "cuisine",
+        "description": "Recettes et astuces culinaires au CBD",
+        "order": 7
+      }
+    ]
+  },
+  {
+    "name": "Catégories produits",
+    "slug": "product-categories",
+    "type": "category",
+    "description": "Catégories de la boutique e-commerce Terra CBD",
+    "terms": [
+      {
+        "name": "Huiles",
+        "slug": "huiles",
+        "description": "Huiles CBD spectre complet et isolat",
+        "order": 0
+      },
+      {
+        "name": "Gummies",
+        "slug": "gummies",
+        "description": "Gummies et bonbons au CBD",
+        "order": 1
+      },
+      {
+        "name": "Cosmétiques",
+        "slug": "cosmetiques",
+        "description": "Crèmes, baumes et soins cosmétiques au CBD",
+        "order": 2
+      },
+      {
+        "name": "Infusions",
+        "slug": "infusions",
+        "description": "Tisanes et infusions au CBD",
+        "order": 3
+      },
+      {
+        "name": "Capsules",
+        "slug": "capsules",
+        "description": "Capsules et gélules de CBD",
+        "order": 4
+      },
+      {
+        "name": "Coffrets",
+        "slug": "coffrets",
+        "description": "Packs découverte et coffrets cadeaux CBD",
+        "order": 5
+      }
+    ]
+  }
+]

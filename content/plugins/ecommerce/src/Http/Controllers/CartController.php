@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Ecommerce\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\CmsPlugin;
+use Ecommerce\Http\Controllers\Concerns\HasEcommerceSettings;
 use Ecommerce\Http\Controllers\Concerns\HasThemeAndMenus;
 use Ecommerce\Models\CartItem;
 use Ecommerce\Services\CartService;
@@ -17,44 +17,36 @@ use Inertia\Response;
 
 class CartController extends Controller
 {
+    use HasEcommerceSettings;
     use HasThemeAndMenus;
 
     public function __construct(
         private readonly CartService $cartService,
     ) {}
 
-    /**
-     * Display the cart page.
-     */
     public function index(): Response
     {
         $items = $this->cartService->getItems();
 
-        $cartItems = $items->map(function ($item) {
-            return [
-                'id' => $item->id,
-                'product_id' => $item->product_id,
-                'variant_id' => $item->variant_id,
-                'name' => $item->product->name,
-                'variant_name' => $item->variant?->name,
-                'variant_attributes' => $item->variant?->attributes,
-                'price' => $item->getPrice(),
-                'quantity' => $item->quantity,
-                'total' => $item->getTotal(),
-                'featured_image' => $item->product->featured_image,
-                'slug' => $item->product->slug,
-                'stock' => $item->variant?->stock ?? $item->product->stock,
-            ];
-        });
-
-        $subtotal = $items->sum(fn ($item) => $item->getTotal());
+        $cartItems = $items->map(fn ($item) => [
+            'id' => $item->id,
+            'product_id' => $item->product_id,
+            'variant_id' => $item->variant_id,
+            'name' => $item->product->name,
+            'variant_name' => $item->variant?->name,
+            'variant_attributes' => $item->variant?->attributes,
+            'price' => $item->getPrice(),
+            'quantity' => $item->quantity,
+            'total' => $item->getTotal(),
+            'featured_image' => $item->product->featured_image,
+            'slug' => $item->product->slug,
+            'stock' => $item->variant?->stock ?? $item->product->stock,
+        ]);
 
         $settings = $this->getSettings();
-        $shippingCost = (float) ($settings['shipping_cost'] ?? 5.99);
-        $freeShippingThreshold = (float) ($settings['free_shipping_threshold'] ?? 50);
-        $shipping = $subtotal >= $freeShippingThreshold ? 0 : $shippingCost;
-        $taxRate = (float) ($settings['tax_rate'] ?? 20);
-        $tax = round($subtotal * $taxRate / 100, 2);
+        $subtotal = $items->sum(fn ($item) => $item->getTotal());
+        $shipping = $this->calculateShipping($subtotal, $settings);
+        $tax = round($subtotal * (float) ($settings['tax_rate'] ?? 20) / 100, 2);
 
         return Inertia::render('Front/Shop/Cart', array_merge($this->themeAndMenus(), [
             'cartItems' => $cartItems,
@@ -66,9 +58,6 @@ class CartController extends Controller
         ]));
     }
 
-    /**
-     * Add an item to the cart.
-     */
     public function add(Request $request): RedirectResponse
     {
         $validated = $request->validate([
@@ -79,48 +68,47 @@ class CartController extends Controller
 
         $this->cartService->addItem($validated);
 
-        return redirect()
-            ->back()
-            ->with('success', 'Produit ajoute au panier.');
+        return redirect()->back()->with('success', 'Produit ajoute au panier.');
     }
 
-    /**
-     * Update the quantity of a cart item.
-     */
     public function update(Request $request, CartItem $cartItem): RedirectResponse
     {
+        $this->authorizeCartItem($cartItem);
+
         $validated = $request->validate([
             'quantity' => 'required|integer|min:1',
         ]);
 
         $this->cartService->updateQuantity($cartItem, $validated['quantity']);
 
-        return redirect()
-            ->back()
-            ->with('success', 'Panier mis a jour.');
+        return redirect()->back()->with('success', 'Panier mis a jour.');
     }
 
-    /**
-     * Remove a cart item.
-     */
     public function remove(CartItem $cartItem): RedirectResponse
     {
+        $this->authorizeCartItem($cartItem);
+
         $this->cartService->removeItem($cartItem);
 
-        return redirect()
-            ->back()
-            ->with('success', 'Produit retire du panier.');
+        return redirect()->back()->with('success', 'Produit retire du panier.');
+    }
+
+    public function clear(): RedirectResponse
+    {
+        $this->cartService->clear();
+
+        return redirect()->back()->with('success', 'Panier vide.');
     }
 
     /**
-     * API: add item (JSON response for block renderers).
+     * JSON: add item (for block renderers / AJAX).
      */
     public function apiAdd(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'product_id' => 'required|exists:products,id',
             'variant_id' => 'nullable|exists:product_variants,id',
-            'quantity'   => 'integer|min:1',
+            'quantity' => 'integer|min:1',
         ]);
 
         $this->cartService->addItem($validated);
@@ -130,60 +118,29 @@ class CartController extends Controller
     }
 
     /**
-     * API: get cart count/total (JSON response).
+     * JSON: cart summary (count + total).
      */
     public function apiGet(): JsonResponse
     {
         $items = $this->cartService->getItems();
-        $count = $items->sum('quantity');
-        $total = $items->sum(fn ($item) => $item->getTotal());
 
-        return response()->json(['count' => $count, 'total' => round($total, 2)]);
+        return response()->json([
+            'count' => $items->sum('quantity'),
+            'total' => round($items->sum(fn ($item) => $item->getTotal()), 2),
+        ]);
     }
 
-    /**
-     * Clear the cart.
-     */
-    public function clear(): RedirectResponse
+    private function authorizeCartItem(CartItem $cartItem): void
     {
-        $this->cartService->clear();
-
-        return redirect()
-            ->back()
-            ->with('success', 'Panier vide.');
+        if ($cartItem->user_id !== auth()->id() && $cartItem->session_id !== session()->getId()) {
+            abort(403);
+        }
     }
 
-    /**
-     * Get current e-commerce settings with defaults.
-     *
-     * @return array<string, mixed>
-     */
-    private function getSettings(): array
+    private function calculateShipping(float $subtotal, array $settings): float
     {
-        $defaults = [
-            'store_name' => 'Ma Boutique',
-            'currency' => 'EUR',
-            'currency_symbol' => "\u{20AC}",
-            'tax_rate' => 20,
-            'shipping_cost' => 5.99,
-            'free_shipping_threshold' => 50,
-        ];
+        $threshold = (float) ($settings['free_shipping_threshold'] ?? 50);
 
-        $plugin = CmsPlugin::where('slug', 'ecommerce')->first();
-
-        if (!$plugin || empty($plugin->settings)) {
-            return $defaults;
-        }
-
-        $resolved = [];
-        foreach ($plugin->settings as $key => $value) {
-            if (is_array($value) && isset($value['default'])) {
-                $resolved[$key] = $value['default'];
-            } else {
-                $resolved[$key] = $value;
-            }
-        }
-
-        return array_merge($defaults, $resolved);
+        return $subtotal >= $threshold ? 0.0 : (float) ($settings['shipping_cost'] ?? 5.99);
     }
 }

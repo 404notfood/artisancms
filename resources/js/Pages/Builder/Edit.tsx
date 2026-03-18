@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Head, router } from '@inertiajs/react';
 import { DndContext, DragOverlay, pointerWithin, DragStartEvent, DragEndEvent, useSensor, useSensors, PointerSensor } from '@dnd-kit/core';
 import { useBuilderStore, findParentInfo } from '@/stores/builder-store';
@@ -7,7 +7,9 @@ import BuilderToolbar from '@/Components/builder/builder-toolbar';
 import BuilderCanvas from '@/Components/builder/builder-canvas';
 import BuilderSidebar from '@/Components/builder/builder-sidebar';
 import DeleteConfirmDialog from '@/Components/builder/delete-confirm-dialog';
-import type { PageData } from '@/types/cms';
+import type { BlockNode, PageData } from '@/types/cms';
+
+const CONTAINER_TYPES = new Set(['section', 'grid', 'column']);
 
 interface BuilderEditProps {
     page: PageData;
@@ -22,63 +24,89 @@ export default function BuilderEdit({ page }: BuilderEditProps) {
     const isDragging = useBuilderStore((s) => s.isDragging);
 
     useEffect(() => {
-        // Register all core block types
         registerCoreBlocks();
 
-        // Load page content into the builder store
-        // content is stored as { blocks: [...] } in DB, extract the array
         const raw = page.content;
-        const initialBlocks = Array.isArray(raw)
+        const initialBlocks: BlockNode[] = Array.isArray(raw)
             ? raw
-            : (raw as any)?.blocks ?? [];
+            : (raw as Record<string, unknown> | null)?.blocks as BlockNode[] ?? [];
         setBlocks(initialBlocks);
-    }, [page.id]);
+    }, [page.id, setBlocks]);
 
     const [isSaving, setIsSaving] = useState(false);
+    const [activeDragData, setActiveDragData] = useState<Record<string, unknown> | null>(null);
 
     const handleSave = useCallback(() => {
         setIsSaving(true);
+        const currentBlocks = useBuilderStore.getState().blocks;
         router.put(
             `/admin/pages/${page.id}/builder`,
-            { content: blocks } as any,
+            // Inertia's RequestPayload type doesn't support deeply nested objects like BlockNode[],
+            // but the data is correctly serialized at runtime.
+            { content: currentBlocks } as any,
             { preserveState: true, preserveScroll: true, onFinish: () => setIsSaving(false) },
         );
-    }, [page.id, blocks]);
+    }, [page.id]);
 
     const handlePublish = useCallback(() => {
         router.post(`/admin/pages/${page.id}/publish`, {}, { preserveState: true });
     }, [page.id]);
 
-    // Require 8px of movement before activating drag (so clicks work)
     const sensors = useSensors(
         useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
     );
 
-    // DnD handlers — shared context for sidebar + canvas
-    const handleDragStart = useCallback((_event: DragStartEvent) => {
+    const handleDragStart = useCallback((event: DragStartEvent) => {
         setIsDragging(true);
+        setActiveDragData(event.active.data.current ?? null);
     }, [setIsDragging]);
 
     const handleDragEnd = useCallback((event: DragEndEvent) => {
         setIsDragging(false);
+        setActiveDragData(null);
         const { active, over } = event;
         if (!over) return;
 
         const activeData = active.data.current;
+        const overData = over.data.current;
 
         if (activeData?.type === 'new-block') {
-            // Adding new block from sidebar
             const blockType = activeData.blockType as string;
-            const overData = over.data.current;
-            const parentId = overData?.block?.type === 'section' || overData?.block?.type === 'grid'
-                ? (overData.block.id as string) : undefined;
-            addBlock(blockType, parentId, undefined);
+            let parentId: string | undefined;
+            let index: number | undefined;
+
+            if (overData?.block) {
+                const overBlock = overData.block as { id: string; type: string; children?: unknown[] };
+
+                if (CONTAINER_TYPES.has(overBlock.type)) {
+                    parentId = overBlock.id;
+                    index = overBlock.children?.length ?? 0;
+                } else {
+                    const info = findParentInfo(blocks, overBlock.id);
+                    if (info) {
+                        parentId = info.parentId ?? undefined;
+                        index = info.index + 1;
+                    }
+                }
+            }
+
+            addBlock(blockType, parentId, index);
         } else if (activeData?.type === 'block') {
-            // Reordering existing block
             if (active.id === over.id) return;
-            const overIndex = blocks.findIndex((b) => b.id === over.id);
-            if (overIndex !== -1) {
-                moveBlock(active.id as string, null, overIndex);
+
+            if (over.id === 'canvas-drop-zone') {
+                moveBlock(active.id as string, null, blocks.length);
+            } else if (overData?.block) {
+                const overBlock = overData.block as { id: string; type: string; children?: unknown[] };
+
+                if (CONTAINER_TYPES.has(overBlock.type) && active.id !== over.id) {
+                    moveBlock(active.id as string, overBlock.id, overBlock.children?.length ?? 0);
+                } else {
+                    const info = findParentInfo(blocks, overBlock.id);
+                    if (info) {
+                        moveBlock(active.id as string, info.parentId, info.index);
+                    }
+                }
             }
         }
     }, [addBlock, moveBlock, blocks]);
@@ -87,58 +115,48 @@ export default function BuilderEdit({ page }: BuilderEditProps) {
         setIsDragging(false);
     }, [setIsDragging]);
 
-    // Warn before navigating away with unsaved changes
     useEffect(() => {
-        const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-            const dirty = useBuilderStore.getState().isDirty;
-            if (dirty) {
+        const onBeforeUnload = (e: BeforeUnloadEvent) => {
+            if (useBuilderStore.getState().isDirty) {
                 e.preventDefault();
             }
         };
-
-        window.addEventListener('beforeunload', handleBeforeUnload);
-        return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+        window.addEventListener('beforeunload', onBeforeUnload);
+        return () => window.removeEventListener('beforeunload', onBeforeUnload);
     }, []);
 
-    // Keyboard shortcuts
     useEffect(() => {
-        const handleKeyDown = (e: KeyboardEvent) => {
-            const isCtrlOrCmd = e.ctrlKey || e.metaKey;
+        const onKeyDown = (e: KeyboardEvent) => {
+            const mod = e.ctrlKey || e.metaKey;
 
-            // Ctrl+Z = Undo
-            if (isCtrlOrCmd && e.key === 'z' && !e.shiftKey) {
+            if (mod && e.key === 'z' && !e.shiftKey) {
                 e.preventDefault();
                 useBuilderStore.getState().undo();
+                return;
             }
 
-            // Ctrl+Shift+Z or Ctrl+Y = Redo
-            if (isCtrlOrCmd && ((e.key === 'z' && e.shiftKey) || e.key === 'y')) {
+            if (mod && ((e.key === 'z' && e.shiftKey) || e.key === 'y')) {
                 e.preventDefault();
                 useBuilderStore.getState().redo();
+                return;
             }
 
-            // Ctrl+S = Save
-            if (isCtrlOrCmd && e.key === 's') {
+            if (mod && e.key === 's') {
                 e.preventDefault();
-                const state = useBuilderStore.getState();
-                router.put(
-                    `/admin/pages/${page.id}/builder`,
-                    { content: state.blocks } as any,
-                    { preserveState: true, preserveScroll: true },
-                );
+                handleSave();
+                return;
             }
 
-            // Ctrl+C = Copy selected block
-            if (isCtrlOrCmd && e.key === 'c' && !isEditableTarget(e.target)) {
+            if (mod && e.key === 'c' && !isEditableTarget(e.target)) {
                 const { selectedBlockId, copyBlock } = useBuilderStore.getState();
                 if (selectedBlockId) {
                     e.preventDefault();
                     copyBlock(selectedBlockId);
                 }
+                return;
             }
 
-            // Ctrl+V = Paste after selected block
-            if (isCtrlOrCmd && e.key === 'v' && !isEditableTarget(e.target)) {
+            if (mod && e.key === 'v' && !isEditableTarget(e.target)) {
                 const state = useBuilderStore.getState();
                 if (state.clipboard && state.selectedBlockId) {
                     e.preventDefault();
@@ -147,48 +165,39 @@ export default function BuilderEdit({ page }: BuilderEditProps) {
                         state.pasteBlock(info.parentId, info.index + 1);
                     }
                 }
+                return;
             }
 
-            // Ctrl+D = Duplicate selected block
-            if (isCtrlOrCmd && e.key === 'd' && !isEditableTarget(e.target)) {
+            if (mod && e.key === 'd' && !isEditableTarget(e.target)) {
                 const { selectedBlockId, duplicateBlock } = useBuilderStore.getState();
                 if (selectedBlockId) {
                     e.preventDefault();
                     duplicateBlock(selectedBlockId);
                 }
+                return;
             }
 
-            // Delete = open confirmation dialog, Shift+Delete = delete immediately
-            if (e.key === 'Delete' && !isEditableTarget(e.target)) {
+            if ((e.key === 'Delete' || e.key === 'Backspace') && !isEditableTarget(e.target)) {
                 const { selectedBlockId, setPendingDeleteId, removeBlock } = useBuilderStore.getState();
                 if (selectedBlockId) {
                     e.preventDefault();
-                    if (e.shiftKey) {
+                    if (e.key === 'Delete' && e.shiftKey) {
                         removeBlock(selectedBlockId);
                     } else {
                         setPendingDeleteId(selectedBlockId);
                     }
                 }
+                return;
             }
 
-            // Backspace = open confirmation dialog (same as Delete)
-            if (e.key === 'Backspace' && !isEditableTarget(e.target)) {
-                const { selectedBlockId, setPendingDeleteId } = useBuilderStore.getState();
-                if (selectedBlockId) {
-                    e.preventDefault();
-                    setPendingDeleteId(selectedBlockId);
-                }
-            }
-
-            // Escape = deselect
             if (e.key === 'Escape') {
                 useBuilderStore.getState().selectBlock(null);
             }
         };
 
-        window.addEventListener('keydown', handleKeyDown);
-        return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [page.id]);
+        window.addEventListener('keydown', onKeyDown);
+        return () => window.removeEventListener('keydown', onKeyDown);
+    }, [handleSave]);
 
     return (
         <>
@@ -202,7 +211,6 @@ export default function BuilderEdit({ page }: BuilderEditProps) {
                 onDragCancel={handleDragCancel}
             >
                 <div className="h-screen flex flex-col overflow-hidden">
-                    {/* Top toolbar */}
                     <BuilderToolbar
                         title={page.title}
                         onSave={handleSave}
@@ -210,7 +218,6 @@ export default function BuilderEdit({ page }: BuilderEditProps) {
                         isSaving={isSaving}
                     />
 
-                    {/* Main content area: sidebar left, canvas right */}
                     <div className="flex flex-1 overflow-hidden">
                         <BuilderSidebar />
                         <BuilderCanvas />
@@ -218,9 +225,11 @@ export default function BuilderEdit({ page }: BuilderEditProps) {
                 </div>
 
                 <DragOverlay dropAnimation={null}>
-                    {isDragging ? (
-                        <div className="bg-blue-50 border-2 border-blue-300 rounded-md px-4 py-2 text-sm text-blue-700 font-medium shadow-lg opacity-80">
-                            Bloc en cours de deplacement...
+                    {isDragging && activeDragData ? (
+                        <div className="rounded-lg border-2 border-blue-400 bg-white px-4 py-3 shadow-lg">
+                            <span className="text-sm font-medium text-blue-600">
+                                {(activeDragData.blockType as string) || (activeDragData.block as { type?: string })?.type || 'Bloc'}
+                            </span>
                         </div>
                     ) : null}
                 </DragOverlay>
@@ -231,11 +240,8 @@ export default function BuilderEdit({ page }: BuilderEditProps) {
     );
 }
 
-/** Check if the event target is an editable element (input, textarea, contentEditable) */
 function isEditableTarget(target: EventTarget | null): boolean {
     if (!target || !(target instanceof HTMLElement)) return false;
-    const tagName = target.tagName.toLowerCase();
-    if (tagName === 'input' || tagName === 'textarea' || tagName === 'select') return true;
-    if (target.isContentEditable) return true;
-    return false;
+    const tag = target.tagName.toLowerCase();
+    return tag === 'input' || tag === 'textarea' || tag === 'select' || target.isContentEditable;
 }

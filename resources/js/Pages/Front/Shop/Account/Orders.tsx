@@ -14,9 +14,9 @@ const statusTabs = [
     { label: 'Toutes', value: '' },
     { label: 'En attente', value: 'pending' },
     { label: 'En traitement', value: 'processing' },
-    { label: 'Expediees', value: 'shipped' },
-    { label: 'Terminees', value: 'completed' },
-    { label: 'Annulees', value: 'cancelled' },
+    { label: 'Exp\u00e9di\u00e9es', value: 'shipped' },
+    { label: 'Termin\u00e9es', value: 'completed' },
+    { label: 'Annul\u00e9es', value: 'cancelled' },
 ];
 
 export default function Orders({ orders, filters, settings }: OrdersProps) {
@@ -45,10 +45,10 @@ export default function Orders({ orders, filters, settings }: OrdersProps) {
     const statusLabels: Record<string, string> = {
         pending: 'En attente',
         processing: 'En traitement',
-        shipped: 'Expediee',
-        completed: 'Terminee',
-        cancelled: 'Annulee',
-        refunded: 'Remboursee',
+        shipped: 'Exp\u00e9di\u00e9e',
+        completed: 'Termin\u00e9e',
+        cancelled: 'Annul\u00e9e',
+        refunded: 'Rembours\u00e9e',
     };
 
     const statusColors: Record<string, string> = {
@@ -102,7 +102,7 @@ export default function Orders({ orders, filters, settings }: OrdersProps) {
                                 {orders.data.length === 0 ? (
                                     <tr>
                                         <td colSpan={6} className="px-6 py-8 text-center text-gray-500">
-                                            Aucune commande trouvee.
+                                            Aucune commande trouv\u00e9e.
                                         </td>
                                     </tr>
                                 ) : (
@@ -147,7 +147,7 @@ export default function Orders({ orders, filters, settings }: OrdersProps) {
                     {orders.last_page > 1 && (
                         <div className="flex items-center justify-between border-t border-gray-200 px-6 py-3">
                             <p className="text-sm text-gray-600">
-                                {orders.from}--{orders.to} sur {orders.total}
+                                {orders.from}\u2013{orders.to} sur {orders.total}
                             </p>
                             <div className="flex gap-1">
                                 {Array.from({ length: orders.last_page }, (_, i) => i + 1).map((p) => (

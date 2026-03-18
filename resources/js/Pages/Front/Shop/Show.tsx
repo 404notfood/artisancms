@@ -19,6 +19,7 @@ interface ShopShowProps {
     };
 }
 
+/** Theme CSS variable tokens used for inline styles */
 const T = {
     primary:    'var(--color-primary, #1a3d1a)',
     gold:       'var(--color-gold, #c9a84c)',
@@ -226,13 +227,12 @@ export default function ShopShow({ product, relatedProducts, settings, menus, th
             <div style={{ background: T.bg, minHeight: '100vh', fontFamily: T.body }}>
                 {/* Breadcrumb */}
                 <div style={{ borderBottom: '1px solid rgba(26,61,26,0.08)', background: '#fff' }}>
-                    <div style={{ maxWidth: T.body, margin: '0 auto' }}>
-                        <div style={{
-                            maxWidth: '1280px', margin: '0 auto',
-                            padding: '12px 24px',
-                            display: 'flex', alignItems: 'center', gap: '8px',
-                            fontSize: '13px', color: '#888',
-                        }}>
+                    <div style={{
+                        maxWidth: '1280px', margin: '0 auto',
+                        padding: '12px 24px',
+                        display: 'flex', alignItems: 'center', gap: '8px',
+                        fontSize: '13px', color: '#888',
+                    }}>
                             <Link href="/shop" style={{ color: '#888', textDecoration: 'none', transition: 'color 0.2s' }}
                                 onMouseEnter={e => (e.currentTarget.style.color = T.primary)}
                                 onMouseLeave={e => (e.currentTarget.style.color = '#888')}
@@ -249,13 +249,12 @@ export default function ShopShow({ product, relatedProducts, settings, menus, th
                                 </>
                             )}
                             <span style={{ color: T.text, fontWeight: 500 }}>{product.name}</span>
-                        </div>
                     </div>
                 </div>
 
                 {/* Main product zone */}
                 <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '48px 24px' }}>
-                    <div style={{
+                    <div className="shop-show-grid" style={{
                         display: 'grid',
                         gridTemplateColumns: 'repeat(2, 1fr)',
                         gap: '64px',
@@ -474,7 +473,7 @@ export default function ShopShow({ product, relatedProducts, settings, menus, th
                             </div>
 
                             {/* Trust badges */}
-                            <div style={{
+                            <div className="shop-trust-badges" style={{
                                 marginTop: '28px',
                                 paddingTop: '24px',
                                 borderTop: '1px solid rgba(26,61,26,0.08)',
@@ -531,7 +530,7 @@ export default function ShopShow({ product, relatedProducts, settings, menus, th
                                     Voir tout →
                                 </Link>
                             </div>
-                            <div style={{
+                            <div className="shop-related-grid" style={{
                                 display: 'grid',
                                 gridTemplateColumns: `repeat(${Math.min(relatedProducts.length, 4)}, 1fr)`,
                                 gap: '20px',

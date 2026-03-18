@@ -132,10 +132,7 @@ function Pagination({
 }) {
     if (products.last_page <= 1) return null;
 
-    const pages = [];
-    for (let i = 1; i <= products.last_page; i++) {
-        pages.push(i);
-    }
+    const pages = Array.from({ length: products.last_page }, (_, i) => i + 1);
 
     return (
         <nav className="mt-8 flex items-center justify-center gap-1">
@@ -249,7 +246,7 @@ export default function ShopCategory({
                         {/* Other Categories */}
                         <div className="mb-6">
                             <h3 className="mb-3 text-sm font-semibold text-gray-900">
-                                Categories
+                                Cat\u00e9gories
                             </h3>
                             <ul className="space-y-1">
                                 <li>
@@ -257,7 +254,7 @@ export default function ShopCategory({
                                         href="/shop"
                                         className="block w-full rounded px-2 py-1.5 text-left text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                                     >
-                                        Toutes les categories
+                                        Toutes les cat\u00e9gories
                                     </Link>
                                 </li>
                                 {categories.map((cat) => (
@@ -322,7 +319,7 @@ export default function ShopCategory({
                         {/* Sort Bar */}
                         <div className="mb-6 flex items-center justify-between">
                             <p className="text-sm text-gray-500">
-                                Affichage de {products.from || 0} a {products.to || 0} sur{' '}
+                                Affichage de {products.from || 0} \u00e0 {products.to || 0} sur{' '}
                                 {products.total} produits
                             </p>
                             <div className="flex items-center gap-2">
@@ -332,9 +329,9 @@ export default function ShopCategory({
                                     onChange={(e) => handleSortChange(e.target.value)}
                                     className="rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:border-gray-500 focus:ring-1 focus:ring-gray-500 focus:outline-none"
                                 >
-                                    <option value="recent">Recents</option>
+                                    <option value="recent">R\u00e9cents</option>
                                     <option value="price_asc">Prix croissant</option>
-                                    <option value="price_desc">Prix decroissant</option>
+                                    <option value="price_desc">Prix d\u00e9croissant</option>
                                     <option value="name_asc">Nom A-Z</option>
                                 </select>
                             </div>
@@ -367,10 +364,10 @@ export default function ShopCategory({
                                     />
                                 </svg>
                                 <h3 className="mt-4 text-lg font-medium text-gray-900">
-                                    Aucun produit dans cette categorie
+                                    Aucun produit dans cette cat\u00e9gorie
                                 </h3>
                                 <p className="mt-2 text-sm text-gray-500">
-                                    Revenez plus tard ou explorez d'autres categories.
+                                    Revenez plus tard ou explorez d'autres cat\u00e9gories.
                                 </p>
                                 <Link
                                     href="/shop"

@@ -61,7 +61,7 @@ function buildCssVariables(customizations: Record<string, string | boolean>): Re
         sidebar: '--sidebar-',
     };
     for (const [dotKey, value] of Object.entries(customizations)) {
-        if (!value && value !== 0) continue;
+        if (!value) continue;
         if (typeof value === 'boolean') continue;
         const dotIdx = dotKey.indexOf('.');
         if (dotIdx === -1) continue;

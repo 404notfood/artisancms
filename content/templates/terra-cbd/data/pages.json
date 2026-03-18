@@ -1,0 +1,1686 @@
+[
+  {
+    "id": "page-home",
+    "title": "Accueil",
+    "slug": "accueil",
+    "layout": "full-width",
+    "status": "published",
+    "order": 0,
+    "meta_title": "Terra CBD — Huiles & Produits CBD Premium",
+    "meta_description": "Découvrez notre gamme de produits CBD naturels et certifiés : huiles, gummies, cosmétiques. Qualité laboratoire, livraison rapide.",
+    "content": {
+      "blocks": [
+
+        {
+          "type": "section",
+          "id": "sec-hero",
+          "props": {
+            "backgroundColor": "#0d1f0d",
+            "paddingTop": 0,
+            "paddingBottom": 0,
+            "fullWidth": true
+          },
+          "children": [
+            {
+              "type": "custom-html",
+              "id": "hero-main",
+              "props": {
+                "html": "<div style=\"position:relative;min-height:620px;display:flex;align-items:center;overflow:hidden;background:linear-gradient(135deg,#0d1f0d 0%,#1a3d1a 50%,#0f2a0f 100%);\"><div style=\"position:absolute;inset:0;background-image:radial-gradient(ellipse at 70% 50%,rgba(201,168,76,0.12) 0%,transparent 60%),radial-gradient(ellipse at 20% 80%,rgba(45,106,45,0.3) 0%,transparent 50%);pointer-events:none;\"></div><div style=\"position:absolute;right:0;top:0;width:50%;height:100%;background:url('https://images.unsplash.com/photo-1611521778980-ae7faa60a5fd?w=900&q=80') center/cover no-repeat;opacity:0.3;mask-image:linear-gradient(to right,transparent,rgba(0,0,0,0.8));\"></div><div style=\"position:relative;max-width:1280px;margin:0 auto;padding:80px 40px;width:100%;\"><div style=\"max-width:600px;\"><div style=\"display:inline-flex;align-items:center;gap:8px;background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.35);border-radius:999px;padding:6px 16px;margin-bottom:28px;\"><span style=\"width:6px;height:6px;border-radius:50%;background:#c9a84c;display:inline-block;\"></span><span style=\"font-size:0.75rem;font-weight:600;color:#c9a84c;letter-spacing:0.1em;text-transform:uppercase;\">100% Naturel · Testé en laboratoire</span></div><h1 style=\"font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(2.5rem,5vw,4rem);font-weight:600;font-style:italic;color:#f5f0e8;line-height:1.15;margin:0 0 20px;\">La nature au service<br><span style=\"color:#c9a84c;\">de votre bien-être</span></h1><p style=\"font-size:1.0625rem;color:rgba(245,240,232,0.75);line-height:1.7;margin:0 0 36px;max-width:480px;\">Huiles CBD spectre complet, gummies et cosmétiques issus de chanvre bio européen. Formules certifiées, testées en laboratoire indépendant.</p><div style=\"display:flex;flex-wrap:wrap;gap:12px;\"><a href='/boutique' style=\"display:inline-flex;align-items:center;gap:8px;background:#c9a84c;color:#0d1f0d;font-weight:700;font-size:0.9375rem;padding:14px 28px;border-radius:6px;text-decoration:none;transition:all 0.2s;\">Découvrir la boutique →</a><a href='#bienfaits' style=\"display:inline-flex;align-items:center;gap:8px;background:transparent;color:#f5f0e8;font-weight:500;font-size:0.9375rem;padding:14px 28px;border-radius:6px;border:1px solid rgba(245,240,232,0.3);text-decoration:none;\">Nos engagements</a></div><div style=\"display:flex;gap:32px;margin-top:48px;padding-top:32px;border-top:1px solid rgba(201,168,76,0.2);\"><div><div style=\"font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:600;color:#c9a84c;\">10 000+</div><div style=\"font-size:0.8rem;color:rgba(245,240,232,0.55);text-transform:uppercase;letter-spacing:0.08em;\">Clients satisfaits</div></div><div><div style=\"font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:600;color:#c9a84c;\">4.9/5</div><div style=\"font-size:0.8rem;color:rgba(245,240,232,0.55);text-transform:uppercase;letter-spacing:0.08em;\">Note moyenne</div></div><div><div style=\"font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:600;color:#c9a84c;\">&lt;0,3%</div><div style=\"font-size:0.8rem;color:rgba(245,240,232,0.55);text-transform:uppercase;letter-spacing:0.08em;\">THC garanti</div></div></div></div></div></div>"
+              }
+            }
+          ]
+        },
+
+        {
+          "type": "section",
+          "id": "sec-trust-bar",
+          "props": {
+            "backgroundColor": "#c9a84c",
+            "paddingTop": 0,
+            "paddingBottom": 0,
+            "fullWidth": true
+          },
+          "children": [
+            {
+              "type": "custom-html",
+              "id": "trust-bar",
+              "props": {
+                "html": "<div style=\"max-width:1280px;margin:0 auto;padding:14px 40px;display:flex;flex-wrap:wrap;justify-content:center;gap:24px 48px;\"><div style=\"display:flex;align-items:center;gap:8px;\"><span style=\"font-size:1.1rem;\">🚚</span><span style=\"font-size:0.8125rem;font-weight:600;color:#0d1f0d;letter-spacing:0.04em;\">Livraison offerte dès 49€</span></div><div style=\"display:flex;align-items:center;gap:8px;\"><span style=\"font-size:1.1rem;\">🔬</span><span style=\"font-size:0.8125rem;font-weight:600;color:#0d1f0d;letter-spacing:0.04em;\">Testé en laboratoire indépendant</span></div><div style=\"display:flex;align-items:center;gap:8px;\"><span style=\"font-size:1.1rem;\">🌿</span><span style=\"font-size:0.8125rem;font-weight:600;color:#0d1f0d;letter-spacing:0.04em;\">Chanvre bio européen</span></div><div style=\"display:flex;align-items:center;gap:8px;\"><span style=\"font-size:1.1rem;\">✅</span><span style=\"font-size:0.8125rem;font-weight:600;color:#0d1f0d;letter-spacing:0.04em;\">Légal · &lt;0,3% THC</span></div></div>"
+              }
+            }
+          ]
+        },
+
+        {
+          "type": "section",
+          "id": "sec-bestsellers",
+          "props": {
+            "backgroundColor": "#fafaf5",
+            "paddingTop": 96,
+            "paddingBottom": 96,
+            "maxWidth": 1280,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "custom-html",
+              "id": "bestsellers-header",
+              "props": {
+                "html": "<div style=\"text-align:center;margin-bottom:56px;\"><div style=\"display:inline-block;font-size:0.75rem;font-weight:600;color:#c9a84c;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:12px;\">Nos meilleures ventes</div><h2 style=\"font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(2rem,4vw,2.75rem);font-weight:600;font-style:italic;color:#1a2e1a;margin:0 0 16px;\">Les favoris de nos clients</h2><p style=\"color:#5a7a5a;font-size:1rem;max-width:520px;margin:0 auto;line-height:1.65;\">Sélectionnés pour leur efficacité et leur qualité, découvrez nos produits les plus appréciés.</p></div>"
+              }
+            },
+            {
+              "type": "grid",
+              "id": "products-grid",
+              "props": {
+                "columns": 3,
+                "gap": 28
+              },
+              "children": [
+                {
+                  "type": "custom-html",
+                  "id": "product-1",
+                  "props": {
+                    "html": "<div style=\"background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 20px rgba(26,61,26,0.08);transition:transform 0.25s,box-shadow 0.25s;\" onmouseenter=\"this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 40px rgba(26,61,26,0.15)'\" onmouseleave=\"this.style.transform='';this.style.boxShadow='0 2px 20px rgba(26,61,26,0.08)'\"><div style=\"position:relative;aspect-ratio:1/1;background:linear-gradient(145deg,#e8f5e8,#f0f5ec);display:flex;align-items:center;justify-content:center;\"><div style=\"position:absolute;top:12px;left:12px;background:#1a3d1a;color:#f5f0e8;font-size:0.7rem;font-weight:700;padding:4px 10px;border-radius:4px;letter-spacing:0.05em;\">BESTSELLER</div><div style=\"position:absolute;top:12px;right:12px;background:#c9a84c;color:#0d1f0d;font-size:0.7rem;font-weight:700;padding:4px 10px;border-radius:4px;\">10% CBD</div><div style=\"font-size:5rem;\">🌿</div></div><div style=\"padding:20px;\"><div style=\"font-size:0.75rem;color:#5a7a5a;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.08em;\">Huile CBD</div><h3 style=\"font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:600;color:#1a2e1a;margin:0 0 8px;\">Huile CBD 10% Spectre Complet</h3><p style=\"font-size:0.85rem;color:#5a7a5a;margin:0 0 16px;line-height:1.6;\">30ml · Extraction CO₂ · Chanvre bio FR</p><div style=\"display:flex;align-items:center;justify-content:space-between;\"><div><span style=\"font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:600;color:#1a3d1a;\">39,90 €</span></div><button style=\"background:#1a3d1a;color:#f5f0e8;border:none;padding:10px 18px;border-radius:6px;font-size:0.875rem;font-weight:600;cursor:pointer;\">Ajouter</button></div></div></div>"
+                  }
+                },
+                {
+                  "type": "custom-html",
+                  "id": "product-2",
+                  "props": {
+                    "html": "<div style=\"background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 20px rgba(26,61,26,0.08);transition:transform 0.25s,box-shadow 0.25s;\" onmouseenter=\"this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 40px rgba(26,61,26,0.15)'\" onmouseleave=\"this.style.transform='';this.style.boxShadow='0 2px 20px rgba(26,61,26,0.08)'\"><div style=\"position:relative;aspect-ratio:1/1;background:linear-gradient(145deg,#fdf8f0,#fdf4e8);display:flex;align-items:center;justify-content:center;\"><div style=\"position:absolute;top:12px;left:12px;background:#c9a84c;color:#0d1f0d;font-size:0.7rem;font-weight:700;padding:4px 10px;border-radius:4px;\">NOUVEAU</div><div style=\"font-size:5rem;\">🍬</div></div><div style=\"padding:20px;\"><div style=\"font-size:0.75rem;color:#5a7a5a;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.08em;\">Gummies CBD</div><h3 style=\"font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:600;color:#1a2e1a;margin:0 0 8px;\">Gummies CBD Sommeil &amp; Détente</h3><p style=\"font-size:0.85rem;color:#5a7a5a;margin:0 0 16px;line-height:1.6;\">30 gummies · 25mg CBD · Mélatonine</p><div style=\"display:flex;align-items:center;justify-content:space-between;\"><div><span style=\"font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:600;color:#1a3d1a;\">29,90 €</span></div><button style=\"background:#1a3d1a;color:#f5f0e8;border:none;padding:10px 18px;border-radius:6px;font-size:0.875rem;font-weight:600;cursor:pointer;\">Ajouter</button></div></div></div>"
+                  }
+                },
+                {
+                  "type": "custom-html",
+                  "id": "product-3",
+                  "props": {
+                    "html": "<div style=\"background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 20px rgba(26,61,26,0.08);transition:transform 0.25s,box-shadow 0.25s;\" onmouseenter=\"this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 40px rgba(26,61,26,0.15)'\" onmouseleave=\"this.style.transform='';this.style.boxShadow='0 2px 20px rgba(26,61,26,0.08)'\"><div style=\"position:relative;aspect-ratio:1/1;background:linear-gradient(145deg,#f0f5ec,#e8f5e8);display:flex;align-items:center;justify-content:center;\"><div style=\"font-size:5rem;\">✨</div></div><div style=\"padding:20px;\"><div style=\"font-size:0.75rem;color:#5a7a5a;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.08em;\">Cosmétique CBD</div><h3 style=\"font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:600;color:#1a2e1a;margin:0 0 8px;\">Crème Visage CBD &amp; Aloe Vera</h3><p style=\"font-size:0.85rem;color:#5a7a5a;margin:0 0 16px;line-height:1.6;\">50ml · Anti-âge · Peaux sensibles</p><div style=\"display:flex;align-items:center;justify-content:space-between;\"><div><span style=\"font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:600;color:#1a3d1a;\">34,90 €</span></div><button style=\"background:#1a3d1a;color:#f5f0e8;border:none;padding:10px 18px;border-radius:6px;font-size:0.875rem;font-weight:600;cursor:pointer;\">Ajouter</button></div></div></div>"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "custom-html",
+              "id": "products-cta",
+              "props": {
+                "html": "<div style=\"text-align:center;margin-top:44px;\"><a href='/boutique' style=\"display:inline-flex;align-items:center;gap:8px;background:transparent;color:#1a3d1a;font-weight:600;font-size:0.9375rem;padding:13px 28px;border-radius:6px;border:2px solid #1a3d1a;text-decoration:none;\">Voir tous les produits →</a></div>"
+              }
+            }
+          ]
+        },
+
+        {
+          "type": "section",
+          "id": "sec-bienfaits",
+          "props": {
+            "backgroundColor": "#1a3d1a",
+            "paddingTop": 96,
+            "paddingBottom": 96,
+            "maxWidth": 1280,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "custom-html",
+              "id": "bienfaits-header",
+              "props": {
+                "html": "<div style=\"text-align:center;margin-bottom:56px;\"><div style=\"display:inline-block;font-size:0.75rem;font-weight:600;color:#c9a84c;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:12px;\">Pourquoi le CBD ?</div><h2 style=\"font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(2rem,4vw,2.75rem);font-weight:600;font-style:italic;color:#f5f0e8;margin:0 0 16px;\">Les bienfaits reconnus du CBD</h2><p style=\"color:rgba(245,240,232,0.65);font-size:1rem;max-width:520px;margin:0 auto;line-height:1.65;\">Soutenu par des études scientifiques, le CBD naturel agit en douceur sur votre équilibre quotidien.</p></div>"
+              }
+            },
+            {
+              "type": "grid",
+              "id": "bienfaits-grid",
+              "props": {
+                "columns": 3,
+                "gap": 24
+              },
+              "children": [
+                {
+                  "type": "custom-html",
+                  "id": "bienfait-1",
+                  "props": {
+                    "html": "<div style=\"background:rgba(255,255,255,0.06);border:1px solid rgba(201,168,76,0.2);border-radius:10px;padding:32px 28px;\"><div style=\"width:52px;height:52px;border-radius:10px;background:rgba(201,168,76,0.15);display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin-bottom:20px;\">😌</div><h3 style=\"font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:600;color:#f5f0e8;margin:0 0 10px;\">Stress &amp; Anxiété</h3><p style=\"font-size:0.875rem;color:rgba(245,240,232,0.6);line-height:1.65;margin:0;\">Le CBD interagit avec le système endocannabinoïde pour favoriser un état de calme naturel et réduire les tensions du quotidien.</p></div>"
+                  }
+                },
+                {
+                  "type": "custom-html",
+                  "id": "bienfait-2",
+                  "props": {
+                    "html": "<div style=\"background:rgba(255,255,255,0.06);border:1px solid rgba(201,168,76,0.2);border-radius:10px;padding:32px 28px;\"><div style=\"width:52px;height:52px;border-radius:10px;background:rgba(201,168,76,0.15);display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin-bottom:20px;\">🌙</div><h3 style=\"font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:600;color:#f5f0e8;margin:0 0 10px;\">Sommeil de qualité</h3><p style=\"font-size:0.875rem;color:rgba(245,240,232,0.6);line-height:1.65;margin:0;\">Favorise l'endormissement et améliore la qualité du sommeil sans effet de dépendance ni somnolence au réveil.</p></div>"
+                  }
+                },
+                {
+                  "type": "custom-html",
+                  "id": "bienfait-3",
+                  "props": {
+                    "html": "<div style=\"background:rgba(255,255,255,0.06);border:1px solid rgba(201,168,76,0.2);border-radius:10px;padding:32px 28px;\"><div style=\"width:52px;height:52px;border-radius:10px;background:rgba(201,168,76,0.15);display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin-bottom:20px;\">💪</div><h3 style=\"font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:600;color:#f5f0e8;margin:0 0 10px;\">Douleurs &amp; Inflammation</h3><p style=\"font-size:0.875rem;color:rgba(245,240,232,0.6);line-height:1.65;margin:0;\">Propriétés anti-inflammatoires naturelles pour soulager les douleurs musculaires, articulaires et les migraines.</p></div>"
+                  }
+                },
+                {
+                  "type": "custom-html",
+                  "id": "bienfait-4",
+                  "props": {
+                    "html": "<div style=\"background:rgba(255,255,255,0.06);border:1px solid rgba(201,168,76,0.2);border-radius:10px;padding:32px 28px;\"><div style=\"width:52px;height:52px;border-radius:10px;background:rgba(201,168,76,0.15);display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin-bottom:20px;\">🧴</div><h3 style=\"font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:600;color:#f5f0e8;margin:0 0 10px;\">Peau &amp; Beauté</h3><p style=\"font-size:0.875rem;color:rgba(245,240,232,0.6);line-height:1.65;margin:0;\">Puissant antioxydant, le CBD apaise les peaux réactives, réduit les rougeurs et combat le vieillissement cutané.</p></div>"
+                  }
+                },
+                {
+                  "type": "custom-html",
+                  "id": "bienfait-5",
+                  "props": {
+                    "html": "<div style=\"background:rgba(255,255,255,0.06);border:1px solid rgba(201,168,76,0.2);border-radius:10px;padding:32px 28px;\"><div style=\"width:52px;height:52px;border-radius:10px;background:rgba(201,168,76,0.15);display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin-bottom:20px;\">🏃</div><h3 style=\"font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:600;color:#f5f0e8;margin:0 0 10px;\">Récupération sportive</h3><p style=\"font-size:0.875rem;color:rgba(245,240,232,0.6);line-height:1.65;margin:0;\">Aide à la récupération musculaire après l'effort, réduit les courbatures et favorise la régénération cellulaire.</p></div>"
+                  }
+                },
+                {
+                  "type": "custom-html",
+                  "id": "bienfait-6",
+                  "props": {
+                    "html": "<div style=\"background:rgba(255,255,255,0.06);border:1px solid rgba(201,168,76,0.2);border-radius:10px;padding:32px 28px;\"><div style=\"width:52px;height:52px;border-radius:10px;background:rgba(201,168,76,0.15);display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin-bottom:20px;\">🧠</div><h3 style=\"font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:600;color:#f5f0e8;margin:0 0 10px;\">Concentration &amp; Clarté</h3><p style=\"font-size:0.875rem;color:rgba(245,240,232,0.6);line-height:1.65;margin:0;\">Sans effet psychoactif, le CBD aide à maintenir la concentration et la clarté mentale tout au long de la journée.</p></div>"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+
+        {
+          "type": "section",
+          "id": "sec-process",
+          "props": {
+            "backgroundColor": "#fafaf5",
+            "paddingTop": 96,
+            "paddingBottom": 96,
+            "maxWidth": 1280,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "custom-html",
+              "id": "process-header",
+              "props": {
+                "html": "<div style=\"text-align:center;margin-bottom:56px;\"><div style=\"display:inline-block;font-size:0.75rem;font-weight:600;color:#c9a84c;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:12px;\">Notre engagement qualité</div><h2 style=\"font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(2rem,4vw,2.75rem);font-weight:600;font-style:italic;color:#1a2e1a;margin:0;\">De la plante à votre porte</h2></div>"
+              }
+            },
+            {
+              "type": "timeline",
+              "id": "process-timeline",
+              "props": {
+                "items": [
+                  {
+                    "title": "Chanvre bio européen",
+                    "description": "Nos plantes de chanvre sont cultivées en agriculture biologique certifiée, sans pesticides ni OGM, dans les meilleures régions d'Europe.",
+                    "date": "Étape 1"
+                  },
+                  {
+                    "title": "Extraction CO₂ supercritique",
+                    "description": "La méthode d'extraction au CO₂ supercritique garantit une pureté maximale du CBD tout en préservant les terpènes et cannabinoïdes bénéfiques.",
+                    "date": "Étape 2"
+                  },
+                  {
+                    "title": "Analyse laboratoire indépendant",
+                    "description": "Chaque lot est analysé par un laboratoire tiers accrédité. Les résultats complets (COA) sont disponibles sur chaque page produit.",
+                    "date": "Étape 3"
+                  },
+                  {
+                    "title": "Livré chez vous",
+                    "description": "Emballage éco-responsable, livraison rapide et discrète. Satisfait ou remboursé sous 30 jours.",
+                    "date": "Étape 4"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+
+        {
+          "type": "section",
+          "id": "sec-counters",
+          "props": {
+            "backgroundColor": "#f0f5ec",
+            "paddingTop": 72,
+            "paddingBottom": 72,
+            "maxWidth": 1280,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "counter",
+              "id": "stats",
+              "props": {
+                "columns": 4,
+                "align": "center",
+                "valueColor": "#1a3d1a",
+                "labelColor": "#5a7a5a",
+                "items": [
+                  { "value": 10000, "suffix": "+", "label": "Clients satisfaits" },
+                  { "value": 4.9, "suffix": "/5", "label": "Note moyenne" },
+                  { "value": 50, "suffix": "+", "label": "Produits CBD" },
+                  { "value": 30, "suffix": "j", "label": "Satisfait ou remboursé" }
+                ]
+              }
+            }
+          ]
+        },
+
+        {
+          "type": "section",
+          "id": "sec-testimonials",
+          "props": {
+            "backgroundColor": "#fafaf5",
+            "paddingTop": 96,
+            "paddingBottom": 96,
+            "maxWidth": 1280,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "custom-html",
+              "id": "testi-header",
+              "props": {
+                "html": "<div style=\"text-align:center;margin-bottom:56px;\"><div style=\"display:inline-block;font-size:0.75rem;font-weight:600;color:#c9a84c;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:12px;\">Ils nous font confiance</div><h2 style=\"font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(2rem,4vw,2.75rem);font-weight:600;font-style:italic;color:#1a2e1a;margin:0;\">Ce qu'ils disent de nous</h2></div>"
+              }
+            },
+            {
+              "type": "testimonials",
+              "id": "testimonials-block",
+              "props": {
+                "layout": "grid",
+                "columns": 3,
+                "colorScheme": "auto",
+                "items": [
+                  {
+                    "name": "Sophie M.",
+                    "role": "Coach bien-être",
+                    "company": "",
+                    "content": "J'utilise l'huile CBD 10% depuis 3 mois pour gérer mon stress. Les résultats sont remarquables, je dors beaucoup mieux et je me sens plus sereine au quotidien. Qualité irréprochable !",
+                    "avatar": "",
+                    "rating": 5
+                  },
+                  {
+                    "name": "Thomas R.",
+                    "role": "Sportif amateur",
+                    "company": "",
+                    "content": "Les gummies récupération sont devenus indispensables après mes entraînements. Moins de courbatures, meilleure récupération. Et le goût est vraiment délicieux !",
+                    "avatar": "",
+                    "rating": 5
+                  },
+                  {
+                    "name": "Marie-Claire D.",
+                    "role": "Cliente fidèle",
+                    "company": "",
+                    "content": "La crème CBD a transformé ma routine beauté. Ma peau est apaisée, les rougeurs ont disparu. Le service client est également excellent, très réactif et à l'écoute.",
+                    "avatar": "",
+                    "rating": 5
+                  }
+                ]
+              }
+            }
+          ]
+        },
+
+        {
+          "type": "section",
+          "id": "sec-certifications",
+          "props": {
+            "backgroundColor": "#1a3d1a",
+            "paddingTop": 64,
+            "paddingBottom": 64,
+            "maxWidth": 1280,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "custom-html",
+              "id": "certif-content",
+              "props": {
+                "html": "<div style=\"text-align:center;margin-bottom:40px;\"><div style=\"font-size:0.75rem;font-weight:600;color:#c9a84c;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:12px;\">Certifications &amp; Conformité</div><h2 style=\"font-family:'Cormorant Garamond',Georgia,serif;font-size:2rem;font-weight:600;font-style:italic;color:#f5f0e8;margin:0;\">Qualité vérifiée, conformité garantie</h2></div><div style=\"display:flex;flex-wrap:wrap;justify-content:center;gap:20px;\"><div style=\"background:rgba(255,255,255,0.07);border:1px solid rgba(201,168,76,0.25);border-radius:10px;padding:24px 28px;text-align:center;min-width:160px;\"><div style=\"font-size:2rem;margin-bottom:10px;\">🌱</div><div style=\"font-size:0.8125rem;font-weight:600;color:#f5f0e8;margin-bottom:4px;\">Agriculture Bio</div><div style=\"font-size:0.75rem;color:rgba(245,240,232,0.5);\">Certifié EU</div></div><div style=\"background:rgba(255,255,255,0.07);border:1px solid rgba(201,168,76,0.25);border-radius:10px;padding:24px 28px;text-align:center;min-width:160px;\"><div style=\"font-size:2rem;margin-bottom:10px;\">🔬</div><div style=\"font-size:0.8125rem;font-weight:600;color:#f5f0e8;margin-bottom:4px;\">Labo Indépendant</div><div style=\"font-size:0.75rem;color:rgba(245,240,232,0.5);\">COA disponible</div></div><div style=\"background:rgba(255,255,255,0.07);border:1px solid rgba(201,168,76,0.25);border-radius:10px;padding:24px 28px;text-align:center;min-width:160px;\"><div style=\"font-size:2rem;margin-bottom:10px;\">✅</div><div style=\"font-size:0.8125rem;font-weight:600;color:#f5f0e8;margin-bottom:4px;\">&lt;0,3% THC</div><div style=\"font-size:0.75rem;color:rgba(245,240,232,0.5);\">Légal en France</div></div><div style=\"background:rgba(255,255,255,0.07);border:1px solid rgba(201,168,76,0.25);border-radius:10px;padding:24px 28px;text-align:center;min-width:160px;\"><div style=\"font-size:2rem;margin-bottom:10px;\">🏭</div><div style=\"font-size:0.8125rem;font-weight:600;color:#f5f0e8;margin-bottom:4px;\">GMP Certifié</div><div style=\"font-size:0.75rem;color:rgba(245,240,232,0.5);\">Bonne pratique</div></div><div style=\"background:rgba(255,255,255,0.07);border:1px solid rgba(201,168,76,0.25);border-radius:10px;padding:24px 28px;text-align:center;min-width:160px;\"><div style=\"font-size:2rem;margin-bottom:10px;\">🚫</div><div style=\"font-size:0.8125rem;font-weight:600;color:#f5f0e8;margin-bottom:4px;\">Sans additifs</div><div style=\"font-size:0.75rem;color:rgba(245,240,232,0.5);\">100% naturel</div></div></div>"
+              }
+            }
+          ]
+        },
+
+        {
+          "type": "section",
+          "id": "sec-faq",
+          "props": {
+            "backgroundColor": "#fafaf5",
+            "paddingTop": 96,
+            "paddingBottom": 96,
+            "maxWidth": 800,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "custom-html",
+              "id": "faq-header",
+              "props": {
+                "html": "<div style=\"text-align:center;margin-bottom:48px;\"><div style=\"display:inline-block;font-size:0.75rem;font-weight:600;color:#c9a84c;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:12px;\">Questions fréquentes</div><h2 style=\"font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(2rem,4vw,2.5rem);font-weight:600;font-style:italic;color:#1a2e1a;margin:0;\">Tout ce que vous devez savoir</h2></div>"
+              }
+            },
+            {
+              "type": "accordion",
+              "id": "faq-accordion",
+              "props": {
+                "items": [
+                  {
+                    "title": "Le CBD est-il légal en France ?",
+                    "content": "Oui, le CBD (cannabidiol) est légal en France et dans l'Union Européenne à condition que sa teneur en THC soit inférieure à 0,3%. Tous nos produits respectent cette réglementation et sont accompagnés de certificats d'analyse laboratoire."
+                  },
+                  {
+                    "title": "Le CBD fait-il planer ou crée-t-il une dépendance ?",
+                    "content": "Non. Le CBD n'a aucun effet psychoactif. Contrairement au THC, il n'altère pas la conscience et ne crée pas de dépendance. L'OMS a d'ailleurs confirmé que le CBD n'est pas susceptible d'entraîner un abus ou une dépendance."
+                  },
+                  {
+                    "title": "Comment choisir la concentration de CBD adaptée ?",
+                    "content": "Pour débuter, nous recommandons une concentration de 5 à 10%. Pour les personnes ayant des besoins plus importants (douleurs chroniques, anxiété sévère), des concentrations de 15 à 30% peuvent être plus appropriées. Commencez toujours par une faible dose et augmentez progressivement."
+                  },
+                  {
+                    "title": "Quels sont les délais et modalités de livraison ?",
+                    "content": "Nous livrons en France métropolitaine et dans l'UE. La livraison est offerte dès 49€ d'achat. Les commandes sont expédiées sous 24-48h (jours ouvrés) en colissimo suivi. Nous proposons aussi la livraison express en 24h."
+                  },
+                  {
+                    "title": "Comment sont vérifiés vos produits ?",
+                    "content": "Chaque lot de production est analysé par un laboratoire indépendant accrédité. Les certificats d'analyse (COA) sont disponibles sur chaque page produit. Ils vérifient le taux de CBD, la teneur en THC, l'absence de pesticides, métaux lourds et solvants résiduels."
+                  },
+                  {
+                    "title": "Politique de retour et remboursement ?",
+                    "content": "Vous disposez de 30 jours après réception pour retourner un produit non ouvert. Pour les produits entamés, si vous n'êtes pas satisfait pour quelque raison que ce soit, contactez notre service client — nous trouverons une solution."
+                  }
+                ]
+              }
+            }
+          ]
+        },
+
+        {
+          "type": "section",
+          "id": "sec-newsletter",
+          "props": {
+            "backgroundColor": "#f0f5ec",
+            "paddingTop": 80,
+            "paddingBottom": 80,
+            "maxWidth": 700,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "custom-html",
+              "id": "newsletter-block",
+              "props": {
+                "html": "<div style=\"text-align:center;\"><div style=\"display:inline-block;font-size:0.75rem;font-weight:600;color:#c9a84c;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:12px;\">Newsletter</div><h2 style=\"font-family:'Cormorant Garamond',Georgia,serif;font-size:2.25rem;font-weight:600;font-style:italic;color:#1a2e1a;margin:0 0 14px;\">Rejoignez la communauté Terra</h2><p style=\"color:#5a7a5a;font-size:0.9375rem;margin:0 0 32px;line-height:1.65;\">Conseils bien-être, nouveautés, offres exclusives et guides CBD — directement dans votre boîte mail.</p><form style=\"display:flex;gap:10px;max-width:480px;margin:0 auto;\" onsubmit=\"return false;\"><input type='email' placeholder='votre@email.com' style=\"flex:1;padding:13px 18px;border:1.5px solid #c8ddc8;border-radius:6px;font-size:0.9375rem;outline:none;background:#fff;color:#1a2e1a;\" /><button type='submit' style=\"background:#1a3d1a;color:#f5f0e8;border:none;padding:13px 24px;border-radius:6px;font-weight:600;font-size:0.9375rem;cursor:pointer;white-space:nowrap;\">S'inscrire</button></form><p style=\"font-size:0.75rem;color:#5a7a5a;margin-top:14px;\">Pas de spam. Désabonnement en 1 clic.</p></div>"
+              }
+            }
+          ]
+        },
+
+        {
+          "type": "section",
+          "id": "sec-cta",
+          "props": {
+            "backgroundColor": "#0d1f0d",
+            "paddingTop": 96,
+            "paddingBottom": 96,
+            "maxWidth": 800,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "custom-html",
+              "id": "cta-content",
+              "props": {
+                "html": "<div style=\"text-align:center;\"><div style=\"display:inline-block;font-size:0.75rem;font-weight:600;color:#c9a84c;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:16px;\">Commencez votre parcours</div><h2 style=\"font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(2.25rem,4vw,3rem);font-weight:600;font-style:italic;color:#f5f0e8;margin:0 0 18px;line-height:1.2;\">Prêt à prendre soin<br>de vous naturellement ?</h2><p style=\"color:rgba(245,240,232,0.65);font-size:1rem;margin:0 0 40px;line-height:1.65;\">Rejoignez plus de 10 000 clients qui font confiance à Terra CBD pour leur bien-être quotidien.</p><div style=\"display:flex;flex-wrap:wrap;justify-content:center;gap:12px;\"><a href='/boutique' style=\"display:inline-flex;align-items:center;gap:8px;background:#c9a84c;color:#0d1f0d;font-weight:700;font-size:0.9375rem;padding:15px 32px;border-radius:6px;text-decoration:none;\">Découvrir la boutique →</a><a href='/a-propos' style=\"display:inline-flex;align-items:center;gap:8px;background:transparent;color:#f5f0e8;font-weight:500;font-size:0.9375rem;padding:15px 32px;border-radius:6px;border:1px solid rgba(245,240,232,0.3);text-decoration:none;\">Notre histoire</a></div></div>"
+              }
+            }
+          ]
+        },
+
+        {
+          "type": "section",
+          "id": "sec-legal",
+          "props": {
+            "backgroundColor": "#0a1a0a",
+            "paddingTop": 32,
+            "paddingBottom": 32,
+            "maxWidth": 1280,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "custom-html",
+              "id": "legal-mention",
+              "props": {
+                "html": "<p style=\"font-size:0.75rem;color:rgba(245,240,232,0.35);line-height:1.6;text-align:center;max-width:900px;margin:0 auto;\">Nos produits contiennent moins de 0,3% de THC conformément à la réglementation européenne. Ils ne sont pas destinés à diagnostiquer, traiter, guérir ou prévenir une maladie. Réservés aux adultes de plus de 18 ans. Consultez un médecin avant utilisation si vous êtes enceinte, allaitante ou sous traitement médical. Ces produits ne doivent pas être utilisés comme substitut à un traitement médical prescrit.</p>"
+              }
+            }
+          ]
+        }
+
+      ]
+    }
+  },
+
+  {
+    "id": "page-boutique",
+    "title": "Boutique",
+    "slug": "boutique",
+    "layout": "full-width",
+    "status": "published",
+    "order": 1,
+    "meta_title": "Boutique CBD — Huiles, Gummies, Cosmétiques | Terra CBD",
+    "meta_description": "Parcourez notre gamme complète de produits CBD premium : huiles, gummies, cosmétiques, infusions et coffrets. Chanvre bio européen, qualité certifiée.",
+    "content": {
+      "blocks": [
+        {
+          "type": "section",
+          "id": "terra-boutique-hero",
+          "props": {
+            "backgroundColor": "#0d1f0d",
+            "paddingTop": 80,
+            "paddingBottom": 80,
+            "maxWidth": 1280,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "terra-boutique-title",
+              "props": {
+                "level": 1,
+                "text": "Notre boutique CBD",
+                "align": "center",
+                "color": "#f5f0e8",
+                "fontFamily": "Cormorant Garamond"
+              }
+            },
+            {
+              "type": "text",
+              "id": "terra-boutique-subtitle",
+              "props": {
+                "content": "<p style=\"text-align:center;color:rgba(245,240,232,0.7);max-width:600px;margin:16px auto 0;\">Des produits CBD naturels, issus de chanvre bio européen, testés en laboratoire indépendant. Trouvez celui qui correspond à vos besoins.</p>"
+              }
+            }
+          ]
+        },
+
+        {
+          "type": "section",
+          "id": "terra-boutique-categories",
+          "props": {
+            "backgroundColor": "#fafaf5",
+            "paddingTop": 64,
+            "paddingBottom": 32,
+            "maxWidth": 1280,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "terra-boutique-cat-title",
+              "props": {
+                "level": 2,
+                "text": "Nos catégories",
+                "align": "center",
+                "color": "#1a2e1a",
+                "fontFamily": "Cormorant Garamond"
+              }
+            },
+            {
+              "type": "spacer",
+              "id": "terra-boutique-cat-spacer",
+              "props": { "height": 40 }
+            },
+            {
+              "type": "grid",
+              "id": "terra-boutique-cat-grid",
+              "props": {
+                "columns": 3,
+                "gap": 24
+              },
+              "children": [
+                {
+                  "type": "custom-html",
+                  "id": "terra-cat-huiles",
+                  "props": {
+                    "html": "<a href='/boutique?category=huiles' style=\"display:block;text-decoration:none;\"><div style=\"background:linear-gradient(145deg,#e8f5e8,#d4ecd4);border-radius:12px;padding:40px 24px;text-align:center;transition:transform 0.2s;\"><div style=\"font-size:3rem;margin-bottom:16px;\">🌿</div><h3 style=\"font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;color:#1a2e1a;margin:0 0 8px;\">Huiles CBD</h3><p style=\"font-size:0.875rem;color:#5a7a5a;margin:0;\">Spectre complet, 10% à 30%</p></div></a>"
+                  }
+                },
+                {
+                  "type": "custom-html",
+                  "id": "terra-cat-gummies",
+                  "props": {
+                    "html": "<a href='/boutique?category=gummies' style=\"display:block;text-decoration:none;\"><div style=\"background:linear-gradient(145deg,#fdf8f0,#fdf4e8);border-radius:12px;padding:40px 24px;text-align:center;transition:transform 0.2s;\"><div style=\"font-size:3rem;margin-bottom:16px;\">🍬</div><h3 style=\"font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;color:#1a2e1a;margin:0 0 8px;\">Gummies</h3><p style=\"font-size:0.875rem;color:#5a7a5a;margin:0;\">Fruits rouges &amp; agrumes</p></div></a>"
+                  }
+                },
+                {
+                  "type": "custom-html",
+                  "id": "terra-cat-cosmetiques",
+                  "props": {
+                    "html": "<a href='/boutique?category=cosmetiques' style=\"display:block;text-decoration:none;\"><div style=\"background:linear-gradient(145deg,#f5f0e8,#efe8d8);border-radius:12px;padding:40px 24px;text-align:center;transition:transform 0.2s;\"><div style=\"font-size:3rem;margin-bottom:16px;\">✨</div><h3 style=\"font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;color:#1a2e1a;margin:0 0 8px;\">Cosmétiques</h3><p style=\"font-size:0.875rem;color:#5a7a5a;margin:0;\">Crèmes &amp; baumes au CBD</p></div></a>"
+                  }
+                },
+                {
+                  "type": "custom-html",
+                  "id": "terra-cat-infusions",
+                  "props": {
+                    "html": "<a href='/boutique?category=infusions' style=\"display:block;text-decoration:none;\"><div style=\"background:linear-gradient(145deg,#e8ede8,#dce8dc);border-radius:12px;padding:40px 24px;text-align:center;transition:transform 0.2s;\"><div style=\"font-size:3rem;margin-bottom:16px;\">🍵</div><h3 style=\"font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;color:#1a2e1a;margin:0 0 8px;\">Infusions</h3><p style=\"font-size:0.875rem;color:#5a7a5a;margin:0;\">Camomille &amp; menthe-citron</p></div></a>"
+                  }
+                },
+                {
+                  "type": "custom-html",
+                  "id": "terra-cat-capsules",
+                  "props": {
+                    "html": "<a href='/boutique?category=capsules' style=\"display:block;text-decoration:none;\"><div style=\"background:linear-gradient(145deg,#f0f0f5,#e8e8f0);border-radius:12px;padding:40px 24px;text-align:center;transition:transform 0.2s;\"><div style=\"font-size:3rem;margin-bottom:16px;\">💊</div><h3 style=\"font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;color:#1a2e1a;margin:0 0 8px;\">Capsules</h3><p style=\"font-size:0.875rem;color:#5a7a5a;margin:0;\">Dosage précis, praticité maximale</p></div></a>"
+                  }
+                },
+                {
+                  "type": "custom-html",
+                  "id": "terra-cat-coffrets",
+                  "props": {
+                    "html": "<a href='/boutique?category=coffrets' style=\"display:block;text-decoration:none;\"><div style=\"background:linear-gradient(145deg,#f5efe8,#efe4d0);border-radius:12px;padding:40px 24px;text-align:center;transition:transform 0.2s;\"><div style=\"font-size:3rem;margin-bottom:16px;\">🎁</div><h3 style=\"font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;color:#1a2e1a;margin:0 0 8px;\">Coffrets</h3><p style=\"font-size:0.875rem;color:#5a7a5a;margin:0;\">Packs découverte &amp; cadeaux</p></div></a>"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+
+        {
+          "type": "section",
+          "id": "terra-boutique-products",
+          "props": {
+            "backgroundColor": "#fafaf5",
+            "paddingTop": 48,
+            "paddingBottom": 96,
+            "maxWidth": 1280,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "terra-boutique-all-title",
+              "props": {
+                "level": 2,
+                "text": "Tous nos produits",
+                "align": "center",
+                "color": "#1a2e1a",
+                "fontFamily": "Cormorant Garamond"
+              }
+            },
+            {
+              "type": "text",
+              "id": "terra-boutique-all-desc",
+              "props": {
+                "content": "<p style=\"text-align:center;color:#5a7a5a;max-width:500px;margin:12px auto 40px;\">Chaque produit est accompagné de son certificat d'analyse laboratoire. Livraison offerte dès 49 euros d'achat.</p>"
+              }
+            },
+            {
+              "type": "grid",
+              "id": "terra-boutique-product-grid",
+              "props": {
+                "columns": 4,
+                "gap": 24
+              },
+              "children": [
+                {
+                  "type": "custom-html",
+                  "id": "terra-prod-oil10",
+                  "props": {
+                    "html": "<div style=\"background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 16px rgba(26,61,26,0.07);\"><div style=\"aspect-ratio:1/1;background:linear-gradient(145deg,#e8f5e8,#f0f5ec);display:flex;align-items:center;justify-content:center;position:relative;\"><div style=\"position:absolute;top:10px;left:10px;background:#c9a84c;color:#0d1f0d;font-size:0.65rem;font-weight:700;padding:3px 8px;border-radius:4px;\">-20%</div><div style=\"font-size:3.5rem;\">🌿</div></div><div style=\"padding:16px;\"><div style=\"font-size:0.7rem;color:#5a7a5a;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;\">Huile CBD</div><h3 style=\"font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:#1a2e1a;margin:0 0 8px;\">Huile CBD Premium 10%</h3><div style=\"display:flex;align-items:center;gap:8px;\"><span style=\"font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:600;color:#1a3d1a;\">39,90 €</span><span style=\"font-size:0.8rem;color:#999;text-decoration:line-through;\">49,90 €</span></div></div></div>"
+                  }
+                },
+                {
+                  "type": "custom-html",
+                  "id": "terra-prod-oil20",
+                  "props": {
+                    "html": "<div style=\"background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 16px rgba(26,61,26,0.07);\"><div style=\"aspect-ratio:1/1;background:linear-gradient(145deg,#e0f0e0,#ecf5e8);display:flex;align-items:center;justify-content:center;position:relative;\"><div style=\"position:absolute;top:10px;left:10px;background:#c9a84c;color:#0d1f0d;font-size:0.65rem;font-weight:700;padding:3px 8px;border-radius:4px;\">-20%</div><div style=\"position:absolute;top:10px;right:10px;background:#1a3d1a;color:#f5f0e8;font-size:0.65rem;font-weight:700;padding:3px 8px;border-radius:4px;\">BESTSELLER</div><div style=\"font-size:3.5rem;\">🌿</div></div><div style=\"padding:16px;\"><div style=\"font-size:0.7rem;color:#5a7a5a;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;\">Huile CBD</div><h3 style=\"font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:#1a2e1a;margin:0 0 8px;\">Huile CBD Premium 20%</h3><div style=\"display:flex;align-items:center;gap:8px;\"><span style=\"font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:600;color:#1a3d1a;\">59,90 €</span><span style=\"font-size:0.8rem;color:#999;text-decoration:line-through;\">74,90 €</span></div></div></div>"
+                  }
+                },
+                {
+                  "type": "custom-html",
+                  "id": "terra-prod-oil30",
+                  "props": {
+                    "html": "<div style=\"background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 16px rgba(26,61,26,0.07);\"><div style=\"aspect-ratio:1/1;background:linear-gradient(145deg,#d8ecd8,#e8f2e0);display:flex;align-items:center;justify-content:center;position:relative;\"><div style=\"position:absolute;top:10px;left:10px;background:#c9a84c;color:#0d1f0d;font-size:0.65rem;font-weight:700;padding:3px 8px;border-radius:4px;\">-20%</div><div style=\"font-size:3.5rem;\">🌿</div></div><div style=\"padding:16px;\"><div style=\"font-size:0.7rem;color:#5a7a5a;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;\">Huile CBD</div><h3 style=\"font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:#1a2e1a;margin:0 0 8px;\">Huile CBD Premium 30%</h3><div style=\"display:flex;align-items:center;gap:8px;\"><span style=\"font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:600;color:#1a3d1a;\">79,90 €</span><span style=\"font-size:0.8rem;color:#999;text-decoration:line-through;\">99,90 €</span></div></div></div>"
+                  }
+                },
+                {
+                  "type": "custom-html",
+                  "id": "terra-prod-gummies-fr",
+                  "props": {
+                    "html": "<div style=\"background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 16px rgba(26,61,26,0.07);\"><div style=\"aspect-ratio:1/1;background:linear-gradient(145deg,#fdf8f0,#fdf4e8);display:flex;align-items:center;justify-content:center;position:relative;\"><div style=\"position:absolute;top:10px;right:10px;background:#c9a84c;color:#0d1f0d;font-size:0.65rem;font-weight:700;padding:3px 8px;border-radius:4px;\">NOUVEAU</div><div style=\"font-size:3.5rem;\">🍬</div></div><div style=\"padding:16px;\"><div style=\"font-size:0.7rem;color:#5a7a5a;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;\">Gummies</div><h3 style=\"font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:#1a2e1a;margin:0 0 8px;\">Gummies CBD Fruits Rouges</h3><div><span style=\"font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:600;color:#1a3d1a;\">24,90 €</span></div></div></div>"
+                  }
+                },
+                {
+                  "type": "custom-html",
+                  "id": "terra-prod-gummies-ag",
+                  "props": {
+                    "html": "<div style=\"background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 16px rgba(26,61,26,0.07);\"><div style=\"aspect-ratio:1/1;background:linear-gradient(145deg,#fef9f0,#fef5e5);display:flex;align-items:center;justify-content:center;\"><div style=\"font-size:3.5rem;\">🍊</div></div><div style=\"padding:16px;\"><div style=\"font-size:0.7rem;color:#5a7a5a;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;\">Gummies</div><h3 style=\"font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:#1a2e1a;margin:0 0 8px;\">Gummies CBD Agrumes</h3><div><span style=\"font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:600;color:#1a3d1a;\">24,90 €</span></div></div></div>"
+                  }
+                },
+                {
+                  "type": "custom-html",
+                  "id": "terra-prod-creme",
+                  "props": {
+                    "html": "<div style=\"background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 16px rgba(26,61,26,0.07);\"><div style=\"aspect-ratio:1/1;background:linear-gradient(145deg,#f5f0e8,#efe8d8);display:flex;align-items:center;justify-content:center;\"><div style=\"font-size:3.5rem;\">✨</div></div><div style=\"padding:16px;\"><div style=\"font-size:0.7rem;color:#5a7a5a;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;\">Cosmétique</div><h3 style=\"font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:#1a2e1a;margin:0 0 8px;\">Crème Visage CBD Hydratante</h3><div><span style=\"font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:600;color:#1a3d1a;\">34,90 €</span></div></div></div>"
+                  }
+                },
+                {
+                  "type": "custom-html",
+                  "id": "terra-prod-baume",
+                  "props": {
+                    "html": "<div style=\"background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 16px rgba(26,61,26,0.07);\"><div style=\"aspect-ratio:1/1;background:linear-gradient(145deg,#e8f0e0,#dce8d4);display:flex;align-items:center;justify-content:center;\"><div style=\"font-size:3.5rem;\">💆</div></div><div style=\"padding:16px;\"><div style=\"font-size:0.7rem;color:#5a7a5a;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;\">Cosmétique</div><h3 style=\"font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:#1a2e1a;margin:0 0 8px;\">Baume Musculaire CBD</h3><div><span style=\"font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:600;color:#1a3d1a;\">29,90 €</span></div></div></div>"
+                  }
+                },
+                {
+                  "type": "custom-html",
+                  "id": "terra-prod-infusion-cam",
+                  "props": {
+                    "html": "<div style=\"background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 16px rgba(26,61,26,0.07);\"><div style=\"aspect-ratio:1/1;background:linear-gradient(145deg,#f5f0e0,#ede8d0);display:flex;align-items:center;justify-content:center;\"><div style=\"font-size:3.5rem;\">🍵</div></div><div style=\"padding:16px;\"><div style=\"font-size:0.7rem;color:#5a7a5a;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;\">Infusion</div><h3 style=\"font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:#1a2e1a;margin:0 0 8px;\">Infusion CBD Camomille</h3><div><span style=\"font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:600;color:#1a3d1a;\">14,90 €</span></div></div></div>"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+
+        {
+          "type": "section",
+          "id": "terra-boutique-reassurance",
+          "props": {
+            "backgroundColor": "#1a3d1a",
+            "paddingTop": 56,
+            "paddingBottom": 56,
+            "maxWidth": 1280,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "grid",
+              "id": "terra-boutique-reassurance-grid",
+              "props": {
+                "columns": 4,
+                "gap": 24
+              },
+              "children": [
+                {
+                  "type": "icon-box",
+                  "id": "terra-reassure-1",
+                  "props": {
+                    "icon": "truck",
+                    "title": "Livraison offerte",
+                    "description": "Dès 49 euros d'achat en France métropolitaine",
+                    "align": "center",
+                    "iconColor": "#c9a84c",
+                    "titleColor": "#f5f0e8",
+                    "textColor": "rgba(245,240,232,0.6)"
+                  }
+                },
+                {
+                  "type": "icon-box",
+                  "id": "terra-reassure-2",
+                  "props": {
+                    "icon": "shield-check",
+                    "title": "Paiement sécurisé",
+                    "description": "CB, PayPal, virement. Toutes vos données sont chiffrées",
+                    "align": "center",
+                    "iconColor": "#c9a84c",
+                    "titleColor": "#f5f0e8",
+                    "textColor": "rgba(245,240,232,0.6)"
+                  }
+                },
+                {
+                  "type": "icon-box",
+                  "id": "terra-reassure-3",
+                  "props": {
+                    "icon": "refresh-cw",
+                    "title": "Satisfait ou remboursé",
+                    "description": "30 jours pour changer d'avis, retour gratuit",
+                    "align": "center",
+                    "iconColor": "#c9a84c",
+                    "titleColor": "#f5f0e8",
+                    "textColor": "rgba(245,240,232,0.6)"
+                  }
+                },
+                {
+                  "type": "icon-box",
+                  "id": "terra-reassure-4",
+                  "props": {
+                    "icon": "headphones",
+                    "title": "Service client",
+                    "description": "Disponible du lundi au vendredi, 9h-18h par email et chat",
+                    "align": "center",
+                    "iconColor": "#c9a84c",
+                    "titleColor": "#f5f0e8",
+                    "textColor": "rgba(245,240,232,0.6)"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+
+  {
+    "id": "page-a-propos",
+    "title": "À propos",
+    "slug": "a-propos",
+    "layout": "full-width",
+    "status": "published",
+    "order": 2,
+    "meta_title": "À propos — Notre histoire & nos valeurs | Terra CBD",
+    "meta_description": "Découvrez l'histoire de Terra CBD : notre engagement pour un CBD bio, naturel et français. Rencontrez notre équipe passionnée par le bien-être naturel.",
+    "content": {
+      "blocks": [
+        {
+          "type": "section",
+          "id": "terra-apropos-hero",
+          "props": {
+            "backgroundColor": "#0d1f0d",
+            "paddingTop": 80,
+            "paddingBottom": 80,
+            "maxWidth": 800,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "terra-apropos-title",
+              "props": {
+                "level": 1,
+                "text": "Notre histoire",
+                "align": "center",
+                "color": "#f5f0e8",
+                "fontFamily": "Cormorant Garamond"
+              }
+            },
+            {
+              "type": "text",
+              "id": "terra-apropos-intro",
+              "props": {
+                "content": "<p style=\"text-align:center;color:rgba(245,240,232,0.7);max-width:600px;margin:16px auto 0;font-size:1.0625rem;line-height:1.7;\">Terra CBD est née d'une conviction simple : la nature offre les meilleures solutions pour notre bien-être quotidien. Depuis 2021, nous rendons le CBD premium accessible à tous.</p>"
+              }
+            }
+          ]
+        },
+
+        {
+          "type": "section",
+          "id": "terra-apropos-story",
+          "props": {
+            "backgroundColor": "#fafaf5",
+            "paddingTop": 96,
+            "paddingBottom": 96,
+            "maxWidth": 1280,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "grid",
+              "id": "terra-apropos-story-grid",
+              "props": {
+                "columns": 2,
+                "gap": 64
+              },
+              "children": [
+                {
+                  "type": "custom-html",
+                  "id": "terra-apropos-story-img",
+                  "props": {
+                    "html": "<div style=\"background:linear-gradient(145deg,#e8f5e8,#d4ecd4);border-radius:16px;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;\"><div style=\"text-align:center;\"><div style=\"font-size:5rem;margin-bottom:16px;\">🌱</div><p style=\"font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-style:italic;color:#1a3d1a;\">Depuis 2021</p></div></div>"
+                  }
+                },
+                {
+                  "type": "custom-html",
+                  "id": "terra-apropos-story-text",
+                  "props": {
+                    "html": "<div style=\"display:flex;flex-direction:column;justify-content:center;height:100%;\"><div style=\"font-size:0.75rem;font-weight:600;color:#c9a84c;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:12px;\">Notre genèse</div><h2 style=\"font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:600;font-style:italic;color:#1a2e1a;margin:0 0 20px;\">Du champ à votre bien-être</h2><p style=\"color:#5a7a5a;line-height:1.75;margin:0 0 16px;\">Tout a commencé en 2021, lorsque notre fondatrice, Camille Durand, a découvert les bienfaits du CBD pour gérer son stress chronique. Déçue par la qualité des produits disponibles sur le marché français, elle a décidé de créer Terra CBD.</p><p style=\"color:#5a7a5a;line-height:1.75;margin:0 0 16px;\">Notre mission est claire : proposer des produits CBD d'une qualité irréprochable, issus de chanvre biologique cultivé en Europe, extraits selon les méthodes les plus pures et testés rigoureusement par des laboratoires indépendants.</p><p style=\"color:#5a7a5a;line-height:1.75;margin:0;\">Aujourd'hui, Terra CBD c'est plus de 10 000 clients satisfaits, 50 produits soigneusement formulés et une équipe de 12 passionnés du bien-être naturel.</p></div>"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+
+        {
+          "type": "section",
+          "id": "terra-apropos-values",
+          "props": {
+            "backgroundColor": "#1a3d1a",
+            "paddingTop": 96,
+            "paddingBottom": 96,
+            "maxWidth": 1280,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "terra-apropos-values-title",
+              "props": {
+                "level": 2,
+                "text": "Nos valeurs",
+                "align": "center",
+                "color": "#f5f0e8",
+                "fontFamily": "Cormorant Garamond"
+              }
+            },
+            {
+              "type": "spacer",
+              "id": "terra-apropos-values-spacer",
+              "props": { "height": 48 }
+            },
+            {
+              "type": "grid",
+              "id": "terra-apropos-values-grid",
+              "props": {
+                "columns": 3,
+                "gap": 28
+              },
+              "children": [
+                {
+                  "type": "icon-box",
+                  "id": "terra-value-bio",
+                  "props": {
+                    "icon": "leaf",
+                    "title": "100% Biologique",
+                    "description": "Notre chanvre est cultivé en agriculture biologique certifiée, sans pesticides, herbicides ni OGM. Nous privilégions les partenariats avec des producteurs européens engagés dans une démarche responsable.",
+                    "align": "center",
+                    "iconColor": "#c9a84c",
+                    "titleColor": "#f5f0e8",
+                    "textColor": "rgba(245,240,232,0.6)"
+                  }
+                },
+                {
+                  "type": "icon-box",
+                  "id": "terra-value-transparence",
+                  "props": {
+                    "icon": "eye",
+                    "title": "Transparence totale",
+                    "description": "Chaque lot est analysé par un laboratoire indépendant. Les certificats d'analyse sont accessibles sur chaque fiche produit. Nous n'avons rien à cacher : ingrédients, origine, procédés de fabrication.",
+                    "align": "center",
+                    "iconColor": "#c9a84c",
+                    "titleColor": "#f5f0e8",
+                    "textColor": "rgba(245,240,232,0.6)"
+                  }
+                },
+                {
+                  "type": "icon-box",
+                  "id": "terra-value-france",
+                  "props": {
+                    "icon": "map-pin",
+                    "title": "Fabriqué en France",
+                    "description": "Nos formulations sont élaborées et conditionnées dans notre laboratoire en Provence. Nous soutenons l'économie locale et réduisons notre empreinte carbone en limitant les transports.",
+                    "align": "center",
+                    "iconColor": "#c9a84c",
+                    "titleColor": "#f5f0e8",
+                    "textColor": "rgba(245,240,232,0.6)"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+
+        {
+          "type": "section",
+          "id": "terra-apropos-team",
+          "props": {
+            "backgroundColor": "#fafaf5",
+            "paddingTop": 96,
+            "paddingBottom": 96,
+            "maxWidth": 1280,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "terra-apropos-team-title",
+              "props": {
+                "level": 2,
+                "text": "L'équipe Terra",
+                "align": "center",
+                "color": "#1a2e1a",
+                "fontFamily": "Cormorant Garamond"
+              }
+            },
+            {
+              "type": "text",
+              "id": "terra-apropos-team-desc",
+              "props": {
+                "content": "<p style=\"text-align:center;color:#5a7a5a;max-width:520px;margin:12px auto 48px;\">Une équipe de passionnés, réunie par la conviction que le bien-être naturel devrait être accessible à tous.</p>"
+              }
+            },
+            {
+              "type": "grid",
+              "id": "terra-apropos-team-grid",
+              "props": {
+                "columns": 4,
+                "gap": 24
+              },
+              "children": [
+                {
+                  "type": "custom-html",
+                  "id": "terra-team-1",
+                  "props": {
+                    "html": "<div style=\"text-align:center;\"><div style=\"width:140px;height:140px;border-radius:50%;background:linear-gradient(145deg,#e8f5e8,#d4ecd4);margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:3rem;\">👩</div><h3 style=\"font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600;color:#1a2e1a;margin:0 0 4px;\">Camille Durand</h3><p style=\"font-size:0.8rem;color:#c9a84c;font-weight:600;margin:0 0 8px;\">Fondatrice &amp; CEO</p><p style=\"font-size:0.8rem;color:#5a7a5a;line-height:1.5;margin:0;\">Passionnée de bien-être naturel et naturopathie certifiée</p></div>"
+                  }
+                },
+                {
+                  "type": "custom-html",
+                  "id": "terra-team-2",
+                  "props": {
+                    "html": "<div style=\"text-align:center;\"><div style=\"width:140px;height:140px;border-radius:50%;background:linear-gradient(145deg,#f5f0e8,#efe8d8);margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:3rem;\">👨</div><h3 style=\"font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600;color:#1a2e1a;margin:0 0 4px;\">Dr. Antoine Moreau</h3><p style=\"font-size:0.8rem;color:#c9a84c;font-weight:600;margin:0 0 8px;\">Directeur R&amp;D</p><p style=\"font-size:0.8rem;color:#5a7a5a;line-height:1.5;margin:0;\">Pharmacien, 15 ans d'expérience en phytothérapie</p></div>"
+                  }
+                },
+                {
+                  "type": "custom-html",
+                  "id": "terra-team-3",
+                  "props": {
+                    "html": "<div style=\"text-align:center;\"><div style=\"width:140px;height:140px;border-radius:50%;background:linear-gradient(145deg,#e8ede8,#dce8dc);margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:3rem;\">👩</div><h3 style=\"font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600;color:#1a2e1a;margin:0 0 4px;\">Léa Petit</h3><p style=\"font-size:0.8rem;color:#c9a84c;font-weight:600;margin:0 0 8px;\">Responsable Qualité</p><p style=\"font-size:0.8rem;color:#5a7a5a;line-height:1.5;margin:0;\">Ingénieure agroalimentaire, garante de nos certifications</p></div>"
+                  }
+                },
+                {
+                  "type": "custom-html",
+                  "id": "terra-team-4",
+                  "props": {
+                    "html": "<div style=\"text-align:center;\"><div style=\"width:140px;height:140px;border-radius:50%;background:linear-gradient(145deg,#f5efe8,#efe4d0);margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:3rem;\">👨</div><h3 style=\"font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600;color:#1a2e1a;margin:0 0 4px;\">Julien Bertrand</h3><p style=\"font-size:0.8rem;color:#c9a84c;font-weight:600;margin:0 0 8px;\">Service Client</p><p style=\"font-size:0.8rem;color:#5a7a5a;line-height:1.5;margin:0;\">Votre interlocuteur privilégié, à l'écoute de vos besoins</p></div>"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+
+        {
+          "type": "section",
+          "id": "terra-apropos-counters",
+          "props": {
+            "backgroundColor": "#f0f5ec",
+            "paddingTop": 72,
+            "paddingBottom": 72,
+            "maxWidth": 1280,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "counter",
+              "id": "terra-apropos-stats",
+              "props": {
+                "columns": 4,
+                "align": "center",
+                "valueColor": "#1a3d1a",
+                "labelColor": "#5a7a5a",
+                "items": [
+                  { "value": 2021, "label": "Année de création" },
+                  { "value": 12, "label": "Collaborateurs passionnés" },
+                  { "value": 50, "suffix": "+", "label": "Produits développés" },
+                  { "value": 10000, "suffix": "+", "label": "Clients heureux" }
+                ]
+              }
+            }
+          ]
+        },
+
+        {
+          "type": "section",
+          "id": "terra-apropos-cta",
+          "props": {
+            "backgroundColor": "#0d1f0d",
+            "paddingTop": 80,
+            "paddingBottom": 80,
+            "maxWidth": 700,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "terra-apropos-cta-title",
+              "props": {
+                "level": 2,
+                "text": "Envie de nous découvrir ?",
+                "align": "center",
+                "color": "#f5f0e8",
+                "fontFamily": "Cormorant Garamond"
+              }
+            },
+            {
+              "type": "text",
+              "id": "terra-apropos-cta-text",
+              "props": {
+                "content": "<p style=\"text-align:center;color:rgba(245,240,232,0.65);margin:12px auto 32px;max-width:500px;\">Parcourez notre boutique et trouvez le produit CBD qui correspond à vos besoins. Livraison offerte dès 49 euros.</p>"
+              }
+            },
+            {
+              "type": "button",
+              "id": "terra-apropos-cta-btn",
+              "props": {
+                "text": "Visiter la boutique",
+                "url": "/boutique",
+                "align": "center",
+                "variant": "primary",
+                "backgroundColor": "#c9a84c",
+                "textColor": "#0d1f0d"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+
+  {
+    "id": "page-blog",
+    "title": "Blog",
+    "slug": "blog",
+    "layout": "full-width",
+    "status": "published",
+    "order": 3,
+    "meta_title": "Blog — Guides, conseils CBD & bien-être | Terra CBD",
+    "meta_description": "Articles, guides et conseils sur le CBD, le bien-être naturel et la santé. Tout savoir sur l'utilisation du cannabidiol au quotidien.",
+    "content": {
+      "blocks": [
+        {
+          "type": "section",
+          "id": "terra-blog-hero",
+          "props": {
+            "backgroundColor": "#0d1f0d",
+            "paddingTop": 80,
+            "paddingBottom": 80,
+            "maxWidth": 800,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "terra-blog-title",
+              "props": {
+                "level": 1,
+                "text": "Le journal Terra",
+                "align": "center",
+                "color": "#f5f0e8",
+                "fontFamily": "Cormorant Garamond"
+              }
+            },
+            {
+              "type": "text",
+              "id": "terra-blog-intro",
+              "props": {
+                "content": "<p style=\"text-align:center;color:rgba(245,240,232,0.7);max-width:550px;margin:16px auto 0;\">Guides pratiques, actualités bien-être et conseils d'experts pour tirer le meilleur du CBD au quotidien.</p>"
+              }
+            }
+          ]
+        },
+
+        {
+          "type": "section",
+          "id": "terra-blog-content",
+          "props": {
+            "backgroundColor": "#fafaf5",
+            "paddingTop": 64,
+            "paddingBottom": 96,
+            "maxWidth": 1280,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "text",
+              "id": "terra-blog-placeholder",
+              "props": {
+                "content": "<p style=\"text-align:center;color:#5a7a5a;font-size:1.0625rem;margin:40px auto;max-width:600px;\">Les derniers articles de notre blog s'affichent automatiquement ici. Consultez nos guides CBD, nos conseils bien-être et les dernières actualités de la marque.</p>"
+              }
+            },
+            {
+              "type": "grid",
+              "id": "terra-blog-categories-grid",
+              "props": {
+                "columns": 5,
+                "gap": 16
+              },
+              "children": [
+                {
+                  "type": "button",
+                  "id": "terra-blog-cat-guide",
+                  "props": {
+                    "text": "Guides",
+                    "url": "/blog?category=guide",
+                    "variant": "outline",
+                    "align": "center",
+                    "textColor": "#1a3d1a"
+                  }
+                },
+                {
+                  "type": "button",
+                  "id": "terra-blog-cat-bienetre",
+                  "props": {
+                    "text": "Bien-être",
+                    "url": "/blog?category=bien-etre",
+                    "variant": "outline",
+                    "align": "center",
+                    "textColor": "#1a3d1a"
+                  }
+                },
+                {
+                  "type": "button",
+                  "id": "terra-blog-cat-sante",
+                  "props": {
+                    "text": "Santé",
+                    "url": "/blog?category=sante",
+                    "variant": "outline",
+                    "align": "center",
+                    "textColor": "#1a3d1a"
+                  }
+                },
+                {
+                  "type": "button",
+                  "id": "terra-blog-cat-marque",
+                  "props": {
+                    "text": "Notre marque",
+                    "url": "/blog?category=notre-marque",
+                    "variant": "outline",
+                    "align": "center",
+                    "textColor": "#1a3d1a"
+                  }
+                },
+                {
+                  "type": "button",
+                  "id": "terra-blog-cat-recettes",
+                  "props": {
+                    "text": "Recettes",
+                    "url": "/blog?category=recettes",
+                    "variant": "outline",
+                    "align": "center",
+                    "textColor": "#1a3d1a"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+
+        {
+          "type": "section",
+          "id": "terra-blog-newsletter",
+          "props": {
+            "backgroundColor": "#1a3d1a",
+            "paddingTop": 72,
+            "paddingBottom": 72,
+            "maxWidth": 700,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "terra-blog-newsletter-title",
+              "props": {
+                "level": 2,
+                "text": "Ne manquez aucun article",
+                "align": "center",
+                "color": "#f5f0e8",
+                "fontFamily": "Cormorant Garamond"
+              }
+            },
+            {
+              "type": "text",
+              "id": "terra-blog-newsletter-text",
+              "props": {
+                "content": "<p style=\"text-align:center;color:rgba(245,240,232,0.65);margin:12px auto 28px;max-width:450px;\">Inscrivez-vous à notre newsletter pour recevoir nos meilleurs articles et conseils CBD directement dans votre boîte mail.</p>"
+              }
+            },
+            {
+              "type": "button",
+              "id": "terra-blog-newsletter-btn",
+              "props": {
+                "text": "S'inscrire à la newsletter",
+                "url": "#newsletter",
+                "align": "center",
+                "variant": "primary",
+                "backgroundColor": "#c9a84c",
+                "textColor": "#0d1f0d"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+
+  {
+    "id": "page-faq",
+    "title": "FAQ",
+    "slug": "faq",
+    "layout": "full-width",
+    "status": "published",
+    "order": 4,
+    "meta_title": "Questions fréquentes — Tout savoir sur le CBD | Terra CBD",
+    "meta_description": "Retrouvez les réponses à toutes vos questions sur le CBD : légalité, dosage, utilisation, livraison, retours. Guide complet Terra CBD.",
+    "content": {
+      "blocks": [
+        {
+          "type": "section",
+          "id": "terra-faq-hero",
+          "props": {
+            "backgroundColor": "#0d1f0d",
+            "paddingTop": 80,
+            "paddingBottom": 80,
+            "maxWidth": 800,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "terra-faq-title",
+              "props": {
+                "level": 1,
+                "text": "Questions fréquentes",
+                "align": "center",
+                "color": "#f5f0e8",
+                "fontFamily": "Cormorant Garamond"
+              }
+            },
+            {
+              "type": "text",
+              "id": "terra-faq-intro",
+              "props": {
+                "content": "<p style=\"text-align:center;color:rgba(245,240,232,0.7);max-width:550px;margin:16px auto 0;\">Tout ce que vous devez savoir sur le CBD, nos produits et notre boutique. Si votre question n'est pas listée, contactez-nous.</p>"
+              }
+            }
+          ]
+        },
+
+        {
+          "type": "section",
+          "id": "terra-faq-general",
+          "props": {
+            "backgroundColor": "#fafaf5",
+            "paddingTop": 80,
+            "paddingBottom": 48,
+            "maxWidth": 800,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "terra-faq-general-title",
+              "props": {
+                "level": 2,
+                "text": "Le CBD en général",
+                "color": "#1a2e1a",
+                "fontFamily": "Cormorant Garamond"
+              }
+            },
+            {
+              "type": "spacer",
+              "id": "terra-faq-general-spacer",
+              "props": { "height": 24 }
+            },
+            {
+              "type": "accordion",
+              "id": "terra-faq-general-accordion",
+              "props": {
+                "items": [
+                  {
+                    "title": "Qu'est-ce que le CBD exactement ?",
+                    "content": "Le CBD (cannabidiol) est un composé naturellement présent dans le chanvre (Cannabis sativa L.). Contrairement au THC, le CBD n'a aucun effet psychotrope ou stupéfiant. Il est reconnu pour ses propriétés relaxantes, anti-inflammatoires et anxiolytiques. Le CBD agit en interagissant avec le système endocannabinoïde de notre corps, un réseau de récepteurs impliqués dans la régulation du stress, du sommeil, de l'humeur et de la douleur."
+                  },
+                  {
+                    "title": "Le CBD est-il légal en France et en Europe ?",
+                    "content": "Oui, le CBD est parfaitement légal en France depuis l'arrêté du 30 décembre 2021, confirmé par la décision de la Cour de Justice de l'Union Européenne (affaire Kanavape). La condition essentielle est que les produits contiennent moins de 0,3% de THC. Tous les produits Terra CBD respectent scrupuleusement cette réglementation et sont accompagnés de certificats d'analyse le prouvant."
+                  },
+                  {
+                    "title": "Le CBD peut-il me faire planer ou créer une dépendance ?",
+                    "content": "Absolument pas. Le CBD n'a aucun effet psychoactif : il ne modifie pas l'état de conscience et ne procure pas de sensation d'ivresse. L'Organisation Mondiale de la Santé (OMS) a confirmé en 2017 que le CBD pur ne présente pas de potentiel d'abus ni de dépendance. Vous pouvez utiliser nos produits en toute sérénité."
+                  },
+                  {
+                    "title": "Le CBD est-il détectable lors d'un test de dépistage ?",
+                    "content": "Les tests de dépistage routiers ou professionnels recherchent le THC, pas le CBD. Nos produits contiennent moins de 0,3% de THC, conformément à la réglementation. À ces concentrations infimes, un résultat positif est extrêmement improbable. Cependant, en cas de contrôles très fréquents, nous recommandons nos produits isolats CBD (0% THC) pour une tranquillité absolue."
+                  },
+                  {
+                    "title": "Quels sont les effets secondaires possibles du CBD ?",
+                    "content": "Le CBD est globalement très bien toléré. Dans de rares cas et à hautes doses, certaines personnes peuvent ressentir une légère somnolence, une sécheresse buccale ou des troubles digestifs mineurs. Ces effets sont temporaires et disparaissent en réduisant le dosage. Nous recommandons toujours de commencer par une faible dose et d'augmenter progressivement."
+                  }
+                ]
+              }
+            }
+          ]
+        },
+
+        {
+          "type": "section",
+          "id": "terra-faq-products",
+          "props": {
+            "backgroundColor": "#fafaf5",
+            "paddingTop": 48,
+            "paddingBottom": 48,
+            "maxWidth": 800,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "terra-faq-products-title",
+              "props": {
+                "level": 2,
+                "text": "Nos produits",
+                "color": "#1a2e1a",
+                "fontFamily": "Cormorant Garamond"
+              }
+            },
+            {
+              "type": "spacer",
+              "id": "terra-faq-products-spacer",
+              "props": { "height": 24 }
+            },
+            {
+              "type": "accordion",
+              "id": "terra-faq-products-accordion",
+              "props": {
+                "items": [
+                  {
+                    "title": "Comment choisir la bonne concentration de CBD ?",
+                    "content": "Le choix de la concentration dépend de vos besoins et de votre expérience. Pour les débutants : 10% (environ 4mg par goutte), idéal pour le stress léger et l'amélioration du sommeil. Pour les utilisateurs intermédiaires : 20% (environ 8mg par goutte), recommandé pour le stress modéré, les douleurs musculaires et l'anxiété. Pour les besoins importants : 30% (environ 12mg par goutte), adapté aux douleurs chroniques et aux troubles du sommeil persistants. Commencez toujours par 2-3 gouttes et ajustez progressivement."
+                  },
+                  {
+                    "title": "D'où vient votre chanvre et comment est-il extrait ?",
+                    "content": "Notre chanvre est cultivé en agriculture biologique certifiée dans les meilleures régions d'Europe (Suisse, Italie, France). Nous utilisons exclusivement la méthode d'extraction au CO₂ supercritique, considérée comme la plus sûre et la plus efficace. Cette méthode préserve l'ensemble des cannabinoïdes, terpènes et flavonoïdes bénéfiques, sans aucun résidu de solvant."
+                  },
+                  {
+                    "title": "Quelle est la différence entre spectre complet et isolat ?",
+                    "content": "Le CBD spectre complet (full spectrum) contient l'ensemble des cannabinoïdes naturellement présents dans le chanvre (CBD, CBG, CBN, etc.) ainsi que les terpènes et flavonoïdes. Ces composés agissent en synergie — c'est « l'effet d'entourage ». L'isolat de CBD est du CBD pur à 99%+, sans aucun autre cannabinoïde. Il convient aux personnes souhaitant éviter toute trace de THC. Nos huiles premium sont en spectre complet pour une efficacité optimale."
+                  },
+                  {
+                    "title": "Comment utiliser l'huile CBD ?",
+                    "content": "Déposez le nombre de gouttes souhaité sous la langue (administration sublinguale). Maintenez 60 à 90 secondes avant d'avaler. Cette méthode permet une absorption rapide et optimale du CBD (les effets se font sentir en 15 à 30 minutes). Vous pouvez aussi ajouter l'huile à une boisson ou un aliment, mais l'absorption sera plus lente et moins complète."
+                  }
+                ]
+              }
+            }
+          ]
+        },
+
+        {
+          "type": "section",
+          "id": "terra-faq-orders",
+          "props": {
+            "backgroundColor": "#fafaf5",
+            "paddingTop": 48,
+            "paddingBottom": 80,
+            "maxWidth": 800,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "terra-faq-orders-title",
+              "props": {
+                "level": 2,
+                "text": "Commandes & livraison",
+                "color": "#1a2e1a",
+                "fontFamily": "Cormorant Garamond"
+              }
+            },
+            {
+              "type": "spacer",
+              "id": "terra-faq-orders-spacer",
+              "props": { "height": 24 }
+            },
+            {
+              "type": "accordion",
+              "id": "terra-faq-orders-accordion",
+              "props": {
+                "items": [
+                  {
+                    "title": "Quels sont les délais de livraison ?",
+                    "content": "Les commandes passées avant 14h sont expédiées le jour même (jours ouvrés). Livraison Colissimo suivi : 2-4 jours ouvrés. Livraison express Chronopost : 24h. Livraison en point relais : 3-5 jours ouvrés. Nous livrons en France métropolitaine, Belgique, Suisse et Luxembourg."
+                  },
+                  {
+                    "title": "La livraison est-elle offerte ?",
+                    "content": "Oui, la livraison standard (Colissimo suivi) est offerte pour toute commande de 49 euros ou plus en France métropolitaine. En dessous de ce montant, les frais de livraison sont de 4,90 euros. La livraison express est disponible en supplément (6,90 euros). Nous proposons aussi le retrait en point relais à 3,90 euros."
+                  },
+                  {
+                    "title": "Comment fonctionne la politique de retour ?",
+                    "content": "Vous bénéficiez de 30 jours après réception pour retourner un produit non ouvert, dans son emballage d'origine. Le retour est gratuit en France. Pour les produits entamés, si vous n'êtes pas satisfait, contactez notre service client : nous étudierons votre demande au cas par cas. Le remboursement est effectué sous 7 jours ouvrés après réception du retour."
+                  },
+                  {
+                    "title": "Quels modes de paiement acceptez-vous ?",
+                    "content": "Nous acceptons les paiements par carte bancaire (Visa, Mastercard, CB), PayPal, virement bancaire et Apple Pay. Toutes les transactions sont sécurisées par un chiffrement SSL 256 bits. Nous proposons aussi le paiement en 3 fois sans frais à partir de 100 euros d'achat via Alma."
+                  },
+                  {
+                    "title": "L'emballage est-il discret ?",
+                    "content": "Oui, absolument. Vos commandes sont expédiées dans un emballage neutre et discret, sans aucune mention de CBD ou de notre marque à l'extérieur. Seule l'étiquette de livraison est visible. De plus, nous utilisons des emballages éco-responsables en carton recyclé."
+                  }
+                ]
+              }
+            }
+          ]
+        },
+
+        {
+          "type": "section",
+          "id": "terra-faq-contact",
+          "props": {
+            "backgroundColor": "#1a3d1a",
+            "paddingTop": 72,
+            "paddingBottom": 72,
+            "maxWidth": 700,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "terra-faq-contact-title",
+              "props": {
+                "level": 2,
+                "text": "Vous n'avez pas trouvé votre réponse ?",
+                "align": "center",
+                "color": "#f5f0e8",
+                "fontFamily": "Cormorant Garamond"
+              }
+            },
+            {
+              "type": "text",
+              "id": "terra-faq-contact-text",
+              "props": {
+                "content": "<p style=\"text-align:center;color:rgba(245,240,232,0.65);margin:12px auto 28px;max-width:450px;\">Notre équipe est disponible du lundi au vendredi de 9h à 18h pour répondre à toutes vos questions.</p>"
+              }
+            },
+            {
+              "type": "button",
+              "id": "terra-faq-contact-btn",
+              "props": {
+                "text": "Nous contacter",
+                "url": "/contact",
+                "align": "center",
+                "variant": "primary",
+                "backgroundColor": "#c9a84c",
+                "textColor": "#0d1f0d"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+
+  {
+    "id": "page-contact",
+    "title": "Contact",
+    "slug": "contact",
+    "layout": "full-width",
+    "status": "published",
+    "order": 5,
+    "meta_title": "Contactez-nous — Terra CBD",
+    "meta_description": "Une question sur nos produits CBD ? Contactez l'équipe Terra CBD par email, téléphone ou via notre formulaire. Réponse garantie sous 24h.",
+    "content": {
+      "blocks": [
+        {
+          "type": "section",
+          "id": "terra-contact-hero",
+          "props": {
+            "backgroundColor": "#0d1f0d",
+            "paddingTop": 80,
+            "paddingBottom": 80,
+            "maxWidth": 800,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "terra-contact-title",
+              "props": {
+                "level": 1,
+                "text": "Contactez-nous",
+                "align": "center",
+                "color": "#f5f0e8",
+                "fontFamily": "Cormorant Garamond"
+              }
+            },
+            {
+              "type": "text",
+              "id": "terra-contact-intro",
+              "props": {
+                "content": "<p style=\"text-align:center;color:rgba(245,240,232,0.7);max-width:550px;margin:16px auto 0;\">Une question, un conseil produit ou une suggestion ? Notre équipe est à votre écoute et vous répond sous 24 heures.</p>"
+              }
+            }
+          ]
+        },
+
+        {
+          "type": "section",
+          "id": "terra-contact-info",
+          "props": {
+            "backgroundColor": "#fafaf5",
+            "paddingTop": 80,
+            "paddingBottom": 40,
+            "maxWidth": 1280,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "grid",
+              "id": "terra-contact-info-grid",
+              "props": {
+                "columns": 3,
+                "gap": 28
+              },
+              "children": [
+                {
+                  "type": "icon-box",
+                  "id": "terra-contact-email",
+                  "props": {
+                    "icon": "mail",
+                    "title": "Email",
+                    "description": "contact@terra-cbd.fr\nRéponse sous 24h ouvrées",
+                    "align": "center",
+                    "iconColor": "#c9a84c",
+                    "titleColor": "#1a2e1a",
+                    "textColor": "#5a7a5a"
+                  }
+                },
+                {
+                  "type": "icon-box",
+                  "id": "terra-contact-phone",
+                  "props": {
+                    "icon": "phone",
+                    "title": "Téléphone",
+                    "description": "04 26 XX XX XX\nLun-Ven 9h-18h",
+                    "align": "center",
+                    "iconColor": "#c9a84c",
+                    "titleColor": "#1a2e1a",
+                    "textColor": "#5a7a5a"
+                  }
+                },
+                {
+                  "type": "icon-box",
+                  "id": "terra-contact-address",
+                  "props": {
+                    "icon": "map-pin",
+                    "title": "Adresse",
+                    "description": "Terra CBD\n12 rue des Oliviers\n13100 Aix-en-Provence",
+                    "align": "center",
+                    "iconColor": "#c9a84c",
+                    "titleColor": "#1a2e1a",
+                    "textColor": "#5a7a5a"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+
+        {
+          "type": "section",
+          "id": "terra-contact-form-section",
+          "props": {
+            "backgroundColor": "#fafaf5",
+            "paddingTop": 40,
+            "paddingBottom": 96,
+            "maxWidth": 700,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "terra-contact-form-title",
+              "props": {
+                "level": 2,
+                "text": "Envoyez-nous un message",
+                "align": "center",
+                "color": "#1a2e1a",
+                "fontFamily": "Cormorant Garamond"
+              }
+            },
+            {
+              "type": "spacer",
+              "id": "terra-contact-form-spacer",
+              "props": { "height": 32 }
+            },
+            {
+              "type": "custom-html",
+              "id": "terra-contact-form",
+              "props": {
+                "html": "<form style=\"background:#fff;border-radius:12px;padding:40px;box-shadow:0 4px 24px rgba(26,61,26,0.08);\" onsubmit=\"return false;\"><div style=\"display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;\"><div><label style=\"display:block;font-size:0.8125rem;font-weight:600;color:#1a2e1a;margin-bottom:6px;\">Prénom *</label><input type='text' placeholder='Votre prénom' style=\"width:100%;padding:12px 16px;border:1.5px solid #c8ddc8;border-radius:6px;font-size:0.9375rem;outline:none;color:#1a2e1a;box-sizing:border-box;\" /></div><div><label style=\"display:block;font-size:0.8125rem;font-weight:600;color:#1a2e1a;margin-bottom:6px;\">Nom *</label><input type='text' placeholder='Votre nom' style=\"width:100%;padding:12px 16px;border:1.5px solid #c8ddc8;border-radius:6px;font-size:0.9375rem;outline:none;color:#1a2e1a;box-sizing:border-box;\" /></div></div><div style=\"margin-bottom:20px;\"><label style=\"display:block;font-size:0.8125rem;font-weight:600;color:#1a2e1a;margin-bottom:6px;\">Email *</label><input type='email' placeholder='votre@email.com' style=\"width:100%;padding:12px 16px;border:1.5px solid #c8ddc8;border-radius:6px;font-size:0.9375rem;outline:none;color:#1a2e1a;box-sizing:border-box;\" /></div><div style=\"margin-bottom:20px;\"><label style=\"display:block;font-size:0.8125rem;font-weight:600;color:#1a2e1a;margin-bottom:6px;\">Sujet</label><select style=\"width:100%;padding:12px 16px;border:1.5px solid #c8ddc8;border-radius:6px;font-size:0.9375rem;outline:none;color:#1a2e1a;background:#fff;box-sizing:border-box;\"><option>Question sur un produit</option><option>Suivi de commande</option><option>Retour / Remboursement</option><option>Partenariat / Professionnel</option><option>Autre</option></select></div><div style=\"margin-bottom:24px;\"><label style=\"display:block;font-size:0.8125rem;font-weight:600;color:#1a2e1a;margin-bottom:6px;\">Message *</label><textarea rows='5' placeholder='Décrivez votre demande...' style=\"width:100%;padding:12px 16px;border:1.5px solid #c8ddc8;border-radius:6px;font-size:0.9375rem;outline:none;color:#1a2e1a;resize:vertical;font-family:inherit;box-sizing:border-box;\"></textarea></div><button type='submit' style=\"width:100%;background:#1a3d1a;color:#f5f0e8;border:none;padding:14px 24px;border-radius:6px;font-weight:600;font-size:0.9375rem;cursor:pointer;\">Envoyer le message</button></form>"
+              }
+            }
+          ]
+        },
+
+        {
+          "type": "section",
+          "id": "terra-contact-hours",
+          "props": {
+            "backgroundColor": "#f0f5ec",
+            "paddingTop": 64,
+            "paddingBottom": 64,
+            "maxWidth": 800,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "terra-contact-hours-title",
+              "props": {
+                "level": 2,
+                "text": "Horaires du service client",
+                "align": "center",
+                "color": "#1a2e1a",
+                "fontFamily": "Cormorant Garamond"
+              }
+            },
+            {
+              "type": "spacer",
+              "id": "terra-contact-hours-spacer",
+              "props": { "height": 24 }
+            },
+            {
+              "type": "custom-html",
+              "id": "terra-contact-hours-table",
+              "props": {
+                "html": "<div style=\"max-width:400px;margin:0 auto;\"><div style=\"display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid #c8ddc8;\"><span style=\"color:#1a2e1a;font-weight:500;\">Lundi - Vendredi</span><span style=\"color:#5a7a5a;\">9h00 - 18h00</span></div><div style=\"display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid #c8ddc8;\"><span style=\"color:#1a2e1a;font-weight:500;\">Samedi</span><span style=\"color:#5a7a5a;\">10h00 - 14h00</span></div><div style=\"display:flex;justify-content:space-between;padding:12px 0;\"><span style=\"color:#1a2e1a;font-weight:500;\">Dimanche</span><span style=\"color:#999;\">Fermé</span></div></div>"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

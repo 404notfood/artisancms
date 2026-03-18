@@ -1,0 +1,48 @@
+[
+  {
+    "name": "Navigation principale",
+    "location": "header",
+    "items": [
+      { "label": "Accueil", "url": "/", "order": 0 },
+      { "label": "Boutique", "url": "/boutique", "order": 1 },
+      { "label": "Blog", "url": "/blog", "order": 2 },
+      { "label": "FAQ", "url": "/faq", "order": 3 },
+      { "label": "À propos", "url": "/a-propos", "order": 4 },
+      { "label": "Contact", "url": "/contact", "order": 5 }
+    ]
+  },
+  {
+    "name": "Footer — Boutique",
+    "location": "footer",
+    "items": [
+      { "label": "Huiles CBD", "url": "/boutique?category=huiles", "order": 0 },
+      { "label": "Gummies", "url": "/boutique?category=gummies", "order": 1 },
+      { "label": "Cosmétiques", "url": "/boutique?category=cosmetiques", "order": 2 },
+      { "label": "Infusions", "url": "/boutique?category=infusions", "order": 3 },
+      { "label": "Capsules", "url": "/boutique?category=capsules", "order": 4 },
+      { "label": "Coffrets", "url": "/boutique?category=coffrets", "order": 5 }
+    ]
+  },
+  {
+    "name": "Footer — Informations",
+    "location": "footer_info",
+    "items": [
+      { "label": "À propos", "url": "/a-propos", "order": 0 },
+      { "label": "Blog", "url": "/blog", "order": 1 },
+      { "label": "FAQ", "url": "/faq", "order": 2 },
+      { "label": "Contact", "url": "/contact", "order": 3 },
+      { "label": "Programme fidélité", "url": "/fidelite", "order": 4 }
+    ]
+  },
+  {
+    "name": "Footer — Légal",
+    "location": "footer_legal",
+    "items": [
+      { "label": "Mentions légales", "url": "/mentions-legales", "order": 0 },
+      { "label": "Politique de confidentialité", "url": "/confidentialite", "order": 1 },
+      { "label": "Conditions générales de vente", "url": "/cgv", "order": 2 },
+      { "label": "Politique de cookies", "url": "/cookies", "order": 3 },
+      { "label": "Livraison & retours", "url": "/livraison-retours", "order": 4 }
+    ]
+  }
+]

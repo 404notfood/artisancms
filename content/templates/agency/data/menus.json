@@ -1,0 +1,23 @@
+[
+  {
+    "name": "Navigation principale",
+    "location": "header",
+    "items": [
+      { "label": "Accueil", "url": "/", "page_slug": "accueil", "order": 0 },
+      { "label": "Services", "url": "/services", "page_slug": "services", "order": 1 },
+      { "label": "Portfolio", "url": "/portfolio", "page_slug": "portfolio", "order": 2 },
+      { "label": "À propos", "url": "/a-propos", "page_slug": "a-propos", "order": 3 },
+      { "label": "Blog", "url": "/blog", "page_slug": "blog", "order": 4 },
+      { "label": "Contact", "url": "/contact", "page_slug": "contact", "order": 5 }
+    ]
+  },
+  {
+    "name": "Footer Navigation",
+    "location": "footer",
+    "items": [
+      { "label": "Mentions légales", "url": "/mentions-legales", "order": 0 },
+      { "label": "Politique de confidentialité", "url": "/politique-de-confidentialite", "order": 1 },
+      { "label": "Contact", "url": "/contact", "page_slug": "contact", "order": 2 }
+    ]
+  }
+]

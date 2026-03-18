@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Ecommerce\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\CmsPlugin;
+use Ecommerce\Http\Controllers\Concerns\HasEcommerceSettings;
+use Ecommerce\Http\Controllers\Concerns\HasThemeAndMenus;
 use Ecommerce\Models\WishlistItem;
 use Ecommerce\Services\WishlistService;
 use Illuminate\Http\JsonResponse;
@@ -15,30 +16,23 @@ use Inertia\Response;
 
 class WishlistController extends Controller
 {
+    use HasEcommerceSettings;
+    use HasThemeAndMenus;
+
     public function __construct(
         private readonly WishlistService $wishlistService,
     ) {}
 
-    /**
-     * Display the user's wishlist.
-     */
     public function index(): Response
     {
-        /** @var int $userId */
-        $userId = (int) auth()->id();
+        $userId = $this->userId();
 
-        $items = $this->wishlistService->getItems($userId);
-        $settings = $this->getSettings();
-
-        return Inertia::render('Front/Shop/Account/Wishlist', [
-            'items' => $items,
-            'settings' => $settings,
-        ]);
+        return Inertia::render('Front/Shop/Account/Wishlist', array_merge($this->themeAndMenus(), [
+            'items' => $this->wishlistService->getItems($userId),
+            'settings' => $this->getSettings(),
+        ]));
     }
 
-    /**
-     * Add an item to the wishlist (JSON response for AJAX).
-     */
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
@@ -46,8 +40,7 @@ class WishlistController extends Controller
             'variant_id' => 'nullable|exists:product_variants,id',
         ]);
 
-        /** @var int $userId */
-        $userId = (int) auth()->id();
+        $userId = $this->userId();
 
         $item = $this->wishlistService->add(
             $userId,
@@ -63,19 +56,17 @@ class WishlistController extends Controller
         ]);
     }
 
-    /**
-     * Remove an item from the wishlist (JSON response).
-     */
     public function destroy(WishlistItem $wishlistItem): JsonResponse
     {
-        if ($wishlistItem->user_id !== (int) auth()->id()) {
-            abort(403);
-        }
+        $this->authorizeWishlistItem($wishlistItem);
 
-        $wishlistItem->delete();
+        $userId = $this->userId();
 
-        /** @var int $userId */
-        $userId = (int) auth()->id();
+        $this->wishlistService->remove(
+            $userId,
+            $wishlistItem->product_id,
+            $wishlistItem->variant_id,
+        );
 
         return response()->json([
             'success' => true,
@@ -84,17 +75,11 @@ class WishlistController extends Controller
         ]);
     }
 
-    /**
-     * Move a wishlist item to the cart and remove it.
-     */
     public function moveToCart(WishlistItem $wishlistItem): JsonResponse
     {
-        if ($wishlistItem->user_id !== (int) auth()->id()) {
-            abort(403);
-        }
+        $this->authorizeWishlistItem($wishlistItem);
 
-        /** @var int $userId */
-        $userId = (int) auth()->id();
+        $userId = $this->userId();
 
         $this->wishlistService->moveToCart($userId, $wishlistItem->id);
 
@@ -105,28 +90,15 @@ class WishlistController extends Controller
         ]);
     }
 
-    /**
-     * Get current e-commerce settings with defaults.
-     *
-     * @return array<string, mixed>
-     */
-    private function getSettings(): array
+    private function userId(): int
     {
-        $defaults = [
-            'store_name' => 'Ma Boutique',
-            'currency' => 'EUR',
-            'currency_symbol' => "\u{20AC}",
-            'tax_rate' => 20,
-            'shipping_cost' => 5.99,
-            'free_shipping_threshold' => 50,
-        ];
+        return (int) auth()->id();
+    }
 
-        $plugin = CmsPlugin::where('slug', 'ecommerce')->first();
-
-        if (!$plugin || empty($plugin->settings)) {
-            return $defaults;
+    private function authorizeWishlistItem(WishlistItem $item): void
+    {
+        if ($item->user_id !== $this->userId()) {
+            abort(403);
         }
-
-        return array_merge($defaults, $plugin->settings);
     }
 }

@@ -417,8 +417,738 @@
           }
         ]
       }
+    },
+    {
+      "id": "blog",
+      "title": "Blog",
+      "slug": "blog",
+      "template": "default",
+      "meta_title": "Blog — Édito Magazine",
+      "meta_description": "Tous nos articles : photographie, voyage, cuisine, lifestyle, déco, culture, bien-être et architecture. Un regard sensible sur le monde.",
+      "content": {
+        "blocks": [
+          {
+            "type": "section",
+            "id": "bl-blog-hero",
+            "props": {
+              "backgroundColor": "#18181b",
+              "paddingTop": 80,
+              "paddingBottom": 80,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 800,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "bl-blog-kicker",
+                "props": {
+                  "content": "<p style='text-align:center;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#ec4899;margin-bottom:20px'>Le journal</p>"
+                }
+              },
+              {
+                "type": "heading",
+                "id": "bl-blog-title",
+                "props": {
+                  "text": "Tous nos articles",
+                  "level": 1,
+                  "alignment": "center",
+                  "color": "#ffffff"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "bl-blog-sp1",
+                "props": {
+                  "height": 20
+                }
+              },
+              {
+                "type": "text",
+                "id": "bl-blog-desc",
+                "props": {
+                  "content": "<p style='text-align:center;color:#a1a1aa;font-size:1.05rem;line-height:1.75;max-width:600px;margin:0 auto'>Photographie, voyage, cuisine, lifestyle, architecture... Explorez nos articles et laissez-vous inspirer par un regard sensible sur le monde qui nous entoure.</p>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "bl-blog-listing",
+            "props": {
+              "backgroundColor": "#fafafa",
+              "paddingTop": 64,
+              "paddingBottom": 80,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 1080,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "bl-blog-filters",
+                "props": {
+                  "content": "<div style='display:flex;gap:12px;flex-wrap:wrap;margin-bottom:48px;justify-content:center'><a href='/blog' style='background:#18181b;color:#fff;font-size:0.8rem;font-weight:600;padding:8px 18px;border-radius:100px;text-decoration:none'>Tous</a><a href='/blog?cat=photographie' style='background:#fff;color:#71717a;font-size:0.8rem;font-weight:500;padding:8px 18px;border-radius:100px;text-decoration:none;border:1px solid #e4e4e7'>Photographie</a><a href='/blog?cat=voyage' style='background:#fff;color:#71717a;font-size:0.8rem;font-weight:500;padding:8px 18px;border-radius:100px;text-decoration:none;border:1px solid #e4e4e7'>Voyage</a><a href='/blog?cat=cuisine' style='background:#fff;color:#71717a;font-size:0.8rem;font-weight:500;padding:8px 18px;border-radius:100px;text-decoration:none;border:1px solid #e4e4e7'>Cuisine</a><a href='/blog?cat=lifestyle' style='background:#fff;color:#71717a;font-size:0.8rem;font-weight:500;padding:8px 18px;border-radius:100px;text-decoration:none;border:1px solid #e4e4e7'>Lifestyle</a><a href='/blog?cat=deco' style='background:#fff;color:#71717a;font-size:0.8rem;font-weight:500;padding:8px 18px;border-radius:100px;text-decoration:none;border:1px solid #e4e4e7'>Déco</a><a href='/blog?cat=culture' style='background:#fff;color:#71717a;font-size:0.8rem;font-weight:500;padding:8px 18px;border-radius:100px;text-decoration:none;border:1px solid #e4e4e7'>Culture</a><a href='/blog?cat=bien-etre' style='background:#fff;color:#71717a;font-size:0.8rem;font-weight:500;padding:8px 18px;border-radius:100px;text-decoration:none;border:1px solid #e4e4e7'>Bien-être</a><a href='/blog?cat=architecture' style='background:#fff;color:#71717a;font-size:0.8rem;font-weight:500;padding:8px 18px;border-radius:100px;text-decoration:none;border:1px solid #e4e4e7'>Architecture</a></div>"
+                }
+              },
+              {
+                "type": "text",
+                "id": "bl-blog-note",
+                "props": {
+                  "content": "<p style='text-align:center;color:#a1a1aa;font-size:0.875rem;margin-bottom:24px'>Les articles du blog s'afficheront automatiquement ici une fois le site installé.</p>"
+                }
+              }
+            ]
+          }
+        ]
+      }
     }
   ],
+  "menus": [
+    {
+      "name": "Navigation principale",
+      "location": "header",
+      "items": [
+        { "label": "Accueil", "url": "/", "order": 1 },
+        { "label": "Blog", "url": "/blog", "order": 2 },
+        { "label": "À propos", "url": "/a-propos", "order": 3 },
+        { "label": "Contact", "url": "/contact", "order": 4 }
+      ]
+    },
+    {
+      "name": "Footer",
+      "location": "footer",
+      "items": [
+        { "label": "Accueil", "url": "/", "order": 1 },
+        { "label": "Blog", "url": "/blog", "order": 2 },
+        { "label": "À propos", "url": "/a-propos", "order": 3 },
+        { "label": "Contact", "url": "/contact", "order": 4 }
+      ]
+    },
+    {
+      "name": "Footer légal",
+      "location": "footer_legal",
+      "items": [
+        { "label": "Mentions légales", "url": "/mentions-legales", "order": 1 },
+        { "label": "Politique de confidentialité", "url": "/confidentialite", "order": 2 },
+        { "label": "Conditions d'utilisation", "url": "/conditions-utilisation", "order": 3 }
+      ]
+    }
+  ],
+  "posts": [
+    {
+      "title": "L'art de la photographie minimaliste",
+      "slug": "art-photographie-minimaliste",
+      "status": "published",
+      "excerpt": "Dans un monde saturé d'images, la photographie minimaliste nous invite à revenir à l'essentiel. Exploration d'un art qui célèbre le vide, la lumière et la simplicité.",
+      "featured_image": null,
+      "content": {
+        "blocks": [
+          {
+            "id": "post1-intro",
+            "type": "text",
+            "props": {
+              "content": "<p>Il y a dans le minimalisme photographique une quête presque méditative : celle de réduire le cadre à son essence. Là où la photographie contemporaine multiplie les sujets, les textures et les couleurs, le minimalisme opère un mouvement inverse. Il soustrait, épure, jusqu'à ne conserver que la tension entre un sujet et l'espace qui l'entoure. Cette approche, loin d'être un simple exercice de style, traduit une philosophie de vie que de plus en plus de photographes adoptent comme manifeste créatif.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "post1-h2-1",
+            "type": "heading",
+            "props": {
+              "content": "Le vide comme langage",
+              "level": 2
+            },
+            "children": []
+          },
+          {
+            "id": "post1-body1",
+            "type": "text",
+            "props": {
+              "content": "<p>En photographie minimaliste, le vide n'est jamais vraiment vide. Il est respiration, il est silence visuel. Un mur blanc traversé par une ombre oblique, un horizon marin sans la moindre embarcation, un chemin de terre bordé d'un seul arbre : chaque image raconte une histoire par ce qu'elle choisit de ne pas montrer. Les grands maîtres du genre — de Michael Kenna à Fan Ho — ont compris que l'espace négatif est aussi éloquent que le sujet lui-même.</p><p>Cette discipline exige une rigueur particulière dans la composition. Le photographe minimaliste ne cherche pas le spectaculaire ; il cherche l'équilibre. La règle des tiers cède la place à une géométrie plus instinctive, où la position d'un unique élément dans le cadre détermine toute la charge émotionnelle de l'image. Un point trop centré et l'image devient statique ; trop excentré et elle perd son ancrage.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "post1-quote",
+            "type": "blockquote",
+            "props": {
+              "content": "La perfection est atteinte, non pas lorsqu'il n'y a plus rien à ajouter, mais lorsqu'il n'y a plus rien à retirer.",
+              "citation": "Antoine de Saint-Exupéry"
+            },
+            "children": []
+          },
+          {
+            "id": "post1-h2-2",
+            "type": "heading",
+            "props": {
+              "content": "Lumière et matière : les deux piliers",
+              "level": 2
+            },
+            "children": []
+          },
+          {
+            "id": "post1-body2",
+            "type": "text",
+            "props": {
+              "content": "<p>Sans la profusion de sujets pour capter le regard, la lumière devient le véritable protagoniste de l'image minimaliste. Les photographes de ce mouvement préfèrent souvent les heures douces — l'aube et le crépuscule — quand la lumière rasante sculpte les volumes et allonge les ombres. Le brouillard est un allié précieux : il efface les détails superflus et enveloppe le paysage d'un voile qui simplifie naturellement la scène.</p><p>La matière, quant à elle, prend une importance considérable lorsqu'elle se retrouve seule face à l'objectif. La texture d'un mur de béton, les veines d'un bois flotté, les rides concentriques de l'eau : isolés, ces détails deviennent des mondes en soi. Le choix du noir et blanc renforce souvent cette lecture tactile de l'image, en supprimant la distraction de la couleur pour ne garder que le jeu des contrastes et des textures.</p><p>Pratiquer la photographie minimaliste, c'est finalement apprendre à voir autrement. C'est ralentir son regard dans un monde qui nous pousse à la consommation visuelle frénétique. C'est un exercice de présence, une méditation avec un appareil photo entre les mains.</p>"
+            },
+            "children": []
+          }
+        ]
+      },
+      "taxonomies": {
+        "categories": ["photographie"],
+        "tags": ["minimalisme", "art-de-vivre", "inspiration"]
+      }
+    },
+    {
+      "title": "Voyage au Japon : carnet de route",
+      "slug": "voyage-japon-carnet-de-route",
+      "status": "published",
+      "excerpt": "De Tokyo à Kyoto, de la frénésie urbaine aux temples silencieux, récit d'un voyage au pays où tradition et modernité cohabitent avec une grâce singulière.",
+      "featured_image": null,
+      "content": {
+        "blocks": [
+          {
+            "id": "post2-intro",
+            "type": "text",
+            "props": {
+              "content": "<p>Le Japon ne se visite pas, il se ressent. Dès les premières heures à Tokyo, une évidence s'impose : ce pays fonctionne selon des codes qui échappent à toute logique occidentale. L'ordre impeccable du métro, la politesse silencieuse des passants, l'odeur des takoyaki dans les ruelles de Shinjuku — tout ici parle d'un équilibre patiemment cultivé entre l'ancien et le nouveau. Ce carnet de route retrace trois semaines d'immersion, du béton tokyoïte aux forêts de bambou de Sagano.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "post2-h2-1",
+            "type": "heading",
+            "props": {
+              "content": "Tokyo : le vertige organisé",
+              "level": 2
+            },
+            "children": []
+          },
+          {
+            "id": "post2-body1",
+            "type": "text",
+            "props": {
+              "content": "<p>Rien ne prépare au choc sensoriel de Shibuya un vendredi soir. Le célèbre carrefour, que l'on a vu mille fois en photo, prend une dimension physique quand on se retrouve au milieu de deux mille personnes traversant simultanément dans toutes les directions. Pourtant, personne ne se touche. C'est une chorégraphie spontanée, un ballet urbain d'une précision stupéfiante.</p><p>Mais Tokyo sait aussi être contemplative. Le jardin Meiji Jingu, à deux pas de Harajuku, offre un silence presque irréel au cœur de la mégalopole. Les allées de gravier, bordées de cèdres centenaires, mènent à un sanctuaire shinto où le temps semble suspendu. On y croise des couples en kimono venus prier, des vieillards méditatifs et des corbeaux qui semblent veiller sur le lieu avec une solennité presque religieuse.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "post2-h2-2",
+            "type": "heading",
+            "props": {
+              "content": "Kyoto : la mémoire vivante",
+              "level": 2
+            },
+            "children": []
+          },
+          {
+            "id": "post2-body2",
+            "type": "text",
+            "props": {
+              "content": "<p>Le train à grande vitesse — le Shinkansen — file à 300 km/h entre Tokyo et Kyoto. En deux heures et demie, on passe d'une capitale futuriste à l'ancienne capitale impériale, où deux mille temples et sanctuaires ponctuent chaque quartier. Le Kinkaku-ji, le Pavillon d'Or, reste l'une des visions les plus saisissantes du voyage : sa façade dorée se reflétant parfaitement dans l'étang qui le borde, créant une symétrie presque surnaturelle.</p><p>C'est pourtant dans les détails les plus modestes que Kyoto révèle sa beauté : les mousses qui recouvrent les pierres du temple Gio-ji, la lueur des lanternes dans le quartier de Gion au crépuscule, le son d'une flûte shakuhachi s'échappant d'une maison de thé. Chaque instant invite au ralentissement, à cette attention aux choses que les Japonais nomment <em>mono no aware</em> — la douce mélancolie de l'éphémère.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "post2-quote",
+            "type": "blockquote",
+            "props": {
+              "content": "Voyager, c'est demander d'un coup à la distance ce que le temps ne pourrait nous donner que peu à peu.",
+              "citation": "Paul Morand"
+            },
+            "children": []
+          },
+          {
+            "id": "post2-body3",
+            "type": "text",
+            "props": {
+              "content": "<p>En quittant le Japon, on emporte avec soi cette sensation étrange d'avoir touché à quelque chose de profondément humain et pourtant radicalement différent de ce que l'on connaît. Le pays du Soleil-Levant ne livre pas ses secrets facilement, mais il récompense ceux qui prennent le temps de regarder, d'écouter et de se laisser surprendre. On revient transformé, avec l'envie tenace d'intégrer un peu de cette sagesse quotidienne dans nos vies occidentales pressées.</p>"
+            },
+            "children": []
+          }
+        ]
+      },
+      "taxonomies": {
+        "categories": ["voyage"],
+        "tags": ["nature", "inspiration", "art-de-vivre"]
+      }
+    },
+    {
+      "title": "Cuisine végétale : 5 recettes d'automne",
+      "slug": "cuisine-vegetale-5-recettes-automne",
+      "status": "published",
+      "excerpt": "Quand les feuilles tombent et que les soirées rallongent, la cuisine végétale se pare de saveurs chaudes et réconfortantes. Cinq recettes pour célébrer la saison.",
+      "featured_image": null,
+      "content": {
+        "blocks": [
+          {
+            "id": "post3-intro",
+            "type": "text",
+            "props": {
+              "content": "<p>L'automne est sans doute la plus belle saison pour cuisiner. Les marchés débordent de courges aux formes improbables, de champignons forestiers, de pommes juteuses et de racines oubliées. C'est le moment idéal pour explorer la cuisine végétale dans ce qu'elle a de plus généreux et réconfortant. Voici cinq recettes testées et approuvées, qui prouvent que manger végétal en automne n'est pas un sacrifice, mais une célébration.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "post3-h2-1",
+            "type": "heading",
+            "props": {
+              "content": "1. Velouté de butternut rôtie au lait de coco",
+              "level": 2
+            },
+            "children": []
+          },
+          {
+            "id": "post3-body1",
+            "type": "text",
+            "props": {
+              "content": "<p>Le secret de ce velouté réside dans la torréfaction préalable de la courge. Coupez une butternut en deux, badigeonnez-la d'huile d'olive et de sirop d'érable, puis enfournez à 200°C pendant 40 minutes. La chaleur du four caramélise les sucres naturels de la courge et développe une profondeur de saveur incomparable. Mixez ensuite la chair avec du lait de coco, un morceau de gingembre frais, une pincée de curcuma et un filet de jus de citron vert. Servez avec des graines de courge torréfiées et quelques feuilles de coriandre fraîche.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "post3-h2-2",
+            "type": "heading",
+            "props": {
+              "content": "2. Risotto aux champignons des bois et noisettes",
+              "level": 2
+            },
+            "children": []
+          },
+          {
+            "id": "post3-body2",
+            "type": "text",
+            "props": {
+              "content": "<p>Utilisez un mélange de champignons — pleurotes, shiitake, chanterelles — que vous faites revenir à feu vif avec de l'ail et du thym frais. Le riz arborio se cuit classiquement, en ajoutant le bouillon de légumes louche par louche. La touche finale : une cuillère généreuse de miso blanc dilué dans un peu d'eau chaude, qui remplace le parmesan et apporte cette saveur umami si caractéristique. Parsemez de noisettes concassées et d'un filet d'huile de noisette pour une finition automnale parfaite.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "post3-list",
+            "type": "list",
+            "props": {
+              "items": [
+                "Velouté de butternut rôtie au lait de coco — 30 min de préparation",
+                "Risotto aux champignons des bois et noisettes — 45 min",
+                "Tarte fine aux figues, oignons confits et romarin — 35 min",
+                "Curry de lentilles corail aux épices douces — 25 min",
+                "Crumble pommes-coings à la farine de châtaigne — 40 min"
+              ],
+              "style": "ordered"
+            },
+            "children": []
+          },
+          {
+            "id": "post3-body3",
+            "type": "text",
+            "props": {
+              "content": "<p>Les trois autres recettes — la tarte fine aux figues caramélisées avec des oignons confits et du romarin, le curry de lentilles corail aux épices douces rehaussé de crème de coco et de feuilles de curry fraîches, et le crumble pommes-coings à la farine de châtaigne — suivent la même philosophie : des ingrédients de saison, des techniques simples et le respect du produit.</p><p>La cuisine végétale automnale nous rappelle une vérité que l'on oublie trop souvent : les légumes, les fruits et les céréales portent en eux une richesse de saveurs qui n'a besoin d'aucun artifice pour s'exprimer. Il suffit de les écouter, de les traiter avec soin, et de leur laisser la place qu'ils méritent dans nos assiettes.</p>"
+            },
+            "children": []
+          }
+        ]
+      },
+      "taxonomies": {
+        "categories": ["cuisine"],
+        "tags": ["recettes", "bien-etre", "nature"]
+      }
+    },
+    {
+      "title": "Le slow living : ralentir pour mieux vivre",
+      "slug": "slow-living-ralentir-pour-mieux-vivre",
+      "status": "published",
+      "excerpt": "Face à l'accélération permanente de nos vies, le mouvement slow living propose une alternative radicale : ralentir consciemment pour retrouver du sens et de la présence.",
+      "featured_image": null,
+      "content": {
+        "blocks": [
+          {
+            "id": "post4-intro",
+            "type": "text",
+            "props": {
+              "content": "<p>Nous vivons dans une société qui valorise la vitesse. Répondre vite aux emails, produire davantage, optimiser chaque minute. Le slow living n'est pas un retour en arrière ni un rejet de la modernité : c'est une résistance douce, un choix délibéré de reprendre le contrôle de son temps. Né en Italie dans les années 1980 avec le mouvement Slow Food de Carlo Petrini, ce courant a depuis essaimé dans tous les domaines de la vie quotidienne — travail, habitat, éducation, consommation.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "post4-h2-1",
+            "type": "heading",
+            "props": {
+              "content": "Déconstruire le mythe de la productivité",
+              "level": 2
+            },
+            "children": []
+          },
+          {
+            "id": "post4-body1",
+            "type": "text",
+            "props": {
+              "content": "<p>Le premier pas vers le slow living consiste à questionner notre rapport à la productivité. Depuis quand jugeons-nous la valeur d'une journée au nombre de tâches accomplies ? La sociologue allemande Hartmut Rosa parle d'« accélération sociale » pour décrire ce phénomène où le rythme de vie augmente alors même que les technologies censées nous faire gagner du temps se multiplient. Nous avons des machines pour tout, et pourtant nous n'avons jamais si peu de temps.</p><p>Le slow living propose d'inverser cette logique. Plutôt que de chercher à en faire plus, il s'agit de faire mieux et moins. Choisir trois tâches importantes dans sa journée plutôt que d'en lister quinze. Accepter de ne pas répondre immédiatement à un message. Prendre le temps de cuisiner un repas au lieu de commander. Ces micro-décisions, accumulées, transforment radicalement notre rapport au quotidien.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "post4-quote",
+            "type": "blockquote",
+            "props": {
+              "content": "Il ne s'agit pas de tout faire lentement. Il s'agit de chercher à faire chaque chose à la bonne vitesse.",
+              "citation": "Carl Honoré, Éloge de la lenteur"
+            },
+            "children": []
+          },
+          {
+            "id": "post4-h2-2",
+            "type": "heading",
+            "props": {
+              "content": "Habiter lentement",
+              "level": 2
+            },
+            "children": []
+          },
+          {
+            "id": "post4-body2",
+            "type": "text",
+            "props": {
+              "content": "<p>Le slow living s'exprime aussi dans notre façon d'habiter l'espace. Un intérieur slow, c'est un intérieur pensé pour le calme : des matières naturelles — lin, bois brut, terre cuite — des couleurs douces, peu d'objets mais choisis avec soin. C'est bannir le superflu pour ne garder que ce qui a du sens, ce qui raconte une histoire ou remplit une fonction véritable. L'influence du wabi-sabi japonais se fait sentir dans cette approche : accepter l'imperfection, valoriser la patine du temps, trouver la beauté dans la simplicité.</p><p>Cette philosophie s'étend naturellement à la consommation. Acheter moins mais mieux, privilégier l'artisanat local, réparer plutôt que remplacer. Le slow living n'est pas un luxe réservé à ceux qui peuvent se permettre de travailler moins — c'est un état d'esprit accessible à tous, qui commence par des choix modestes mais significatifs. Prendre cinq minutes pour boire son café du matin en pleine conscience plutôt que debout dans la cuisine, c'est déjà du slow living.</p>"
+            },
+            "children": []
+          }
+        ]
+      },
+      "taxonomies": {
+        "categories": ["lifestyle"],
+        "tags": ["bien-etre", "minimalisme", "art-de-vivre"]
+      }
+    },
+    {
+      "title": "Décoration intérieure : les tendances naturelles",
+      "slug": "decoration-interieure-tendances-naturelles",
+      "status": "published",
+      "excerpt": "Bois brut, terre cuite, lin froissé : la décoration intérieure opère un retour aux matières authentiques. Tour d'horizon des tendances qui reconnectent nos espaces à la nature.",
+      "featured_image": null,
+      "content": {
+        "blocks": [
+          {
+            "id": "post5-intro",
+            "type": "text",
+            "props": {
+              "content": "<p>Après des années de minimalisme blanc et de surfaces lisses, la décoration intérieure opère un virage sensible vers le naturel et l'organique. Les intérieurs contemporains les plus inspirants partagent un trait commun : ils intègrent des matériaux bruts, des textures vivantes et des teintes empruntées aux paysages. Ce n'est pas un simple effet de mode — c'est le reflet d'un besoin profond de reconnecter nos espaces de vie avec le monde naturel dont nous nous sommes éloignés.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "post5-h2-1",
+            "type": "heading",
+            "props": {
+              "content": "Le règne des matières brutes",
+              "level": 2
+            },
+            "children": []
+          },
+          {
+            "id": "post5-body1",
+            "type": "text",
+            "props": {
+              "content": "<p>Le bois retrouve ses lettres de noblesse, mais pas n'importe quel bois. Exit les surfaces laquées et les stratifiés : place au chêne massif avec ses nœuds apparents, au noyer avec ses variations de teintes, au bois flotté récupéré sur les plages. Les architectes d'intérieur les plus en vue — de Vincent Van Duysen à Axel Vervoordt — utilisent le bois comme un élément sculptural, préservant ses imperfections plutôt que de les masquer.</p><p>La terre cuite fait un retour remarqué, des sols aux objets décoratifs. Les carreaux artisanaux, avec leurs irrégularités et leurs variations de couleur, remplacent les carrelages industriels uniformes. Les poteries faites main, les vases en grès, les bols tournés — ces objets portent la trace de la main qui les a façonnés, et c'est précisément cette humanité qui fait leur valeur dans un monde de production de masse.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "post5-h2-2",
+            "type": "heading",
+            "props": {
+              "content": "La palette de la nature",
+              "level": 2
+            },
+            "children": []
+          },
+          {
+            "id": "post5-body2",
+            "type": "text",
+            "props": {
+              "content": "<p>Les couleurs qui dominent cette tendance sont celles que l'on trouve en marchant dans la nature : le vert sauge des sous-bois, le terracotta des falaises méditerranéennes, le beige sable des dunes, le brun profond de l'humus après la pluie. Ces teintes ont la particularité d'évoluer magnifiquement avec la lumière naturelle, prenant des nuances différentes selon l'heure du jour.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "post5-list",
+            "type": "list",
+            "props": {
+              "items": [
+                "Le vert sauge : apaisant et intemporel, idéal pour les chambres et les espaces de travail",
+                "Le terracotta : chaleureux et ancrant, parfait en accent dans un salon ou une cuisine",
+                "Le blanc cassé : lumineux sans être froid, la base idéale pour les matériaux naturels",
+                "Le brun chocolat : profond et enveloppant, magnifique pour les pièces de vie",
+                "Le bleu ardoise : subtil et sophistiqué, il évoque la pierre et l'eau"
+              ],
+              "style": "unordered"
+            },
+            "children": []
+          },
+          {
+            "id": "post5-body3",
+            "type": "text",
+            "props": {
+              "content": "<p>Le textile joue un rôle crucial dans cette approche. Le lin froissé — pour les rideaux, les coussins, les nappes — apporte une nonchalance élégante qui contraste avec la rigidité des intérieurs trop « designés ». La laine bouclée, le jute, le raphia et le coton lavé complètent cette palette tactile. L'idée maîtresse : chaque surface doit inviter au toucher, chaque objet doit raconter une histoire de fabrication, de matière première, de savoir-faire humain.</p>"
+            },
+            "children": []
+          }
+        ]
+      },
+      "taxonomies": {
+        "categories": ["deco"],
+        "tags": ["tendances", "nature", "inspiration"]
+      }
+    },
+    {
+      "title": "Lecture : nos coups de coeur du printemps",
+      "slug": "lecture-coups-de-coeur-printemps",
+      "status": "published",
+      "excerpt": "Romans contemplatifs, essais stimulants, récits de voyage intérieurs : notre sélection de six livres pour accompagner les premières journées lumineuses du printemps.",
+      "featured_image": null,
+      "content": {
+        "blocks": [
+          {
+            "id": "post6-intro",
+            "type": "text",
+            "props": {
+              "content": "<p>Le printemps est cette saison où l'on redécouvre le plaisir de lire dehors — sur un banc, dans un jardin, au bord d'une fenêtre ouverte. Les jours s'allongent, la lumière change, et avec elle notre envie de lectures qui respirent. Nous avons sélectionné six ouvrages récents qui partagent un fil conducteur : l'attention au vivant, la lenteur comme vertu, et cette capacité rare de transformer notre regard sur le quotidien.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "post6-h2-1",
+            "type": "heading",
+            "props": {
+              "content": "Romans et récits",
+              "level": 2
+            },
+            "children": []
+          },
+          {
+            "id": "post6-body1",
+            "type": "text",
+            "props": {
+              "content": "<p><strong>« Les Heures silencieuses »</strong> de Gaëlle Josse — Un roman d'une délicatesse rare, qui suit une restauratrice de tableaux dans son dialogue intime avec les œuvres qu'elle soigne. Gaëlle Josse excelle dans l'art de transformer les gestes les plus modestes — nettoyer un vernis, révéler un glacis — en méditations sur le temps, la beauté et la transmission. On en ressort avec l'envie de regarder chaque chose avec plus d'attention.</p><p><strong>« Là où chantent les écrevisses »</strong> de Delia Owens — Ce roman américain, qui mêle enquête policière et célébration de la nature sauvage, nous plonge dans les marais de Caroline du Nord à travers les yeux de Kya, une jeune femme solitaire qui a grandi avec les oiseaux et les marées pour seuls compagnons. Une ode puissante à la résilience et à la beauté des espaces préservés.</p><p><strong>« Petit pays »</strong> de Gaël Faye — Bien que publié il y a quelques années, ce roman continue de circuler et d'émouvoir. Le regard d'un enfant sur le Burundi des années 1990, entre paradis perdu de l'enfance et tragédie historique. L'écriture de Gaël Faye, poète avant d'être romancier, touche par sa musicalité et sa justesse.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "post6-h2-2",
+            "type": "heading",
+            "props": {
+              "content": "Essais et non-fiction",
+              "level": 2
+            },
+            "children": []
+          },
+          {
+            "id": "post6-body2",
+            "type": "text",
+            "props": {
+              "content": "<p><strong>« Manières d'être vivant »</strong> de Baptiste Morizot — Philosophe et pisteur, Morizot nous invite à repenser notre relation au monde vivant. À travers des récits de terrain — pister des loups dans le Vercors, observer des oiseaux migrateurs — il développe une pensée écologique incarnée et sensible. Un livre qui change durablement notre façon de marcher dans la nature.</p><p><strong>« L'Art de la simplicité »</strong> de Dominique Loreau — Un classique du genre, réédité avec bonheur. Loreau, qui vit au Japon depuis plus de trente ans, propose un art de vivre épuré qui emprunte au zen et au minimalisme japonais. Moins posséder, mieux manger, prendre soin de son corps et de son esprit — des conseils d'une simplicité désarmante mais d'une efficacité remarquable.</p><p><strong>« Le pouvoir du moment présent »</strong> d'Eckhart Tolle — Pour ceux qui n'ont pas encore découvert ce texte fondateur de la pleine conscience occidentale, le printemps est le moment idéal. Tolle y expose avec une clarté lumineuse comment l'identification à nos pensées nous emprisonne, et comment l'attention au moment présent nous libère. Un livre à lire lentement, par petites gorgées.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "post6-quote",
+            "type": "blockquote",
+            "props": {
+              "content": "Un livre doit être la hache qui brise la mer gelée en nous.",
+              "citation": "Franz Kafka"
+            },
+            "children": []
+          }
+        ]
+      },
+      "taxonomies": {
+        "categories": ["culture"],
+        "tags": ["inspiration", "art-de-vivre", "tendances"]
+      }
+    },
+    {
+      "title": "Bien-être : les bienfaits de la méditation",
+      "slug": "bien-etre-bienfaits-meditation",
+      "status": "published",
+      "excerpt": "Réduction du stress, meilleure concentration, sommeil apaisé : les bienfaits de la méditation sont désormais documentés par la science. Guide pour commencer en douceur.",
+      "featured_image": null,
+      "content": {
+        "blocks": [
+          {
+            "id": "post7-intro",
+            "type": "text",
+            "props": {
+              "content": "<p>Il y a vingt ans, parler de méditation dans un contexte occidental pouvait susciter des sourires polis. Aujourd'hui, les plus grandes universités — Harvard, Stanford, Oxford — publient régulièrement des études confirmant ce que les traditions contemplatives affirment depuis des millénaires : la méditation modifie profondément notre cerveau, notre système nerveux et notre rapport au monde. Loin de l'image ésotérique qu'on lui prête parfois, la méditation est un entraînement de l'attention, aussi concret et méthodique qu'un entraînement sportif.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "post7-h2-1",
+            "type": "heading",
+            "props": {
+              "content": "Ce que dit la science",
+              "level": 2
+            },
+            "children": []
+          },
+          {
+            "id": "post7-body1",
+            "type": "text",
+            "props": {
+              "content": "<p>Les études en neurosciences ont révélé que huit semaines de pratique régulière suffisent à modifier la structure même du cerveau. L'amygdale — cette petite région responsable de nos réactions de peur et de stress — diminue en volume chez les méditants réguliers, tandis que le cortex préfrontal — siège de la concentration et de la prise de décision — s'épaissit. Le Dr Sara Lazar, neuroscientifique à Harvard, a démontré que ces changements sont mesurables même chez des débutants pratiquant seulement 27 minutes par jour.</p><p>Au-delà du cerveau, les effets se font sentir sur l'ensemble du corps. La méditation réduit le taux de cortisol (l'hormone du stress), abaisse la tension artérielle, renforce le système immunitaire et améliore la qualité du sommeil. Une méta-analyse publiée dans le <em>Journal of the American Medical Association</em> a conclu que la méditation de pleine conscience est aussi efficace que les antidépresseurs pour prévenir les rechutes dépressives.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "post7-h2-2",
+            "type": "heading",
+            "props": {
+              "content": "Commencer simplement",
+              "level": 2
+            },
+            "children": []
+          },
+          {
+            "id": "post7-list",
+            "type": "list",
+            "props": {
+              "items": [
+                "Choisissez un moment fixe — de préférence le matin, avant que la journée ne prenne le dessus",
+                "Commencez par 5 minutes — c'est suffisant pour installer l'habitude",
+                "Asseyez-vous confortablement — pas besoin de position du lotus, une chaise suffit",
+                "Portez attention à votre respiration — inspirez, expirez, sans chercher à modifier le rythme",
+                "Quand l'esprit vagabonde (et il le fera), ramenez doucement l'attention au souffle, sans jugement"
+              ],
+              "style": "ordered"
+            },
+            "children": []
+          },
+          {
+            "id": "post7-body2",
+            "type": "text",
+            "props": {
+              "content": "<p>La clé de la méditation n'est pas de vider son esprit — c'est un mythe tenace — mais d'observer ses pensées sans s'y accrocher. Imaginez-vous assis au bord d'une rivière : les pensées sont les bateaux qui passent. Vous les voyez, vous les reconnaissez, mais vous ne montez pas à bord. Avec le temps et la pratique, cet espace entre le stimulus et la réaction s'agrandit, et c'est dans cet espace que réside notre liberté.</p><p>Les applications comme Petit Bambou, Headspace ou Insight Timer offrent d'excellentes méditations guidées pour les débutants. Mais la pratique la plus simple reste aussi la plus puissante : s'asseoir, respirer, observer. Cinq minutes le matin, cinq minutes le soir. En un mois, vous sentirez la différence. En trois mois, votre entourage la remarquera.</p>"
+            },
+            "children": []
+          }
+        ]
+      },
+      "taxonomies": {
+        "categories": ["bien-etre"],
+        "tags": ["bien-etre", "nature", "art-de-vivre"]
+      }
+    },
+    {
+      "title": "Architecture durable : construire responsable",
+      "slug": "architecture-durable-construire-responsable",
+      "status": "published",
+      "excerpt": "L'architecture durable ne se résume pas à des panneaux solaires sur un toit. C'est une réflexion globale sur les matériaux, l'énergie, le territoire et notre façon d'habiter le monde.",
+      "featured_image": null,
+      "content": {
+        "blocks": [
+          {
+            "id": "post8-intro",
+            "type": "text",
+            "props": {
+              "content": "<p>Le bâtiment représente près de 40 % des émissions mondiales de CO2. Face à ce constat, une génération d'architectes repense fondamentalement l'acte de construire. L'architecture durable — ou éco-construction — ne se contente pas d'ajouter des technologies vertes à des bâtiments conventionnels. Elle repart de zéro, en questionnant chaque choix : les matériaux, l'orientation, l'isolation, l'intégration au paysage, et même la nécessité même de construire du neuf.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "post8-h2-1",
+            "type": "heading",
+            "props": {
+              "content": "Construire avec le vivant",
+              "level": 2
+            },
+            "children": []
+          },
+          {
+            "id": "post8-body1",
+            "type": "text",
+            "props": {
+              "content": "<p>Le retour aux matériaux biosourcés est l'une des révolutions les plus prometteuses de l'architecture contemporaine. Le bois, bien sûr, qui stocke le carbone au lieu d'en émettre et dont les performances structurelles rivalisent désormais avec le béton grâce au CLT (bois lamellé-croisé). Mais aussi la paille, utilisée en isolation depuis des siècles et qui retrouve ses lettres de noblesse dans des projets de grande envergure. La terre crue — pisé, adobe, bauge — fait elle aussi son retour, portée par des architectes comme Anna Heringer ou Francis Kéré, prix Pritzker 2022.</p><p>Le chanvre, le lin, la ouate de cellulose, le liège : la palette des matériaux naturels disponibles n'a jamais été aussi large. Leur point commun ? Ils sont renouvelables, recyclables, et leur fabrication consomme infiniment moins d'énergie que le béton ou l'acier. Le mycelium — la partie souterraine des champignons — est même exploré comme isolant et matériau de construction par des laboratoires de pointe aux États-Unis et aux Pays-Bas.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "post8-quote",
+            "type": "blockquote",
+            "props": {
+              "content": "Le bâtiment le plus durable est celui qu'on ne construit pas. Le deuxième plus durable est celui qu'on rénove.",
+              "citation": "Carl Elefante, architecte"
+            },
+            "children": []
+          },
+          {
+            "id": "post8-h2-2",
+            "type": "heading",
+            "props": {
+              "content": "Penser le bâtiment comme un écosystème",
+              "level": 2
+            },
+            "children": []
+          },
+          {
+            "id": "post8-body2",
+            "type": "text",
+            "props": {
+              "content": "<p>L'architecture durable la plus avancée ne pense plus le bâtiment comme un objet isolé, mais comme un écosystème intégré à son territoire. Les toitures végétalisées accueillent la biodiversité et régulent les eaux pluviales. Les façades bioclimatiques s'adaptent aux saisons — perméables à la lumière en hiver, protectrices en été. La ventilation naturelle remplace la climatisation. Les eaux grises sont recyclées pour l'arrosage.</p><p>L'architecte singapourien Vo Trong Nghia pousse cette logique à son terme avec ses « maisons forêts », où la végétation est intégrée à la structure même du bâtiment. En France, le collectif Encore Heureux milite pour le réemploi des matériaux de construction, donnant une seconde vie aux poutres, briques et menuiseries issues de démolitions. Leur devise : « Le meilleur déchet est celui qui n'existe pas. »</p><p>Construire durable, c'est finalement retrouver une forme d'humilité face au lieu. C'est écouter le terrain avant de dessiner, observer le soleil et le vent avant de positionner les ouvertures, et accepter que l'architecture la plus réussie est celle qui s'efface au profit du confort de ses habitants et du respect de son environnement.</p>"
+            },
+            "children": []
+          }
+        ]
+      },
+      "taxonomies": {
+        "categories": ["architecture"],
+        "tags": ["durable", "nature", "tendances"]
+      }
+    }
+  ],
+  "taxonomies": [
+    {
+      "name": "Catégories",
+      "slug": "categories",
+      "type": "category",
+      "description": "Catégories thématiques du blog",
+      "terms": [
+        { "name": "Photographie", "slug": "photographie", "description": "L'art de capturer la lumière et les instants", "order": 1 },
+        { "name": "Voyage", "slug": "voyage", "description": "Carnets de route et découvertes du monde", "order": 2 },
+        { "name": "Cuisine", "slug": "cuisine", "description": "Recettes végétales et art culinaire", "order": 3 },
+        { "name": "Lifestyle", "slug": "lifestyle", "description": "Art de vivre, slow living et bien-être au quotidien", "order": 4 },
+        { "name": "Déco", "slug": "deco", "description": "Décoration intérieure et tendances habitat", "order": 5 },
+        { "name": "Culture", "slug": "culture", "description": "Littérature, cinéma, art et idées", "order": 6 },
+        { "name": "Bien-être", "slug": "bien-etre", "description": "Méditation, santé naturelle et équilibre corps-esprit", "order": 7 },
+        { "name": "Architecture", "slug": "architecture", "description": "Architecture durable et habitat responsable", "order": 8 }
+      ]
+    },
+    {
+      "name": "Tags",
+      "slug": "tags",
+      "type": "tag",
+      "description": "Mots-clés transversaux",
+      "terms": [
+        { "name": "Minimalisme", "slug": "minimalisme", "description": "Simplicité, épure et essentiel", "order": 1 },
+        { "name": "Nature", "slug": "nature", "description": "Connexion au vivant et au monde naturel", "order": 2 },
+        { "name": "Recettes", "slug": "recettes", "description": "Recettes végétales et cuisine de saison", "order": 3 },
+        { "name": "Bien-être", "slug": "bien-etre", "description": "Santé, méditation et équilibre", "order": 4 },
+        { "name": "Tendances", "slug": "tendances", "description": "Les mouvements qui façonnent notre époque", "order": 5 },
+        { "name": "Inspiration", "slug": "inspiration", "description": "Sources d'inspiration et créativité", "order": 6 },
+        { "name": "Durable", "slug": "durable", "description": "Écologie, durabilité et responsabilité", "order": 7 },
+        { "name": "Art de vivre", "slug": "art-de-vivre", "description": "Philosophie du quotidien et savoir-vivre", "order": 8 }
+      ]
+    }
+  ],
+  "pages_count": 4,
+  "posts_count": 8,
+  "data_files": {
+    "posts": "data/posts.json",
+    "taxonomies": "data/taxonomies.json"
+  },
   "compatible_themes": [
     "botanica",
     "lumiere",

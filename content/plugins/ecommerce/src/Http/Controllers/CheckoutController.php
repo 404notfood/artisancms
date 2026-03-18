@@ -4,15 +4,13 @@ declare(strict_types=1);
 
 namespace Ecommerce\Http\Controllers;
 
-use App\CMS\Facades\CMS;
 use App\Http\Controllers\Controller;
-use App\Models\CmsPlugin;
+use Ecommerce\Http\Controllers\Concerns\HasEcommerceSettings;
 use Ecommerce\Http\Controllers\Concerns\HasThemeAndMenus;
-use Ecommerce\Models\Coupon;
 use Ecommerce\Models\Order;
-use Ecommerce\Models\OrderItem;
 use Ecommerce\Services\CartService;
 use Ecommerce\Services\CouponService;
+use Ecommerce\Services\OrderService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -21,93 +19,57 @@ use Inertia\Response;
 
 class CheckoutController extends Controller
 {
+    use HasEcommerceSettings;
     use HasThemeAndMenus;
 
     public function __construct(
         private readonly CartService $cartService,
+        private readonly OrderService $orderService,
         private readonly CouponService $couponService,
     ) {}
 
-    /**
-     * Show the checkout form.
-     */
     public function index(Request $request): Response
     {
         $items = $this->cartService->getItems();
-
-        if ($items->isEmpty()) {
-            return Inertia::render('Front/Shop/Checkout', array_merge($this->themeAndMenus(), [
-                'cartItems' => [],
-                'subtotal' => 0,
-                'tax' => 0,
-                'shipping' => 0,
-                'discount' => 0,
-                'total' => 0,
-                'settings' => $this->getSettings(),
-                'coupon' => null,
-            ]));
-        }
-
         $settings = $this->getSettings();
 
-        $subtotal = $items->sum(fn ($item) => $item->getTotal());
-        $taxRate = (float) ($settings['tax_rate'] ?? 20);
-        $tax = round($subtotal * $taxRate / 100, 2);
-        $shippingCost = (float) ($settings['shipping_cost'] ?? 5.99);
-        $freeShippingThreshold = (float) ($settings['free_shipping_threshold'] ?? 50);
-        $shipping = $subtotal >= $freeShippingThreshold ? 0 : $shippingCost;
-
-        // Check for coupon in session
-        $discount = 0;
-        $couponData = null;
-        $couponCode = $request->session()->get('coupon_code');
-        if ($couponCode) {
-            $coupon = $this->couponService->findByCode($couponCode);
-            if ($coupon && $coupon->isUsable()) {
-                if ($coupon->min_order === null || $subtotal >= (float) $coupon->min_order) {
-                    $discount = $coupon->type === 'percentage'
-                        ? round($subtotal * (float) $coupon->value / 100, 2)
-                        : min((float) $coupon->value, $subtotal);
-                    $couponData = [
-                        'code' => $coupon->code,
-                        'type' => $coupon->type,
-                        'value' => $coupon->value,
-                    ];
-                }
-            }
+        if ($items->isEmpty()) {
+            return $this->renderCheckout([], $settings);
         }
 
-        $total = max(0, $subtotal + $tax + $shipping - $discount);
+        $couponCode = $request->session()->get('coupon_code');
+        $totals = $this->orderService->calculateTotals($items, $settings, $couponCode);
 
-        $cartItems = $items->map(function ($item) {
-            return [
-                'id' => $item->id,
-                'product_id' => $item->product_id,
-                'variant_id' => $item->variant_id,
-                'name' => $item->product->name,
-                'variant_name' => $item->variant?->name,
-                'price' => $item->getPrice(),
-                'quantity' => $item->quantity,
-                'total' => $item->getTotal(),
-                'featured_image' => $item->product->featured_image,
-            ];
-        });
+        $couponData = $totals['coupon'] ? [
+            'code' => $totals['coupon']->code,
+            'type' => $totals['coupon']->type,
+            'value' => $totals['coupon']->value,
+        ] : null;
+
+        $cartItems = $items->map(fn ($item) => [
+            'id' => $item->id,
+            'product_id' => $item->product_id,
+            'variant_id' => $item->variant_id,
+            'name' => $item->product->name,
+            'variant_name' => $item->variant?->name,
+            'price' => $item->getPrice(),
+            'quantity' => $item->quantity,
+            'total' => $item->getTotal(),
+            'featured_image' => $item->product->featured_image,
+        ]);
 
         return Inertia::render('Front/Shop/Checkout', array_merge($this->themeAndMenus(), [
             'cartItems' => $cartItems,
-            'subtotal' => $subtotal,
-            'tax' => $tax,
-            'shipping' => $shipping,
-            'discount' => $discount,
-            'total' => $total,
+            'subtotal' => $totals['subtotal'],
+            'tax' => $totals['tax'],
+            'shipping' => $totals['shipping'],
+            'discount' => $totals['discount'],
+            'total' => $totals['total'],
             'settings' => $settings,
             'coupon' => $couponData,
         ]));
     }
 
-    /**
-     * Process the checkout and create an order.
-     */
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
@@ -135,114 +97,39 @@ class CheckoutController extends Controller
         $items = $this->cartService->getItems();
 
         if ($items->isEmpty()) {
-            return redirect()
-                ->route('shop.cart')
-                ->with('error', 'Votre panier est vide.');
+            return redirect()->route('shop.cart')->with('error', 'Votre panier est vide.');
+        }
+
+        $stockError = $this->orderService->checkStock($items);
+        if ($stockError) {
+            return redirect()->route('shop.cart')->with('error', $stockError);
         }
 
         $settings = $this->getSettings();
-
-        $subtotal = $items->sum(fn ($item) => $item->getTotal());
-        $taxRate = (float) ($settings['tax_rate'] ?? 20);
-        $tax = round($subtotal * $taxRate / 100, 2);
-        $shippingCost = (float) ($settings['shipping_cost'] ?? 5.99);
-        $freeShippingThreshold = (float) ($settings['free_shipping_threshold'] ?? 50);
-        $shipping = $subtotal >= $freeShippingThreshold ? 0 : $shippingCost;
-
-        // Apply coupon discount
-        $discount = 0;
         $couponCode = $request->session()->get('coupon_code');
-        if ($couponCode) {
-            $coupon = $this->couponService->findByCode($couponCode);
-            if ($coupon && $coupon->isUsable()) {
-                if ($coupon->min_order === null || $subtotal >= (float) $coupon->min_order) {
-                    $discount = $coupon->type === 'percentage'
-                        ? round($subtotal * (float) $coupon->value / 100, 2)
-                        : min((float) $coupon->value, $subtotal);
+        $totals = $this->orderService->calculateTotals($items, $settings, $couponCode);
 
-                    // Increment coupon usage
-                    $coupon->increment('used_count');
-                }
-            }
-        }
+        $order = $this->orderService->createFromCart($validated, $items, $totals);
 
-        $total = max(0, $subtotal + $tax + $shipping - $discount);
-        $total = (float) CMS::applyFilter('ecommerce.checkout.total', $total, $subtotal, $tax, $shipping, $discount);
-
-        $shippingAddress = $validated['shipping_address'];
-        $billingAddress = !empty($validated['billing_same_as_shipping'])
-            ? $shippingAddress
-            : ($validated['billing_address'] ?? $shippingAddress);
-
-        // Create the order
-        $order = Order::create([
-            'user_id' => auth()->id(),
-            'status' => 'pending',
-            'subtotal' => $subtotal,
-            'tax' => $tax,
-            'shipping' => $shipping,
-            'total' => $total,
-            'payment_method' => $validated['payment_method'],
-            'payment_status' => 'pending',
-            'shipping_address' => $shippingAddress,
-            'billing_address' => $billingAddress,
-            'notes' => $validated['notes'] ?? null,
-        ]);
-
-        // Create order items
-        foreach ($items as $item) {
-            OrderItem::create([
-                'order_id' => $order->id,
-                'product_id' => $item->product_id,
-                'variant_id' => $item->variant_id,
-                'name' => $item->product->name . ($item->variant ? ' - ' . $item->variant->name : ''),
-                'price' => $item->getPrice(),
-                'quantity' => $item->quantity,
-                'total' => $item->getTotal(),
-            ]);
-
-            // Decrease stock
-            if ($item->variant) {
-                $item->variant->decrement('stock', $item->quantity);
-            } else {
-                $item->product->decrement('stock', $item->quantity);
-            }
-        }
-
-        // Clear cart and coupon session
-        $this->cartService->clear();
         $request->session()->forget('coupon_code');
-
-        CMS::fire('ecommerce.order.created', $order);
 
         return redirect()
             ->route('shop.checkout.confirmation', $order)
             ->with('success', 'Votre commande a ete enregistree avec succes.');
     }
 
-    /**
-     * Show the order confirmation page.
-     */
     public function confirmation(Order $order): Response
     {
-        // Ensure the order belongs to the authenticated user
-        if ($order->user_id !== auth()->id()) {
-            abort(403);
-        }
+        $this->authorizeOrder($order);
 
         $order->load('items');
 
-        $settings = $this->getSettings();
-
         return Inertia::render('Front/Shop/Confirmation', array_merge($this->themeAndMenus(), [
             'order' => $order,
-            'settings' => $settings,
+            'settings' => $this->getSettings(),
         ]));
     }
 
-    /**
-     * Apply a coupon code and return the discount as JSON.
-     */
     public function applyCoupon(Request $request): JsonResponse
     {
         $request->validate([
@@ -260,19 +147,16 @@ class CheckoutController extends Controller
         }
 
         $subtotal = (float) $request->input('subtotal');
+        $discount = $this->orderService->calculateCouponDiscount($coupon, $subtotal);
 
-        if ($coupon->min_order !== null && $subtotal < (float) $coupon->min_order) {
+        if ($discount === 0.0 && $coupon->min_order !== null) {
             return response()->json([
                 'success' => false,
-                'message' => 'Le montant minimum de commande pour ce code promo est de ' . number_format((float) $coupon->min_order, 2, ',', ' ') . ' €.',
+                'message' => 'Le montant minimum de commande pour ce code promo est de '
+                    . number_format((float) $coupon->min_order, 2, ',', ' ') . ' EUR.',
             ], 422);
         }
 
-        $discount = $coupon->type === 'percentage'
-            ? round($subtotal * (float) $coupon->value / 100, 2)
-            : min((float) $coupon->value, $subtotal);
-
-        // Store coupon in session
         $request->session()->put('coupon_code', $coupon->code);
 
         return response()->json([
@@ -287,37 +171,24 @@ class CheckoutController extends Controller
         ]);
     }
 
-    /**
-     * Get current e-commerce settings with defaults.
-     *
-     * @return array<string, mixed>
-     */
-    private function getSettings(): array
+    private function renderCheckout(array $cartItems, array $settings): Response
     {
-        $defaults = [
-            'store_name' => 'Ma Boutique',
-            'currency' => 'EUR',
-            'currency_symbol' => "\u{20AC}",
-            'tax_rate' => 20,
-            'shipping_cost' => 5.99,
-            'free_shipping_threshold' => 50,
-        ];
+        return Inertia::render('Front/Shop/Checkout', array_merge($this->themeAndMenus(), [
+            'cartItems' => $cartItems,
+            'subtotal' => 0,
+            'tax' => 0,
+            'shipping' => 0,
+            'discount' => 0,
+            'total' => 0,
+            'settings' => $settings,
+            'coupon' => null,
+        ]));
+    }
 
-        $plugin = CmsPlugin::where('slug', 'ecommerce')->first();
-
-        if (!$plugin || empty($plugin->settings)) {
-            return $defaults;
+    private function authorizeOrder(Order $order): void
+    {
+        if ($order->user_id !== auth()->id()) {
+            abort(403);
         }
-
-        $resolved = [];
-        foreach ($plugin->settings as $key => $value) {
-            if (is_array($value) && isset($value['default'])) {
-                $resolved[$key] = $value['default'];
-            } else {
-                $resolved[$key] = $value;
-            }
-        }
-
-        return array_merge($defaults, $resolved);
     }
 }

@@ -19,7 +19,7 @@ interface TipTapEditorProps {
 }
 
 export default function TipTapEditor({ content, onUpdate, placeholder }: TipTapEditorProps) {
-    const debounceRef = useRef<ReturnType<typeof setTimeout>>();
+    const debounceRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
     const editor = useEditor({
         extensions: [
@@ -42,7 +42,7 @@ export default function TipTapEditor({ content, onUpdate, placeholder }: TipTapE
 
     useEffect(() => {
         if (editor && content !== editor.getHTML()) {
-            editor.commands.setContent(content, false);
+            editor.commands.setContent(content, { emitUpdate: false });
         }
     }, [content]);
 

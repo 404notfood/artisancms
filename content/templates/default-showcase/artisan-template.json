@@ -372,7 +372,9 @@
               {
                 "type": "spacer",
                 "id": "oss-sp1",
-                "props": { "height": 12 }
+                "props": {
+                  "height": 12
+                }
               },
               {
                 "type": "text",
@@ -384,12 +386,17 @@
               {
                 "type": "spacer",
                 "id": "oss-sp2",
-                "props": { "height": 64 }
+                "props": {
+                  "height": 64
+                }
               },
               {
                 "type": "grid",
                 "id": "oss-grid",
-                "props": { "columns": 3, "gap": 32 },
+                "props": {
+                  "columns": 3,
+                  "gap": 32
+                },
                 "children": [
                   {
                     "type": "custom-html",
@@ -509,6 +516,356 @@
           }
         ]
       }
+    },
+    {
+      "id": "a-propos",
+      "title": "A propos",
+      "slug": "a-propos",
+      "template": "default",
+      "status": "published",
+      "meta_title": "A propos — ArtisanCMS",
+      "meta_description": "Decouvrez ArtisanCMS, le CMS open source nouvelle generation construit avec Laravel et React.",
+      "content": {
+        "blocks": [
+          {
+            "type": "section",
+            "id": "ds-about-hero",
+            "props": {
+              "backgroundColor": "#0f172a",
+              "paddingTop": 80,
+              "paddingBottom": 80,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 800,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "ds-about-label",
+                "props": {
+                  "content": "<p style=\"text-align:center;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#a78bfa;margin-bottom:12px\">A propos</p>"
+                }
+              },
+              {
+                "type": "heading",
+                "id": "ds-about-title",
+                "props": {
+                  "text": "Une alternative moderne a WordPress",
+                  "level": 1,
+                  "alignment": "center",
+                  "color": "#ffffff"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "ds-about-sp1",
+                "props": {
+                  "height": 16
+                }
+              },
+              {
+                "type": "text",
+                "id": "ds-about-desc",
+                "props": {
+                  "content": "<p style=\"text-align:center;color:#94a3b8;font-size:1.125rem;line-height:1.75;max-width:640px;margin:0 auto\">ArtisanCMS est ne d'un constat simple : les CMS existants sont soit trop lourds, soit trop rigides, soit trop chers. Nous avons cree la plateforme que nous aurions voulu utiliser en tant que developpeurs freelance.</p>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "ds-about-body",
+            "props": {
+              "backgroundColor": "#ffffff",
+              "paddingTop": 80,
+              "paddingBottom": 80,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 900,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "ds-about-mission",
+                "props": {
+                  "content": "<h2 style=\"color:#0f172a;font-size:1.75rem;font-weight:700;margin-bottom:16px\">Notre mission</h2><p style=\"color:#64748b;font-size:1rem;line-height:1.8;margin-bottom:24px\">Offrir aux developpeurs freelance et aux agences un outil professionnel, performant et gratuit pour creer des sites web exceptionnels pour leurs clients. ArtisanCMS combine la puissance de Laravel avec la modernite de React pour offrir une experience de developpement et d'utilisation sans compromis.</p><h2 style=\"color:#0f172a;font-size:1.75rem;font-weight:700;margin-bottom:16px\">Pourquoi ArtisanCMS ?</h2><p style=\"color:#64748b;font-size:1rem;line-height:1.8;margin-bottom:16px\"><strong>Performance</strong> : Construit sur Laravel 12 et React 19, ArtisanCMS est optimise pour la vitesse. Score Lighthouse 100 out of the box, temps de chargement inferieur a 1 seconde.</p><p style=\"color:#64748b;font-size:1rem;line-height:1.8;margin-bottom:16px\"><strong>Simplicite</strong> : Un page builder drag & drop intuitif qui permet a vos clients de gerer leur site en toute autonomie, sans formation technique.</p><p style=\"color:#64748b;font-size:1rem;line-height:1.8;margin-bottom:16px\"><strong>Extensibilite</strong> : Un ecosysteme de plugins et de themes qui s'enrichit en permanence. Architecture Laravel standard, facile a etendre pour les developpeurs.</p><p style=\"color:#64748b;font-size:1rem;line-height:1.8\"><strong>Liberte</strong> : 100% open source, licence MIT. Pas de frais de licence, pas d'abonnement, pas de limite cachee. Installez-le sur votre propre serveur et gardez le controle total.</p>"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "services",
+      "title": "Services",
+      "slug": "services",
+      "template": "default",
+      "status": "published",
+      "meta_title": "Services — ArtisanCMS",
+      "meta_description": "Decouvrez les services proposes par ArtisanCMS : page builder, themes premium, plugins, hebergement compatible.",
+      "content": {
+        "blocks": [
+          {
+            "type": "section",
+            "id": "ds-svc-hero",
+            "props": {
+              "backgroundColor": "#0f172a",
+              "paddingTop": 80,
+              "paddingBottom": 80,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 800,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "ds-svc-label",
+                "props": {
+                  "content": "<p style=\"text-align:center;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#a78bfa;margin-bottom:12px\">Ce que nous proposons</p>"
+                }
+              },
+              {
+                "type": "heading",
+                "id": "ds-svc-title",
+                "props": {
+                  "text": "Des outils pour creer des sites extraordinaires",
+                  "level": 1,
+                  "alignment": "center",
+                  "color": "#ffffff"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "ds-svc-sp1",
+                "props": {
+                  "height": 16
+                }
+              },
+              {
+                "type": "text",
+                "id": "ds-svc-desc",
+                "props": {
+                  "content": "<p style=\"text-align:center;color:#94a3b8;font-size:1.125rem;line-height:1.75;max-width:640px;margin:0 auto\">ArtisanCMS fournit tous les outils necessaires pour concevoir, deployer et gerer des sites web professionnels.</p>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "ds-svc-grid",
+            "props": {
+              "backgroundColor": "#ffffff",
+              "paddingTop": 80,
+              "paddingBottom": 80,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 1080,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "grid",
+                "id": "ds-svc-cards",
+                "props": {
+                  "columns": 2,
+                  "gap": 32
+                },
+                "children": [
+                  {
+                    "type": "text",
+                    "id": "ds-svc-c1",
+                    "props": {
+                      "content": "<div style=\"padding:32px;background:#f8fafc;border-radius:16px;border:1px solid #e2e8f0\"><h3 style=\"color:#0f172a;font-size:1.25rem;font-weight:700;margin-bottom:12px\">Page Builder Visuel</h3><p style=\"color:#64748b;line-height:1.7;font-size:0.95rem\">Construisez vos pages par glisser-deposer avec plus de 50 blocs disponibles. Sections, grilles, textes, images, formulaires, temoignages, FAQ, timeline et bien plus. Edition responsive en temps reel pour desktop, tablette et mobile.</p></div>"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "id": "ds-svc-c2",
+                    "props": {
+                      "content": "<div style=\"padding:32px;background:#f8fafc;border-radius:16px;border:1px solid #e2e8f0\"><h3 style=\"color:#0f172a;font-size:1.25rem;font-weight:700;margin-bottom:12px\">Themes Premium</h3><p style=\"color:#64748b;line-height:1.7;font-size:0.95rem\">8 themes professionnels inclus gratuitement, entierement personnalisables sans code. Couleurs, typographie, mise en page : tout est ajustable via un panneau visuel intuitif. Chaque theme est responsive et optimise pour le SEO.</p></div>"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "id": "ds-svc-c3",
+                    "props": {
+                      "content": "<div style=\"padding:32px;background:#f8fafc;border-radius:16px;border:1px solid #e2e8f0\"><h3 style=\"color:#0f172a;font-size:1.25rem;font-weight:700;margin-bottom:12px\">Ecosystem de Plugins</h3><p style=\"color:#64748b;line-height:1.7;font-size:0.95rem\">Etendez les fonctionnalites avec des plugins : SEO, e-commerce, formulaires, newsletter, sauvegarde, analytics et bien plus. Chaque plugin est un Laravel Service Provider standard, facile a developper et a maintenir.</p></div>"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "id": "ds-svc-c4",
+                    "props": {
+                      "content": "<div style=\"padding:32px;background:linear-gradient(135deg,#7c3aed,#4338ca);border-radius:16px\"><h3 style=\"color:#fff;font-size:1.25rem;font-weight:700;margin-bottom:12px\">Hebergement Flexible</h3><p style=\"color:rgba(255,255,255,0.8);line-height:1.7;font-size:0.95rem\">Compatible avec tous les hebergements PHP + MySQL : mutualisés (o2switch, OVH, LWS, Infomaniak), VPS ou serveur dedie. Installation en 2 minutes avec le wizard integre ou en ligne de commande.</p></div>"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "blog",
+      "title": "Blog",
+      "slug": "blog",
+      "template": "default",
+      "status": "published",
+      "meta_title": "Blog — ArtisanCMS",
+      "meta_description": "Conseils, tutoriels et actualites sur la creation de sites web, le SEO et la performance.",
+      "content": {
+        "blocks": [
+          {
+            "type": "section",
+            "id": "ds-blog-hero",
+            "props": {
+              "backgroundColor": "#0f172a",
+              "paddingTop": 80,
+              "paddingBottom": 80,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 800,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "ds-blog-label",
+                "props": {
+                  "content": "<p style=\"text-align:center;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#a78bfa;margin-bottom:12px\">Actualites</p>"
+                }
+              },
+              {
+                "type": "heading",
+                "id": "ds-blog-title",
+                "props": {
+                  "text": "Le blog",
+                  "level": 1,
+                  "alignment": "center",
+                  "color": "#ffffff"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "ds-blog-sp1",
+                "props": {
+                  "height": 16
+                }
+              },
+              {
+                "type": "text",
+                "id": "ds-blog-desc",
+                "props": {
+                  "content": "<p style=\"text-align:center;color:#94a3b8;font-size:1.125rem;line-height:1.75;max-width:640px;margin:0 auto\">Conseils pratiques, tutoriels et reflexions sur la creation web, le choix d'un CMS, la performance et le referencement naturel.</p>"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "contact",
+      "title": "Contact",
+      "slug": "contact",
+      "template": "default",
+      "status": "published",
+      "meta_title": "Contact — ArtisanCMS",
+      "meta_description": "Contactez l'equipe ArtisanCMS pour toute question, suggestion ou demande de support.",
+      "content": {
+        "blocks": [
+          {
+            "type": "section",
+            "id": "ds-contact-hero",
+            "props": {
+              "backgroundColor": "#0f172a",
+              "paddingTop": 80,
+              "paddingBottom": 60,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 800,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "text",
+                "id": "ds-contact-label",
+                "props": {
+                  "content": "<p style=\"text-align:center;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#a78bfa;margin-bottom:12px\">Nous contacter</p>"
+                }
+              },
+              {
+                "type": "heading",
+                "id": "ds-contact-title",
+                "props": {
+                  "text": "Restons en contact",
+                  "level": 1,
+                  "alignment": "center",
+                  "color": "#ffffff"
+                }
+              },
+              {
+                "type": "spacer",
+                "id": "ds-contact-sp1",
+                "props": {
+                  "height": 16
+                }
+              },
+              {
+                "type": "text",
+                "id": "ds-contact-desc",
+                "props": {
+                  "content": "<p style=\"text-align:center;color:#94a3b8;font-size:1.125rem;line-height:1.75;max-width:640px;margin:0 auto\">Une question, une suggestion ou un besoin de support ? N'hesitez pas a nous ecrire, nous repondons sous 24 heures.</p>"
+                }
+              }
+            ]
+          },
+          {
+            "type": "section",
+            "id": "ds-contact-form",
+            "props": {
+              "backgroundColor": "#ffffff",
+              "paddingTop": 80,
+              "paddingBottom": 80,
+              "paddingLeft": 24,
+              "paddingRight": 24,
+              "maxWidth": 900,
+              "centered": true
+            },
+            "children": [
+              {
+                "type": "grid",
+                "id": "ds-contact-grid",
+                "props": {
+                  "columns": 2,
+                  "gap": 48
+                },
+                "children": [
+                  {
+                    "type": "text",
+                    "id": "ds-contact-info",
+                    "props": {
+                      "content": "<div><h2 style=\"color:#0f172a;font-size:1.5rem;font-weight:700;margin-bottom:24px\">Informations</h2><div style=\"margin-bottom:20px\"><p style=\"color:#0f172a;font-weight:600;margin:0 0 4px\">Email</p><p style=\"color:#7c3aed;margin:0\">contact@artisancms.dev</p></div><div style=\"margin-bottom:20px\"><p style=\"color:#0f172a;font-weight:600;margin:0 0 4px\">GitHub</p><p style=\"color:#64748b;margin:0\">github.com/artisancms</p></div><div style=\"margin-bottom:20px\"><p style=\"color:#0f172a;font-weight:600;margin:0 0 4px\">Documentation</p><p style=\"color:#64748b;margin:0\">docs.artisancms.dev</p></div><div style=\"margin-top:32px;padding:20px;background:#f0fdf4;border-radius:12px;border:1px solid #bbf7d0\"><p style=\"color:#15803d;font-size:0.9rem;margin:0;line-height:1.6\">ArtisanCMS est un projet open source. Pour les bugs et les demandes de fonctionnalites, utilisez GitHub Issues.</p></div></div>"
+                    }
+                  },
+                  {
+                    "type": "custom-html",
+                    "id": "ds-contact-formhtml",
+                    "props": {
+                      "html": "<div><h2 style=\"color:#0f172a;font-size:1.5rem;font-weight:700;margin-bottom:24px\">Envoyer un message</h2><form style=\"display:flex;flex-direction:column;gap:16px\"><div><label style=\"display:block;font-size:0.85rem;font-weight:600;color:#374151;margin-bottom:6px\">Nom</label><input type=\"text\" placeholder=\"Votre nom\" style=\"width:100%;padding:12px 16px;border:1px solid #e2e8f0;border-radius:8px;font-size:0.95rem;box-sizing:border-box;outline:none\"/></div><div><label style=\"display:block;font-size:0.85rem;font-weight:600;color:#374151;margin-bottom:6px\">Email</label><input type=\"email\" placeholder=\"votre@email.fr\" style=\"width:100%;padding:12px 16px;border:1px solid #e2e8f0;border-radius:8px;font-size:0.95rem;box-sizing:border-box;outline:none\"/></div><div><label style=\"display:block;font-size:0.85rem;font-weight:600;color:#374151;margin-bottom:6px\">Sujet</label><select style=\"width:100%;padding:12px 16px;border:1px solid #e2e8f0;border-radius:8px;font-size:0.95rem;box-sizing:border-box;outline:none\"><option>Question generale</option><option>Support technique</option><option>Suggestion</option><option>Partenariat</option></select></div><div><label style=\"display:block;font-size:0.85rem;font-weight:600;color:#374151;margin-bottom:6px\">Message</label><textarea rows=\"5\" placeholder=\"Votre message...\" style=\"width:100%;padding:12px 16px;border:1px solid #e2e8f0;border-radius:8px;font-size:0.95rem;box-sizing:border-box;outline:none;resize:vertical\"></textarea></div><button type=\"submit\" style=\"background:#7c3aed;color:#fff;padding:14px 32px;border:none;border-radius:8px;font-size:1rem;font-weight:600;cursor:pointer\">Envoyer le message</button></form></div>"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
     }
   ],
   "menus": [
@@ -522,18 +879,50 @@
           "order": 1
         },
         {
-          "label": "Fonctionnalités",
-          "url": "#features",
+          "label": "A propos",
+          "url": "/a-propos",
           "order": 2
         },
         {
-          "label": "Open source",
-          "url": "#opensource",
+          "label": "Services",
+          "url": "/services",
           "order": 3
         },
         {
-          "label": "FAQ",
-          "url": "#faq",
+          "label": "Blog",
+          "url": "/blog",
+          "order": 4
+        },
+        {
+          "label": "Contact",
+          "url": "/contact",
+          "order": 5
+        }
+      ]
+    },
+    {
+      "name": "Menu footer",
+      "location": "footer",
+      "items": [
+        {
+          "label": "Mentions legales",
+          "url": "/mentions-legales",
+          "order": 1
+        },
+        {
+          "label": "Politique de confidentialite",
+          "url": "/politique-de-confidentialite",
+          "order": 2
+        },
+        {
+          "label": "Contact",
+          "url": "/contact",
+          "order": 3
+        },
+        {
+          "label": "GitHub",
+          "url": "https://github.com/artisancms",
+          "target": "_blank",
           "order": 4
         }
       ]
@@ -547,5 +936,290 @@
     "secondary_color": "#3b82f6",
     "font_heading": "Syne",
     "font_body": "Inter"
-  }
+  },
+  "taxonomies": [
+    {
+      "name": "Categories",
+      "slug": "categories",
+      "type": "category",
+      "description": "Categories des articles du blog",
+      "terms": [
+        {
+          "name": "CMS",
+          "slug": "cms",
+          "description": "Articles sur les CMS et la gestion de contenu",
+          "order": 1
+        },
+        {
+          "name": "Performance",
+          "slug": "performance",
+          "description": "Articles sur la performance web",
+          "order": 2
+        },
+        {
+          "name": "Developpement",
+          "slug": "developpement",
+          "description": "Articles sur le developpement web",
+          "order": 3
+        },
+        {
+          "name": "Juridique",
+          "slug": "juridique",
+          "description": "Articles sur les aspects juridiques du web",
+          "order": 4
+        }
+      ]
+    },
+    {
+      "name": "Tags",
+      "slug": "tags",
+      "type": "tag",
+      "description": "Tags des articles",
+      "terms": [
+        {
+          "name": "SEO",
+          "slug": "seo",
+          "order": 1
+        },
+        {
+          "name": "Laravel",
+          "slug": "laravel",
+          "order": 2
+        },
+        {
+          "name": "WordPress",
+          "slug": "wordpress",
+          "order": 3
+        },
+        {
+          "name": "RGPD",
+          "slug": "rgpd",
+          "order": 4
+        }
+      ]
+    }
+  ],
+  "posts": [
+    {
+      "title": "Comment choisir le bon CMS pour votre site",
+      "slug": "comment-choisir-bon-cms",
+      "status": "published",
+      "excerpt": "WordPress, Wix, Squarespace, Strapi, ArtisanCMS... Comment choisir le CMS adapte a votre projet et a vos besoins reels ?",
+      "featured_image": null,
+      "taxonomies": {
+        "categories": [
+          "cms"
+        ],
+        "tags": [
+          "wordpress"
+        ]
+      },
+      "content": {
+        "blocks": [
+          {
+            "id": "ds-p1-b1",
+            "type": "heading",
+            "props": {
+              "text": "Comment choisir le bon CMS pour votre site web",
+              "level": 1,
+              "color": "#0f172a"
+            },
+            "children": []
+          },
+          {
+            "id": "ds-p1-b2",
+            "type": "text",
+            "props": {
+              "content": "<p>Le choix d'un CMS est une decision strategique qui impactera la performance, la maintenabilite et le cout total de votre site web pendant des annees. Avec des dizaines de solutions disponibles, comment s'y retrouver ? Voici les criteres essentiels a considerer pour faire le bon choix.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "ds-p1-b3",
+            "type": "text",
+            "props": {
+              "content": "<h2>Definissez vos besoins reels</h2><p>Avant de comparer les CMS, listez vos besoins concrets : site vitrine ou e-commerce ? Blog ou pages statiques ? Combien de pages ? Quel volume de trafic ? Qui gerera le contenu au quotidien ? Ces reponses elimineront d'emblee de nombreuses options. Un blog personnel n'a pas les memes besoins qu'un site e-commerce avec 10 000 produits.</p><h2>Les criteres techniques</h2><p>Performance : le CMS doit generer des pages rapides (< 2 secondes de chargement). SEO : il doit offrir un controle complet sur les meta tags, les URLs et le schema. Securite : mises a jour regulieres, protection contre les vulnerabilites courantes. Hebergement : est-il compatible avec votre infrastructure ? Un CMS PHP + MySQL fonctionnera sur n'importe quel hebergement mutualise, tandis qu'un CMS Node.js necessitera un VPS.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "ds-p1-b4",
+            "type": "text",
+            "props": {
+              "content": "<h2>L'experience utilisateur</h2><p>Le meilleur CMS du monde est inutile si vos clients ne savent pas l'utiliser. Testez l'interface d'administration, le page builder, la gestion des medias. Un CMS no-code avec un builder visuel intuitif reduira considerablement le temps de formation et les demandes de support.</p><h2>Pourquoi ArtisanCMS ?</h2><p>ArtisanCMS combine le meilleur des deux mondes : la puissance et la flexibilite d'un framework moderne (Laravel + React) avec la simplicite d'un builder visuel no-code. Il fonctionne sur n'importe quel hebergement PHP, il est gratuit et open source, et il est concu specifiquement pour les developpeurs freelance qui creent des sites pour leurs clients.</p>"
+            },
+            "children": []
+          }
+        ]
+      }
+    },
+    {
+      "title": "Les avantages d'un site sur mesure",
+      "slug": "avantages-site-sur-mesure",
+      "status": "published",
+      "excerpt": "Pourquoi investir dans un site web sur mesure plutot qu'un template standard ? Performance, SEO, image de marque et ROI.",
+      "featured_image": null,
+      "taxonomies": {
+        "categories": [
+          "developpement"
+        ],
+        "tags": [
+          "seo"
+        ]
+      },
+      "content": {
+        "blocks": [
+          {
+            "id": "ds-p2-b1",
+            "type": "heading",
+            "props": {
+              "text": "Les avantages d'un site web sur mesure en 2026",
+              "level": 1,
+              "color": "#0f172a"
+            },
+            "children": []
+          },
+          {
+            "id": "ds-p2-b2",
+            "type": "text",
+            "props": {
+              "content": "<p>A l'heure ou des milliers de sites sont crees chaque jour avec des templates identiques, un site sur mesure reste un investissement strategique pour les entreprises qui veulent se demarquer. Loin d'etre un luxe, c'est souvent la decision la plus rentable a moyen et long terme.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "ds-p2-b3",
+            "type": "text",
+            "props": {
+              "content": "<h2>Une image de marque unique</h2><p>Votre site web est souvent le premier point de contact avec vos clients potentiels. Un design sur mesure communique immediatement le professionnalisme, les valeurs et le positionnement de votre marque. Contrairement a un template generique utilise par des centaines d'autres sites, un design unique cree une impression memorable et renforce la confiance.</p><h2>Performance optimisee</h2><p>Un site sur mesure ne charge que le code necessaire, contrairement aux templates qui embarquent des dizaines de fonctionnalites inutilisees. Le resultat : des temps de chargement inferieurs a 1 seconde, un meilleur score Lighthouse et une experience utilisateur plus fluide. Google favorise les sites rapides dans ses resultats de recherche, ce qui se traduit directement en trafic organique superieur.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "ds-p2-b4",
+            "type": "text",
+            "props": {
+              "content": "<h2>SEO natif et structure optimisee</h2><p>Un site sur mesure est construit avec le SEO en tete des sa conception. Structure HTML semantique, hierarchie de titres coherente, schema markup adapte, URLs propres, sitemap optimise : chaque element est pense pour maximiser la visibilite dans les moteurs de recherche. Avec un template, vous heritez souvent d'une structure qui n'est pas optimale pour votre contenu specifique.</p><h2>Evolutivite et maintenabilite</h2><p>Un site sur mesure est concu pour evoluer avec votre activite. Besoin d'ajouter un espace client, un configurateur de produit ou une section multilingue ? C'est possible sans refonte complete. Le code est documente, structure et facile a maintenir, ce qui reduit les couts a long terme et facilite les mises a jour.</p>"
+            },
+            "children": []
+          }
+        ]
+      }
+    },
+    {
+      "title": "Optimiser la vitesse de votre site web",
+      "slug": "optimiser-vitesse-site-web",
+      "status": "published",
+      "excerpt": "Guide complet pour ameliorer les performances de votre site : images, cache, code, CDN et Core Web Vitals.",
+      "featured_image": null,
+      "taxonomies": {
+        "categories": [
+          "performance"
+        ],
+        "tags": [
+          "seo",
+          "laravel"
+        ]
+      },
+      "content": {
+        "blocks": [
+          {
+            "id": "ds-p3-b1",
+            "type": "heading",
+            "props": {
+              "text": "Optimiser la vitesse de votre site web : guide complet",
+              "level": 1,
+              "color": "#0f172a"
+            },
+            "children": []
+          },
+          {
+            "id": "ds-p3-b2",
+            "type": "text",
+            "props": {
+              "content": "<p>La vitesse de chargement est un facteur determinant pour l'experience utilisateur et le referencement naturel. Google a confirme que les Core Web Vitals (LCP, FID, CLS) influencent directement le classement des pages. Un site lent perd des visiteurs, des conversions et des positions dans les resultats de recherche. Voici les leviers les plus efficaces pour accelerer votre site.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "ds-p3-b3",
+            "type": "text",
+            "props": {
+              "content": "<h2>Optimiser les images</h2><p>Les images representent souvent 60 a 80% du poids total d'une page. Convertissez vos images en format WebP (30% plus leger que le JPEG a qualite egale), definissez les dimensions exactes avec les attributs width et height (evite le CLS), utilisez le lazy loading natif pour les images hors ecran et generez des srcset pour servir la bonne taille selon l'appareil.</p><h2>Mettre en place un cache efficace</h2><p>Le cache est votre meilleur allie pour la performance. Cote serveur, utilisez le cache applicatif (Redis ou file cache avec Laravel) pour eviter les requetes en base de donnees repetitives. Cote client, configurez les en-tetes Cache-Control pour que le navigateur stocke les ressources statiques. Un CDN comme Cloudflare ajoute une couche de cache supplementaire en servant les fichiers depuis le serveur le plus proche de l'utilisateur.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "ds-p3-b4",
+            "type": "text",
+            "props": {
+              "content": "<h2>Optimiser le code</h2><p>Minifiez et compressez vos fichiers CSS et JavaScript. Utilisez le code splitting pour ne charger que le JavaScript necessaire a chaque page. Supprimez les librairies inutilisees. Avec un bundler moderne comme Vite, ces optimisations sont quasi-automatiques. Activez la compression Brotli sur votre serveur pour reduire encore le poids des transferts.</p><h2>Les Core Web Vitals en detail</h2><p>LCP (Largest Contentful Paint) : vise moins de 2,5 secondes. Optimisez l'image principale, preloadez les ressources critiques. FID/INP (Interaction to Next Paint) : vise moins de 200ms. Evitez les scripts bloquants, utilisez des web workers. CLS (Cumulative Layout Shift) : vise moins de 0,1. Definissez les dimensions des images et des iframes, evitez les insertions de contenu dynamique au-dessus du fold.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "ds-p3-b5",
+            "type": "text",
+            "props": {
+              "content": "<h2>ArtisanCMS et la performance</h2><p>ArtisanCMS est concu pour la performance des sa fondation. Cache intelligent avec invalidation automatique, images optimisees en WebP, code splitting React, compression Brotli, lazy loading natif : toutes ces optimisations sont integrees par defaut. Resultat : un score Lighthouse de 100 sans aucune configuration supplementaire.</p>"
+            },
+            "children": []
+          }
+        ]
+      }
+    },
+    {
+      "title": "RGPD : mise en conformite de votre site",
+      "slug": "rgpd-mise-en-conformite-site",
+      "status": "published",
+      "excerpt": "Guide pratique pour mettre votre site web en conformite avec le RGPD : cookies, donnees personnelles, formulaires et droits des utilisateurs.",
+      "featured_image": null,
+      "taxonomies": {
+        "categories": [
+          "juridique"
+        ],
+        "tags": [
+          "rgpd"
+        ]
+      },
+      "content": {
+        "blocks": [
+          {
+            "id": "ds-p4-b1",
+            "type": "heading",
+            "props": {
+              "text": "RGPD : guide de mise en conformite pour votre site web",
+              "level": 1,
+              "color": "#0f172a"
+            },
+            "children": []
+          },
+          {
+            "id": "ds-p4-b2",
+            "type": "text",
+            "props": {
+              "content": "<p>Le Reglement General sur la Protection des Donnees (RGPD) est en vigueur depuis mai 2018, mais de nombreux sites web ne sont toujours pas conformes. Les sanctions peuvent atteindre 4% du chiffre d'affaires annuel mondial ou 20 millions d'euros. Au-dela de l'obligation legale, la conformite RGPD est un gage de confiance pour vos utilisateurs.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "ds-p4-b3",
+            "type": "text",
+            "props": {
+              "content": "<h2>Les cookies et le consentement</h2><p>Tout cookie non essentiel au fonctionnement du site necessite le consentement explicite de l'utilisateur avant d'etre depose. Cela inclut les cookies d'analyse (Google Analytics), de publicite, de reseaux sociaux et de personnalisation. Le bandeau cookies doit etre clair, proposer un choix reel (accepter/refuser/personnaliser) et ne pas utiliser de dark patterns pour forcer le consentement.</p><h2>La collecte de donnees personnelles</h2><p>Chaque formulaire de votre site doit indiquer clairement quelles donnees sont collectees, pourquoi et pendant combien de temps. Le principe de minimisation impose de ne collecter que les donnees strictement necessaires. Un formulaire de contact n'a pas besoin de la date de naissance ou de l'adresse postale. Ajoutez un lien vers votre politique de confidentialite et, si necessaire, une case a cocher pour le consentement explicite.</p>"
+            },
+            "children": []
+          },
+          {
+            "id": "ds-p4-b4",
+            "type": "text",
+            "props": {
+              "content": "<h2>Les droits des utilisateurs</h2><p>Le RGPD accorde aux utilisateurs plusieurs droits : droit d'acces, de rectification, d'effacement (droit a l'oubli), de portabilite et d'opposition. Votre site doit proposer un moyen simple d'exercer ces droits (formulaire dedie, adresse email du DPO). Les demandes doivent etre traitees dans un delai d'un mois.</p><h2>ArtisanCMS et le RGPD</h2><p>ArtisanCMS est concu avec la vie privee comme priorite. Le module d'analytics integre est 100% server-side et ne depose aucun cookie tiers. Les formulaires integrent nativement les mentions RGPD. Les donnees personnelles sont stockees de maniere securisee avec chiffrement. Un module d'export et de suppression des donnees utilisateur est disponible pour repondre aux demandes d'exercice des droits.</p>"
+            },
+            "children": []
+          }
+        ]
+      }
+    }
+  ]
 }

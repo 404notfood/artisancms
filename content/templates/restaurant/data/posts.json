@@ -1,0 +1,625 @@
+[
+  {
+    "title": "Notre nouveau menu d'été est arrivé",
+    "slug": "nouveau-menu-ete",
+    "status": "published",
+    "excerpt": "Découvrez les saveurs estivales qui composent notre nouvelle carte : produits du soleil, herbes fraîches du potager et poissons de la criée du matin.",
+    "content": {
+      "blocks": [
+        {
+          "type": "section",
+          "id": "post1-intro",
+          "props": {
+            "backgroundColor": "#fffbeb",
+            "paddingTop": 60,
+            "paddingBottom": 60,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 800,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "text",
+              "id": "post1-intro-text",
+              "props": {
+                "content": "<p style='font-size:1.125rem;line-height:1.9;color:#451a03'>Chaque année, l'arrivée de l'été est un moment que notre brigade attend avec impatience. C'est le signal d'un renouveau complet de notre carte, guidé par les arrivages des producteurs locaux et l'inspiration que nous puisons dans les marchés de Provence.</p><p style='font-size:1.125rem;line-height:1.9;color:#451a03;margin-top:20px'>Le Chef Antoine Moreau a composé cette année un menu qui célèbre la Méditerranée : tomates anciennes de notre maraîcher Pierre Langlade, basilic pourpre du potager, bar de ligne pêché à l'aube au large de Cassis, et agneau de lait des Alpilles élevé en plein air.</p>"
+              }
+            }
+          ]
+        },
+        {
+          "type": "section",
+          "id": "post1-highlights",
+          "props": {
+            "backgroundColor": "#fff",
+            "paddingTop": 60,
+            "paddingBottom": 60,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 800,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "post1-h2-plats",
+              "props": {
+                "text": "Les plats phares de la saison",
+                "level": 2,
+                "color": "#dc2626"
+              }
+            },
+            {
+              "type": "spacer",
+              "id": "post1-sp1",
+              "props": { "height": 24 }
+            },
+            {
+              "type": "text",
+              "id": "post1-plats-text",
+              "props": {
+                "content": "<div style='display:flex;flex-direction:column;gap:24px'><div style='padding:24px;background:#fef2f2;border-radius:8px;border-left:3px solid #dc2626'><h3 style='color:#451a03;font-weight:700;margin-bottom:8px'>Gaspacho de tomates anciennes & burrata</h3><p style='color:#78716c;line-height:1.7'>Tomates cœur de bœuf, Green Zebra et Noire de Crimée, infusées au basilic pourpre. Servies avec une burrata crémeuse di Andria et un filet d'huile d'olive de notre partenaire en Toscane.</p></div><div style='padding:24px;background:#fef2f2;border-radius:8px;border-left:3px solid #dc2626'><h3 style='color:#451a03;font-weight:700;margin-bottom:8px'>Bar de ligne rôti, fenouil confit & jus de bouillabaisse</h3><p style='color:#78716c;line-height:1.7'>Pêche du jour, cuisson précise à la plancha, accompagné de fenouil braisé au pastis et d'un jus de roche concentré façon bouillabaisse, parsemé de fleurs de courgette farcies à la ricotta.</p></div><div style='padding:24px;background:#fef2f2;border-radius:8px;border-left:3px solid #dc2626'><h3 style='color:#451a03;font-weight:700;margin-bottom:8px'>Vacherin glacé aux fruits rouges du jardin</h3><p style='color:#78716c;line-height:1.7'>Meringue croustillante et fondante, glace vanille de Madagascar, sorbet framboise-cassis et coulis de fruits rouges cueillis le matin même dans notre potager.</p></div></div>"
+              }
+            }
+          ]
+        },
+        {
+          "type": "section",
+          "id": "post1-cta",
+          "props": {
+            "backgroundColor": "#451a03",
+            "paddingTop": 48,
+            "paddingBottom": 48,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 800,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "text",
+              "id": "post1-cta-text",
+              "props": {
+                "content": "<p style='text-align:center;color:rgba(255,255,255,0.9);font-size:1.125rem;line-height:1.8;margin-bottom:24px'>Le menu d'été est disponible du mardi au dimanche, en déjeuner comme en dîner. Nous vous recommandons de réserver pour profiter de la terrasse ombragée.</p>"
+              }
+            },
+            {
+              "type": "button",
+              "id": "post1-cta-btn",
+              "props": {
+                "text": "Réserver une table",
+                "url": "/reservation",
+                "alignment": "center",
+                "variant": "outline",
+                "size": "lg"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "taxonomies": {
+      "categories": ["actualites"],
+      "tags": ["saison", "gastronomie", "terroir"]
+    }
+  },
+  {
+    "title": "Rencontre avec notre Chef étoilé",
+    "slug": "rencontre-chef-etoile",
+    "status": "published",
+    "excerpt": "Portrait d'Antoine Moreau, chef fondateur du Gourmet. De son apprentissage dans les grandes maisons à sa vision d'une cuisine authentique et engagée.",
+    "content": {
+      "blocks": [
+        {
+          "type": "section",
+          "id": "post2-intro",
+          "props": {
+            "backgroundColor": "#fffbeb",
+            "paddingTop": 60,
+            "paddingBottom": 60,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 800,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "text",
+              "id": "post2-intro-text",
+              "props": {
+                "content": "<p style='font-size:1.125rem;line-height:1.9;color:#451a03;font-style:italic;border-left:3px solid #a16207;padding-left:24px'>« La cuisine, c'est avant tout une histoire de transmission. Chaque plat que je compose porte en lui les gestes de ceux qui m'ont appris, et l'envie de surprendre ceux qui me font confiance. »</p><p style='font-size:1.125rem;line-height:1.9;color:#451a03;margin-top:24px'>Antoine Moreau a grandi entre les vignes de Bourgogne et les cuisines de sa grand-mère. Formé à l'École Ferrandi, il a fait ses armes chez Alain Ducasse au Plaza Athénée, puis chez Pierre Gagnaire avant de tracer sa propre voie en 2008 avec l'ouverture du Gourmet.</p>"
+              }
+            }
+          ]
+        },
+        {
+          "type": "section",
+          "id": "post2-parcours",
+          "props": {
+            "backgroundColor": "#fff",
+            "paddingTop": 60,
+            "paddingBottom": 60,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 800,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "post2-h2-parcours",
+              "props": {
+                "text": "Un parcours d'excellence",
+                "level": 2,
+                "color": "#451a03"
+              }
+            },
+            {
+              "type": "spacer",
+              "id": "post2-sp1",
+              "props": { "height": 24 }
+            },
+            {
+              "type": "text",
+              "id": "post2-parcours-text",
+              "props": {
+                "content": "<p style='font-size:1.05rem;line-height:1.9;color:#78716c'>Après cinq années passées dans les plus grandes maisons parisiennes, Antoine ressent le besoin de revenir à l'essentiel. <strong style='color:#451a03'>« Je voulais une cuisine de produit, sans artifice, où chaque ingrédient a sa raison d'être dans l'assiette »</strong>, explique-t-il.</p><p style='font-size:1.05rem;line-height:1.9;color:#78716c;margin-top:20px'>En 2012, le Guide Michelin lui décerne sa première étoile, saluant « une cuisine d'une précision remarquable, où la technique au service du goût crée des associations mémorables ». En 2019, la deuxième étoile vient couronner dix années d'un travail acharné et d'une quête permanente de perfection.</p><p style='font-size:1.05rem;line-height:1.9;color:#78716c;margin-top:20px'>Aujourd'hui, Antoine dirige une brigade de 12 cuisiniers et pâtissiers, tous animés par la même passion. Il consacre ses matinées à parcourir les marchés et à visiter ses producteurs partenaires, et ses après-midis à créer, tester, ajuster. <strong style='color:#451a03'>« Un plat n'est jamais terminé. Il évolue avec les saisons, avec mes rencontres, avec les envies de mes convives. »</strong></p>"
+              }
+            }
+          ]
+        },
+        {
+          "type": "section",
+          "id": "post2-philosophie",
+          "props": {
+            "backgroundColor": "#fef2f2",
+            "paddingTop": 60,
+            "paddingBottom": 60,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 800,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "post2-h2-philo",
+              "props": {
+                "text": "Sa philosophie culinaire",
+                "level": 2,
+                "color": "#dc2626"
+              }
+            },
+            {
+              "type": "spacer",
+              "id": "post2-sp2",
+              "props": { "height": 24 }
+            },
+            {
+              "type": "text",
+              "id": "post2-philo-text",
+              "props": {
+                "content": "<div style='display:grid;grid-template-columns:1fr 1fr;gap:24px'><div style='padding:24px;background:#fff;border-radius:8px'><h3 style='color:#a16207;font-size:1rem;font-weight:700;margin-bottom:12px'>Le produit d'abord</h3><p style='color:#78716c;line-height:1.7;font-size:0.95rem'>Antoine sélectionne personnellement chaque producteur. Maraîchers bio d'Île-de-France, pêcheurs bretons, éleveurs du Limousin — chaque partenariat est une relation de confiance construite sur des années.</p></div><div style='padding:24px;background:#fff;border-radius:8px'><h3 style='color:#a16207;font-size:1rem;font-weight:700;margin-bottom:12px'>La précision technique</h3><p style='color:#78716c;line-height:1.7;font-size:0.95rem'>Chaque cuisson est chronométrée, chaque assaisonnement dosé au gramme. Cette rigueur, héritée de ses années chez Ducasse, est la fondation invisible de plats qui semblent d'une simplicité désarmante.</p></div><div style='padding:24px;background:#fff;border-radius:8px'><h3 style='color:#a16207;font-size:1rem;font-weight:700;margin-bottom:12px'>L'émotion avant tout</h3><p style='color:#78716c;line-height:1.7;font-size:0.95rem'>« Un bon plat doit raconter une histoire. Quand un convive ferme les yeux en goûtant, j'ai gagné. » Pour Antoine, la gastronomie est un art qui s'adresse à tous les sens.</p></div><div style='padding:24px;background:#fff;border-radius:8px'><h3 style='color:#a16207;font-size:1rem;font-weight:700;margin-bottom:12px'>Le respect du vivant</h3><p style='color:#78716c;line-height:1.7;font-size:0.95rem'>Zéro gaspillage, circuit court, énergie verte en cuisine. Le Gourmet s'engage pour une gastronomie responsable, prouvant que l'excellence peut rimer avec éthique.</p></div></div>"
+              }
+            }
+          ]
+        },
+        {
+          "type": "section",
+          "id": "post2-quote",
+          "props": {
+            "backgroundColor": "#451a03",
+            "paddingTop": 48,
+            "paddingBottom": 48,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 800,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "text",
+              "id": "post2-quote-text",
+              "props": {
+                "content": "<p style='text-align:center;color:#fde68a;font-size:1.25rem;font-style:italic;line-height:1.8;max-width:600px;margin:0 auto'>« Ma plus grande fierté ? Quand un client me dit que mon plat lui a rappelé un souvenir d'enfance. C'est là que la magie opère. »</p><p style='text-align:center;color:rgba(255,255,255,0.6);margin-top:16px;font-size:0.875rem'>— Antoine Moreau, Chef étoilé</p>"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "taxonomies": {
+      "categories": ["portraits"],
+      "tags": ["chef", "gastronomie"]
+    }
+  },
+  {
+    "title": "Les secrets de notre pâtisserie maison",
+    "slug": "secrets-patisserie-maison",
+    "status": "published",
+    "excerpt": "Entrez dans l'univers sucré du Gourmet où chaque dessert est une œuvre d'art. Notre chef pâtissier Claire Fontaine nous dévoile les coulisses.",
+    "content": {
+      "blocks": [
+        {
+          "type": "section",
+          "id": "post3-intro",
+          "props": {
+            "backgroundColor": "#fffbeb",
+            "paddingTop": 60,
+            "paddingBottom": 60,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 800,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "text",
+              "id": "post3-intro-text",
+              "props": {
+                "content": "<p style='font-size:1.125rem;line-height:1.9;color:#451a03'>Au Gourmet, la pâtisserie n'est pas un simple final de repas — c'est un spectacle à part entière. Derrière chaque soufflé, chaque millefeuille, chaque petit four se cachent des heures de travail, de recherche et de passion. Nous avons rencontré Claire Fontaine, notre chef pâtissière, qui nous ouvre les portes de son laboratoire.</p>"
+              }
+            }
+          ]
+        },
+        {
+          "type": "section",
+          "id": "post3-body",
+          "props": {
+            "backgroundColor": "#fff",
+            "paddingTop": 60,
+            "paddingBottom": 60,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 800,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "post3-h2-labo",
+              "props": {
+                "text": "Un laboratoire d'exception",
+                "level": 2,
+                "color": "#451a03"
+              }
+            },
+            {
+              "type": "spacer",
+              "id": "post3-sp1",
+              "props": { "height": 24 }
+            },
+            {
+              "type": "text",
+              "id": "post3-labo-text",
+              "props": {
+                "content": "<p style='font-size:1.05rem;line-height:1.9;color:#78716c'>Claire arrive chaque matin à 5h30. <strong style='color:#451a03'>« La pâtisserie, c'est de la chimie. Le moindre degré de température, le moindre gramme de sucre change tout »</strong>, sourit-elle en vérifiant ses fermentations de la veille.</p><p style='font-size:1.05rem;line-height:1.9;color:#78716c;margin-top:20px'>Formée chez Pierre Hermé puis chez Cédric Grolet au Meurice, Claire maîtrise l'art de transformer les grands classiques en créations contemporaines. Son millefeuille, par exemple, utilise une pâte feuilletée inversée — technique longue et exigeante qui donne une texture incomparablement croustillante.</p>"
+              }
+            },
+            {
+              "type": "spacer",
+              "id": "post3-sp2",
+              "props": { "height": 32 }
+            },
+            {
+              "type": "heading",
+              "id": "post3-h2-ingredients",
+              "props": {
+                "text": "Des ingrédients d'exception",
+                "level": 2,
+                "color": "#dc2626"
+              }
+            },
+            {
+              "type": "spacer",
+              "id": "post3-sp3",
+              "props": { "height": 24 }
+            },
+            {
+              "type": "text",
+              "id": "post3-ingredients-text",
+              "props": {
+                "content": "<div style='display:flex;flex-direction:column;gap:16px'><div style='display:flex;gap:16px;align-items:start;padding:20px;background:#fffbeb;border-radius:8px'><span style='font-size:1.5rem;flex-shrink:0'>🍫</span><div><h4 style='color:#451a03;font-weight:700;margin-bottom:4px'>Chocolat Valrhona Grand Cru</h4><p style='color:#78716c;line-height:1.6;font-size:0.95rem'>Guanaja 70%, Manjari 64%, Ivoire 35% — trois crus sélectionnés pour leur profil aromatique unique. Le chocolat est tempéré à la main chaque jour.</p></div></div><div style='display:flex;gap:16px;align-items:start;padding:20px;background:#fffbeb;border-radius:8px'><span style='font-size:1.5rem;flex-shrink:0'>🍋</span><div><h4 style='color:#451a03;font-weight:700;margin-bottom:4px'>Agrumes de Menton & yuzu japonais</h4><p style='color:#78716c;line-height:1.6;font-size:0.95rem'>Citrons de Menton IGP pour leur douceur exceptionnelle, yuzu importé directement de Kochi au Japon pour sa fraîcheur incomparable.</p></div></div><div style='display:flex;gap:16px;align-items:start;padding:20px;background:#fffbeb;border-radius:8px'><span style='font-size:1.5rem;flex-shrink:0'>🌿</span><div><h4 style='color:#451a03;font-weight:700;margin-bottom:4px'>Vanille Bourbon de Madagascar</h4><p style='color:#78716c;line-height:1.6;font-size:0.95rem'>Gousses charnues, récoltées à maturité optimale. Claire les fend et les infuse elle-même dans ses crèmes, refusant tout extrait industriel.</p></div></div></div>"
+              }
+            }
+          ]
+        },
+        {
+          "type": "section",
+          "id": "post3-signature",
+          "props": {
+            "backgroundColor": "#fef2f2",
+            "paddingTop": 48,
+            "paddingBottom": 48,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 800,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "text",
+              "id": "post3-signature-text",
+              "props": {
+                "content": "<p style='text-align:center;color:#dc2626;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:16px'>Le dessert signature</p><h3 style='text-align:center;color:#451a03;font-size:1.5rem;font-weight:700;margin-bottom:16px'>Soufflé au Grand Marnier</h3><p style='text-align:center;color:#78716c;line-height:1.8;max-width:600px;margin:0 auto'>Le soufflé doit être commandé en début de repas. Il est préparé à la minute, cuit exactement 12 minutes et servi immédiatement. Sa texture aérienne et sa croûte dorée cachent un cœur moelleux parfumé au Grand Marnier, accompagné d'une quenelle de glace vanille. Un classique qui ne se démode jamais.</p>"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "taxonomies": {
+      "categories": ["cuisine"],
+      "tags": ["gastronomie", "chef"]
+    }
+  },
+  {
+    "title": "Accord mets et vins : nos recommandations",
+    "slug": "accord-mets-vins-recommandations",
+    "status": "published",
+    "excerpt": "Notre sommelier Thomas Beaumont partage ses accords favoris pour sublimer chaque plat de notre carte. Un voyage sensoriel à travers les vignobles français.",
+    "content": {
+      "blocks": [
+        {
+          "type": "section",
+          "id": "post4-intro",
+          "props": {
+            "backgroundColor": "#fffbeb",
+            "paddingTop": 60,
+            "paddingBottom": 60,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 800,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "text",
+              "id": "post4-intro-text",
+              "props": {
+                "content": "<p style='font-size:1.125rem;line-height:1.9;color:#451a03'>Avec plus de 280 références dans notre cave, choisir le bon vin peut sembler intimidant. C'est pourquoi notre sommelier Thomas Beaumont, Meilleur Sommelier d'Île-de-France 2021, a sélectionné pour vous ses accords préférés — des associations testées et approuvées qui magnifient chaque bouchée.</p>"
+              }
+            }
+          ]
+        },
+        {
+          "type": "section",
+          "id": "post4-accords",
+          "props": {
+            "backgroundColor": "#fff",
+            "paddingTop": 60,
+            "paddingBottom": 60,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 800,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "post4-h2-accords",
+              "props": {
+                "text": "Nos accords coup de cœur",
+                "level": 2,
+                "color": "#451a03"
+              }
+            },
+            {
+              "type": "spacer",
+              "id": "post4-sp1",
+              "props": { "height": 24 }
+            },
+            {
+              "type": "text",
+              "id": "post4-accords-text",
+              "props": {
+                "content": "<div style='display:flex;flex-direction:column;gap:24px'><div style='padding:24px;background:#fef2f2;border-radius:8px;border-left:4px solid #a16207'><div style='display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px'><h3 style='color:#451a03;font-weight:700'>Foie gras maison</h3><span style='color:#a16207;font-weight:600;font-size:0.875rem'>ENTRÉE</span></div><p style='color:#78716c;line-height:1.7;margin-bottom:12px'>Le gras soyeux du foie gras appelle la douceur et l'acidité d'un vin moelleux.</p><p style='color:#dc2626;font-weight:600'>→ Gewurztraminer Vendanges Tardives 2018, Domaine Zind-Humbrecht</p><p style='color:#9ca3af;font-size:0.875rem;font-style:italic;margin-top:4px'>Notes de litchi, miel et épices douces. L'onctuosité du vin épouse celle du foie gras.</p></div><div style='padding:24px;background:#fef2f2;border-radius:8px;border-left:4px solid #a16207'><div style='display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px'><h3 style='color:#451a03;font-weight:700'>Turbot sauvage de ligne</h3><span style='color:#a16207;font-weight:600;font-size:0.875rem'>POISSON</span></div><p style='color:#78716c;line-height:1.7;margin-bottom:12px'>La chair délicate du turbot mérite un blanc de caractère, sans le dominer.</p><p style='color:#dc2626;font-weight:600'>→ Meursault 1er Cru « Les Charmes » 2020, Domaine Roulot</p><p style='color:#9ca3af;font-size:0.875rem;font-style:italic;margin-top:4px'>Noisette, beurre frais, minéralité. Un bourgogne blanc d'une élégance rare.</p></div><div style='padding:24px;background:#fef2f2;border-radius:8px;border-left:4px solid #a16207'><div style='display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px'><h3 style='color:#451a03;font-weight:700'>Filet de bœuf Wagyu A5</h3><span style='color:#a16207;font-weight:600;font-size:0.875rem'>VIANDE</span></div><p style='color:#78716c;line-height:1.7;margin-bottom:12px'>Le persillé du Wagyu exige un rouge puissant avec des tanins soyeux.</p><p style='color:#dc2626;font-weight:600'>→ Pomerol 2016, Château L'Évangile</p><p style='color:#9ca3af;font-size:0.875rem;font-style:italic;margin-top:4px'>Velours de merlot, truffe, cerise noire. Un grand Pomerol qui tient tête au Wagyu.</p></div><div style='padding:24px;background:#fef2f2;border-radius:8px;border-left:4px solid #a16207'><div style='display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px'><h3 style='color:#451a03;font-weight:700'>Soufflé au Grand Marnier</h3><span style='color:#a16207;font-weight:600;font-size:0.875rem'>DESSERT</span></div><p style='color:#78716c;line-height:1.7;margin-bottom:12px'>Un dessert aérien qui appelle un vin pétillant, doux et festif.</p><p style='color:#dc2626;font-weight:600'>→ Champagne Demi-Sec « Nectar Impérial », Moët & Chandon</p><p style='color:#9ca3af;font-size:0.875rem;font-style:italic;margin-top:4px'>Brioche, fruits confits, amande. La bulle fine souligne la légèreté du soufflé.</p></div></div>"
+              }
+            }
+          ]
+        },
+        {
+          "type": "section",
+          "id": "post4-conseil",
+          "props": {
+            "backgroundColor": "#451a03",
+            "paddingTop": 48,
+            "paddingBottom": 48,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 800,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "text",
+              "id": "post4-conseil-text",
+              "props": {
+                "content": "<p style='text-align:center;color:#fde68a;font-size:1.125rem;line-height:1.8;max-width:600px;margin:0 auto'>Notre sommelier Thomas est à votre disposition chaque soir pour composer un accord personnalisé. N'hésitez pas à lui faire part de vos préférences — il adore les défis !</p>"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "taxonomies": {
+      "categories": ["oenologie"],
+      "tags": ["gastronomie", "terroir"]
+    }
+  },
+  {
+    "title": "Soirée dégustation : retour sur un événement mémorable",
+    "slug": "soiree-degustation-evenement-memorable",
+    "status": "published",
+    "excerpt": "Retour en images et en saveurs sur notre dernière soirée dégustation autour des truffes du Périgord. Un moment de partage exceptionnel avec nos convives.",
+    "content": {
+      "blocks": [
+        {
+          "type": "section",
+          "id": "post5-intro",
+          "props": {
+            "backgroundColor": "#fffbeb",
+            "paddingTop": 60,
+            "paddingBottom": 60,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 800,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "text",
+              "id": "post5-intro-text",
+              "props": {
+                "content": "<p style='font-size:1.125rem;line-height:1.9;color:#451a03'>Le 15 février dernier, Le Gourmet a accueilli 24 convives pour une soirée d'exception entièrement consacrée à la truffe noire du Périgord. Six plats, six accords, et une ambiance feutrée pour un voyage gustatif au cœur de ce « diamant noir » de la gastronomie française.</p>"
+              }
+            }
+          ]
+        },
+        {
+          "type": "section",
+          "id": "post5-menu",
+          "props": {
+            "backgroundColor": "#fff",
+            "paddingTop": 60,
+            "paddingBottom": 60,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 800,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "post5-h2-menu",
+              "props": {
+                "text": "Le menu de la soirée",
+                "level": 2,
+                "color": "#451a03"
+              }
+            },
+            {
+              "type": "spacer",
+              "id": "post5-sp1",
+              "props": { "height": 24 }
+            },
+            {
+              "type": "text",
+              "id": "post5-menu-text",
+              "props": {
+                "content": "<div style='display:flex;flex-direction:column;gap:16px'><div style='display:flex;align-items:baseline;gap:16px;padding:16px 0;border-bottom:1px dotted #e5e7eb'><span style='color:#a16207;font-weight:700;font-size:0.875rem;min-width:20px'>01</span><div><p style='color:#451a03;font-weight:600'>Œuf parfait 64°C, émulsion de truffe noire</p><p style='color:#9ca3af;font-size:0.875rem'>Jaune coulant, crème de topinambour, râpée de truffe généreuse</p></div></div><div style='display:flex;align-items:baseline;gap:16px;padding:16px 0;border-bottom:1px dotted #e5e7eb'><span style='color:#a16207;font-weight:700;font-size:0.875rem;min-width:20px'>02</span><div><p style='color:#451a03;font-weight:600'>Ravioles de royans à la truffe</p><p style='color:#9ca3af;font-size:0.875rem'>Comté 24 mois, beurre de truffe, bouillon de poule fumé</p></div></div><div style='display:flex;align-items:baseline;gap:16px;padding:16px 0;border-bottom:1px dotted #e5e7eb'><span style='color:#a16207;font-weight:700;font-size:0.875rem;min-width:20px'>03</span><div><p style='color:#451a03;font-weight:600'>Saint-Jacques poêlées, brisures de truffe</p><p style='color:#9ca3af;font-size:0.875rem'>Purée de céleri truffée, jus de veau réduit</p></div></div><div style='display:flex;align-items:baseline;gap:16px;padding:16px 0;border-bottom:1px dotted #e5e7eb'><span style='color:#a16207;font-weight:700;font-size:0.875rem;min-width:20px'>04</span><div><p style='color:#451a03;font-weight:600'>Poularde de Bresse en vessie, truffe sous la peau</p><p style='color:#9ca3af;font-size:0.875rem'>La pièce maîtresse de la soirée — cuite en douceur, servie en salle</p></div></div><div style='display:flex;align-items:baseline;gap:16px;padding:16px 0;border-bottom:1px dotted #e5e7eb'><span style='color:#a16207;font-weight:700;font-size:0.875rem;min-width:20px'>05</span><div><p style='color:#451a03;font-weight:600'>Brie de Meaux truffé, 3 semaines d'affinage</p><p style='color:#9ca3af;font-size:0.875rem'>Pain aux noix, confiture de figues</p></div></div><div style='display:flex;align-items:baseline;gap:16px;padding:16px 0'><span style='color:#a16207;font-weight:700;font-size:0.875rem;min-width:20px'>06</span><div><p style='color:#451a03;font-weight:600'>Crème brûlée à la truffe blanche d'Alba</p><p style='color:#9ca3af;font-size:0.875rem'>Surprise finale — la truffe blanche en dessert, une révélation</p></div></div></div>"
+              }
+            }
+          ]
+        },
+        {
+          "type": "section",
+          "id": "post5-temoignages",
+          "props": {
+            "backgroundColor": "#fef2f2",
+            "paddingTop": 60,
+            "paddingBottom": 60,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 800,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "post5-h2-avis",
+              "props": {
+                "text": "Ce qu'en disent nos convives",
+                "level": 2,
+                "color": "#451a03",
+                "alignment": "center"
+              }
+            },
+            {
+              "type": "spacer",
+              "id": "post5-sp2",
+              "props": { "height": 24 }
+            },
+            {
+              "type": "grid",
+              "id": "post5-avis-grid",
+              "props": {
+                "columns": 2,
+                "gap": 24
+              },
+              "children": [
+                {
+                  "type": "text",
+                  "id": "post5-avis1",
+                  "props": {
+                    "content": "<div style='background:#fff;padding:24px;border-radius:8px;border-left:3px solid #a16207'><p style='color:#78716c;font-style:italic;line-height:1.7;margin-bottom:12px'>« La poularde en vessie était un moment de pure émotion. Le service en salle, le parfum qui s'échappe... inoubliable. »</p><p style='color:#451a03;font-weight:600;font-size:0.9rem'>— Isabelle M.</p></div>"
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "post5-avis2",
+                  "props": {
+                    "content": "<div style='background:#fff;padding:24px;border-radius:8px;border-left:3px solid #a16207'><p style='color:#78716c;font-style:italic;line-height:1.7;margin-bottom:12px'>« Les accords vins étaient bluffants. Le Châteauneuf-du-Pape blanc sur les Saint-Jacques truffées — un accord que je n'aurais jamais imaginé. Bravo Thomas ! »</p><p style='color:#451a03;font-weight:600;font-size:0.9rem'>— Jean-Pierre D.</p></div>"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "section",
+          "id": "post5-prochaine",
+          "props": {
+            "backgroundColor": "#dc2626",
+            "paddingTop": 48,
+            "paddingBottom": 48,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 800,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "post5-h2-next",
+              "props": {
+                "text": "Prochaine soirée dégustation",
+                "level": 3,
+                "alignment": "center",
+                "color": "#ffffff"
+              }
+            },
+            {
+              "type": "spacer",
+              "id": "post5-sp3",
+              "props": { "height": 12 }
+            },
+            {
+              "type": "text",
+              "id": "post5-next-text",
+              "props": {
+                "content": "<p style='text-align:center;color:rgba(255,255,255,0.9);font-size:1.05rem;line-height:1.7;margin-bottom:24px'>Le 18 avril — « Les vins naturels rencontrent la cuisine du Gourmet »<br>24 places uniquement · 180 € par personne (vins inclus)</p>"
+              }
+            },
+            {
+              "type": "button",
+              "id": "post5-cta-btn",
+              "props": {
+                "text": "Réserver ma place",
+                "url": "/reservation",
+                "alignment": "center",
+                "variant": "outline",
+                "size": "lg"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "taxonomies": {
+      "categories": ["evenements"],
+      "tags": ["gastronomie", "terroir", "local"]
+    }
+  }
+]

@@ -1,0 +1,28 @@
+[
+  {
+    "name": "Catégories",
+    "slug": "categories",
+    "type": "category",
+    "description": "Catégories d'articles du blog de l'agence",
+    "terms": [
+      { "name": "Design", "slug": "design", "description": "Articles sur le design UX/UI et les tendances visuelles", "order": 0 },
+      { "name": "Marketing", "slug": "marketing", "description": "Stratégies marketing digital et acquisition", "order": 1 },
+      { "name": "Développement", "slug": "developpement", "description": "Développement web et mobile, technologies et bonnes pratiques", "order": 2 },
+      { "name": "SEO", "slug": "seo", "description": "Référencement naturel et optimisation pour les moteurs de recherche", "order": 3 },
+      { "name": "Branding", "slug": "branding", "description": "Identité de marque, positionnement et communication", "order": 4 }
+    ]
+  },
+  {
+    "name": "Tags",
+    "slug": "tags",
+    "type": "tag",
+    "description": "Tags pour les articles du blog",
+    "terms": [
+      { "name": "UI/UX", "slug": "ui-ux", "description": null, "order": 0 },
+      { "name": "Tendances", "slug": "tendances", "description": null, "order": 1 },
+      { "name": "Conseils", "slug": "conseils", "description": null, "order": 2 },
+      { "name": "Mobile", "slug": "mobile", "description": null, "order": 3 },
+      { "name": "PME", "slug": "pme", "description": null, "order": 4 }
+    ]
+  }
+]

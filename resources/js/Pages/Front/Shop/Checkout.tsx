@@ -18,6 +18,7 @@ interface CheckoutPageProps {
     theme: { customizations: Record<string, string>; layouts: Array<{ slug: string; name: string }> };
 }
 
+/** Theme CSS variable tokens used for inline styles */
 const T = {
     primary: 'var(--color-primary, #1a3d1a)',
     gold:    'var(--color-gold, #c9a84c)',
@@ -30,7 +31,7 @@ const T = {
     body:    "var(--font-body, 'DM Sans', system-ui, sans-serif)",
 };
 
-function fp(p: number, s: string) { return `${Number(p).toFixed(2)} ${s}`; }
+function formatPrice(price: number, symbol: string) { return `${Number(price).toFixed(2)} ${symbol}`; }
 
 interface AddressFormData { first_name: string; last_name: string; address: string; address2: string; city: string; postal_code: string; country: string; phone: string; }
 
@@ -60,7 +61,7 @@ function AddressForm({ title, prefix, data, errors, onChange }: { title: string;
     return (
         <div>
             <h3 style={{ fontFamily: T.heading, fontSize: '22px', fontWeight: 600, color: T.text, margin: '0 0 20px' }}>{title}</h3>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+            <div className="checkout-address-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                 <Field label="Prénom" required error={errors[`${prefix}.first_name`]}>
                     <input type="text" value={data.first_name} onChange={e => onChange('first_name', e.target.value)} style={inputStyle(!!errors[`${prefix}.first_name`])} />
                 </Field>
@@ -152,7 +153,7 @@ export default function CheckoutPage({ cartItems, subtotal, tax, shipping, disco
                 <h1 style={{ fontFamily: T.heading, fontSize: 'clamp(28px,4vw,40px)', fontWeight: 600, color: T.text, margin: '0 0 36px' }}>Informations de livraison</h1>
 
                 <form onSubmit={(e: FormEvent) => { e.preventDefault(); post('/checkout'); }}>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: '40px', alignItems: 'start' }}>
+                    <div className="checkout-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: '40px', alignItems: 'start' }}>
                         {/* Left */}
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                             {/* Shipping */}
@@ -169,14 +170,12 @@ export default function CheckoutPage({ cartItems, subtotal, tax, shipping, disco
                             {/* Billing toggle */}
                             <div style={sectionStyle}>
                                 <label style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}>
-                                    <div onClick={() => { setBillingSame(!billingSame); setData('billing_same_as_shipping', !billingSame); }} style={{
-                                        width: '20px', height: '20px', borderRadius: '3px', flexShrink: 0,
-                                        border: `2px solid ${billingSame ? T.primary : T.border}`,
-                                        background: billingSame ? T.primary : '#fff',
-                                        display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'all 0.2s',
-                                    }}>
-                                        {billingSame && <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>}
-                                    </div>
+                                    <input
+                                        type="checkbox"
+                                        checked={billingSame}
+                                        onChange={() => { const next = !billingSame; setBillingSame(next); setData('billing_same_as_shipping', next); }}
+                                        style={{ accentColor: T.primary, width: '18px', height: '18px', flexShrink: 0, cursor: 'pointer' }}
+                                    />
                                     <span style={{ fontFamily: T.body, fontSize: '14px', color: T.text }}>Adresse de facturation identique à la livraison</span>
                                 </label>
                                 {!billingSame && (
@@ -231,8 +230,8 @@ export default function CheckoutPage({ cartItems, subtotal, tax, shipping, disco
                             </div>
                         </div>
 
-                        {/* Right — Order summary */}
-                        <div style={{ ...sectionStyle, position: 'sticky', top: '100px' }}>
+                        {/* Right -- Order summary */}
+                        <div className="checkout-summary" style={{ ...sectionStyle, position: 'sticky', top: '100px' }}>
                             <h3 style={{ fontFamily: T.heading, fontSize: '22px', fontWeight: 600, color: T.text, margin: '0 0 20px' }}>Votre commande</h3>
 
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '20px' }}>
@@ -251,7 +250,7 @@ export default function CheckoutPage({ cartItems, subtotal, tax, shipping, disco
                                             <p style={{ fontFamily: T.body, fontSize: '13px', fontWeight: 600, color: T.text, margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.name}</p>
                                             {item.variant_name && <p style={{ fontFamily: T.body, fontSize: '11px', color: T.muted, margin: 0 }}>{item.variant_name}</p>}
                                         </div>
-                                        <span style={{ fontFamily: T.body, fontSize: '13px', fontWeight: 600, color: T.text, flexShrink: 0 }}>{fp(item.total, settings.currency_symbol)}</span>
+                                        <span style={{ fontFamily: T.body, fontSize: '13px', fontWeight: 600, color: T.text, flexShrink: 0 }}>{formatPrice(item.total, settings.currency_symbol)}</span>
                                     </div>
                                 ))}
                             </div>
@@ -259,25 +258,25 @@ export default function CheckoutPage({ cartItems, subtotal, tax, shipping, disco
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', paddingTop: '16px', borderTop: `1px solid ${T.border}` }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: T.body, fontSize: '13px' }}>
                                     <span style={{ color: T.muted }}>Sous-total</span>
-                                    <span style={{ color: T.text }}>{fp(subtotal, settings.currency_symbol)}</span>
+                                    <span style={{ color: T.text }}>{formatPrice(subtotal, settings.currency_symbol)}</span>
                                 </div>
                                 {discount > 0 && coupon && (
                                     <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: T.body, fontSize: '13px' }}>
                                         <span style={{ color: '#2d7a2d' }}>Réduction ({coupon.code})</span>
-                                        <span style={{ color: '#2d7a2d' }}>−{fp(discount, settings.currency_symbol)}</span>
+                                        <span style={{ color: '#2d7a2d' }}>−{formatPrice(discount, settings.currency_symbol)}</span>
                                     </div>
                                 )}
                                 <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: T.body, fontSize: '13px' }}>
                                     <span style={{ color: T.muted }}>TVA ({settings.tax_rate}%)</span>
-                                    <span style={{ color: T.text }}>{fp(tax, settings.currency_symbol)}</span>
+                                    <span style={{ color: T.text }}>{formatPrice(tax, settings.currency_symbol)}</span>
                                 </div>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: T.body, fontSize: '13px' }}>
                                     <span style={{ color: T.muted }}>Livraison</span>
-                                    <span style={{ color: shipping === 0 ? '#2d7a2d' : T.text }}>{shipping === 0 ? 'Gratuite' : fp(shipping, settings.currency_symbol)}</span>
+                                    <span style={{ color: shipping === 0 ? '#2d7a2d' : T.text }}>{shipping === 0 ? 'Gratuite' : formatPrice(shipping, settings.currency_symbol)}</span>
                                 </div>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '14px', marginTop: '4px', borderTop: `1px solid ${T.border}` }}>
                                     <span style={{ fontFamily: T.heading, fontSize: '20px', fontWeight: 600, color: T.text }}>Total TTC</span>
-                                    <span style={{ fontFamily: T.heading, fontSize: '22px', fontWeight: 700, color: T.primary }}>{fp(total, settings.currency_symbol)}</span>
+                                    <span style={{ fontFamily: T.heading, fontSize: '22px', fontWeight: 700, color: T.primary }}>{formatPrice(total, settings.currency_symbol)}</span>
                                 </div>
                             </div>
 
@@ -306,9 +305,9 @@ export default function CheckoutPage({ cartItems, subtotal, tax, shipping, disco
 
             <style>{`
                 @media (max-width: 900px) {
-                    form > div[style*="grid-template-columns"] { grid-template-columns: 1fr !important; }
-                    div[style*="sticky"] { position: static !important; }
-                    div[style*="1fr 1fr"] { grid-template-columns: 1fr !important; }
+                    .checkout-grid { grid-template-columns: 1fr !important; }
+                    .checkout-summary { position: static !important; }
+                    .checkout-address-grid { grid-template-columns: 1fr !important; }
                 }
             `}</style>
         </FrontLayout>

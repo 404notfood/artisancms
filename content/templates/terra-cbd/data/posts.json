@@ -1,0 +1,550 @@
+[
+  {
+    "title": "Le CBD : tout ce que vous devez savoir",
+    "slug": "le-cbd-tout-ce-que-vous-devez-savoir",
+    "status": "published",
+    "excerpt": "Guide complet pour comprendre le CBD : origines, fonctionnement, bienfaits reconnus et cadre légal en France. Tout ce qu'il faut savoir avant de se lancer.",
+    "taxonomies": {
+      "categories": ["guide"],
+      "tags": ["cbd", "bien-etre", "naturel"]
+    },
+    "content": {
+      "blocks": [
+        {
+          "type": "heading",
+          "id": "terra-post1-h1",
+          "props": {
+            "level": 1,
+            "text": "Le CBD : tout ce que vous devez savoir",
+            "color": "#1a2e1a",
+            "fontFamily": "Cormorant Garamond"
+          }
+        },
+        {
+          "type": "text",
+          "id": "terra-post1-intro",
+          "props": {
+            "content": "<p>Le CBD, ou cannabidiol, est sur toutes les lèvres. Mais derrière l'engouement médiatique, que savons-nous vraiment de cette molécule naturelle ? Issu du chanvre (<em>Cannabis sativa</em>), le CBD est l'un des 120 cannabinoïdes identifiés dans la plante. Contrairement au THC, il n'a aucun effet psychoactif : il ne fait pas planer, ne modifie pas la perception et ne crée aucune dépendance.</p><p>Le CBD agit en interagissant avec le <strong>système endocannabinoïde</strong> (SEC) de notre corps, un réseau complexe de récepteurs présent dans tout l'organisme. Ce système régule des fonctions essentielles : l'humeur, le sommeil, l'appétit, la douleur, l'inflammation et la réponse immunitaire. En stimulant ce système, le CBD favorise un retour à l'équilibre naturel du corps — ce que les scientifiques appellent l'homéostasie.</p>"
+          }
+        },
+        {
+          "type": "heading",
+          "id": "terra-post1-h2-history",
+          "props": {
+            "level": 2,
+            "text": "Une brève histoire du CBD",
+            "color": "#1a2e1a",
+            "fontFamily": "Cormorant Garamond"
+          }
+        },
+        {
+          "type": "text",
+          "id": "terra-post1-history",
+          "props": {
+            "content": "<p>Le chanvre est utilisé par l'humanité depuis plus de 5 000 ans, aussi bien pour ses fibres textiles que pour ses vertus médicinales. La molécule de CBD a été isolée pour la première fois en 1940 par le chimiste Roger Adams. Mais c'est le professeur Raphael Mechoulam, en 1963, qui a déterminé sa structure chimique exacte, ouvrant la voie aux recherches modernes.</p><p>Depuis les années 2010, les études scientifiques sur le CBD se sont multipliées. En 2018, l'Organisation Mondiale de la Santé (OMS) a publié un rapport concluant que le CBD est généralement bien toléré, avec un bon profil de sécurité. La même année, le premier médicament à base de CBD (Epidiolex) a été approuvé par la FDA américaine pour le traitement de formes rares d'épilepsie infantile.</p>"
+          }
+        },
+        {
+          "type": "heading",
+          "id": "terra-post1-h2-benefits",
+          "props": {
+            "level": 2,
+            "text": "Les bienfaits reconnus du CBD",
+            "color": "#1a2e1a",
+            "fontFamily": "Cormorant Garamond"
+          }
+        },
+        {
+          "type": "text",
+          "id": "terra-post1-benefits",
+          "props": {
+            "content": "<p>Les études scientifiques ont mis en évidence plusieurs bienfaits du CBD :</p><ul><li><strong>Réduction du stress et de l'anxiété</strong> : le CBD agit sur les récepteurs de sérotonine (5-HT1A), favorisant un état de calme sans les effets secondaires des anxiolytiques classiques.</li><li><strong>Amélioration du sommeil</strong> : en réduisant l'anxiété et en régulant le cycle circadien, le CBD favorise un endormissement plus rapide et un sommeil plus réparateur.</li><li><strong>Propriétés anti-inflammatoires</strong> : le CBD inhibe la production de cytokines pro-inflammatoires, ce qui en fait un allié naturel contre les douleurs musculaires et articulaires.</li><li><strong>Action antioxydante</strong> : le CBD est un puissant antioxydant qui protège les cellules du stress oxydatif, contribuant à la santé de la peau et au vieillissement cellulaire.</li><li><strong>Soutien à la récupération sportive</strong> : de plus en plus d'athlètes intègrent le CBD dans leur routine pour réduire les courbatures et accélérer la récupération musculaire.</li></ul><p>Il est important de noter que le CBD n'est pas un médicament. Il ne diagnostique, traite ni guérit aucune maladie. Il s'agit d'un complément de bien-être dont l'usage doit s'inscrire dans une hygiène de vie globale.</p>"
+          }
+        },
+        {
+          "type": "heading",
+          "id": "terra-post1-h2-legal",
+          "props": {
+            "level": 2,
+            "text": "Cadre légal en France",
+            "color": "#1a2e1a",
+            "fontFamily": "Cormorant Garamond"
+          }
+        },
+        {
+          "type": "text",
+          "id": "terra-post1-legal",
+          "props": {
+            "content": "<p>En France, le CBD est légal à condition que les produits contiennent moins de 0,3% de THC. Cette réglementation, confirmée par la Cour de Justice de l'Union Européenne en 2020 et l'arrêté du 30 décembre 2021, autorise la vente et la consommation de produits à base de CBD.</p><p>Chez Terra CBD, tous nos produits sont analysés par un laboratoire indépendant et les certificats d'analyse (COA) sont disponibles sur chaque fiche produit. Nous garantissons une conformité totale avec la législation en vigueur.</p><p>Pour commencer votre parcours CBD en toute confiance, nous recommandons de débuter par notre <strong>huile CBD 10%</strong>, idéale pour les nouveaux utilisateurs. Commencez par 2-3 gouttes sous la langue, matin et soir, et ajustez la dose selon vos ressentis.</p>"
+          }
+        }
+      ]
+    }
+  },
+
+  {
+    "title": "Comment choisir son huile de CBD",
+    "slug": "comment-choisir-son-huile-de-cbd",
+    "status": "published",
+    "excerpt": "Concentration, spectre complet ou isolat, méthode d'extraction... Tous les critères pour bien choisir votre huile de CBD selon vos besoins.",
+    "taxonomies": {
+      "categories": ["guide"],
+      "tags": ["cbd", "huile", "bio"]
+    },
+    "content": {
+      "blocks": [
+        {
+          "type": "heading",
+          "id": "terra-post2-h1",
+          "props": {
+            "level": 1,
+            "text": "Comment choisir son huile de CBD",
+            "color": "#1a2e1a",
+            "fontFamily": "Cormorant Garamond"
+          }
+        },
+        {
+          "type": "text",
+          "id": "terra-post2-intro",
+          "props": {
+            "content": "<p>Face à la profusion de marques et de produits CBD sur le marché, choisir la bonne huile peut sembler intimidant. Concentration, spectre complet, broad spectrum, isolat, méthode d'extraction... Les termes techniques sont nombreux et les différences de qualité peuvent être considérables d'une marque à l'autre.</p><p>Ce guide vous accompagne étape par étape pour faire le choix le plus éclairé, adapté à vos besoins spécifiques et à votre budget.</p>"
+          }
+        },
+        {
+          "type": "heading",
+          "id": "terra-post2-h2-concentration",
+          "props": {
+            "level": 2,
+            "text": "1. La concentration : quel pourcentage choisir ?",
+            "color": "#1a2e1a",
+            "fontFamily": "Cormorant Garamond"
+          }
+        },
+        {
+          "type": "text",
+          "id": "terra-post2-concentration",
+          "props": {
+            "content": "<p>La concentration de CBD est exprimée en pourcentage ou en milligrammes. Plus le pourcentage est élevé, plus chaque goutte contient de CBD. Voici nos recommandations :</p><ul><li><strong>5-10% (500-1000mg)</strong> : idéal pour les débutants, le stress léger, l'amélioration du sommeil et l'entretien quotidien. C'est le dosage que nous recommandons pour commencer.</li><li><strong>15-20% (1500-2000mg)</strong> : adapté aux utilisateurs réguliers, au stress modéré, aux douleurs musculaires après le sport et aux troubles anxieux légers à modérés.</li><li><strong>25-30% (2500-3000mg)</strong> : réservé aux besoins importants — douleurs chroniques, troubles du sommeil persistants, anxiété sévère. Recommandé pour les utilisateurs expérimentés.</li></ul><p>La règle d'or : <strong>commencez toujours par la concentration la plus basse et augmentez progressivement</strong> jusqu'à trouver votre dosage optimal. Chaque organisme réagit différemment au CBD, et il est inutile de surdoser dès le départ.</p>"
+          }
+        },
+        {
+          "type": "heading",
+          "id": "terra-post2-h2-spectrum",
+          "props": {
+            "level": 2,
+            "text": "2. Spectre complet, broad spectrum ou isolat ?",
+            "color": "#1a2e1a",
+            "fontFamily": "Cormorant Garamond"
+          }
+        },
+        {
+          "type": "text",
+          "id": "terra-post2-spectrum",
+          "props": {
+            "content": "<p>C'est l'un des critères les plus importants. Comprendre la différence vous aidera à faire le bon choix :</p><p><strong>Spectre complet (Full Spectrum)</strong> : contient l'ensemble des cannabinoïdes naturels (CBD, CBG, CBN, CBC...), les terpènes et les flavonoïdes du chanvre, plus une quantité infime de THC (< 0,3%). C'est notre recommandation car ces composés agissent en synergie — un phénomène appelé « effet d'entourage » — pour une efficacité maximale.</p><p><strong>Broad Spectrum</strong> : identique au spectre complet, mais le THC a été totalement éliminé. Un bon compromis pour ceux qui souhaitent l'effet d'entourage sans aucune trace de THC.</p><p><strong>Isolat de CBD</strong> : du CBD pur à 99%+, sans aucun autre composé. Moins efficace que le spectre complet, mais convient aux personnes effectuant des dépistages réguliers ou ayant des sensibilités particulières.</p>"
+          }
+        },
+        {
+          "type": "heading",
+          "id": "terra-post2-h2-extraction",
+          "props": {
+            "level": 2,
+            "text": "3. La méthode d'extraction",
+            "color": "#1a2e1a",
+            "fontFamily": "Cormorant Garamond"
+          }
+        },
+        {
+          "type": "text",
+          "id": "terra-post2-extraction",
+          "props": {
+            "content": "<p>La qualité d'une huile CBD dépend grandement de sa méthode d'extraction :</p><p><strong>Extraction au CO₂ supercritique</strong> : la méthode de référence. Elle utilise le dioxyde de carbone sous haute pression pour extraire le CBD, préservant l'intégralité des composés bénéfiques sans aucun résidu de solvant. C'est la méthode que nous utilisons chez Terra CBD.</p><p><strong>Extraction par solvant</strong> (éthanol, butane) : moins coûteuse mais peut laisser des traces de solvants dans le produit final. Elle peut aussi détruire certains terpènes et flavonoïdes sensibles à la chaleur.</p><p><strong>Extraction par huile végétale</strong> : une méthode douce et naturelle, mais qui produit des concentrations plus faibles de CBD et une durée de conservation réduite.</p><p>Enfin, vérifiez toujours que la marque fournit des <strong>certificats d'analyse (COA)</strong> de laboratoire indépendant. C'est le gage ultime de qualité et de transparence. Chez Terra CBD, chaque lot est analysé et les résultats sont disponibles sur chaque page produit.</p>"
+          }
+        },
+        {
+          "type": "heading",
+          "id": "terra-post2-h2-carrier",
+          "props": {
+            "level": 2,
+            "text": "4. L'huile porteuse : un détail qui compte",
+            "color": "#1a2e1a",
+            "fontFamily": "Cormorant Garamond"
+          }
+        },
+        {
+          "type": "text",
+          "id": "terra-post2-carrier",
+          "props": {
+            "content": "<p>Le CBD extrait est dilué dans une huile porteuse qui facilite son absorption. Les plus courantes sont :</p><ul><li><strong>Huile MCT (coco fractionnée)</strong> : absorption rapide, goût neutre, excellente biodisponibilité. C'est notre choix chez Terra CBD.</li><li><strong>Huile de chanvre</strong> : riche en oméga 3 et 6, goût herbacé prononcé. Intéressante pour l'apport nutritionnel mais absorption moins rapide.</li><li><strong>Huile d'olive</strong> : bonne absorption, goût familier. Un bon choix pour ceux qui n'apprécient pas le goût du chanvre.</li></ul><p>En résumé, pour votre première huile CBD, nous recommandons une huile spectre complet, extraite au CO₂, avec une concentration de 10%, dans une base d'huile MCT. C'est exactement ce que propose notre Huile CBD Premium 10% — un excellent point de départ pour découvrir les bienfaits du CBD.</p>"
+          }
+        }
+      ]
+    }
+  },
+
+  {
+    "title": "5 façons d'intégrer le CBD dans votre routine bien-être",
+    "slug": "5-facons-integrer-cbd-routine-bien-etre",
+    "status": "published",
+    "excerpt": "Du matin au soir, découvrez comment intégrer le CBD dans votre quotidien pour optimiser votre bien-être : huile, infusion, cosmétique et plus encore.",
+    "taxonomies": {
+      "categories": ["bien-etre"],
+      "tags": ["cbd", "bien-etre", "relaxation", "naturel"]
+    },
+    "content": {
+      "blocks": [
+        {
+          "type": "heading",
+          "id": "terra-post3-h1",
+          "props": {
+            "level": 1,
+            "text": "5 façons d'intégrer le CBD dans votre routine bien-être",
+            "color": "#1a2e1a",
+            "fontFamily": "Cormorant Garamond"
+          }
+        },
+        {
+          "type": "text",
+          "id": "terra-post3-intro",
+          "props": {
+            "content": "<p>Le CBD s'est imposé comme un allié incontournable du bien-être naturel. Mais au-delà de la simple prise d'huile sous la langue, il existe de nombreuses façons créatives et agréables d'intégrer le cannabidiol dans votre quotidien. Du réveil au coucher, voici nos 5 méthodes préférées pour profiter pleinement des bienfaits du CBD.</p>"
+          }
+        },
+        {
+          "type": "heading",
+          "id": "terra-post3-h2-morning",
+          "props": {
+            "level": 2,
+            "text": "1. Le rituel matinal : huile CBD sublinguale",
+            "color": "#1a2e1a",
+            "fontFamily": "Cormorant Garamond"
+          }
+        },
+        {
+          "type": "text",
+          "id": "terra-post3-morning",
+          "props": {
+            "content": "<p>Commencez votre journée du bon pied avec quelques gouttes d'huile CBD sous la langue. L'administration sublinguale est la méthode la plus efficace : les muqueuses sous la langue absorbent rapidement le CBD, qui atteint la circulation sanguine en 15 à 30 minutes.</p><p><strong>Notre conseil</strong> : 2-3 gouttes d'huile CBD 10% le matin, maintenues 60 secondes sous la langue avant d'avaler. Cela favorise un état de calme et de concentration pour démarrer la journée. Vous pouvez aussi ajouter vos gouttes à votre smoothie du matin ou à votre café (le CBD est liposoluble, il s'associe bien aux matières grasses).</p>"
+          }
+        },
+        {
+          "type": "heading",
+          "id": "terra-post3-h2-infusion",
+          "props": {
+            "level": 2,
+            "text": "2. La pause détente : infusion CBD",
+            "color": "#1a2e1a",
+            "fontFamily": "Cormorant Garamond"
+          }
+        },
+        {
+          "type": "text",
+          "id": "terra-post3-infusion",
+          "props": {
+            "content": "<p>Quoi de mieux qu'une tisane pour une pause bien-être en milieu de journée ? Nos infusions CBD à la camomille ou menthe-citron combinent les bienfaits du CBD avec ceux des plantes apaisantes. Le rituel de préparation fait lui-même partie de la détente.</p><p><strong>Astuce importante</strong> : le CBD n'est pas soluble dans l'eau. Pour optimiser son absorption, ajoutez une cuillère d'huile de coco, une noix de beurre ou un nuage de lait entier à votre infusion. Le corps gras permet au CBD de se dissoudre et d'être mieux assimilé par l'organisme.</p><p><strong>Température idéale</strong> : laissez infuser 7 à 10 minutes à 90°C (pas d'eau bouillante, qui pourrait dégrader certains composés).</p>"
+          }
+        },
+        {
+          "type": "heading",
+          "id": "terra-post3-h2-sport",
+          "props": {
+            "level": 2,
+            "text": "3. Après le sport : baume musculaire CBD",
+            "color": "#1a2e1a",
+            "fontFamily": "Cormorant Garamond"
+          }
+        },
+        {
+          "type": "text",
+          "id": "terra-post3-sport",
+          "props": {
+            "content": "<p>De plus en plus d'athlètes, amateurs comme professionnels, intègrent le CBD dans leur routine de récupération. Le CBD possède des propriétés anti-inflammatoires naturelles qui aident à soulager les courbatures et à accélérer la récupération musculaire.</p><p>Notre baume musculaire CBD s'applique directement sur les zones sollicitées après l'effort. Enrichi en menthol et en arnica, il procure une sensation de fraîcheur apaisante tout en permettant au CBD de pénétrer localement. Massez doucement pendant 2-3 minutes pour une absorption optimale.</p><p>Vous pouvez aussi combiner l'application locale avec une prise orale de gummies CBD pour une action à la fois ciblée et globale.</p>"
+          }
+        },
+        {
+          "type": "heading",
+          "id": "terra-post3-h2-skincare",
+          "props": {
+            "level": 2,
+            "text": "4. La routine beauté : crème visage CBD",
+            "color": "#1a2e1a",
+            "fontFamily": "Cormorant Garamond"
+          }
+        },
+        {
+          "type": "text",
+          "id": "terra-post3-skincare",
+          "props": {
+            "content": "<p>Le CBD est un puissant antioxydant et anti-inflammatoire, ce qui en fait un ingrédient de choix en cosmétique. Notre crème visage CBD hydratante, enrichie en aloe vera et en vitamine E, convient à tous les types de peau — y compris les peaux sensibles et réactives.</p><p>Appliquez-la matin et/ou soir sur une peau propre. Le CBD aide à réguler la production de sébum (utile pour les peaux mixtes à grasses), apaise les rougeurs et irritations, et combat le stress oxydatif responsable du vieillissement prématuré.</p><p>Les retours de nos clients sont unanimes : une peau plus apaisée, plus lumineuse et moins sujette aux imperfections après seulement quelques semaines d'utilisation régulière.</p>"
+          }
+        },
+        {
+          "type": "heading",
+          "id": "terra-post3-h2-evening",
+          "props": {
+            "level": 2,
+            "text": "5. Le rituel du soir : gummies CBD sommeil",
+            "color": "#1a2e1a",
+            "fontFamily": "Cormorant Garamond"
+          }
+        },
+        {
+          "type": "text",
+          "id": "terra-post3-evening",
+          "props": {
+            "content": "<p>Terminez votre journée en douceur avec nos gummies CBD sommeil. Formulés avec du CBD, de la mélatonine et de la passiflore, ils créent un rituel du soir agréable qui facilite l'endormissement sans créer de dépendance.</p><p>Prenez 1 à 2 gummies 30 à 45 minutes avant le coucher. Le goût fruits rouges rend le moment véritablement plaisant — rien à voir avec les compléments alimentaires classiques ! Le CBD aide à calmer le mental agité, tandis que la mélatonine régule le cycle circadien pour un endormissement plus rapide.</p><p>Beaucoup de nos clients rapportent une amélioration notable de la qualité de leur sommeil dès la première semaine, avec des réveils nocturnes moins fréquents et une sensation de repos plus profond au réveil.</p>"
+          }
+        }
+      ]
+    }
+  },
+
+  {
+    "title": "CBD et sommeil : ce que dit la science",
+    "slug": "cbd-et-sommeil-ce-que-dit-la-science",
+    "status": "published",
+    "excerpt": "Que disent les études scientifiques sur l'effet du CBD sur le sommeil ? Analyse des recherches, mécanismes d'action et conseils pratiques.",
+    "taxonomies": {
+      "categories": ["sante"],
+      "tags": ["cbd", "sommeil", "bien-etre"]
+    },
+    "content": {
+      "blocks": [
+        {
+          "type": "heading",
+          "id": "terra-post4-h1",
+          "props": {
+            "level": 1,
+            "text": "CBD et sommeil : ce que dit la science",
+            "color": "#1a2e1a",
+            "fontFamily": "Cormorant Garamond"
+          }
+        },
+        {
+          "type": "text",
+          "id": "terra-post4-intro",
+          "props": {
+            "content": "<p>En France, un adulte sur trois déclare souffrir de troubles du sommeil. Insomnie, réveils nocturnes, difficultés d'endormissement : ces problèmes impactent considérablement la qualité de vie, la santé et la productivité. Face aux limites et aux effets secondaires des somnifères classiques, le CBD apparaît comme une alternative naturelle de plus en plus étudiée par la communauté scientifique.</p><p>Mais que disent réellement les études ? Le CBD améliore-t-il vraiment le sommeil, ou s'agit-il d'un effet placebo ? Faisons le point sur les données scientifiques disponibles.</p>"
+          }
+        },
+        {
+          "type": "heading",
+          "id": "terra-post4-h2-science",
+          "props": {
+            "level": 2,
+            "text": "Les études scientifiques clés",
+            "color": "#1a2e1a",
+            "fontFamily": "Cormorant Garamond"
+          }
+        },
+        {
+          "type": "text",
+          "id": "terra-post4-science",
+          "props": {
+            "content": "<p>Plusieurs études cliniques ont exploré le lien entre CBD et sommeil :</p><p><strong>L'étude de Shannon et al. (2019)</strong>, publiée dans <em>The Permanente Journal</em>, a suivi 72 adultes souffrant d'anxiété et de troubles du sommeil. Après un mois de prise de CBD (25-175mg/jour), 66,7% des participants ont rapporté une amélioration de leur sommeil, et 79,2% une diminution de leur anxiété.</p><p><strong>L'étude de Kesner et Lovinger (2020)</strong>, publiée dans <em>Current Neuropharmacology</em>, a analysé les mécanismes par lesquels le CBD influence les cycles de sommeil. Les chercheurs ont montré que le CBD interagit avec les récepteurs du système endocannabinoïde impliqués dans la régulation du cycle veille-sommeil.</p><p><strong>La méta-analyse de Suraev et al. (2020)</strong>, publiée dans <em>Sleep Medicine Reviews</em>, a passé en revue 34 études sur les cannabinoïdes et le sommeil, concluant que le CBD présente un potentiel thérapeutique prometteur pour les troubles du sommeil, avec un profil de sécurité favorable.</p>"
+          }
+        },
+        {
+          "type": "heading",
+          "id": "terra-post4-h2-mechanism",
+          "props": {
+            "level": 2,
+            "text": "Comment le CBD agit-il sur le sommeil ?",
+            "color": "#1a2e1a",
+            "fontFamily": "Cormorant Garamond"
+          }
+        },
+        {
+          "type": "text",
+          "id": "terra-post4-mechanism",
+          "props": {
+            "content": "<p>Le CBD n'agit pas comme un somnifère classique qui \"assomme\" le cerveau. Son approche est plus subtile et multifactorielle :</p><ul><li><strong>Réduction de l'anxiété</strong> : l'anxiété est l'une des premières causes d'insomnie. En activant les récepteurs de sérotonine 5-HT1A, le CBD réduit le stress et l'anxiété, permettant au mental de se calmer avant le coucher.</li><li><strong>Régulation du cortisol</strong> : le CBD peut réduire les niveaux de cortisol, l'hormone du stress, dont les pics nocturnes perturbent le sommeil profond. En stabilisant le cortisol, le CBD favorise des phases de sommeil plus longues et plus réparatrices.</li><li><strong>Modulation du cycle circadien</strong> : des études suggèrent que le CBD interagit avec les récepteurs impliqués dans le rythme circadien, aidant à régulariser les heures d'endormissement et de réveil.</li><li><strong>Réduction de la douleur</strong> : pour les personnes dont les troubles du sommeil sont liés à des douleurs chroniques, les propriétés anti-inflammatoires et analgésiques du CBD peuvent améliorer indirectement la qualité du sommeil.</li></ul>"
+          }
+        },
+        {
+          "type": "heading",
+          "id": "terra-post4-h2-tips",
+          "props": {
+            "level": 2,
+            "text": "Nos conseils pour optimiser votre sommeil avec le CBD",
+            "color": "#1a2e1a",
+            "fontFamily": "Cormorant Garamond"
+          }
+        },
+        {
+          "type": "text",
+          "id": "terra-post4-tips",
+          "props": {
+            "content": "<p>Pour maximiser les effets du CBD sur votre sommeil, voici nos recommandations basées sur les retours de nos clients et les données scientifiques :</p><ul><li><strong>Timing</strong> : prenez votre CBD 30 à 60 minutes avant le coucher. Cela laisse le temps à la molécule d'agir, surtout en administration sublinguale.</li><li><strong>Dosage</strong> : commencez par 20-25mg de CBD (2-3 gouttes d'huile 10%) et ajustez progressivement. Certaines personnes obtiennent de bons résultats avec des doses plus faibles, d'autres nécessitent des doses plus élevées.</li><li><strong>Régularité</strong> : le CBD fonctionne mieux lorsqu'il est pris régulièrement. Donnez-vous au moins 2-3 semaines d'utilisation quotidienne avant d'évaluer les résultats.</li><li><strong>Combinez</strong> : associez le CBD à de bonnes pratiques d'hygiène du sommeil : pas d'écran 1h avant le coucher, chambre fraîche (18-19°C), horaires réguliers, éviter la caféine après 14h.</li></ul><p>Nos gummies CBD Sommeil combinent du CBD (25mg), de la mélatonine (1mg) et de la passiflore pour une action synergique sur l'endormissement et la qualité du sommeil. C'est notre produit le plus recommandé pour les personnes souffrant de troubles du sommeil.</p><p><em>Rappel : le CBD ne remplace pas un traitement médical. Si vos troubles du sommeil persistent, consultez un professionnel de santé.</em></p>"
+          }
+        }
+      ]
+    }
+  },
+
+  {
+    "title": "Notre engagement pour une culture biologique",
+    "slug": "notre-engagement-culture-biologique",
+    "status": "published",
+    "excerpt": "De la graine à la bouteille : comment Terra CBD garantit un CBD 100% biologique, traçable et respectueux de l'environnement.",
+    "taxonomies": {
+      "categories": ["notre-marque"],
+      "tags": ["bio", "naturel", "cbd"]
+    },
+    "content": {
+      "blocks": [
+        {
+          "type": "heading",
+          "id": "terra-post5-h1",
+          "props": {
+            "level": 1,
+            "text": "Notre engagement pour une culture biologique",
+            "color": "#1a2e1a",
+            "fontFamily": "Cormorant Garamond"
+          }
+        },
+        {
+          "type": "text",
+          "id": "terra-post5-intro",
+          "props": {
+            "content": "<p>Chez Terra CBD, le bio n'est pas un argument marketing : c'est le fondement de notre démarche. Depuis la création de la marque en 2021, nous avons fait le choix d'une culture biologique certifiée, sans aucun compromis. Ce choix a un coût, mais il garantit des produits purs, sains et respectueux de l'environnement.</p><p>Dans cet article, nous vous emmenons dans les coulisses de notre chaîne de production, du champ à votre flacon.</p>"
+          }
+        },
+        {
+          "type": "heading",
+          "id": "terra-post5-h2-farming",
+          "props": {
+            "level": 2,
+            "text": "Des champs certifiés bio en Europe",
+            "color": "#1a2e1a",
+            "fontFamily": "Cormorant Garamond"
+          }
+        },
+        {
+          "type": "text",
+          "id": "terra-post5-farming",
+          "props": {
+            "content": "<p>Notre chanvre est cultivé par des agriculteurs partenaires en Suisse, en Italie et dans le sud de la France. Tous sont certifiés en agriculture biologique selon le cahier des charges européen. Cela signifie :</p><ul><li><strong>Aucun pesticide chimique</strong> : nos cultures sont protégées par des méthodes naturelles — rotation des cultures, compagnonnage végétal, lutte biologique intégrée.</li><li><strong>Aucun engrais de synthèse</strong> : nous utilisons exclusivement des amendements organiques (compost, fumier, engrais verts) pour nourrir les sols sans les appauvrir.</li><li><strong>Aucun OGM</strong> : toutes nos variétés de chanvre sont des variétés naturelles, inscrites au catalogue européen des plantes autorisées.</li><li><strong>Sols vivants</strong> : nous pratiquons la culture régénérative qui favorise la biodiversité des sols et la capture de carbone.</li></ul><p>Le chanvre est d'ailleurs une plante remarquable sur le plan écologique : il nécessite peu d'eau, capte plus de CO₂ par hectare que la forêt, et ses racines profondes assainissent naturellement les sols.</p>"
+          }
+        },
+        {
+          "type": "heading",
+          "id": "terra-post5-h2-extraction",
+          "props": {
+            "level": 2,
+            "text": "Une extraction propre et sans solvant",
+            "color": "#1a2e1a",
+            "fontFamily": "Cormorant Garamond"
+          }
+        },
+        {
+          "type": "text",
+          "id": "terra-post5-extraction",
+          "props": {
+            "content": "<p>La qualité d'un produit CBD commence au champ, mais c'est l'extraction qui fait la différence. Nous avons choisi l'extraction au CO₂ supercritique, la méthode la plus avancée et la plus respectueuse du produit.</p><p>Contrairement aux extractions par solvant (éthanol, butane) utilisées par de nombreuses marques pour réduire les coûts, notre méthode ne laisse aucun résidu chimique dans le produit final. Elle préserve l'intégralité du profil cannabinoïde de la plante : CBD, CBG, CBN, terpènes et flavonoïdes — pour un véritable spectre complet.</p><p>Le CO₂ utilisé est récupéré et recyclé dans un circuit fermé, ce qui réduit notre empreinte environnementale. Notre partenaire d'extraction est certifié GMP (Bonnes Pratiques de Fabrication), garantissant des conditions de production irréprochables.</p>"
+          }
+        },
+        {
+          "type": "heading",
+          "id": "terra-post5-h2-packaging",
+          "props": {
+            "level": 2,
+            "text": "Un packaging éco-responsable",
+            "color": "#1a2e1a",
+            "fontFamily": "Cormorant Garamond"
+          }
+        },
+        {
+          "type": "text",
+          "id": "terra-post5-packaging",
+          "props": {
+            "content": "<p>Notre engagement bio s'étend au-delà du produit lui-même. Nos emballages sont pensés pour minimiser l'impact environnemental :</p><ul><li>Flacons en verre ambré 100% recyclable (le verre protège aussi mieux le CBD de la lumière)</li><li>Étiquettes imprimées avec des encres végétales sur papier certifié FSC</li><li>Boîtes en carton recyclé, sans plastique</li><li>Calages d'expédition en papier kraft froissé (pas de polystyrène ni de plastique bulle)</li><li>Encre de soja pour les impressions</li></ul><p>Nous compensons également les émissions carbone de nos livraisons en partenariat avec Reforest'Action. Chaque commande contribue à la plantation d'arbres en France.</p><p>Chez Terra CBD, nous croyons qu'un produit qui prend soin de votre bien-être doit aussi prendre soin de la planète. C'est notre promesse, et c'est ce qui guide chacune de nos décisions.</p>"
+          }
+        }
+      ]
+    }
+  },
+
+  {
+    "title": "Recettes gourmandes au CBD",
+    "slug": "recettes-gourmandes-au-cbd",
+    "status": "published",
+    "excerpt": "3 recettes faciles et délicieuses pour cuisiner avec du CBD : energy balls, golden milk et vinaigrette zen. Dosages et astuces pour débuter.",
+    "taxonomies": {
+      "categories": ["recettes"],
+      "tags": ["cbd", "cuisine", "bien-etre", "relaxation"]
+    },
+    "content": {
+      "blocks": [
+        {
+          "type": "heading",
+          "id": "terra-post6-h1",
+          "props": {
+            "level": 1,
+            "text": "Recettes gourmandes au CBD",
+            "color": "#1a2e1a",
+            "fontFamily": "Cormorant Garamond"
+          }
+        },
+        {
+          "type": "text",
+          "id": "terra-post6-intro",
+          "props": {
+            "content": "<p>Et si votre dose quotidienne de CBD devenait un moment de plaisir gourmand ? Au-delà de l'administration sublinguale classique, le CBD peut s'intégrer dans de nombreuses recettes — à condition de respecter quelques règles simples. Voici 3 recettes faciles, testées et approuvées par l'équipe Terra CBD, pour allier bien-être et gourmandise.</p><p><strong>Règles de base avant de cuisiner avec le CBD :</strong></p><ul><li>Le CBD est <strong>liposoluble</strong> : associez-le toujours à un corps gras (huile, beurre, lait entier, avocat) pour une meilleure absorption.</li><li>Évitez les <strong>températures supérieures à 160°C</strong> qui dégradent le CBD. Ajoutez-le plutôt en fin de préparation ou dans des recettes sans cuisson.</li><li><strong>Dosez avec précision</strong> : nous recommandons 10 à 25mg de CBD par portion. Avec notre huile 10%, cela correspond à 2 à 5 gouttes par personne.</li></ul>"
+          }
+        },
+        {
+          "type": "heading",
+          "id": "terra-post6-h2-balls",
+          "props": {
+            "level": 2,
+            "text": "1. Energy Balls CBD & cacao cru",
+            "color": "#1a2e1a",
+            "fontFamily": "Cormorant Garamond"
+          }
+        },
+        {
+          "type": "text",
+          "id": "terra-post6-balls",
+          "props": {
+            "content": "<p>Un en-cas sain et énergisant, parfait pour le goûter ou la collation post-sport. Préparation : 10 minutes. Sans cuisson.</p><p><strong>Ingrédients (pour 12 boules) :</strong></p><ul><li>200g de dattes Medjool dénoyautées</li><li>100g de flocons d'avoine</li><li>3 cuillères à soupe de cacao cru en poudre</li><li>2 cuillères à soupe de beurre de cacahuète</li><li>1 cuillère à soupe d'huile de coco fondue</li><li>24 gouttes d'huile CBD 10% Terra CBD (soit 2 gouttes par boule)</li><li>1 pincée de fleur de sel</li><li>Noix de coco râpée pour l'enrobage</li></ul><p><strong>Préparation :</strong> Mixez les dattes avec les flocons d'avoine jusqu'à obtenir une pâte collante. Ajoutez le cacao, le beurre de cacahuète, l'huile de coco, le CBD et le sel. Mélangez bien. Formez 12 boules et roulez-les dans la noix de coco râpée. Réfrigérez 30 minutes avant de déguster. Conservation : 5 jours au réfrigérateur.</p>"
+          }
+        },
+        {
+          "type": "heading",
+          "id": "terra-post6-h2-goldenmilk",
+          "props": {
+            "level": 2,
+            "text": "2. Golden Milk CBD (lait d'or)",
+            "color": "#1a2e1a",
+            "fontFamily": "Cormorant Garamond"
+          }
+        },
+        {
+          "type": "text",
+          "id": "terra-post6-goldenmilk",
+          "props": {
+            "content": "<p>Le golden milk est une boisson ayurvédique aux vertus anti-inflammatoires. Enrichi en CBD, il devient le rituel du soir parfait. Préparation : 5 minutes.</p><p><strong>Ingrédients (pour 1 tasse) :</strong></p><ul><li>250ml de lait d'avoine (ou lait végétal de votre choix)</li><li>1 cuillère à café de curcuma en poudre</li><li>1/2 cuillère à café de cannelle</li><li>1 petite pincée de poivre noir (active la curcumine)</li><li>1 cuillère à café de miel ou sirop d'agave</li><li>1 cuillère à café d'huile de coco</li><li>3-5 gouttes d'huile CBD 10% Terra CBD</li></ul><p><strong>Préparation :</strong> Chauffez le lait avec le curcuma, la cannelle, le poivre et l'huile de coco à feu doux (ne pas faire bouillir). Versez dans une tasse, laissez tiédir 2 minutes, puis ajoutez le miel et les gouttes de CBD. Remuez et savourez. L'huile de coco assure une bonne absorption du CBD.</p>"
+          }
+        },
+        {
+          "type": "heading",
+          "id": "terra-post6-h2-vinaigrette",
+          "props": {
+            "level": 2,
+            "text": "3. Vinaigrette zen au CBD & citron",
+            "color": "#1a2e1a",
+            "fontFamily": "Cormorant Garamond"
+          }
+        },
+        {
+          "type": "text",
+          "id": "terra-post6-vinaigrette",
+          "props": {
+            "content": "<p>Intégrez le CBD à vos repas avec cette vinaigrette parfumée. Idéale sur une salade verte, des légumes grillés ou un bowl. Préparation : 3 minutes.</p><p><strong>Ingrédients (pour 4 portions) :</strong></p><ul><li>4 cuillères à soupe d'huile d'olive extra vierge</li><li>2 cuillères à soupe de jus de citron frais</li><li>1 cuillère à café de moutarde de Dijon</li><li>1 cuillère à café de miel</li><li>12 gouttes d'huile CBD 10% Terra CBD (3 gouttes par portion)</li><li>Sel, poivre du moulin</li><li>Optionnel : quelques feuilles de basilic frais ciselées</li></ul><p><strong>Préparation :</strong> Dans un petit bocal, combinez la moutarde, le jus de citron, le miel, le sel et le poivre. Ajoutez l'huile d'olive et l'huile CBD. Fermez et secouez vigoureusement pendant 30 secondes. Ajoutez le basilic si souhaité. La vinaigrette se conserve 3 jours au réfrigérateur.</p><p><strong>Bonus :</strong> l'huile d'olive joue ici le rôle de corps gras pour optimiser l'absorption du CBD. Le goût herbacé subtil de l'huile CBD se marie parfaitement avec les notes citronnées.</p><p><em>N'hésitez pas à partager vos propres recettes CBD sur nos réseaux sociaux avec le hashtag #TerraCBDRecettes !</em></p>"
+          }
+        }
+      ]
+    }
+  }
+]

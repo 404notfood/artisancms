@@ -1,0 +1,114 @@
+[
+  {
+    "name": "Catégories",
+    "slug": "categories",
+    "type": "category",
+    "description": "Catégories thématiques du blog",
+    "terms": [
+      {
+        "name": "Photographie",
+        "slug": "photographie",
+        "description": "L'art de capturer la lumière et les instants",
+        "order": 1
+      },
+      {
+        "name": "Voyage",
+        "slug": "voyage",
+        "description": "Carnets de route et découvertes du monde",
+        "order": 2
+      },
+      {
+        "name": "Cuisine",
+        "slug": "cuisine",
+        "description": "Recettes végétales et art culinaire",
+        "order": 3
+      },
+      {
+        "name": "Lifestyle",
+        "slug": "lifestyle",
+        "description": "Art de vivre, slow living et bien-être au quotidien",
+        "order": 4
+      },
+      {
+        "name": "Déco",
+        "slug": "deco",
+        "description": "Décoration intérieure et tendances habitat",
+        "order": 5
+      },
+      {
+        "name": "Culture",
+        "slug": "culture",
+        "description": "Littérature, cinéma, art et idées",
+        "order": 6
+      },
+      {
+        "name": "Bien-être",
+        "slug": "bien-etre",
+        "description": "Méditation, santé naturelle et équilibre corps-esprit",
+        "order": 7
+      },
+      {
+        "name": "Architecture",
+        "slug": "architecture",
+        "description": "Architecture durable et habitat responsable",
+        "order": 8
+      }
+    ]
+  },
+  {
+    "name": "Tags",
+    "slug": "tags",
+    "type": "tag",
+    "description": "Mots-clés transversaux",
+    "terms": [
+      {
+        "name": "Minimalisme",
+        "slug": "minimalisme",
+        "description": "Simplicité, épure et essentiel",
+        "order": 1
+      },
+      {
+        "name": "Nature",
+        "slug": "nature",
+        "description": "Connexion au vivant et au monde naturel",
+        "order": 2
+      },
+      {
+        "name": "Recettes",
+        "slug": "recettes",
+        "description": "Recettes végétales et cuisine de saison",
+        "order": 3
+      },
+      {
+        "name": "Bien-être",
+        "slug": "bien-etre",
+        "description": "Santé, méditation et équilibre",
+        "order": 4
+      },
+      {
+        "name": "Tendances",
+        "slug": "tendances",
+        "description": "Les mouvements qui façonnent notre époque",
+        "order": 5
+      },
+      {
+        "name": "Inspiration",
+        "slug": "inspiration",
+        "description": "Sources d'inspiration et créativité",
+        "order": 6
+      },
+      {
+        "name": "Durable",
+        "slug": "durable",
+        "description": "Écologie, durabilité et responsabilité",
+        "order": 7
+      },
+      {
+        "name": "Art de vivre",
+        "slug": "art-de-vivre",
+        "description": "Philosophie du quotidien et savoir-vivre",
+        "order": 8
+      }
+    ]
+  }
+]

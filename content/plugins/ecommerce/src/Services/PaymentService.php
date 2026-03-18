@@ -18,9 +18,12 @@ use Illuminate\Support\Facades\Log;
 
 class PaymentService
 {
+    private const DRIVER_MAP = [
+        'stripe' => StripeDriver::class,
+        'cod' => CodDriver::class,
+    ];
+
     /**
-     * Get all active payment methods, ordered.
-     *
      * @return Collection<int, PaymentMethod>
      */
     public function getActiveMethods(): Collection
@@ -28,19 +31,16 @@ class PaymentService
         return PaymentMethod::active()->ordered()->get();
     }
 
-    /**
-     * Process a payment for the given order using the specified method slug.
-     *
-     * @param Order $order The order to pay.
-     * @param string $method The payment method slug.
-     * @param array<string, mixed> $data Additional payment data.
-     */
     public function processPayment(Order $order, string $method, array $data = []): PaymentResult
     {
         $paymentMethod = PaymentMethod::where('slug', $method)->active()->first();
 
-        if ($paymentMethod === null) {
+        if (!$paymentMethod) {
             return PaymentResult::failed('Methode de paiement introuvable ou inactive.');
+        }
+
+        if ($order->isPaid()) {
+            return PaymentResult::failed('Cette commande est deja payee.');
         }
 
         try {
@@ -48,10 +48,16 @@ class PaymentService
             $result = $driver->createPayment($order, $data);
 
             if ($result->success) {
-                $order->update([
+                $updateData = [
                     'payment_method' => $paymentMethod->slug,
-                    'payment_status' => $result->status ?? 'pending',
-                ]);
+                    'payment_status' => $result->status ?? Order::PAYMENT_PENDING,
+                ];
+
+                if ($result->transactionId) {
+                    $updateData['transaction_id'] = $result->transactionId;
+                }
+
+                $order->update($updateData);
                 CMS::fire('ecommerce.payment.processed', $order, $result);
             }
 
@@ -67,17 +73,11 @@ class PaymentService
         }
     }
 
-    /**
-     * Handle an incoming payment webhook for the given driver.
-     *
-     * @param string $driver The driver name (e.g. stripe, paypal).
-     * @param Request $request The incoming webhook request.
-     */
     public function handleWebhook(string $driver, Request $request): WebhookResult
     {
         $paymentMethod = PaymentMethod::where('driver', $driver)->active()->first();
 
-        if ($paymentMethod === null) {
+        if (!$paymentMethod) {
             return WebhookResult::failed('Aucune methode de paiement active pour ce driver.');
         }
 
@@ -100,41 +100,38 @@ class PaymentService
         }
     }
 
-    /**
-     * Resolve the payment driver instance from a PaymentMethod model.
-     */
     private function resolveDriver(PaymentMethod $paymentMethod): PaymentDriverInterface
     {
         $config = $paymentMethod->config ?? [];
+        $driverClass = self::DRIVER_MAP[$paymentMethod->driver] ?? null;
 
-        return match ($paymentMethod->driver) {
-            'stripe' => new StripeDriver($config),
-            'cod' => new CodDriver($config),
-            default => throw new \InvalidArgumentException(
+        if (!$driverClass) {
+            throw new \InvalidArgumentException(
                 "Driver de paiement inconnu : {$paymentMethod->driver}"
-            ),
-        };
+            );
+        }
+
+        return new $driverClass($config);
     }
 
-    /**
-     * Update the order's payment status based on webhook result.
-     */
     private function updateOrderFromWebhook(WebhookResult $result): void
     {
-        // Try to find order by transaction ID stored in payment_method metadata
-        // The transaction ID from Stripe corresponds to the PaymentIntent ID
-        $order = Order::where('payment_status', 'pending')->first();
+        $order = Order::where('transaction_id', $result->transactionId)->first();
 
-        if ($order === null) {
-            Log::warning('Webhook received but no matching pending order found', [
+        if (!$order) {
+            Log::warning('Webhook: no order found for transaction', [
                 'transaction_id' => $result->transactionId,
             ]);
             return;
         }
 
-        $order->update([
-            'payment_status' => $result->status ?? 'paid',
-        ]);
+        $paymentStatus = $result->status ?? Order::PAYMENT_PAID;
+        $order->update(['payment_status' => $paymentStatus]);
+
+        // Auto-advance order status when payment is confirmed
+        if ($paymentStatus === Order::PAYMENT_PAID && $order->isPending()) {
+            $order->transitionTo(Order::STATUS_PROCESSING);
+        }
 
         CMS::fire('ecommerce.payment.webhook_processed', $order, $result);
     }

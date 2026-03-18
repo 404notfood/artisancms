@@ -1,0 +1,17 @@
+{
+  "general": {
+    "site_name": "Terra CBD",
+    "tagline": "La nature au service de votre bien-être",
+    "site_description": "Boutique en ligne de produits CBD premium — huiles, gummies et cosmétiques issus de chanvre bio européen certifié."
+  },
+  "theme": {
+    "active_theme": "terra-cbd"
+  },
+  "appearance": {
+    "colors.primary": "#1a3d1a",
+    "colors.secondary": "#f5f0e8",
+    "colors.accent": "#c9a84c",
+    "fonts.heading": "Cormorant Garamond",
+    "fonts.body": "DM Sans"
+  }
+}
