@@ -86,16 +86,7 @@ Route::middleware(['web', 'auth'])->prefix('members')->group(function () {
     Route::post('account/security/2fa/regenerate', [TwoFactorController::class, 'regenerateCodes'])->name('members.account.2fa.regenerate');
 
     // Social Accounts
-    Route::get('account/social', function () {
-        $socialService = app(\MemberSpace\Services\SocialLoginService::class);
-        return \Inertia\Inertia::render('Front/Members/Account/SocialAccounts', array_merge(
-            app(\MemberSpace\Http\Controllers\AccountController::class)->themeAndMenus(),
-            [
-                'accounts' => $socialService->getUserAccounts(auth()->id()),
-                'providers' => $socialService->getSupportedProviders(),
-            ]
-        ));
-    })->name('members.account.social');
+    Route::get('account/social', [AccountController::class, 'socialAccounts'])->name('members.account.social');
     Route::delete('account/social/{provider}', [SocialAuthController::class, 'unlink'])->name('members.account.social.unlink');
 
     // Membership

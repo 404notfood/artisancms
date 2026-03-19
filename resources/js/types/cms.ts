@@ -745,3 +745,189 @@ export interface PreviewTokenData {
     expires_at: string;
     url: string;
 }
+
+// ---- Member Space Types ----
+
+export interface MemberProfileData {
+    id: number;
+    user_id: number;
+    display_name: string;
+    first_name: string | null;
+    last_name: string | null;
+    bio: string | null;
+    avatar: string | null;
+    cover_photo: string | null;
+    phone: string | null;
+    website: string | null;
+    location: string | null;
+    birth_date: string | null;
+    gender: string | null;
+    company: string | null;
+    job_title: string | null;
+    social_links: Record<string, string> | null;
+    profile_visibility: 'public' | 'members_only' | 'private';
+    show_in_directory: boolean;
+    show_email: boolean;
+    show_phone: boolean;
+    profile_completion: number;
+    last_active_at: string | null;
+    user?: UserData;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface MemberCustomFieldData {
+    id: number;
+    name: string;
+    slug: string;
+    type: 'text' | 'textarea' | 'select' | 'checkbox' | 'radio' | 'url' | 'email' | 'phone' | 'date' | 'number' | 'file';
+    options: string[] | null;
+    placeholder: string | null;
+    description: string | null;
+    required: boolean;
+    show_on_registration: boolean;
+    show_on_profile: boolean;
+    show_in_directory: boolean;
+    admin_only: boolean;
+    visibility_roles: string[] | null;
+    validation_rules: string | null;
+    order: number;
+    active: boolean;
+}
+
+export interface MembershipPlanData {
+    id: number;
+    name: string;
+    slug: string;
+    description: string | null;
+    price: string;
+    billing_period: 'monthly' | 'yearly' | 'lifetime' | 'one_time';
+    duration_days: number | null;
+    trial_days: number;
+    features: string[] | null;
+    permissions: string[] | null;
+    restricted_roles: string[] | null;
+    is_popular: boolean;
+    active: boolean;
+    order: number;
+    stripe_price_id: string | null;
+    badge_label: string | null;
+    badge_color: string | null;
+    member_limit: number | null;
+    active_members_count?: number;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface UserMembershipData {
+    id: number;
+    user_id: number;
+    plan_id: number;
+    status: 'active' | 'trial' | 'expired' | 'cancelled' | 'pending';
+    starts_at: string | null;
+    expires_at: string | null;
+    trial_ends_at: string | null;
+    cancelled_at: string | null;
+    stripe_subscription_id: string | null;
+    stripe_customer_id: string | null;
+    amount_paid: string | null;
+    payment_method: string | null;
+    metadata: Record<string, unknown> | null;
+    plan?: MembershipPlanData;
+    user?: UserData;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface SocialAccountData {
+    id: number;
+    user_id: number;
+    provider: string;
+    provider_id: string;
+    provider_email: string | null;
+    provider_name: string | null;
+    provider_avatar: string | null;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface MemberVerificationData {
+    id: number;
+    user_id: number;
+    status: 'pending' | 'approved' | 'rejected';
+    document_path: string | null;
+    notes: string | null;
+    admin_notes: string | null;
+    reviewed_by: number | null;
+    reviewed_at: string | null;
+    submitted_at: string | null;
+    user?: UserData;
+    reviewer?: UserData;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface ContentRestrictionData {
+    id: number;
+    restrictable_type: string;
+    restrictable_id: number;
+    restriction_type: 'role' | 'plan' | 'logged_in';
+    allowed_roles: string[] | null;
+    allowed_plans: number[] | null;
+    redirect_url: string | null;
+    restricted_message: string | null;
+    show_excerpt: boolean;
+    active: boolean;
+    restrictable?: { id: number; title?: string; name?: string };
+    created_at: string;
+    updated_at: string;
+}
+
+export interface MemberActivityData {
+    id: number;
+    user_id: number;
+    type: string;
+    description: string;
+    metadata: Record<string, unknown> | null;
+    ip_address: string | null;
+    user_agent: string | null;
+    created_at: string;
+}
+
+export interface MemberSpaceModules {
+    member_directory: boolean;
+    content_restriction: boolean;
+    custom_fields: boolean;
+    social_login: boolean;
+    two_factor: boolean;
+    membership_plans: boolean;
+    user_verification: boolean;
+}
+
+export interface MemberSpaceSettings {
+    modules: MemberSpaceModules;
+    profile: {
+        default_visibility: string;
+        require_avatar: boolean;
+        max_bio_length: number;
+        enable_cover_photo: boolean;
+    };
+    directory: {
+        per_page: number;
+        default_sort: string;
+        show_search: boolean;
+        layout: string;
+    };
+    registration: {
+        enable_custom_registration: boolean;
+        require_email_verification: boolean;
+        auto_create_profile: boolean;
+        default_role: string;
+    };
+    social_login: Record<string, string>;
+    stripe: {
+        publishable_key: string;
+        secret_key: string;
+        webhook_secret: string;
+    };
+}

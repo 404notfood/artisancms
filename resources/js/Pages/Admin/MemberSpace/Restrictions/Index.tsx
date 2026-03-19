@@ -126,8 +126,8 @@ export default function RestrictionsIndex({ restrictions, plans }: RestrictionsI
                             <div>
                                 <label className="block text-sm font-medium text-gray-700">Type de contenu</label>
                                 <select value={data.restrictable_type} onChange={(e) => setData('restrictable_type', e.target.value)} className={inputClass}>
-                                    <option value="App\Models\Page">Page</option>
-                                    <option value="App\Models\Post">Article</option>
+                                    <option value="App\\Models\\Page">Page</option>
+                                    <option value="App\\Models\\Post">Article</option>
                                 </select>
                             </div>
                             <div>

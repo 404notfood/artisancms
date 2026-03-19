@@ -13,6 +13,7 @@ use MemberSpace\Http\Controllers\Concerns\HasMemberSettings;
 use MemberSpace\Http\Controllers\Concerns\HasThemeAndMenus;
 use MemberSpace\Services\CustomFieldService;
 use MemberSpace\Services\ProfileService;
+use MemberSpace\Services\SocialLoginService;
 
 class AccountController extends Controller
 {
@@ -21,6 +22,7 @@ class AccountController extends Controller
     public function __construct(
         private readonly ProfileService $profileService,
         private readonly CustomFieldService $customFieldService,
+        private readonly SocialLoginService $socialLoginService,
     ) {}
 
     public function dashboard(): Response
@@ -143,5 +145,14 @@ class AccountController extends Controller
         $this->profileService->deleteAvatar($profile);
 
         return redirect()->back()->with('success', 'Photo de profil supprimee.');
+    }
+
+    public function socialAccounts(): Response
+    {
+        return Inertia::render('Front/Members/Account/SocialAccounts', array_merge($this->themeAndMenus(), [
+            'accounts' => $this->socialLoginService->getUserAccounts(auth()->id()),
+            'providers' => $this->socialLoginService->getSupportedProviders(),
+            'settings' => $this->getSettings(),
+        ]));
     }
 }

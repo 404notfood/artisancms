@@ -70,7 +70,7 @@ trait HasMemberSettings
             $resolved[$key] = is_array($value) && isset($value['default']) ? $value['default'] : $value;
         }
 
-        return $cached = array_merge($defaults, $resolved);
+        return $cached = array_replace_recursive($defaults, $resolved);
     }
 
     protected function isModuleEnabled(string $module): bool

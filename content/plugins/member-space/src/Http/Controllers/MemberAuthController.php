@@ -112,7 +112,7 @@ class MemberAuthController extends Controller
         return redirect()->intended('/members/account');
     }
 
-    public function showTwoFactor(): Response
+    public function showTwoFactor(): Response|RedirectResponse
     {
         if (!session('2fa.user_id')) {
             return redirect('/members/auth/login');
