@@ -53,6 +53,10 @@ class HandleInertiaRequests extends Middleware
                     fn () => CmsPlugin::where('enabled', true)->pluck('slug')->toArray(),
                     [],
                 ),
+                'dashboardTheme' => fn () => $this->safeQuery(
+                    fn () => (string) (Setting::get('dashboard.theme') ?? 'indigo'),
+                    'indigo',
+                ),
             ],
             'notifications_count' => fn () => $this->safeQuery(
                 fn () => auth()->check()
@@ -94,55 +98,42 @@ class HandleInertiaRequests extends Middleware
      */
     private function getSidebarBadges(): array
     {
-        $badges = [];
-
-        try {
-            $badges['unread_comments'] = Comment::where('status', 'pending')->count();
-        } catch (\Throwable) {
-            $badges['unread_comments'] = 0;
-        }
-
-        try {
-            if (class_exists(\FormBuilder\Models\FormSubmission::class)) {
-                $badges['new_forms'] = \FormBuilder\Models\FormSubmission::where('status', 'new')->count();
-            } else {
-                $badges['new_forms'] = 0;
-            }
-        } catch (\Throwable) {
-            $badges['new_forms'] = 0;
-        }
-
-        try {
-            if (class_exists(\ContactForm\Models\FormSubmission::class)) {
-                $badges['new_contacts'] = \ContactForm\Models\FormSubmission::whereNull('read_at')->count();
-            } else {
-                $badges['new_contacts'] = 0;
-            }
-        } catch (\Throwable) {
-            $badges['new_contacts'] = 0;
-        }
-
-        try {
-            if (class_exists(\Ecommerce\Models\Order::class)) {
-                $badges['pending_orders'] = \Ecommerce\Models\Order::where('status', 'pending')->count();
-            } else {
-                $badges['pending_orders'] = 0;
-            }
-        } catch (\Throwable) {
-            $badges['pending_orders'] = 0;
-        }
-
-        try {
-            if (class_exists(\MemberSpace\Models\MemberVerification::class)) {
-                $badges['pending_verifications'] = \MemberSpace\Models\MemberVerification::where('status', 'pending')->count();
-            } else {
-                $badges['pending_verifications'] = 0;
-            }
-        } catch (\Throwable) {
-            $badges['pending_verifications'] = 0;
-        }
+        $badges = [
+            'unread_comments' => $this->safeQuery(
+                fn () => Comment::where('status', 'pending')->count(),
+                0,
+            ),
+            'new_forms' => $this->safePluginCount(
+                \FormBuilder\Models\FormSubmission::class,
+                fn ($class) => $class::where('status', 'new')->count(),
+            ),
+            'new_contacts' => $this->safePluginCount(
+                \ContactForm\Models\FormSubmission::class,
+                fn ($class) => $class::whereNull('read_at')->count(),
+            ),
+            'pending_orders' => $this->safePluginCount(
+                \Ecommerce\Models\Order::class,
+                fn ($class) => $class::where('status', 'pending')->count(),
+            ),
+            'pending_verifications' => $this->safePluginCount(
+                \MemberSpace\Models\MemberVerification::class,
+                fn ($class) => $class::where('status', 'pending')->count(),
+            ),
+        ];
 
         return $badges;
+    }
+
+    /**
+     * Safely count records from a plugin model class that may not exist.
+     */
+    private function safePluginCount(string $class, callable $counter): int
+    {
+        if (!class_exists($class)) {
+            return 0;
+        }
+
+        return $this->safeQuery(fn () => $counter($class), 0);
     }
 
     private function flattenTranslations(array $array, string $prefix, array &$result): void

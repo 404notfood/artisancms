@@ -7,7 +7,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PageRequest;
 use App\Models\Page;
-use App\Models\PreviewToken;
 use App\Models\Revision;
 use App\Services\ContentSanitizer;
 use App\Services\PageService;
@@ -44,12 +43,8 @@ class PageController extends Controller
      */
     public function create(): Response
     {
-        $parentPages = Page::whereNull('parent_id')
-            ->orderBy('title')
-            ->get(['id', 'title']);
-
         return Inertia::render('Admin/Pages/Create', [
-            'parentPages' => $parentPages,
+            'parentPages' => $this->pageService->getParentOptions(),
         ]);
     }
 
@@ -72,14 +67,9 @@ class PageController extends Controller
     {
         $page->load(['author', 'parent', 'children', 'revisions', 'terms']);
 
-        $parentPages = Page::where('id', '!=', $page->id)
-            ->whereNull('parent_id')
-            ->orderBy('title')
-            ->get(['id', 'title']);
-
         return Inertia::render('Admin/Pages/Edit', [
             'page' => $page,
-            'parentPages' => $parentPages,
+            'parentPages' => $this->pageService->getParentOptions($page->id),
         ]);
     }
 
@@ -120,24 +110,11 @@ class PageController extends Controller
     }
 
     /**
-     * Move a page to trash (alias for destroy).
-     */
-    public function trash(Page $page): RedirectResponse
-    {
-        $this->pageService->delete($page);
-
-        return redirect()
-            ->back()
-            ->with('success', __('cms.pages.trashed'));
-    }
-
-    /**
      * Permanently delete a page.
      */
     public function forceDelete(Page $page): RedirectResponse
     {
-        $page->revisions()->delete();
-        $page->forceDelete();
+        $this->pageService->forceDelete($page);
 
         return redirect()
             ->back()
@@ -149,12 +126,7 @@ class PageController extends Controller
      */
     public function emptyTrash(): RedirectResponse
     {
-        $trashedPages = Page::where('status', 'trash')->get();
-
-        foreach ($trashedPages as $page) {
-            $page->revisions()->delete();
-            $page->forceDelete();
-        }
+        $this->pageService->emptyTrash();
 
         return redirect()
             ->back()
@@ -166,12 +138,7 @@ class PageController extends Controller
      */
     public function duplicate(Page $page): RedirectResponse
     {
-        $newPage = $page->replicate(['checked_out_by', 'checked_out_at']);
-        $newPage->title = 'Copie de ' . $page->title;
-        $newPage->slug = $page->slug . '-copy';
-        $newPage->status = 'draft';
-        $newPage->published_at = null;
-        $newPage->save();
+        $newPage = $this->pageService->duplicate($page);
 
         return redirect()
             ->route('admin.pages.edit', $newPage)
@@ -270,19 +237,7 @@ class PageController extends Controller
      */
     public function compareRevisions(Page $page, Revision $revision, Revision $compare): JsonResponse
     {
-        $oldData = $compare->data;
-        $newData = $revision->data;
-
-        $changes = [];
-        $allKeys = array_unique(array_merge(array_keys($oldData ?? []), array_keys($newData ?? [])));
-
-        foreach ($allKeys as $key) {
-            $old = $oldData[$key] ?? null;
-            $new = $newData[$key] ?? null;
-            if ($old !== $new) {
-                $changes[$key] = ['old' => $old, 'new' => $new];
-            }
-        }
+        $changes = $this->pageService->compareRevisions($revision, $compare);
 
         return response()->json([
             'revision' => $revision,
@@ -327,10 +282,7 @@ class PageController extends Controller
      */
     public function checkout(Page $page): JsonResponse
     {
-        $page->update([
-            'checked_out_by' => auth()->id(),
-            'checked_out_at' => now(),
-        ]);
+        $this->pageService->checkout($page, (int) auth()->id());
 
         return response()->json(['success' => true]);
     }
@@ -340,12 +292,7 @@ class PageController extends Controller
      */
     public function checkin(Page $page): JsonResponse
     {
-        if ($page->checked_out_by === auth()->id()) {
-            $page->update([
-                'checked_out_by' => null,
-                'checked_out_at' => null,
-            ]);
-        }
+        $this->pageService->checkin($page, (int) auth()->id());
 
         return response()->json(['success' => true]);
     }
@@ -380,14 +327,7 @@ class PageController extends Controller
      */
     public function generatePreview(Page $page): JsonResponse
     {
-        $token = PreviewToken::create([
-            'previewable_type' => Page::class,
-            'previewable_id' => $page->id,
-            'token' => bin2hex(random_bytes(32)),
-            'expires_at' => now()->addHours(48),
-            'created_by' => auth()->id(),
-            'created_at' => now(),
-        ]);
+        $token = $this->pageService->generatePreviewToken($page, (int) auth()->id());
 
         return response()->json([
             'url' => route('preview', $token->token),

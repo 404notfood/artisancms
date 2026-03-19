@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -43,7 +44,11 @@ class UserSession extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function scopeActive($query)
+    /**
+     * @param Builder<UserSession> $query
+     * @return Builder<UserSession>
+     */
+    public function scopeActive(Builder $query): Builder
     {
         return $query->where('last_activity', '>=', now()->subMinutes(15));
     }

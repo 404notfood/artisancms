@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class AnnouncementBar extends Model
@@ -42,14 +43,17 @@ class AnnouncementBar extends Model
 
     /**
      * Get the currently active announcement bar.
+     *
+     * @param Builder<AnnouncementBar> $query
+     * @return Builder<AnnouncementBar>
      */
-    public function scopeCurrent($query)
+    public function scopeCurrent(Builder $query): Builder
     {
         return $query->where('active', true)
-            ->where(function ($q) {
+            ->where(function (Builder $q): void {
                 $q->whereNull('starts_at')->orWhere('starts_at', '<=', now());
             })
-            ->where(function ($q) {
+            ->where(function (Builder $q): void {
                 $q->whereNull('ends_at')->orWhere('ends_at', '>=', now());
             })
             ->orderByDesc('priority');

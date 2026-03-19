@@ -1,6 +1,7 @@
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
 import type { CouponData } from '@/types/cms';
+import { ArrowLeft, RefreshCw } from 'lucide-react';
 
 interface CouponsCreateProps {
     coupon?: CouponData;
@@ -43,7 +44,7 @@ export default function CouponsCreate({ coupon }: CouponsCreateProps) {
             header={
                 <div className="flex items-center gap-4">
                     <Link href="/admin/shop/coupons" className="text-gray-500 hover:text-gray-700">
-                        <BackIcon />
+                        <ArrowLeft className="h-5 w-5" />
                     </Link>
                     <h1 className="text-xl font-semibold text-gray-900">
                         {isEdit ? 'Modifier le coupon' : 'Nouveau coupon'}
@@ -78,7 +79,7 @@ export default function CouponsCreate({ coupon }: CouponsCreateProps) {
                                 title="Generer un code aleatoire"
                             >
                                 <span className="flex items-center gap-1.5">
-                                    <DiceIcon />
+                                    <RefreshCw className="h-4 w-4" />
                                     Generer
                                 </span>
                             </button>
@@ -231,18 +232,3 @@ export default function CouponsCreate({ coupon }: CouponsCreateProps) {
     );
 }
 
-function BackIcon() {
-    return (
-        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-        </svg>
-    );
-}
-
-function DiceIcon() {
-    return (
-        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
-        </svg>
-    );
-}

@@ -30,16 +30,6 @@ class Comment extends Model
     ];
 
     /**
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'created_at' => 'datetime',
-        ];
-    }
-
-    /**
      * @return BelongsTo<Post, $this>
      */
     public function post(): BelongsTo

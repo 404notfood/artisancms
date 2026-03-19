@@ -1,6 +1,7 @@
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, Link, router } from '@inertiajs/react';
 import type { ContentTypeData } from '@/types/cms';
+import { Plus, Package } from 'lucide-react';
 
 interface ContentTypesIndexProps {
     contentTypes: ContentTypeData[];
@@ -21,7 +22,7 @@ export default function ContentTypesIndex({ contentTypes }: ContentTypesIndexPro
                         href="/admin/content-types/create"
                         className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 transition-colors"
                     >
-                        <PlusIcon />
+                        <Plus className="h-4 w-4" />
                         Nouveau type de contenu
                     </Link>
                 </div>
@@ -31,7 +32,7 @@ export default function ContentTypesIndex({ contentTypes }: ContentTypesIndexPro
 
             {contentTypes.length === 0 ? (
                 <div className="rounded-lg border border-gray-200 bg-white p-12 text-center">
-                    <BoxIcon />
+                    <Package className="mx-auto h-12 w-12 text-gray-400" />
                     <h3 className="mt-4 text-lg font-medium text-gray-900">Aucun type de contenu</h3>
                     <p className="mt-2 text-sm text-gray-500">
                         Creez votre premier type de contenu personnalise (Portfolio, Temoignages, Equipe, etc.)
@@ -40,7 +41,7 @@ export default function ContentTypesIndex({ contentTypes }: ContentTypesIndexPro
                         href="/admin/content-types/create"
                         className="mt-4 inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 transition-colors"
                     >
-                        <PlusIcon />
+                        <Plus className="h-4 w-4" />
                         Creer un type de contenu
                     </Link>
                 </div>
@@ -130,18 +131,4 @@ const supportLabels: Record<string, string> = {
     comments: 'Commentaires',
 };
 
-function PlusIcon() {
-    return (
-        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-        </svg>
-    );
-}
-
-function BoxIcon() {
-    return (
-        <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" strokeWidth="1" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
-        </svg>
-    );
-}
+// Icons imported from lucide-react.

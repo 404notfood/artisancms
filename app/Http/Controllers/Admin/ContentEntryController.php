@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ContentEntryRequest;
 use App\Models\ContentEntry;
 use App\Models\ContentType;
 use App\Services\ContentTypeService;
@@ -48,26 +49,13 @@ class ContentEntryController extends Controller
     /**
      * Store a newly created entry.
      */
-    public function store(Request $request, ContentType $contentType): RedirectResponse
+    public function store(ContentEntryRequest $request, ContentType $contentType): RedirectResponse
     {
-        $rules = [
-            'title' => ['required', 'string', 'max:255'],
-            'slug' => ['required', 'string', 'max:255'],
-            'content' => ['nullable', 'array'],
-            'excerpt' => ['nullable', 'string', 'max:5000'],
-            'featured_image' => ['nullable', 'string', 'max:500'],
-            'status' => ['required', 'string', 'in:draft,published,scheduled,trash'],
-            'fields_data' => ['nullable', 'array'],
-            'published_at' => ['nullable', 'date'],
-        ];
-
-        $validated = $request->validate($rules);
-
-        $this->contentTypeService->createEntry($contentType, $validated);
+        $this->contentTypeService->createEntry($contentType, $request->validated());
 
         return redirect()
             ->route('admin.content-entries.index', $contentType)
-            ->with('success', 'Entree creee avec succes.');
+            ->with('success', __('cms.content_entries.created'));
     }
 
     /**
@@ -86,26 +74,13 @@ class ContentEntryController extends Controller
     /**
      * Update the specified entry.
      */
-    public function update(Request $request, ContentType $contentType, ContentEntry $contentEntry): RedirectResponse
+    public function update(ContentEntryRequest $request, ContentType $contentType, ContentEntry $contentEntry): RedirectResponse
     {
-        $rules = [
-            'title' => ['required', 'string', 'max:255'],
-            'slug' => ['required', 'string', 'max:255'],
-            'content' => ['nullable', 'array'],
-            'excerpt' => ['nullable', 'string', 'max:5000'],
-            'featured_image' => ['nullable', 'string', 'max:500'],
-            'status' => ['required', 'string', 'in:draft,published,scheduled,trash'],
-            'fields_data' => ['nullable', 'array'],
-            'published_at' => ['nullable', 'date'],
-        ];
-
-        $validated = $request->validate($rules);
-
-        $this->contentTypeService->updateEntry($contentEntry, $validated);
+        $this->contentTypeService->updateEntry($contentEntry, $request->validated());
 
         return redirect()
             ->back()
-            ->with('success', 'Entree mise a jour.');
+            ->with('success', __('cms.content_entries.updated'));
     }
 
     /**
@@ -117,6 +92,6 @@ class ContentEntryController extends Controller
 
         return redirect()
             ->route('admin.content-entries.index', $contentType)
-            ->with('success', 'Entree supprimee.');
+            ->with('success', __('cms.content_entries.deleted'));
     }
 }

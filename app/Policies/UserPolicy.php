@@ -35,6 +35,14 @@ class UserPolicy
             return false;
         }
 
+        // Cannot delete the last admin
+        if ($model->isAdmin()) {
+            $adminCount = User::whereHas('role', fn ($q) => $q->where('slug', 'admin'))->count();
+            if ($adminCount <= 1) {
+                return false;
+            }
+        }
+
         return $user->hasPermission('users.delete');
     }
 }

@@ -40,8 +40,8 @@ export default function PluginSettings({ plugin, settings, schema }: PluginSetti
         e.preventDefault();
         setProcessing(true);
         router.put(`/admin/plugins/${plugin.slug}/settings`, {
-            settings: values,
-        } as any, {
+            settings: values as Record<string, string | number | boolean | null>,
+        }, {
             preserveScroll: true,
             onFinish: () => setProcessing(false),
         });

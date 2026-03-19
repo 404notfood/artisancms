@@ -32,7 +32,7 @@ return new class extends Migration
             $table->json('content')->nullable();
             $table->text('excerpt')->nullable();
             $table->string('featured_image')->nullable();
-            $table->enum('status', ['draft', 'published', 'scheduled', 'trash'])->default('draft');
+            $table->string('status')->default('draft');
             $table->json('fields_data')->nullable();
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamp('published_at')->nullable();

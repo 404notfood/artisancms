@@ -5,13 +5,11 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class BlockPattern extends Model
 {
-    use HasFactory;
 
     protected $table = 'cms_block_patterns';
 
@@ -39,7 +37,7 @@ class BlockPattern extends Model
     }
 
     /**
-     * @return BelongsTo<User, BlockPattern>
+     * @return BelongsTo<User, $this>
      */
     public function creator(): BelongsTo
     {

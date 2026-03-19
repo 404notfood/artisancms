@@ -11,6 +11,7 @@ use App\Models\Post;
 use App\Models\PreviewToken;
 use App\Services\DesignTokenService;
 use App\Services\SettingService;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -49,6 +50,10 @@ class FrontController extends Controller
         $page = Page::where('slug', $slug)
             ->where('status', 'published')
             ->firstOrFail();
+
+        if ($page->access_level === 'authenticated' && ! Auth::check()) {
+            abort(403, __('cms.content.login_required'));
+        }
 
         return $this->renderPage($page);
     }

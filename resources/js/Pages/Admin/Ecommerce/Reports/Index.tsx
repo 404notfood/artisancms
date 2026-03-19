@@ -1,5 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, router } from '@inertiajs/react';
+import { DollarSign, ShoppingBag, ShoppingCart, Package, CheckCircle } from 'lucide-react';
 
 interface KpiData {
     current: {
@@ -151,25 +152,25 @@ export default function ReportsIndex({
                         label="Chiffre d'affaires"
                         value={formatCurrency(kpis.current.revenue)}
                         change={kpis.changes.revenue}
-                        icon={<CurrencyIcon />}
+                        icon={<DollarSign className="h-5 w-5" />}
                     />
                     <KpiCard
                         label="Commandes"
                         value={String(kpis.current.orders_count)}
                         change={kpis.changes.orders_count}
-                        icon={<OrdersIcon />}
+                        icon={<ShoppingBag className="h-5 w-5" />}
                     />
                     <KpiCard
                         label="Panier moyen"
                         value={formatCurrency(kpis.current.average_order)}
                         change={kpis.changes.average_order}
-                        icon={<CartIcon />}
+                        icon={<ShoppingCart className="h-5 w-5" />}
                     />
                     <KpiCard
                         label="Articles vendus"
                         value={String(kpis.current.items_sold)}
                         change={kpis.changes.items_sold}
-                        icon={<ItemsIcon />}
+                        icon={<Package className="h-5 w-5" />}
                     />
                 </div>
 
@@ -306,7 +307,7 @@ export default function ReportsIndex({
                         </h2>
                         {lowStock.length === 0 ? (
                             <div className="text-center py-4">
-                                <CheckIcon />
+                                <CheckCircle className="h-8 w-8 text-green-400 mx-auto" />
                                 <p className="text-sm text-gray-500 mt-2">Tous les stocks sont suffisants.</p>
                             </div>
                         ) : (
@@ -414,44 +415,3 @@ function KpiCard({ label, value, change, icon }: { label: string; value: string;
     );
 }
 
-// --- Icons ---
-
-function CurrencyIcon() {
-    return (
-        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M14.121 7.629A3 3 0 009.017 9.43c0 1.897 1.747 2.834 3.489 3.548 1.598.655 3.18 1.399 3.18 3.588a3.502 3.502 0 01-6.987.435M12 2.25v1.5m0 16.5v1.5" />
-        </svg>
-    );
-}
-
-function OrdersIcon() {
-    return (
-        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
-        </svg>
-    );
-}
-
-function CartIcon() {
-    return (
-        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
-        </svg>
-    );
-}
-
-function ItemsIcon() {
-    return (
-        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
-        </svg>
-    );
-}
-
-function CheckIcon() {
-    return (
-        <svg className="h-8 w-8 text-green-400 mx-auto" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-    );
-}

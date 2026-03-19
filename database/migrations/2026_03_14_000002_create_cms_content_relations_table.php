@@ -24,6 +24,7 @@ return new class extends Migration
 
             $table->index(['source_type', 'source_id']);
             $table->index(['related_type', 'related_id']);
+            $table->unique(['source_type', 'source_id', 'related_type', 'related_id'], 'content_relations_unique');
         });
     }
 

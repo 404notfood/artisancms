@@ -5,13 +5,11 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class DesignToken extends Model
 {
-    use HasFactory;
-
     protected $table = 'cms_design_tokens';
 
     /**
@@ -35,6 +33,14 @@ class DesignToken extends Model
             'value' => 'array',
             'order' => 'integer',
         ];
+    }
+
+    /**
+     * @return BelongsTo<Site, $this>
+     */
+    public function site(): BelongsTo
+    {
+        return $this->belongsTo(Site::class);
     }
 
     /**

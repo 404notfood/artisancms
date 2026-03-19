@@ -15,7 +15,7 @@ class EnsureAdmin
         $user = $request->user();
 
         if (!$user || !$user->isAdmin()) {
-            abort(403, 'Accès réservé aux administrateurs.');
+            abort(403, __('cms.access.admin_only'));
         }
 
         return $next($request);

@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Database\Factories\UserFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
@@ -28,9 +30,13 @@ class User extends Authenticatable
         'role_id',
         'avatar',
         'bio',
+        'social_links',
+        'profile_visibility',
         'preferences',
         'email_verified_at',
     ];
+
+    protected $appends = ['avatar_url'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -53,6 +59,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'preferences' => 'array',
+            'social_links' => 'array',
         ];
     }
 
@@ -121,6 +128,40 @@ class User extends Authenticatable
         }
 
         return false;
+    }
+
+    /**
+     * Get the avatar URL.
+     */
+    public function getAvatarUrlAttribute(): ?string
+    {
+        if (! $this->avatar) {
+            return null;
+        }
+
+        return Storage::url($this->avatar);
+    }
+
+    /**
+     * Scope to filter users by profile visibility.
+     *
+     * @param Builder<User> $query
+     * @return Builder<User>
+     */
+    public function scopeVisibleTo(Builder $query, ?User $viewer = null): Builder
+    {
+        if ($viewer?->isAdmin()) {
+            return $query;
+        }
+
+        return $query->where(function (Builder $q) use ($viewer) {
+            $q->where('profile_visibility', 'public');
+
+            if ($viewer !== null) {
+                $q->orWhere('profile_visibility', 'members_only');
+                $q->orWhere('id', $viewer->id);
+            }
+        });
     }
 
     /**

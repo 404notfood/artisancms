@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -49,19 +50,13 @@ class UpdateLog extends Model
         return $this->belongsTo(User::class, 'performed_by');
     }
 
-    public function scopeCms($query)
+    /**
+     * @param Builder<UpdateLog> $query
+     * @return Builder<UpdateLog>
+     */
+    public function scopeByType(Builder $query, string $type): Builder
     {
-        return $query->where('type', 'cms');
-    }
-
-    public function scopePlugins($query)
-    {
-        return $query->where('type', 'plugin');
-    }
-
-    public function scopeThemes($query)
-    {
-        return $query->where('type', 'theme');
+        return $query->where('type', $type);
     }
 
     public function markCompleted(): void

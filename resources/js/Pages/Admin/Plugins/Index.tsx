@@ -1,6 +1,7 @@
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
+import { Puzzle } from 'lucide-react';
 import type { FlashMessages } from '@/types/cms';
 
 interface PluginItem {
@@ -43,7 +44,7 @@ export default function PluginsIndex({ plugins }: PluginsIndexProps) {
 
             {plugins.length === 0 ? (
                 <div className="rounded-lg border border-gray-200 bg-white p-12 text-center">
-                    <PluginEmptyIcon />
+                    <Puzzle className="mx-auto h-12 w-12 text-gray-400" strokeWidth={1} />
                     <h3 className="mt-4 text-sm font-medium text-gray-900">Aucun plugin</h3>
                     <p className="mt-1 text-sm text-gray-500">
                         Placez vos plugins dans le dossier content/plugins/ pour les voir ici.
@@ -122,10 +123,3 @@ export default function PluginsIndex({ plugins }: PluginsIndexProps) {
     );
 }
 
-function PluginEmptyIcon() {
-    return (
-        <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" strokeWidth="1" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M14.25 6.087c0-.355.186-.676.401-.959.221-.29.349-.634.349-1.003 0-1.036-1.007-1.875-2.25-1.875S10.5 3.089 10.5 4.125c0 .369.128.713.349 1.003.215.283.401.604.401.959v0a.64.64 0 01-.657.643 48.39 48.39 0 01-4.163-.3c.186 1.613.166 3.267-.036 4.897a.636.636 0 01-.559.579 48.39 48.39 0 01-4.163-.3v0A.64.64 0 011 11.247V9.75" />
-        </svg>
-    );
-}

@@ -25,48 +25,25 @@ class ThemeManager
 
     /**
      * Scan the content/themes/ directory for artisan-theme.json manifests
-     * and register any new themes found.
+     * and register any new themes found in the database.
      */
     public function loadThemes(): void
     {
-        $themesPath = config('cms.paths.themes');
+        $this->discover();
 
-        if (!File::isDirectory($themesPath)) {
-            return;
-        }
-
-        $directories = File::directories($themesPath);
-
-        foreach ($directories as $directory) {
-            $manifestPath = $directory . '/artisan-theme.json';
-
-            if (!File::exists($manifestPath)) {
-                continue;
-            }
-
-            try {
-                $manifest = json_decode(File::get($manifestPath), true, 512, JSON_THROW_ON_ERROR);
-                $slug = basename($directory);
-                $this->manifests[$slug] = $manifest;
-
-                // Register in DB if not already present
-                CmsTheme::firstOrCreate(
-                    ['slug' => $slug],
-                    [
-                        'name' => $manifest['name'] ?? $slug,
-                        'version' => $manifest['version'] ?? '1.0.0',
-                        'description' => $manifest['description'] ?? '',
-                        'author' => is_array($manifest['author'] ?? '') ? ($manifest['author']['name'] ?? '') : ($manifest['author'] ?? ''),
-                        'active' => false,
-                        'settings' => $manifest['settings'] ?? [],
-                        'customizations' => $manifest['customizations'] ?? [],
-                    ],
-                );
-            } catch (\JsonException $e) {
-                Log::error("Failed to parse theme manifest: {$manifestPath}", [
-                    'error' => $e->getMessage(),
-                ]);
-            }
+        foreach ($this->manifests as $slug => $manifest) {
+            CmsTheme::firstOrCreate(
+                ['slug' => $slug],
+                [
+                    'name' => $manifest['name'] ?? $slug,
+                    'version' => $manifest['version'] ?? '1.0.0',
+                    'description' => $manifest['description'] ?? '',
+                    'author' => $this->extractAuthor($manifest),
+                    'active' => false,
+                    'settings' => $manifest['settings'] ?? [],
+                    'customizations' => $manifest['customizations'] ?? [],
+                ],
+            );
         }
     }
 
@@ -174,122 +151,17 @@ class ThemeManager
     }
 
     /**
-     * CSS variable prefix per section.
-     */
-    private const SECTION_PREFIXES = [
-        'colors' => '--color-',
-        'fonts' => '--font-',
-        'layout' => '--',
-        'header' => '--header-',
-        'footer' => '--footer-',
-        'ecommerce' => '--ecommerce-',
-        'global_styles' => '--global-',
-    ];
-
-    /**
-     * Field types that should NOT produce CSS variables.
-     */
-    private const NON_CSS_TYPES = ['boolean', 'image', 'text'];
-
-    /**
-     * Semantic mappings for values that need CSS transformation.
-     */
-    private const SEMANTIC_MAPPINGS = [
-        'spacing_scale' => [
-            '0.75' => '0.75',
-            '0.875' => '0.875',
-            '1' => '1',
-            '1.125' => '1.125',
-            '1.25' => '1.25',
-        ],
-        'shadow_intensity' => [
-            'none' => 'none',
-            'light' => '0 1px 3px 0 rgb(0 0 0 / 0.05)',
-            'medium' => '0 4px 6px -1px rgb(0 0 0 / 0.1)',
-            'strong' => '0 10px 15px -3px rgb(0 0 0 / 0.15)',
-        ],
-        'button_style' => [
-            'square' => '0',
-            'rounded' => '0.375rem',
-            'pill' => '9999px',
-        ],
-        'letter_spacing' => [
-            '-0.025em' => '-0.025em',
-            '0' => '0',
-            '0.025em' => '0.025em',
-            '0.05em' => '0.05em',
-            '0.1em' => '0.1em',
-        ],
-    ];
-
-    /**
      * Generate CSS custom properties from the active theme's customizations.
      * Merges manifest defaults with DB-stored customization overrides.
      */
     public function getCssVariables(?string $slug = null): string
     {
-        $theme = $slug
-            ? CmsTheme::where('slug', $slug)->first()
-            : $this->getActive();
-
-        if ($theme === null) {
+        $resolved = $this->resolveCustomization($slug);
+        if ($resolved === null) {
             return '';
         }
 
-        $config = $this->getThemeConfig($theme->slug);
-        $customization = $config['customization'] ?? [];
-        $overrides = is_array($theme->customizations) ? $theme->customizations : [];
-
-        $variables = [];
-
-        foreach ($customization as $section => $fields) {
-            if (!is_array($fields)) {
-                continue;
-            }
-
-            $prefix = self::SECTION_PREFIXES[$section] ?? "--{$section}-";
-
-            foreach ($fields as $key => $definition) {
-                if (!is_array($definition)) {
-                    continue;
-                }
-
-                $fieldType = $definition['type'] ?? 'text';
-                if (in_array($fieldType, self::NON_CSS_TYPES, true)) {
-                    continue;
-                }
-
-                $dotKey = "{$section}.{$key}";
-                $value = $overrides[$dotKey]
-                    ?? $overrides[$section][$key]
-                    ?? $definition['default']
-                    ?? null;
-
-                if ($value === null || $value === '') {
-                    continue;
-                }
-
-                // Apply semantic mappings
-                if (isset(self::SEMANTIC_MAPPINGS[$key][$value])) {
-                    $value = self::SEMANTIC_MAPPINGS[$key][$value];
-                }
-
-                $cssKey = $prefix . str_replace('_', '-', $key);
-                $variables[$cssKey] = (string) $value;
-            }
-        }
-
-        if (empty($variables)) {
-            return '';
-        }
-
-        $lines = array_map(
-            fn (string $prop, string $val) => "    {$prop}: {$val};",
-            array_keys($variables),
-            array_values($variables),
-        );
-
-        return ":root {\n" . implode("\n", $lines) . "\n}";
+        return app(ThemeCssGenerator::class)->generate(...$resolved);
     }
 
     /**
@@ -300,37 +172,35 @@ class ThemeManager
      */
     public function getAllCustomizations(?string $slug = null): array
     {
+        $resolved = $this->resolveCustomization($slug);
+        if ($resolved === null) {
+            return [];
+        }
+
+        return app(ThemeCssGenerator::class)->getAllValues(...$resolved);
+    }
+
+    /**
+     * Resolve the customization config and overrides for a theme.
+     *
+     * @return array{0: array<string, mixed>, 1: array<string, mixed>}|null
+     */
+    private function resolveCustomization(?string $slug): ?array
+    {
         $theme = $slug
             ? CmsTheme::where('slug', $slug)->first()
             : $this->getActive();
 
         if ($theme === null) {
-            return [];
+            return null;
         }
 
         $config = $this->getThemeConfig($theme->slug);
-        $customization = $config['customization'] ?? [];
-        $overrides = is_array($theme->customizations) ? $theme->customizations : [];
 
-        $result = [];
-
-        foreach ($customization as $section => $fields) {
-            if (!is_array($fields)) {
-                continue;
-            }
-            foreach ($fields as $key => $definition) {
-                if (!is_array($definition)) {
-                    continue;
-                }
-                $dotKey = "{$section}.{$key}";
-                $result[$dotKey] = $overrides[$dotKey]
-                    ?? $overrides[$section][$key]
-                    ?? $definition['default']
-                    ?? '';
-            }
-        }
-
-        return $result;
+        return [
+            $config['customization'] ?? [],
+            is_array($theme->customizations) ? $theme->customizations : [],
+        ];
     }
 
     /**
@@ -374,12 +244,6 @@ class ThemeManager
             $themeSourceDir = dirname($manifestPath);
             $themeDestDir = $themesPath . '/' . $slug;
 
-            // Check for conflict: slug used by a different active theme from another author
-            $existing = CmsTheme::where('slug', $slug)->first();
-            if ($existing && $existing->active) {
-                // Allow updating active theme
-            }
-
             // Copy to content/themes/{slug}/
             if (File::isDirectory($themeDestDir)) {
                 File::deleteDirectory($themeDestDir);
@@ -387,16 +251,13 @@ class ThemeManager
             File::copyDirectory($themeSourceDir, $themeDestDir);
 
             // Register or update in DB
-            $authorRaw = $manifest['author'] ?? '';
-            $authorName = is_array($authorRaw) ? ($authorRaw['name'] ?? '') : (string) $authorRaw;
-
             CmsTheme::updateOrCreate(
                 ['slug' => $slug],
                 [
                     'name'        => $manifest['name'],
                     'version'     => $manifest['version'],
                     'description' => $manifest['description'] ?? '',
-                    'author'      => $authorName,
+                    'author'      => $this->extractAuthor($manifest),
                     'settings'    => $manifest['settings'] ?? [],
                 ],
             );
@@ -498,5 +359,16 @@ class ThemeManager
 
             return [];
         }
+    }
+
+    /**
+     * Extract the author name from a manifest.
+     * Supports both string and {"name": "..."} object format.
+     */
+    private function extractAuthor(array $manifest): string
+    {
+        $author = $manifest['author'] ?? '';
+
+        return is_array($author) ? ($author['name'] ?? '') : (string) $author;
     }
 }

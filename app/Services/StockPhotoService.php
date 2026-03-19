@@ -4,10 +4,39 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Models\Media;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 
 class StockPhotoService
 {
+    /**
+     * Download a stock photo from URL and add it to the media library.
+     */
+    public function download(string $url, string $filename, ?string $author, int $userId): Media
+    {
+        $response = Http::timeout(30)->get($url);
+
+        if (!$response->successful()) {
+            throw new \RuntimeException('Stock photo download failed');
+        }
+
+        $path = 'media/' . date('Y/m') . '/' . $filename;
+
+        Storage::disk('public')->put($path, $response->body());
+
+        return Media::create([
+            'filename' => $filename,
+            'original_filename' => $filename,
+            'path' => $path,
+            'folder' => dirname($path),
+            'mime_type' => $response->header('Content-Type', 'image/jpeg'),
+            'size' => strlen($response->body()),
+            'alt_text' => 'Photo by ' . ($author ?? 'Unknown'),
+            'uploaded_by' => $userId,
+        ]);
+    }
+
     /**
      * Search Unsplash for photos.
      *

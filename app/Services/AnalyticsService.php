@@ -7,6 +7,7 @@ namespace App\Services;
 use App\Jobs\TrackPageViewJob;
 use App\Models\PageView;
 use App\Models\PageViewDaily;
+use App\Support\UserAgentParser;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
@@ -37,7 +38,7 @@ class AnalyticsService
         $userAgent = (string) $request->userAgent();
 
         // Exclure les bots
-        if ($this->isBot($userAgent)) {
+        if (UserAgentParser::isBot($userAgent)) {
             return;
         }
 
@@ -56,8 +57,8 @@ class AnalyticsService
             'referrer'      => $this->sanitizeReferrer($request->header('referer')),
             'user_agent'    => mb_substr($userAgent, 0, 255),
             'country'       => null, // IP geolocation optionnelle (non implementee en V1)
-            'device_type'   => $this->detectDeviceType($userAgent),
-            'browser'       => $this->detectBrowser($userAgent),
+            'device_type'   => UserAgentParser::detectDeviceType($userAgent),
+            'browser'       => UserAgentParser::detectBrowser($userAgent),
             'date'          => Carbon::today()->toDateString(),
         ]);
     }
@@ -276,156 +277,6 @@ class AnalyticsService
     public function shouldRespectDnt(): bool
     {
         return (bool) config('cms.analytics.respect_dnt', true);
-    }
-
-    // ─── Detection User-Agent ─────────────────────────────
-
-    /**
-     * Determiner si un user-agent correspond a un bot/crawler.
-     */
-    public function isBot(string $userAgent): bool
-    {
-        if ($userAgent === '') {
-            return true;
-        }
-
-        $botPatterns = [
-            'bot',
-            'crawl',
-            'spider',
-            'slurp',
-            'mediapartners',
-            'googlebot',
-            'bingbot',
-            'yandexbot',
-            'baiduspider',
-            'facebookexternalhit',
-            'twitterbot',
-            'rogerbot',
-            'linkedinbot',
-            'embedly',
-            'showyoubot',
-            'outbrain',
-            'pinterest',
-            'applebot',
-            'semrushbot',
-            'ahrefsbot',
-            'mj12bot',
-            'dotbot',
-            'petalbot',
-            'bytespider',
-            'headlesschrome',
-            'lighthouse',
-            'pagespeed',
-            'gtmetrix',
-            'wget',
-            'curl',
-            'python-requests',
-            'go-http-client',
-            'java/',
-            'nutch',
-            'scrapy',
-            'httpclient',
-            'okhttp',
-        ];
-
-        $lowerUa = mb_strtolower($userAgent);
-
-        foreach ($botPatterns as $pattern) {
-            if (str_contains($lowerUa, $pattern)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Detecter le type d'appareil a partir du user-agent.
-     */
-    public function detectDeviceType(string $userAgent): string
-    {
-        $lowerUa = mb_strtolower($userAgent);
-
-        // Tablettes (verifier avant mobile car certains tablets contiennent "mobile")
-        if (
-            str_contains($lowerUa, 'ipad')
-            || str_contains($lowerUa, 'tablet')
-            || (str_contains($lowerUa, 'android') && !str_contains($lowerUa, 'mobile'))
-            || str_contains($lowerUa, 'kindle')
-            || str_contains($lowerUa, 'silk')
-        ) {
-            return 'tablet';
-        }
-
-        // Mobiles
-        if (
-            str_contains($lowerUa, 'mobile')
-            || str_contains($lowerUa, 'iphone')
-            || str_contains($lowerUa, 'ipod')
-            || str_contains($lowerUa, 'android')
-            || str_contains($lowerUa, 'blackberry')
-            || str_contains($lowerUa, 'opera mini')
-            || str_contains($lowerUa, 'opera mobi')
-            || str_contains($lowerUa, 'windows phone')
-        ) {
-            return 'mobile';
-        }
-
-        return 'desktop';
-    }
-
-    /**
-     * Detecter le navigateur a partir du user-agent.
-     */
-    public function detectBrowser(string $userAgent): string
-    {
-        $lowerUa = mb_strtolower($userAgent);
-
-        // L'ordre est important : verifier les navigateurs specifiques avant les generiques
-        if (str_contains($lowerUa, 'edg/') || str_contains($lowerUa, 'edge/')) {
-            return 'Edge';
-        }
-
-        if (str_contains($lowerUa, 'opr/') || str_contains($lowerUa, 'opera')) {
-            return 'Opera';
-        }
-
-        if (str_contains($lowerUa, 'brave')) {
-            return 'Brave';
-        }
-
-        if (str_contains($lowerUa, 'vivaldi')) {
-            return 'Vivaldi';
-        }
-
-        if (str_contains($lowerUa, 'samsung')) {
-            return 'Samsung Internet';
-        }
-
-        if (str_contains($lowerUa, 'ucbrowser')) {
-            return 'UC Browser';
-        }
-
-        // Chrome doit etre verifie apres Edge, Opera, Brave, Vivaldi (qui contiennent aussi "chrome")
-        if (str_contains($lowerUa, 'chrome') || str_contains($lowerUa, 'crios')) {
-            return 'Chrome';
-        }
-
-        // Safari doit etre verifie apres Chrome (Chrome contient aussi "safari")
-        if (str_contains($lowerUa, 'safari') && !str_contains($lowerUa, 'chrome')) {
-            return 'Safari';
-        }
-
-        if (str_contains($lowerUa, 'firefox') || str_contains($lowerUa, 'fxios')) {
-            return 'Firefox';
-        }
-
-        if (str_contains($lowerUa, 'msie') || str_contains($lowerUa, 'trident')) {
-            return 'Internet Explorer';
-        }
-
-        return 'Other';
     }
 
     /**

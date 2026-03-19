@@ -2,6 +2,8 @@ import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, Link, router } from '@inertiajs/react';
 import { useState } from 'react';
 import type { CouponData } from '@/types/cms';
+import { formatDate } from '@/lib/format';
+import { Plus, Pencil, Trash2 } from 'lucide-react';
 
 interface CouponsIndexProps {
     coupons: CouponData[];
@@ -36,13 +38,9 @@ export default function CouponsIndex({ coupons }: CouponsIndexProps) {
         return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(price);
     }
 
-    function formatDate(dateStr: string | null): string {
+    function formatCouponDate(dateStr: string | null): string {
         if (!dateStr) return '---';
-        return new Date(dateStr).toLocaleDateString('fr-FR', {
-            day: '2-digit',
-            month: 'short',
-            year: 'numeric',
-        });
+        return formatDate(dateStr);
     }
 
     function formatValue(coupon: CouponData): string {
@@ -61,7 +59,7 @@ export default function CouponsIndex({ coupons }: CouponsIndexProps) {
                         href="/admin/shop/coupons/create"
                         className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 transition-colors"
                     >
-                        <PlusIcon />
+                        <Plus className="h-4 w-4" />
                         Nouveau coupon
                     </Link>
                 </div>
@@ -140,10 +138,10 @@ export default function CouponsIndex({ coupons }: CouponsIndexProps) {
                                         <td className="hidden px-4 py-3 text-gray-600 lg:table-cell">
                                             <div className="text-xs space-y-0.5">
                                                 <p>
-                                                    <span className="text-gray-400">Debut:</span> {formatDate(coupon.starts_at)}
+                                                    <span className="text-gray-400">Debut:</span> {formatCouponDate(coupon.starts_at)}
                                                 </p>
                                                 <p>
-                                                    <span className="text-gray-400">Fin:</span> {formatDate(coupon.expires_at)}
+                                                    <span className="text-gray-400">Fin:</span> {formatCouponDate(coupon.expires_at)}
                                                 </p>
                                             </div>
                                         </td>
@@ -170,14 +168,14 @@ export default function CouponsIndex({ coupons }: CouponsIndexProps) {
                                                     className="text-gray-500 hover:text-indigo-600"
                                                     title="Modifier"
                                                 >
-                                                    <EditIcon />
+                                                    <Pencil className="h-4 w-4" />
                                                 </Link>
                                                 <button
                                                     onClick={() => handleDelete(coupon)}
                                                     className="text-gray-500 hover:text-red-600"
                                                     title="Supprimer"
                                                 >
-                                                    <TrashIcon />
+                                                    <Trash2 className="h-4 w-4" />
                                                 </button>
                                             </div>
                                         </td>
@@ -192,26 +190,3 @@ export default function CouponsIndex({ coupons }: CouponsIndexProps) {
     );
 }
 
-function PlusIcon() {
-    return (
-        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-        </svg>
-    );
-}
-
-function EditIcon() {
-    return (
-        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
-        </svg>
-    );
-}
-
-function TrashIcon() {
-    return (
-        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-        </svg>
-    );
-}

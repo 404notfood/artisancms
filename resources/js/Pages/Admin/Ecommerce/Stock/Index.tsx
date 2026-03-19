@@ -1,10 +1,15 @@
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, router, useForm } from '@inertiajs/react';
 import { useState } from 'react';
+import { Package } from 'lucide-react';
 import { ProductData, PaginatedResponse } from '@/types/cms';
 
+type StockProduct = Omit<ProductData, 'category'> & {
+    category?: { id: number; name: string };
+};
+
 interface StockIndexProps {
-    products: PaginatedResponse<ProductData & { category?: { id: number; name: string } }>;
+    products: PaginatedResponse<StockProduct>;
     filter: string;
     lowStockCount: number;
     outOfStockCount: number;
@@ -35,7 +40,7 @@ export default function StockIndex({ products, filter, lowStockCount, outOfStock
         router.get('/admin/shop/stock', f === 'all' ? {} : { filter: f }, { preserveState: true });
     }
 
-    function getStockBadge(product: ProductData) {
+    function getStockBadge(product: StockProduct) {
         if (product.stock <= 0) {
             return <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-700">Rupture</span>;
         }
@@ -128,15 +133,13 @@ export default function StockIndex({ products, filter, lowStockCount, outOfStock
                                                 />
                                             ) : (
                                                 <div className="w-10 h-10 rounded bg-gray-100 flex items-center justify-center">
-                                                    <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                                                    </svg>
+                                                    <Package className="w-5 h-5 text-gray-400" />
                                                 </div>
                                             )}
                                             <div>
                                                 <div className="text-sm font-medium text-gray-900">{product.name}</div>
-                                                {(product as any).category && (
-                                                    <div className="text-xs text-gray-500">{(product as any).category.name}</div>
+                                                {product.category && (
+                                                    <div className="text-xs text-gray-500">{product.category.name}</div>
                                                 )}
                                             </div>
                                         </div>

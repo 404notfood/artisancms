@@ -21,7 +21,7 @@ function SidebarNavItem({ item }: { item: MenuItemData }) {
 
     const className = [
         'block py-2 px-3 text-sm transition-colors rounded-[var(--border-radius)]',
-        'hover:bg-[var(--color-primary)]/10 hover:text-[var(--color-primary)]',
+        'hover:bg-[var(--color-primary-light,rgba(79,70,229,0.08))] hover:text-[var(--color-primary)]',
         item.css_class || '',
     ]
         .filter(Boolean)
@@ -46,8 +46,14 @@ export default function Sidebar({ menu, widgets }: SidebarProps) {
     return (
         <aside className="w-full lg:w-72 shrink-0">
             {menu && menu.items.length > 0 && (
-                <nav className="mb-6 rounded-[var(--border-radius)] border border-gray-200 bg-[var(--color-background)] p-4">
-                    <h3 className="font-heading mb-3 text-sm font-semibold uppercase tracking-wider text-[var(--color-secondary)]">
+                <nav className="mb-6 rounded-[var(--border-radius)] border p-4" style={{
+                    borderColor: 'var(--color-border, #e2e8f0)',
+                    backgroundColor: 'var(--color-surface, #f8fafc)',
+                }}>
+                    <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider" style={{
+                        fontFamily: 'var(--font-heading)',
+                        color: 'var(--color-text-muted, #64748b)',
+                    }}>
                         Navigation
                     </h3>
                     <ul className="space-y-1">

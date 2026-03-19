@@ -8,6 +8,7 @@ use Backup\Commands\BackupCleanupCommand;
 use Backup\Commands\BackupRestoreCommand;
 use Backup\Commands\BackupRunCommand;
 use Backup\Services\BackupService;
+use Backup\Services\DatabaseDumper;
 use Backup\Services\RestoreService;
 use Illuminate\Support\ServiceProvider;
 
@@ -20,6 +21,7 @@ class BackupServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/backup.php', 'backup');
 
+        $this->app->singleton(DatabaseDumper::class);
         $this->app->singleton(BackupService::class);
         $this->app->singleton(RestoreService::class);
     }

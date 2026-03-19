@@ -26,14 +26,7 @@ class CommentController extends Controller
         $filters = $request->only(['status', 'post_id', 'search', 'per_page']);
 
         $comments = $this->commentService->all($filters);
-
-        // Get counts per status for tab badges
-        $counts = [
-            'all' => Comment::count(),
-            'pending' => Comment::where('status', 'pending')->count(),
-            'approved' => Comment::where('status', 'approved')->count(),
-            'spam' => Comment::where('status', 'spam')->count(),
-        ];
+        $counts = $this->commentService->getStatusCounts();
 
         return Inertia::render('Admin/Comments/Index', [
             'comments' => $comments,

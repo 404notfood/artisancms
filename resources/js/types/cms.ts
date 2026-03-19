@@ -145,9 +145,15 @@ export interface UserData {
     name: string;
     email: string;
     avatar: string | null;
+    avatar_url?: string | null;
     bio: string | null;
+    social_links?: Record<string, string> | null;
+    profile_visibility?: 'public' | 'members_only' | 'private';
+    preferences?: Record<string, unknown> | null;
     role_id: number | null;
     role?: RoleData;
+    posts_count?: number;
+    pages_count?: number;
     created_at?: string;
     updated_at?: string;
 }
@@ -287,8 +293,10 @@ export interface SharedProps {
         name: string;
         version: string;
         enabledPlugins: string[];
+        dashboardTheme?: string;
     };
     sidebar_badges?: Record<string, number>;
+    notifications_count?: number;
     cookie_consent: CookieConsentConfig;
     [key: string]: unknown;
 }

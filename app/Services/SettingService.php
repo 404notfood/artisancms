@@ -84,15 +84,29 @@ class SettingService
     }
 
     /**
-     * Set many settings at once.
+     * Set many settings at once. Clears cache only once after all writes.
      *
      * @param array<string, mixed> $settings Associative array of key => value pairs
      */
     public function setMany(array $settings): void
     {
         foreach ($settings as $key => $value) {
-            $this->set($key, $value);
+            $group = 'general';
+            $settingKey = $key;
+
+            if (str_contains($key, '.')) {
+                [$group, $settingKey] = explode('.', $key, 2);
+            }
+
+            $updateData = ['value' => $value];
+
+            Setting::updateOrCreate(
+                ['group' => $group, 'key' => $settingKey],
+                $updateData,
+            );
         }
+
+        $this->clearCache();
     }
 
     /**

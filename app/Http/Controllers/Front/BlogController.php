@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Concerns\HasFrontData;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PublicCommentRequest;
 use App\Models\Post;
 use App\Models\TaxonomyTerm;
 use App\Services\CommentService;
@@ -46,6 +47,10 @@ class BlogController extends Controller
             ->where('slug', $slug)
             ->firstOrFail();
 
+        if ($post->access_level === 'authenticated' && ! Auth::check()) {
+            abort(403, __('cms.content.login_required'));
+        }
+
         $comments = $this->commentService->getForPost($post->id);
 
         return Inertia::render('Front/Blog/Show', [
@@ -57,17 +62,12 @@ class BlogController extends Controller
         ]);
     }
 
-    public function storeComment(Request $request, string $slug): RedirectResponse
+    public function storeComment(PublicCommentRequest $request, string $slug): RedirectResponse
     {
-        $validated = $request->validate([
-            'author_name' => ['required', 'string', 'max:255'],
-            'author_email' => ['required', 'email', 'max:255'],
-            'content' => ['required', 'string', 'max:5000'],
-            'parent_id' => ['nullable', 'integer', 'exists:comments,id'],
-            'honeypot' => ['nullable', 'max:0'],
-        ]);
+        $validated = $request->validated();
 
-        if (! empty($validated['honeypot'])) {
+        // Honeypot spam check
+        if (!empty($validated['honeypot'])) {
             return redirect()->back()->with('success', __('cms.comments.submitted'));
         }
 

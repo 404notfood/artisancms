@@ -1,4 +1,7 @@
 import { Head, Link, router } from '@inertiajs/react';
+import type { MenuData } from '@/types/cms';
+import FrontLayout from '@/Layouts/FrontLayout';
+import type { ThemeStyle } from '@/Layouts/Front/theme-helpers';
 
 interface SocialAccountData {
     id: number;
@@ -10,6 +13,12 @@ interface SocialAccountData {
 }
 
 interface SocialAccountsProps {
+    menus: Record<string, MenuData>;
+    theme: {
+        customizations: Record<string, string | boolean>;
+        layouts: Array<{ slug: string; name: string }>;
+        style?: ThemeStyle;
+    };
     accounts: SocialAccountData[];
     providers: string[];
 }
@@ -26,7 +35,7 @@ const PROVIDER_COLORS: Record<string, string> = {
     github: 'bg-gray-50 text-gray-700 border-gray-200',
 };
 
-export default function SocialAccounts({ accounts, providers }: SocialAccountsProps) {
+export default function SocialAccounts({ menus, theme, accounts, providers }: SocialAccountsProps) {
     const linkedProviders = accounts.map((a) => a.provider);
 
     function handleUnlink(provider: string) {
@@ -35,11 +44,13 @@ export default function SocialAccounts({ accounts, providers }: SocialAccountsPr
     }
 
     return (
-        <>
+        <FrontLayout menus={menus} theme={theme}>
             <Head title="Comptes sociaux" />
 
             <div className="mx-auto max-w-2xl px-4 py-8">
-                <h1 className="mb-8 text-2xl font-bold text-gray-900">Comptes sociaux</h1>
+                <h1 className="mb-8 text-2xl font-bold text-gray-900" style={{ fontFamily: 'var(--font-heading)' }}>
+                    Comptes sociaux
+                </h1>
 
                 <div className="space-y-4">
                     {providers.map((provider) => {
@@ -49,7 +60,7 @@ export default function SocialAccounts({ accounts, providers }: SocialAccountsPr
                         return (
                             <div
                                 key={provider}
-                                className={`flex items-center justify-between rounded-xl border p-5 ${PROVIDER_COLORS[provider] || 'bg-white border-gray-200'}`}
+                                className={`flex items-center justify-between rounded-xl border p-5 transition-all duration-200 hover:shadow-sm ${PROVIDER_COLORS[provider] || 'bg-white border-gray-200'}`}
                             >
                                 <div className="flex items-center gap-4">
                                     <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white shadow-sm">
@@ -85,6 +96,6 @@ export default function SocialAccounts({ accounts, providers }: SocialAccountsPr
                     })}
                 </div>
             </div>
-        </>
+        </FrontLayout>
     );
 }

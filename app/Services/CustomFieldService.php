@@ -7,6 +7,8 @@ namespace App\Services;
 use App\Models\CustomField;
 use App\Models\CustomFieldGroup;
 use App\Models\CustomFieldValue;
+use App\Models\Page;
+use App\Models\Post;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -47,6 +49,29 @@ class CustomFieldService
         }
 
         return $result;
+    }
+
+    /**
+     * Get field groups and their values for a specific entity (resolved by type and ID).
+     *
+     * @return array{groups: Collection, values: array<string, mixed>}
+     */
+    public function getFieldsAndValuesForEntity(string $entityType, int $entityId): array
+    {
+        $entity = match ($entityType) {
+            'page' => Page::findOrFail($entityId),
+            'post' => Post::findOrFail($entityId),
+        };
+
+        $template = null;
+        if ($entityType === 'page' && !empty($entity->template)) {
+            $template = $entity->template;
+        }
+
+        return [
+            'groups' => $this->getGroupsForEntity($entityType, $template),
+            'values' => $this->getValuesForEntity($entity),
+        ];
     }
 
     /**

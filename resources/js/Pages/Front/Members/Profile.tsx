@@ -1,4 +1,7 @@
 import { Head } from '@inertiajs/react';
+import type { MenuData } from '@/types/cms';
+import FrontLayout from '@/Layouts/FrontLayout';
+import type { ThemeStyle } from '@/Layouts/Front/theme-helpers';
 
 interface SocialLinks {
     twitter?: string;
@@ -48,10 +51,16 @@ interface MemberData {
 }
 
 interface ProfileProps {
+    menus: Record<string, MenuData>;
+    theme: {
+        customizations: Record<string, string | boolean>;
+        layouts: Array<{ slug: string; name: string }>;
+        style?: ThemeStyle;
+    };
     member: MemberData;
 }
 
-export default function Profile({ member }: ProfileProps) {
+export default function Profile({ menus, theme, member }: ProfileProps) {
     const { user, profile, custom_fields } = member;
     const displayName = profile.display_name || user.name;
     const avatarUrl = profile.avatar ? `/storage/${profile.avatar}` : null;
@@ -59,29 +68,37 @@ export default function Profile({ member }: ProfileProps) {
     const socialLinks = profile.social_links || {};
 
     return (
-        <>
+        <FrontLayout menus={menus} theme={theme}>
             <Head title={displayName} />
 
             <div className="mx-auto max-w-4xl px-4 py-8">
                 {/* Cover + Avatar */}
-                <div className="relative mb-16 overflow-hidden rounded-2xl">
+                <div className="relative mb-16 overflow-hidden rounded-2xl shadow-xl">
                     <div
-                        className="h-48 w-full bg-gradient-to-r from-indigo-500 to-purple-600 sm:h-64"
+                        className="h-48 w-full bg-gradient-to-br from-[var(--color-primary,#6366f1)] via-[var(--color-primary,#6366f1)]/80 to-[var(--color-primary,#6366f1)]/60 sm:h-64"
                         style={coverUrl ? { backgroundImage: `url(${coverUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
-                    />
+                    >
+                        {/* Pattern overlay when no cover */}
+                        {!coverUrl && (
+                            <div className="absolute inset-0 opacity-10">
+                                <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '32px 32px' }} />
+                            </div>
+                        )}
+                    </div>
                     <div className="absolute -bottom-12 left-6">
                         <div className="relative">
                             {avatarUrl ? (
                                 <img
                                     src={avatarUrl}
                                     alt={displayName}
-                                    className="h-24 w-24 rounded-full border-4 border-white object-cover shadow-lg sm:h-32 sm:w-32"
+                                    className="h-24 w-24 rounded-full border-4 border-white object-cover shadow-lg sm:h-32 sm:w-32 ring-4 ring-[var(--color-primary,#6366f1)]/20"
                                 />
                             ) : (
-                                <div className="flex h-24 w-24 items-center justify-center rounded-full border-4 border-white bg-indigo-100 text-3xl font-bold text-indigo-600 shadow-lg sm:h-32 sm:w-32">
+                                <div className="flex h-24 w-24 items-center justify-center rounded-full border-4 border-white bg-gradient-to-br from-[var(--color-primary,#6366f1)] to-[var(--color-primary,#6366f1)]/70 text-3xl font-bold text-white shadow-lg sm:h-32 sm:w-32 ring-4 ring-[var(--color-primary,#6366f1)]/20">
                                     {displayName.charAt(0).toUpperCase()}
                                 </div>
                             )}
+                            <div className="absolute bottom-1 right-1 h-5 w-5 rounded-full border-3 border-white bg-emerald-400 shadow-sm" />
                         </div>
                     </div>
                 </div>
@@ -90,14 +107,14 @@ export default function Profile({ member }: ProfileProps) {
                 <div className="mb-8">
                     <h1 className="text-2xl font-bold text-gray-900">{displayName}</h1>
                     {(profile.job_title || profile.company) && (
-                        <p className="mt-1 text-gray-600">
+                        <p className="mt-1.5 text-gray-600">
                             {profile.job_title}
                             {profile.job_title && profile.company && ' chez '}
-                            {profile.company}
+                            <span className="font-medium">{profile.company}</span>
                         </p>
                     )}
                     {profile.location && (
-                        <p className="mt-1 flex items-center gap-1 text-sm text-gray-500">
+                        <p className="mt-1.5 flex items-center gap-1.5 text-sm text-gray-500">
                             <MapPinIcon />
                             {profile.location}
                         </p>
@@ -108,20 +125,34 @@ export default function Profile({ member }: ProfileProps) {
                     {/* Main content */}
                     <div className="space-y-6 lg:col-span-2">
                         {profile.bio && (
-                            <div className="rounded-xl border border-gray-200 bg-white p-6">
-                                <h2 className="mb-3 text-lg font-semibold text-gray-900">A propos</h2>
-                                <p className="whitespace-pre-line text-gray-600">{profile.bio}</p>
+                            <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+                                <h2 className="mb-3 flex items-center gap-2 text-lg font-semibold text-gray-900">
+                                    <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--color-primary,#6366f1)]/10">
+                                        <svg className="h-3.5 w-3.5 text-[var(--color-primary,#6366f1)]" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                                        </svg>
+                                    </div>
+                                    A propos
+                                </h2>
+                                <p className="whitespace-pre-line text-gray-600 leading-relaxed">{profile.bio}</p>
                             </div>
                         )}
 
                         {custom_fields.length > 0 && (
-                            <div className="rounded-xl border border-gray-200 bg-white p-6">
-                                <h2 className="mb-4 text-lg font-semibold text-gray-900">Informations</h2>
-                                <dl className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                            <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+                                <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-gray-900">
+                                    <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--color-primary,#6366f1)]/10">
+                                        <svg className="h-3.5 w-3.5 text-[var(--color-primary,#6366f1)]" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+                                        </svg>
+                                    </div>
+                                    Informations
+                                </h2>
+                                <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                                     {custom_fields.filter(f => f.value).map((field) => (
-                                        <div key={field.id}>
-                                            <dt className="text-sm font-medium text-gray-500">{field.name}</dt>
-                                            <dd className="text-sm text-gray-900">{field.value}</dd>
+                                        <div key={field.id} className="rounded-xl bg-gray-50 p-3">
+                                            <dt className="text-xs font-medium text-gray-500 uppercase tracking-wider">{field.name}</dt>
+                                            <dd className="mt-1 text-sm font-medium text-gray-900">{field.value}</dd>
                                         </div>
                                     ))}
                                 </dl>
@@ -132,22 +163,31 @@ export default function Profile({ member }: ProfileProps) {
                     {/* Sidebar */}
                     <div className="space-y-6">
                         {/* Contact */}
-                        <div className="rounded-xl border border-gray-200 bg-white p-6">
-                            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-gray-500">Contact</h3>
+                        <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+                            <h3 className="mb-4 text-xs font-bold uppercase tracking-wider text-gray-400">Contact</h3>
                             <div className="space-y-3">
                                 {user.email && (
-                                    <a href={`mailto:${user.email}`} className="flex items-center gap-2 text-sm text-gray-700 hover:text-indigo-600">
-                                        <MailIcon /> {user.email}
+                                    <a href={`mailto:${user.email}`} className="flex items-center gap-3 rounded-lg p-2 text-sm text-gray-700 transition-colors hover:bg-[var(--color-primary,#6366f1)]/5 hover:text-[var(--color-primary,#6366f1)]">
+                                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100">
+                                            <MailIcon />
+                                        </div>
+                                        <span className="truncate">{user.email}</span>
                                     </a>
                                 )}
                                 {profile.show_phone && profile.phone && (
-                                    <p className="flex items-center gap-2 text-sm text-gray-700">
-                                        <PhoneIcon /> {profile.phone}
-                                    </p>
+                                    <div className="flex items-center gap-3 rounded-lg p-2 text-sm text-gray-700">
+                                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100">
+                                            <PhoneIcon />
+                                        </div>
+                                        {profile.phone}
+                                    </div>
                                 )}
                                 {profile.website && (
-                                    <a href={profile.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-gray-700 hover:text-indigo-600">
-                                        <GlobeIcon /> {profile.website.replace(/^https?:\/\//, '')}
+                                    <a href={profile.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 rounded-lg p-2 text-sm text-gray-700 transition-colors hover:bg-[var(--color-primary,#6366f1)]/5 hover:text-[var(--color-primary,#6366f1)]">
+                                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100">
+                                            <GlobeIcon />
+                                        </div>
+                                        <span className="truncate">{profile.website.replace(/^https?:\/\//, '')}</span>
                                     </a>
                                 )}
                             </div>
@@ -155,9 +195,9 @@ export default function Profile({ member }: ProfileProps) {
 
                         {/* Social */}
                         {Object.values(socialLinks).some(Boolean) && (
-                            <div className="rounded-xl border border-gray-200 bg-white p-6">
-                                <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-gray-500">Reseaux sociaux</h3>
-                                <div className="flex flex-wrap gap-3">
+                            <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+                                <h3 className="mb-4 text-xs font-bold uppercase tracking-wider text-gray-400">Reseaux sociaux</h3>
+                                <div className="flex flex-wrap gap-2">
                                     {Object.entries(socialLinks).map(([key, url]) =>
                                         url ? (
                                             <a
@@ -165,7 +205,7 @@ export default function Profile({ member }: ProfileProps) {
                                                 href={url}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="rounded-lg bg-gray-100 px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-indigo-100 hover:text-indigo-700"
+                                                className="rounded-xl bg-gray-50 px-4 py-2 text-sm font-medium text-gray-700 transition-all hover:bg-[var(--color-primary,#6366f1)]/10 hover:text-[var(--color-primary,#6366f1)] hover:scale-105"
                                             >
                                                 {key.charAt(0).toUpperCase() + key.slice(1)}
                                             </a>
@@ -176,15 +216,25 @@ export default function Profile({ member }: ProfileProps) {
                         )}
 
                         {/* Member since */}
-                        <div className="rounded-xl border border-gray-200 bg-white p-6">
-                            <p className="text-sm text-gray-500">
-                                Membre depuis {new Date(profile.created_at).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}
-                            </p>
+                        <div className="rounded-2xl border border-gray-100 bg-gradient-to-br from-gray-50 to-white p-6 shadow-sm">
+                            <div className="flex items-center gap-3">
+                                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--color-primary,#6366f1)]/10">
+                                    <svg className="h-5 w-5 text-[var(--color-primary,#6366f1)]" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p className="text-xs text-gray-500">Membre depuis</p>
+                                    <p className="text-sm font-semibold text-gray-900">
+                                        {new Date(profile.created_at).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </>
+        </FrontLayout>
     );
 }
 

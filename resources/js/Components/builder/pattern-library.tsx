@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useBuilderStore } from '@/stores/builder-store';
 import { nanoid } from 'nanoid';
-import { Layers, Trash2, GripVertical } from 'lucide-react';
+import { Layers, Trash2 } from 'lucide-react';
+import type { BlockNode } from '@/types/cms';
 
 interface PatternData {
     id: number;
@@ -43,17 +44,17 @@ export default function PatternLibrary() {
     }, []);
 
     const insertPattern = (pattern: PatternData) => {
-        const freshBlocks = reassignIds(pattern.content) as any[];
+        const freshBlocks = reassignIds(pattern.content) as BlockNode[];
         const store = useBuilderStore.getState();
 
         store.pushHistory();
-        // Insert each top-level block from the pattern at root level
-        for (const block of freshBlocks) {
-            useBuilderStore.setState((state) => {
+        // Insert each top-level block from the pattern at root level using the store's addBlock-like approach
+        useBuilderStore.setState((state) => {
+            for (const block of freshBlocks) {
                 state.blocks.push(block);
-                state.isDirty = true;
-            });
-        }
+            }
+            state.isDirty = true;
+        });
     };
 
     const deletePattern = (id: number) => {

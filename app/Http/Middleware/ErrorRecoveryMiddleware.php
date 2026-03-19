@@ -22,7 +22,7 @@ class ErrorRecoveryMiddleware
         if ($recoveryToken && $this->recoveryService->validateRecoveryToken($recoveryToken)) {
             // Valid recovery token - disable safe mode and continue
             $this->recoveryService->disableSafeMode();
-            session()->flash('success', 'Safe mode désactivé via token de récupération.');
+            session()->flash('success', __('cms.recovery.safe_mode_disabled'));
         }
 
         // In safe mode, share the info with all Inertia responses

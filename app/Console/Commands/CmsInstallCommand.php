@@ -8,7 +8,6 @@ use App\Services\DatabaseConfigurator;
 use App\Services\InstallerService;
 use App\Services\RequirementsChecker;
 use Illuminate\Console\Command;
-use Illuminate\Validation\Rules\Password;
 
 class CmsInstallCommand extends Command
 {
@@ -79,15 +78,7 @@ class CmsInstallCommand extends Command
         $this->components->info('Installation en cours...');
         $this->newLine();
 
-        $result = $this->installer
-            ->onProgress(function (string $step, string $status, string $label) {
-                if ($status === 'completed') {
-                    $this->components->twoColumnDetail($label, '<fg=green>✓</>');
-                } elseif ($status === 'running') {
-                    // Progress shown via step completion
-                }
-            })
-            ->install($config);
+        $result = $this->installer->install($config);
 
         $this->newLine();
 
@@ -105,8 +96,8 @@ class CmsInstallCommand extends Command
         }
 
         $this->components->error('L\'installation a échoué.');
-        foreach ($result['errors'] as $error) {
-            $this->components->error($error);
+        if (isset($result['message'])) {
+            $this->components->error($result['message']);
         }
 
         return self::FAILURE;

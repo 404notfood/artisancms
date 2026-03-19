@@ -163,8 +163,9 @@ export function getGoogleFontsUrl(customizations: Record<string, string | boolea
     const body = c(customizations, 'fonts.body', 'Inter');
     const families = new Set<string>();
 
+    const systemFonts = ['Georgia', 'system-ui', 'Arial', 'Helvetica', 'Times New Roman', 'Courier New', 'Impact'];
     for (const font of [heading, body]) {
-        if (font && !['Georgia', 'system-ui'].includes(font)) {
+        if (font && !systemFonts.includes(font)) {
             families.add(font.replace(/ /g, '+'));
         }
     }

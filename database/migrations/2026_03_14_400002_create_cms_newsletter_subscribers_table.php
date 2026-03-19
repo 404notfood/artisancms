@@ -14,7 +14,7 @@ return new class extends Migration
             $table->id();
             $table->string('email')->unique();
             $table->string('name')->nullable();
-            $table->enum('status', ['active', 'unsubscribed'])->default('active');
+            $table->string('status', 20)->default('active');
             $table->timestamp('subscribed_at')->useCurrent();
             $table->timestamp('unsubscribed_at')->nullable();
             $table->string('ip_address', 45)->nullable();

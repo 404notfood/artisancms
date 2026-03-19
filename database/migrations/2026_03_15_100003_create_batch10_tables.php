@@ -33,8 +33,6 @@ return new class extends Migration
             $table->morphs('usable'); // pages, posts, etc.
             $table->string('field')->nullable(); // which field references this media
             $table->timestamps();
-
-            $table->index('media_id');
         });
 
         // Search logs
@@ -58,7 +56,7 @@ return new class extends Migration
             $table->string('link_url')->nullable();
             $table->string('bg_color')->default('#4f46e5');
             $table->string('text_color')->default('#ffffff');
-            $table->enum('position', ['top', 'bottom'])->default('top');
+            $table->string('position', 10)->default('top');
             $table->boolean('dismissible')->default(true);
             $table->boolean('active')->default(false);
             $table->timestamp('starts_at')->nullable();

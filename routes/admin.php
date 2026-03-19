@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\Admin\AccountController;
 use App\Http\Controllers\Admin\AnalyticsController;
 use App\Http\Controllers\Admin\BrandingController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -48,6 +49,14 @@ use Illuminate\Support\Facades\Route;
 // Dashboard
 Route::get('/', DashboardController::class)->name('admin.dashboard');
 
+// Account (Mon compte)
+Route::get('account', [AccountController::class, 'edit'])->name('admin.account.edit');
+Route::put('account', [AccountController::class, 'update'])->name('admin.account.update');
+Route::put('account/password', [AccountController::class, 'updatePassword'])->name('admin.account.password');
+Route::post('account/avatar', [AccountController::class, 'uploadAvatar'])->name('admin.account.avatar.upload');
+Route::delete('account/avatar', [AccountController::class, 'removeAvatar'])->name('admin.account.avatar.remove');
+Route::delete('account', [AccountController::class, 'destroy'])->name('admin.account.destroy');
+
 // Pages
 Route::resource('pages', PageController::class)->names('admin.pages');
 Route::post('pages/{page}/restore', [PageController::class, 'restore'])->name('admin.pages.restore')->withTrashed();
@@ -90,6 +99,8 @@ Route::post('posts/{post}/revisions/{revision}/restore', [PostController::class,
 
 // Users
 Route::resource('users', UserController::class)->names('admin.users');
+Route::post('users/{user}/avatar', [UserController::class, 'uploadAvatar'])->name('admin.users.avatar.upload');
+Route::delete('users/{user}/avatar', [UserController::class, 'removeAvatar'])->name('admin.users.avatar.remove');
 
 // Media
 Route::get('media', [MediaController::class, 'index'])->name('admin.media.index');

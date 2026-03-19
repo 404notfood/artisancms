@@ -5,13 +5,20 @@ declare(strict_types=1);
 namespace ContactForm\Services;
 
 use App\CMS\Facades\CMS;
-use App\Models\CmsPlugin;
+use App\CMS\Traits\ReadsPluginSettings;
 use ContactForm\Models\FormSubmission;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class FormService
 {
+    use ReadsPluginSettings;
+
+    protected function pluginSlug(): string
+    {
+        return 'contact-form';
+    }
+
     /**
      * Create a new form submission and send notification email.
      *
@@ -26,13 +33,33 @@ class FormService
             'user_agent' => $userAgent,
         ]);
 
-        // Fire hook so other plugins can react to submissions
         CMS::fire('contact_form.submitted', $submission);
 
-        // Send notification email
         $this->sendNotificationEmail($submission);
 
         return $submission;
+    }
+
+    /**
+     * Check if the honeypot field indicates a spam submission.
+     */
+    public function isSpam(?string $honeypotValue): bool
+    {
+        $honeypotEnabled = (bool) $this->getPluginSetting('honeypot_enabled', true);
+
+        if (!$honeypotEnabled) {
+            return false;
+        }
+
+        return !empty($honeypotValue);
+    }
+
+    /**
+     * Get the success message from plugin settings.
+     */
+    public function getSuccessMessage(): string
+    {
+        return (string) $this->getPluginSetting('success_message', 'Merci pour votre message !');
     }
 
     /**
@@ -87,56 +114,5 @@ class FormService
         Message :
         {$message}
         TEXT;
-    }
-
-    /**
-     * Check if the honeypot field indicates a spam submission.
-     */
-    public function isSpam(?string $honeypotValue): bool
-    {
-        $honeypotEnabled = (bool) $this->getPluginSetting('honeypot_enabled', true);
-
-        if (!$honeypotEnabled) {
-            return false;
-        }
-
-        // If the honeypot field has a value, it's likely spam
-        return !empty($honeypotValue);
-    }
-
-    /**
-     * Get the success message from plugin settings.
-     */
-    public function getSuccessMessage(): string
-    {
-        return (string) $this->getPluginSetting('success_message', 'Merci pour votre message !');
-    }
-
-    /**
-     * Retrieve a plugin setting value from the CMS plugin record.
-     */
-    private function getPluginSetting(string $key, mixed $default = null): mixed
-    {
-        $plugin = CmsPlugin::where('slug', 'contact-form')->first();
-
-        if ($plugin === null) {
-            return $default;
-        }
-
-        $settings = $plugin->settings;
-
-        if (!is_array($settings)) {
-            return $default;
-        }
-
-        if (isset($settings[$key]['value'])) {
-            return $settings[$key]['value'];
-        }
-
-        if (isset($settings[$key]['default'])) {
-            return $settings[$key]['default'];
-        }
-
-        return $settings[$key] ?? $default;
     }
 }

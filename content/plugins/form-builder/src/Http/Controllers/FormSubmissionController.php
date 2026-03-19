@@ -63,7 +63,7 @@ class FormSubmissionController extends Controller
 
         // Auto-mark as read when viewed
         if ($submission->status === 'new') {
-            $this->submissionService->markAsRead($submission);
+            $this->submissionService->updateStatus($submission, 'read');
         }
 
         return Inertia::render('Admin/Forms/Submissions/Show', [

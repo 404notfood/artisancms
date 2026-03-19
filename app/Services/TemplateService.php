@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Models\CmsTheme;
+use App\Models\DesignToken;
 use App\Models\Media;
 use App\Models\Menu;
 use App\Models\MenuItem;
@@ -1041,326 +1042,6 @@ class TemplateService
     }
 
     /**
-     * Import taxonomies (categories, tags) from template.
-     */
-    protected function importTaxonomies(string $templatePath, array &$report): void
-    {
-        $file = $templatePath . '/data/taxonomies.json';
-
-        if (!File::exists($file)) {
-            return;
-        }
-
-        $taxonomies = json_decode(File::get($file), true) ?? [];
-
-        foreach ($taxonomies as $taxonomyData) {
-            $taxonomy = Taxonomy::firstOrCreate(
-                ['slug' => $taxonomyData['slug']],
-                [
-                    'name' => $taxonomyData['name'],
-                    'type' => $taxonomyData['type'] ?? 'category',
-                    'description' => $taxonomyData['description'] ?? null,
-                ],
-            );
-
-            foreach ($taxonomyData['terms'] ?? [] as $termData) {
-                TaxonomyTerm::firstOrCreate(
-                    [
-                        'taxonomy_id' => $taxonomy->id,
-                        'slug' => $termData['slug'],
-                    ],
-                    [
-                        'name' => $termData['name'],
-                        'description' => $termData['description'] ?? null,
-                        'order' => $termData['order'] ?? 0,
-                    ],
-                );
-
-                $report['taxonomies_created']++;
-            }
-        }
-    }
-
-    /**
-     * Import pages from template data.
-     *
-     * @param array<string, mixed> $mediaMap Media path mapping
-     */
-    protected function importPages(
-        string $templatePath,
-        int $userId,
-        array $mediaMap,
-        bool $overwrite,
-        array &$report,
-    ): void {
-        $file = $templatePath . '/data/pages.json';
-
-        if (!File::exists($file)) {
-            return;
-        }
-
-        $pages = json_decode(File::get($file), true) ?? [];
-
-        foreach ($pages as $pageData) {
-            $existingPage = Page::where('slug', $pageData['slug'])->first();
-
-            if ($existingPage !== null && !$overwrite) {
-                $report['skipped'][] = [
-                    'type' => 'page',
-                    'slug' => $pageData['slug'],
-                    'reason' => 'Page existante (slug duplique)',
-                ];
-                continue;
-            }
-
-            // Replace media references in JSON content
-            $content = $this->replaceMediaReferences($pageData['content'] ?? [], $mediaMap);
-
-            $attributes = [
-                'title' => $pageData['title'],
-                'slug' => $pageData['slug'],
-                'content' => $content,
-                'status' => $pageData['status'] ?? 'published',
-                'template' => $pageData['template'] ?? 'default',
-                'meta_title' => $pageData['meta_title'] ?? $pageData['title'],
-                'meta_description' => $pageData['meta_description'] ?? null,
-                'order' => $pageData['order'] ?? 0,
-                'created_by' => $userId,
-                'published_at' => now(),
-            ];
-
-            if ($existingPage !== null && $overwrite) {
-                $existingPage->update($attributes);
-            } else {
-                $attributes['slug'] = $this->ensureUniqueSlug(
-                    $pageData['slug'],
-                    Page::class,
-                );
-                Page::create($attributes);
-            }
-
-            // Set as homepage if indicated
-            if ($pageData['is_homepage'] ?? false) {
-                Setting::set('homepage_id', (string) Page::where('slug', $attributes['slug'])->value('id'));
-            }
-
-            $report['pages_created']++;
-        }
-    }
-
-    /**
-     * Import demo posts from template data.
-     *
-     * @param array<string, mixed> $mediaMap Media path mapping
-     */
-    protected function importPosts(
-        string $templatePath,
-        int $userId,
-        array $mediaMap,
-        bool $overwrite,
-        array &$report,
-    ): void {
-        $file = $templatePath . '/data/posts.json';
-
-        if (!File::exists($file)) {
-            return;
-        }
-
-        $posts = json_decode(File::get($file), true) ?? [];
-
-        foreach ($posts as $postData) {
-            $existingPost = Post::where('slug', $postData['slug'])->first();
-
-            if ($existingPost !== null && !$overwrite) {
-                $report['skipped'][] = [
-                    'type' => 'post',
-                    'slug' => $postData['slug'],
-                    'reason' => 'Article existant (slug duplique)',
-                ];
-                continue;
-            }
-
-            $content = $this->replaceMediaReferences($postData['content'] ?? [], $mediaMap);
-
-            // Resolve featured image
-            $featuredImage = null;
-            if (isset($postData['featured_image'])) {
-                $featuredImage = $mediaMap[$postData['featured_image']] ?? $postData['featured_image'];
-            }
-
-            $attributes = [
-                'title' => $postData['title'],
-                'slug' => $postData['slug'],
-                'content' => $content,
-                'excerpt' => $postData['excerpt'] ?? null,
-                'status' => $postData['status'] ?? 'published',
-                'featured_image' => $featuredImage,
-                'created_by' => $userId,
-                'published_at' => now()->subDays(rand(1, 30)),
-            ];
-
-            $post = null;
-
-            if ($existingPost !== null && $overwrite) {
-                $existingPost->update($attributes);
-            } else {
-                $attributes['slug'] = $this->ensureUniqueSlug(
-                    $postData['slug'],
-                    Post::class,
-                );
-                $post = Post::create($attributes);
-            }
-
-            // Attach taxonomies if provided
-            if (isset($postData['taxonomies'])) {
-                $this->attachTaxonomies(
-                    $existingPost ?? $post,
-                    $postData['taxonomies'],
-                );
-            }
-
-            $report['posts_created']++;
-        }
-    }
-
-    /**
-     * Import navigation menus from template data.
-     */
-    protected function importMenus(string $templatePath, bool $overwrite, array &$report): void
-    {
-        $file = $templatePath . '/data/menus.json';
-
-        if (!File::exists($file)) {
-            return;
-        }
-
-        $menus = json_decode(File::get($file), true) ?? [];
-
-        foreach ($menus as $menuData) {
-            $existingMenu = Menu::where('location', $menuData['location'])->first();
-
-            if ($existingMenu !== null && !$overwrite) {
-                $report['skipped'][] = [
-                    'type' => 'menu',
-                    'location' => $menuData['location'],
-                    'reason' => 'Menu existant a cet emplacement',
-                ];
-                continue;
-            }
-
-            if ($existingMenu !== null && $overwrite) {
-                // Delete old items before replacing
-                $existingMenu->items()->delete();
-                $menu = $existingMenu;
-                $menu->update(['name' => $menuData['name']]);
-            } else {
-                $menu = Menu::create([
-                    'name' => $menuData['name'],
-                    'slug' => Str::slug($menuData['name']),
-                    'location' => $menuData['location'],
-                ]);
-            }
-
-            // Create menu items
-            $this->createMenuItems($menu, $menuData['items'] ?? [], null);
-
-            $report['menus_created']++;
-        }
-    }
-
-    /**
-     * Recursively create menu items.
-     *
-     * @param array<int, array<string, mixed>> $items
-     */
-    protected function createMenuItems(Menu $menu, array $items, ?int $parentId): void
-    {
-        foreach ($items as $index => $itemData) {
-            // Resolve URL to a page if it's a page reference
-            $url = $itemData['url'] ?? '#';
-            $linkableId = null;
-            $linkableType = null;
-
-            if (isset($itemData['page_slug'])) {
-                $page = Page::where('slug', $itemData['page_slug'])->first();
-                if ($page !== null) {
-                    $linkableId = $page->id;
-                    $linkableType = Page::class;
-                    $url = '/' . $page->slug;
-                }
-            }
-
-            $menuItem = MenuItem::create([
-                'menu_id' => $menu->id,
-                'parent_id' => $parentId,
-                'label' => $itemData['label'] ?? $itemData['title'] ?? '',
-                'type' => $linkableType !== null ? 'page' : 'url',
-                'url' => $url,
-                'linkable_id' => $linkableId,
-                'linkable_type' => $linkableType,
-                'target' => $itemData['target'] ?? '_self',
-                'order' => $itemData['order'] ?? $index,
-            ]);
-
-            // Child items (sub-menus)
-            if (!empty($itemData['children'])) {
-                $this->createMenuItems($menu, $itemData['children'], $menuItem->id);
-            }
-        }
-    }
-
-    /**
-     * Apply template settings to the site.
-     */
-    protected function importSettings(string $templatePath, bool $overwrite, array &$report): void
-    {
-        $file = $templatePath . '/data/settings.json';
-
-        if (!File::exists($file)) {
-            return;
-        }
-
-        $settings = json_decode(File::get($file), true) ?? [];
-
-        foreach ($settings as $group => $values) {
-            if (is_array($values)) {
-                // Grouped settings: { "general": { "site_name": "..." } }
-                foreach ($values as $key => $value) {
-                    $fullKey = $group . '.' . $key;
-                    $existing = Setting::where('group', $group)->where('key', $key)->first();
-
-                    if ($existing !== null && !$overwrite) {
-                        $report['skipped'][] = [
-                            'type' => 'setting',
-                            'key' => $fullKey,
-                            'reason' => 'Setting existant',
-                        ];
-                        continue;
-                    }
-
-                    Setting::set($fullKey, $value);
-                    $report['settings_applied']++;
-                }
-            } else {
-                // Flat settings: { "site_name": "..." }
-                $existing = Setting::where('key', $group)->first();
-
-                if ($existing !== null && !$overwrite) {
-                    $report['skipped'][] = [
-                        'type' => 'setting',
-                        'key' => $group,
-                        'reason' => 'Setting existant',
-                    ];
-                    continue;
-                }
-
-                Setting::set($group, $values);
-                $report['settings_applied']++;
-            }
-        }
-    }
-
-    /**
      * Apply theme overrides from template.
      *
      * @param array<string, mixed> $template Template manifest data
@@ -1400,43 +1081,30 @@ class TemplateService
      */
     protected function applyCustomTypographyAndColors(array $options, array $template): void
     {
-        $customizations = [];
+        $mapping = [
+            'heading_font'  => 'fonts.heading',
+            'body_font'     => 'fonts.body',
+            'primary_color' => 'colors.primary',
+            'heading_color' => 'colors.heading',
+            'text_color'    => 'colors.text',
+        ];
 
-        if (!empty($options['heading_font'])) {
-            $customizations['fonts.heading'] = $options['heading_font'];
-        }
-        if (!empty($options['body_font'])) {
-            $customizations['fonts.body'] = $options['body_font'];
-        }
-        if (!empty($options['primary_color'])) {
-            $customizations['colors.primary'] = $options['primary_color'];
-        }
-        if (!empty($options['heading_color'])) {
-            $customizations['colors.heading'] = $options['heading_color'];
-        }
-        if (!empty($options['text_color'])) {
-            $customizations['colors.text'] = $options['text_color'];
+        $customizations = [];
+        foreach ($mapping as $optionKey => $customizationKey) {
+            if (!empty($options[$optionKey])) {
+                $customizations[$customizationKey] = $options[$optionKey];
+            }
         }
 
         if (empty($customizations)) {
             return;
         }
 
-        $themeSlug = $template['requires']['theme'] ?? 'default';
-        $theme = CmsTheme::where('slug', $themeSlug)->first();
+        $theme = $this->resolveTheme($template);
 
-        if ($theme === null) {
-            // Try the active theme as fallback
-            $theme = CmsTheme::where('active', true)->first();
+        if ($theme !== null) {
+            $this->mergeThemeCustomizations($theme, $customizations);
         }
-
-        if ($theme === null) {
-            return;
-        }
-
-        $existing = $theme->customizations ?? [];
-        $merged = array_merge($existing, $customizations);
-        $theme->update(['customizations' => $merged]);
     }
 
     /**
@@ -1490,7 +1158,7 @@ class TemplateService
                     'letterSpacing' => $entry['letterSpacing'] ?? '0',
                 ], JSON_THROW_ON_ERROR);
 
-                \App\Models\DesignToken::updateOrCreate(
+                DesignToken::updateOrCreate(
                     ['category' => $tokenGroup, 'name' => $tokenName],
                     ['slug' => $tokenGroup . '-' . $tokenName, 'value' => $tokenValue],
                 );

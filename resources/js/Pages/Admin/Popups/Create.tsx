@@ -1,5 +1,5 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, Link, useForm, router } from '@inertiajs/react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
@@ -58,16 +58,15 @@ export default function PopupsCreate({ popup }: Props) {
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
 
-        const payload = {
-            ...data,
-            pages: data.pages.trim() ? data.pages.split('\n').map(p => p.trim()).filter(Boolean) : null,
-        };
+        const pagesArray = data.pages.trim() ? data.pages.split('\n').map(p => p.trim()).filter(Boolean) : null;
 
-        if (isEditing) {
-            put(`/admin/popups/${popup.id}`, payload as any);
-        } else {
-            post('/admin/popups', payload as any);
-        }
+        router.visit(isEditing ? `/admin/popups/${popup!.id}` : '/admin/popups', {
+            method: isEditing ? 'put' : 'post',
+            data: {
+                ...data,
+                pages: pagesArray,
+            },
+        });
     };
 
     return (
@@ -238,7 +237,7 @@ export default function PopupsCreate({ popup }: Props) {
                                 <Label>Type de d\u00e9clencheur</Label>
                                 <select
                                     value={data.trigger}
-                                    onChange={e => setData('trigger', e.target.value as any)}
+                                    onChange={e => setData('trigger', e.target.value as typeof data.trigger)}
                                     className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white mt-1"
                                 >
                                     <option value="page_load">Chargement de la page</option>
@@ -269,7 +268,7 @@ export default function PopupsCreate({ popup }: Props) {
                                 <Label>Fr\u00e9quence d'affichage</Label>
                                 <select
                                     value={data.display_frequency}
-                                    onChange={e => setData('display_frequency', e.target.value as any)}
+                                    onChange={e => setData('display_frequency', e.target.value as typeof data.display_frequency)}
                                     className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white mt-1"
                                 >
                                     <option value="always">Toujours</option>

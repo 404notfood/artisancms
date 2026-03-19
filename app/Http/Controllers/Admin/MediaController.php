@@ -15,8 +15,6 @@ use App\Services\StockPhotoService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -44,29 +42,9 @@ class MediaController extends Controller
 
         // JSON response for media picker (AJAX)
         if ($request->wantsJson() || $request->has('json')) {
-            $query = Media::query()->orderByDesc('created_at');
-
-            if ($search = $request->input('search')) {
-                $query->where(function ($q) use ($search) {
-                    $q->where('filename', 'like', "%{$search}%")
-                      ->orWhere('alt_text', 'like', "%{$search}%");
-                });
-            }
-
-            if ($type = $request->input('type')) {
-                $query->where('mime_type', 'like', "{$type}/%");
-            }
-
-            $media = $query->limit(40)->get()->map(fn (Media $m) => [
-                'id' => $m->id,
-                'url' => $m->url,
-                'alt' => $m->alt_text ?? '',
-                'filename' => $m->filename,
-                'mime_type' => $m->mime_type,
-                'thumbnail_url' => $m->url,
-            ]);
-
-            return response()->json($media);
+            return response()->json(
+                $this->mediaService->getForPicker($filters),
+            );
         }
 
         $media = $this->mediaService->all($filters);
@@ -167,32 +145,12 @@ class MediaController extends Controller
             'file' => ['required', 'file', 'max:20480'],
         ]);
 
-        $file = $request->file('file');
-        $oldPath = $media->path;
-
-        // Store new file
-        $newPath = $file->storeAs(
-            dirname($oldPath ?: 'media'),
-            $file->hashName(),
-            'public',
-        );
-
-        // Delete old file
-        if ($oldPath && Storage::disk('public')->exists($oldPath)) {
-            Storage::disk('public')->delete($oldPath);
-        }
-
-        $media->update([
-            'path' => $newPath,
-            'filename' => $file->getClientOriginalName(),
-            'mime_type' => $file->getMimeType(),
-            'size' => $file->getSize(),
-        ]);
+        $media = $this->mediaService->replace($media, $request->file('file'));
 
         return response()->json([
             'success' => true,
             'url' => $media->url,
-            'media' => $media->fresh(),
+            'media' => $media,
         ]);
     }
 
@@ -240,27 +198,12 @@ class MediaController extends Controller
         ]);
 
         try {
-            $response = Http::timeout(30)->get($validated['url']);
-
-            if (!$response->successful()) {
-                return response()->json(['success' => false, 'error' => 'Download failed'], 422);
-            }
-
-            $filename = $validated['filename'];
-            $path = 'media/' . date('Y/m') . '/' . $filename;
-
-            Storage::disk('public')->put($path, $response->body());
-
-            $media = Media::create([
-                'filename' => $filename,
-                'original_filename' => $filename,
-                'path' => $path,
-                'folder' => dirname($path),
-                'mime_type' => $response->header('Content-Type', 'image/jpeg'),
-                'size' => strlen($response->body()),
-                'alt_text' => 'Photo by ' . ($validated['author'] ?? 'Unknown'),
-                'uploaded_by' => auth()->id(),
-            ]);
+            $media = $this->stockService->download(
+                $validated['url'],
+                $validated['filename'],
+                $validated['author'] ?? null,
+                (int) auth()->id(),
+            );
 
             return response()->json([
                 'success' => true,

@@ -7,6 +7,8 @@ namespace App\Services;
 use App\CMS\Facades\CMS;
 use App\Models\Menu;
 use App\Models\MenuItem;
+use App\Models\Page;
+use App\Models\Post;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 
@@ -88,6 +90,23 @@ class MenuService
     }
 
     /**
+     * Get published pages and posts for the menu item linkable dropdown.
+     *
+     * @return array{pages: Collection, posts: Collection}
+     */
+    public function getLinkableItems(): array
+    {
+        return [
+            'pages' => Page::where('status', 'published')
+                ->orderBy('title')
+                ->get(['id', 'title', 'slug']),
+            'posts' => Post::published()
+                ->orderBy('title')
+                ->get(['id', 'title', 'slug']),
+        ];
+    }
+
+    /**
      * Sync menu items: delete existing items and recreate from nested array structure.
      *
      * Each item in the array should have:
@@ -131,6 +150,20 @@ class MenuService
             'target' => $data['target'] ?? '_self',
             'order' => $data['order'] ?? $menu->items()->count(),
         ]);
+    }
+
+    /**
+     * Reorder menu items.
+     *
+     * @param array<int, array{id: int, order: int}> $items
+     */
+    public function reorderItems(Menu $menu, array $items): void
+    {
+        foreach ($items as $itemData) {
+            MenuItem::where('id', $itemData['id'])
+                ->where('menu_id', $menu->id)
+                ->update(['order' => $itemData['order']]);
+        }
     }
 
     /**

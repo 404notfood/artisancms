@@ -35,20 +35,12 @@ class BuilderApiController extends Controller
             'content' => ['required', 'array'],
         ]);
 
-        $content = $validated['content'];
-        $isAdmin = $request->user()?->isAdmin() ?? false;
+        $content = $this->sanitizeContent($validated['content'], $request);
 
-        // Sanitize block tree if present
-        if (isset($content['blocks']) && is_array($content['blocks'])) {
-            $content['blocks'] = $this->sanitizer->sanitizeBlockTree($content['blocks'], $isAdmin);
-        }
-
-        // Update page content (PageService creates a revision when content changes)
         $page = $this->pageService->update($page, [
             'content' => $content,
         ]);
 
-        // Get the latest revision for the response
         $latestRevision = $page->revisions()->latest()->first();
 
         return $this->success([
@@ -69,15 +61,8 @@ class BuilderApiController extends Controller
             'content' => ['required', 'array'],
         ]);
 
-        $content = $validated['content'];
-        $isAdmin = $request->user()?->isAdmin() ?? false;
+        $content = $this->sanitizeContent($validated['content'], $request);
 
-        // Sanitize block tree if present
-        if (isset($content['blocks']) && is_array($content['blocks'])) {
-            $content['blocks'] = $this->sanitizer->sanitizeBlockTree($content['blocks'], $isAdmin);
-        }
-
-        // Direct update without revision (autosave = draft save)
         $page->update([
             'content' => $content,
         ]);
@@ -135,19 +120,7 @@ class BuilderApiController extends Controller
             $request->input('folder'),
         );
 
-        return $this->created([
-            'id' => $media->id,
-            'filename' => $media->filename,
-            'original_filename' => $media->original_filename,
-            'path' => $media->path,
-            'url' => $media->url,
-            'mime_type' => $media->mime_type,
-            'size' => $media->size,
-            'alt_text' => $media->alt_text,
-            'title' => $media->title,
-            'metadata' => $media->metadata,
-            'thumbnails' => $media->thumbnails,
-        ]);
+        return $this->created(self::formatMediaResponse($media));
     }
 
     /**
@@ -203,5 +176,45 @@ class BuilderApiController extends Controller
         }
 
         return $this->success(null, __('cms.pages.reordered'));
+    }
+
+    // ── Private helpers ──────────────────────────
+
+    /**
+     * Sanitize content block tree, supporting both flat array and { blocks: [...] } formats.
+     */
+    private function sanitizeContent(array $content, Request $request): array
+    {
+        $isAdmin = $request->user()?->isAdmin() ?? false;
+
+        // Content may be a flat block array or { blocks: [...] }
+        if (isset($content['blocks']) && is_array($content['blocks'])) {
+            $content['blocks'] = $this->sanitizer->sanitizeBlockTree($content['blocks'], $isAdmin);
+        } elseif (isset($content[0])) {
+            // Flat block array (sent directly from the builder)
+            $content = $this->sanitizer->sanitizeBlockTree($content, $isAdmin);
+        }
+
+        return $content;
+    }
+
+    /**
+     * Format a Media model into a standard API response array.
+     */
+    private static function formatMediaResponse(object $media): array
+    {
+        return [
+            'id' => $media->id,
+            'filename' => $media->filename,
+            'original_filename' => $media->original_filename,
+            'path' => $media->path,
+            'url' => $media->url,
+            'mime_type' => $media->mime_type,
+            'size' => $media->size,
+            'alt_text' => $media->alt_text,
+            'title' => $media->title,
+            'metadata' => $media->metadata,
+            'thumbnails' => $media->thumbnails,
+        ];
     }
 }

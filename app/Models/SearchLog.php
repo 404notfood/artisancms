@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -32,8 +33,11 @@ class SearchLog extends Model
 
     /**
      * Get popular search queries.
+     *
+     * @param Builder<SearchLog> $query
+     * @return Builder<SearchLog>
      */
-    public function scopePopular($query, int $days = 30)
+    public function scopePopular(Builder $query, int $days = 30): Builder
     {
         return $query->where('created_at', '>=', now()->subDays($days))
             ->selectRaw('query, COUNT(*) as count, AVG(results_count) as avg_results')

@@ -29,7 +29,7 @@
       "style": { "label": "Style", "type": "select", "default": "solid", "options": ["solid", "transparent", "gradient"] },
       "sticky": { "label": "Header fixe", "type": "boolean", "default": true },
       "background_color": { "label": "Couleur de fond", "type": "color", "default": "#ffffff" },
-      "text_color": { "label": "Couleur du texte", "type": "color", "default": "#1e293b" },
+      "text_color": { "label": "Couleur du texte", "type": "color", "default": "#0f172a" },
       "menu_alignment": { "label": "Alignement du menu", "type": "select", "default": "right", "options": ["left", "center", "right"] },
       "variant": { "label": "Style du header", "type": "select", "default": "classic", "options": ["classic", "centered", "split", "stacked", "minimal"] },
       "mobile_menu_style": { "label": "Menu mobile", "type": "select", "default": "hamburger", "options": ["hamburger", "slide", "fullscreen"] },
@@ -52,16 +52,16 @@
       "show_powered_by": { "label": "Afficher Propulsé par ArtisanCMS", "type": "boolean", "default": true }
     },
     "colors": {
-      "primary": { "label": "Couleur principale", "type": "color", "default": "#3b82f6" },
+      "primary": { "label": "Couleur principale", "type": "color", "default": "#4f46e5" },
       "secondary": { "label": "Couleur secondaire", "type": "color", "default": "#64748b" },
-      "accent": { "label": "Couleur accent", "type": "color", "default": "#f59e0b" },
+      "accent": { "label": "Couleur accent", "type": "color", "default": "#f97316" },
       "background": { "label": "Fond de page", "type": "color", "default": "#ffffff" },
       "surface": { "label": "Fond des cartes", "type": "color", "default": "#f8fafc" },
-      "text": { "label": "Couleur du texte", "type": "color", "default": "#1e293b" },
+      "text": { "label": "Couleur du texte", "type": "color", "default": "#0f172a" },
       "text_muted": { "label": "Texte secondaire", "type": "color", "default": "#64748b" },
       "border": { "label": "Bordures", "type": "color", "default": "#e2e8f0" },
-      "link": { "label": "Couleur des liens", "type": "color", "default": "#3b82f6" },
-      "link_hover": { "label": "Liens au survol", "type": "color", "default": "#2563eb" },
+      "link": { "label": "Couleur des liens", "type": "color", "default": "#4f46e5" },
+      "link_hover": { "label": "Liens au survol", "type": "color", "default": "#4338ca" },
       "success": { "label": "Succès", "type": "color", "default": "#22c55e" },
       "warning": { "label": "Avertissement", "type": "color", "default": "#f59e0b" },
       "error": { "label": "Erreur", "type": "color", "default": "#ef4444" }
@@ -70,7 +70,7 @@
       "heading": { "label": "Police des titres", "type": "font", "default": "Inter" },
       "body": { "label": "Police du corps", "type": "font", "default": "Inter" },
       "base_size": { "label": "Taille de base", "type": "select", "default": "16px", "options": ["14px", "15px", "16px", "17px", "18px"] },
-      "h1_size": { "label": "Taille H1", "type": "text", "default": "2.5rem" },
+      "h1_size": { "label": "Taille H1", "type": "text", "default": "2.75rem" },
       "h2_size": { "label": "Taille H2", "type": "text", "default": "2rem" },
       "h3_size": { "label": "Taille H3", "type": "text", "default": "1.5rem" },
       "h4_size": { "label": "Taille H4", "type": "text", "default": "1.25rem" },
@@ -83,7 +83,7 @@
     },
     "layout": {
       "container_width": { "label": "Largeur max", "type": "select", "default": "1280px", "options": ["1024px", "1280px", "1440px", "100%"] },
-      "border_radius": { "label": "Arrondi", "type": "select", "default": "0.5rem", "options": ["0", "0.25rem", "0.5rem", "1rem"] },
+      "border_radius": { "label": "Arrondi", "type": "select", "default": "0.625rem", "options": ["0", "0.25rem", "0.5rem", "0.625rem", "0.75rem", "1rem"] },
       "section_spacing": { "label": "Espacement sections", "type": "select", "default": "normal", "options": ["compact", "normal", "large", "xlarge"] },
       "sidebar_position": { "label": "Position sidebar", "type": "select", "default": "right", "options": ["left", "right", "none"] },
       "content_width": { "label": "Largeur contenu", "type": "select", "default": "65ch", "options": ["55ch", "60ch", "65ch", "70ch", "75ch", "100%"] }
@@ -108,20 +108,22 @@
     "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
   ],
   "css_variables": {
-    "--color-primary": "#3b82f6",
+    "--color-primary": "#4f46e5",
+    "--color-primary-hover": "#4338ca",
+    "--color-primary-light": "#eef2ff",
     "--color-secondary": "#64748b",
-    "--color-accent": "#f59e0b",
+    "--color-accent": "#f97316",
     "--color-background": "#ffffff",
     "--color-surface": "#f8fafc",
-    "--color-text": "#1e293b",
+    "--color-text": "#0f172a",
     "--color-text-muted": "#64748b",
     "--color-border": "#e2e8f0",
     "--font-heading": "'Inter', system-ui, sans-serif",
     "--font-body": "'Inter', system-ui, sans-serif",
     "--font-size-base": "16px",
-    "--border-radius": "0.5rem",
+    "--border-radius": "0.625rem",
     "--container-width": "1280px",
-    "--section-padding": "64px"
+    "--section-padding": "80px"
   },
   "supports": ["dark_mode", "responsive"],
   "default_template": "default"

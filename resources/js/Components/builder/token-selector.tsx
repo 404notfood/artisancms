@@ -35,17 +35,10 @@ export default function TokenSelector({
 
     useEffect(() => {
         setLoading(true);
-        fetch(`/admin/design-tokens/css`, {
+        fetch(`/admin/design-tokens?_format=json`, {
             headers: { Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
             credentials: 'same-origin',
         })
-            .then(() => {
-                // Fetch the actual tokens
-                return fetch(`/admin/design-tokens?_format=json`, {
-                    headers: { Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
-                    credentials: 'same-origin',
-                });
-            })
             .then((res) => res.json())
             .then((data) => {
                 const allTokens: TokenOption[] = data.tokens?.[category] ?? [];

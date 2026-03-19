@@ -47,7 +47,10 @@ export default function Footer({ menu, settings }: FooterProps) {
     const showPoweredBy = settings?.show_powered_by !== false;
 
     return (
-        <footer className="border-t border-gray-200 bg-[var(--color-background)] py-10">
+        <footer className="border-t py-10" style={{
+            backgroundColor: 'var(--footer-background-color, var(--color-surface, #f8fafc))',
+            borderColor: 'var(--color-border, #e2e8f0)',
+        }}>
             <div
                 className="mx-auto px-4"
                 style={{ maxWidth: 'var(--container-width)' }}
@@ -63,10 +66,10 @@ export default function Footer({ menu, settings }: FooterProps) {
                     </nav>
                 )}
 
-                <div className="text-center text-sm text-[var(--color-secondary)]">
+                <div className="text-center text-sm" style={{ color: 'var(--color-text-muted, #64748b)' }}>
                     <p>&copy; {year} {siteName}. Tous droits r&eacute;serv&eacute;s.</p>
                     {showPoweredBy && (
-                        <p className="mt-2 text-xs opacity-60">
+                        <p className="mt-2 text-xs opacity-50">
                             Propuls&eacute; par ArtisanCMS
                         </p>
                     )}

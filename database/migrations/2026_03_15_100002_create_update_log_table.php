@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('slug')->nullable(); // plugin/theme slug
             $table->string('from_version');
             $table->string('to_version');
-            $table->enum('status', ['pending', 'downloading', 'installing', 'completed', 'failed', 'rolled_back'])->default('pending');
+            $table->string('status', 20)->default('pending');
             $table->string('checksum')->nullable(); // SHA-256
             $table->text('changelog')->nullable();
             $table->text('error_message')->nullable();

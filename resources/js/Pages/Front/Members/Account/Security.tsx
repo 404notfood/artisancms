@@ -1,12 +1,21 @@
 import { Head, useForm, usePage } from '@inertiajs/react';
 import { useState } from 'react';
+import type { MenuData } from '@/types/cms';
+import FrontLayout from '@/Layouts/FrontLayout';
+import type { ThemeStyle } from '@/Layouts/Front/theme-helpers';
 
 interface SecurityProps {
+    menus: Record<string, MenuData>;
+    theme: {
+        customizations: Record<string, string | boolean>;
+        layouts: Array<{ slug: string; name: string }>;
+        style?: ThemeStyle;
+    };
     twoFactorEnabled: boolean;
     recoveryCodes: string[];
 }
 
-export default function Security({ twoFactorEnabled, recoveryCodes }: SecurityProps) {
+export default function Security({ menus, theme, twoFactorEnabled, recoveryCodes }: SecurityProps) {
     const flash = usePage().props.flash as { '2fa_setup'?: { secret: string; qr_url: string; recovery_codes: string[] }; recovery_codes?: string[]; success?: string } | undefined;
     const setup = flash?.['2fa_setup'] ?? null;
     const newCodes = flash?.recovery_codes ?? null;
@@ -33,11 +42,13 @@ export default function Security({ twoFactorEnabled, recoveryCodes }: SecurityPr
     }
 
     return (
-        <>
+        <FrontLayout menus={menus} theme={theme}>
             <Head title="Securite" />
 
             <div className="mx-auto max-w-2xl px-4 py-8">
-                <h1 className="mb-8 text-2xl font-bold text-gray-900">Securite</h1>
+                <h1 className="mb-8 text-2xl font-bold text-gray-900" style={{ fontFamily: 'var(--font-heading)' }}>
+                    Securite
+                </h1>
 
                 {flash?.success && (
                     <div className="mb-6 rounded-lg bg-green-50 border border-green-200 px-4 py-3 text-sm text-green-700">
@@ -64,7 +75,7 @@ export default function Security({ twoFactorEnabled, recoveryCodes }: SecurityPr
                             <button
                                 type="submit"
                                 disabled={enableForm.processing}
-                                className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 disabled:opacity-50"
+                                className="rounded-lg bg-[var(--color-primary,#6366f1)] px-4 py-2 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50 transition-all"
                             >
                                 Activer la 2FA
                             </button>
@@ -90,13 +101,13 @@ export default function Security({ twoFactorEnabled, recoveryCodes }: SecurityPr
                                     onChange={(e) => confirmForm.setData('code', e.target.value)}
                                     placeholder="Code a 6 chiffres"
                                     maxLength={6}
-                                    className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm text-center tracking-widest focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                                    className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm text-center tracking-widest focus:border-[var(--color-primary,#6366f1)] focus:outline-none focus:ring-1 focus:ring-[var(--color-primary,#6366f1)]"
                                     required
                                 />
                                 <button
                                     type="submit"
                                     disabled={confirmForm.processing}
-                                    className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 disabled:opacity-50"
+                                    className="rounded-lg bg-[var(--color-primary,#6366f1)] px-4 py-2 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50 transition-all"
                                 >
                                     Confirmer
                                 </button>
@@ -162,6 +173,6 @@ export default function Security({ twoFactorEnabled, recoveryCodes }: SecurityPr
                     )}
                 </div>
             </div>
-        </>
+        </FrontLayout>
     );
 }

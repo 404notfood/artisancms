@@ -2,7 +2,6 @@ import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, router } from '@inertiajs/react';
 import { Card, CardContent } from '@/Components/ui/card';
 import { Button } from '@/Components/ui/button';
-import { Badge } from '@/Components/ui/badge';
 import {
     Dialog,
     DialogContent,
@@ -10,100 +9,25 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/Components/ui/dialog';
-import { Switch } from '@/Components/ui/switch';
-import { Label } from '@/Components/ui/label';
-import { LayoutTemplate, Upload, Loader2, Check, ChevronLeft, ChevronRight, Type, Palette, Settings2, Sparkles } from 'lucide-react';
+import { LayoutTemplate, Upload, Loader2, ChevronLeft, ChevronRight, Type, Palette, Settings2, Sparkles } from 'lucide-react';
 import { useState, useCallback } from 'react';
 import WizardStepTypography from './wizard/WizardStepTypography';
 import WizardStepAnimations from './wizard/WizardStepAnimations';
 import { DEFAULT_TYPOGRAPHY_CONFIG, type TypographyConfig } from './wizard/constants/typography-presets';
 import { DEFAULT_ANIMATION_CONFIG, type AnimationConfig } from './wizard/constants/animation-presets';
-
-// -------------------------------------------------------
-// Types
-// -------------------------------------------------------
-
-interface Template {
-    slug: string;
-    name: string;
-    description?: string;
-    category?: string;
-    version?: string;
-    thumbnail_url?: string;
-}
-
-interface TemplatePageDetail {
-    id: string;
-    title: string;
-    slug: string;
-    meta_description: string;
-    blocks_count: number;
-}
-
-interface TemplateMenuDetail {
-    name: string;
-    location: string;
-    items_count: number;
-}
-
-interface TemplateThemeSummary {
-    primary_color: string | null;
-    secondary_color: string | null;
-    font_heading: string | null;
-    font_body: string | null;
-}
-
-interface TemplateDetails {
-    pages: TemplatePageDetail[];
-    menus: TemplateMenuDetail[];
-    has_settings: boolean;
-    has_theme_overrides: boolean;
-    theme_summary: TemplateThemeSummary | null;
-}
+import { type Template, type TemplateDetails, type WizardStep } from './components/types';
+import TemplateCard from './components/TemplateCard';
+import WizardProgressBar from './components/WizardProgressBar';
+import WizardStepSummary from './components/WizardStepSummary';
+import WizardStepColors from './components/WizardStepColors';
+import WizardStepOptions from './components/WizardStepOptions';
 
 interface Props {
     templates: Record<string, Template>;
     categories: Record<string, Template[]>;
 }
 
-// -------------------------------------------------------
-// Constants
-// -------------------------------------------------------
-
-const categoryLabels: Record<string, string> = {
-    blank: 'Vide',
-    business: 'Business',
-    creative: 'Creatif',
-    content: 'Contenu',
-    marketing: 'Marketing',
-    restaurant: 'Restaurant',
-    agency: 'Agence',
-    portfolio: 'Portfolio',
-    blog: 'Blog',
-    custom: 'Personnalise',
-};
-
-const categoryColors: Record<string, string> = {
-    blank: 'bg-gray-50 text-gray-600 border-gray-200',
-    business: 'bg-blue-50 text-blue-700 border-blue-200',
-    creative: 'bg-purple-50 text-purple-700 border-purple-200',
-    content: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-    marketing: 'bg-orange-50 text-orange-700 border-orange-200',
-    restaurant: 'bg-red-50 text-red-700 border-red-200',
-    agency: 'bg-indigo-50 text-indigo-700 border-indigo-200',
-    portfolio: 'bg-yellow-50 text-yellow-700 border-yellow-200',
-    blog: 'bg-teal-50 text-teal-700 border-teal-200',
-};
-
-const COLOR_PALETTES = [
-    { name: 'Indigo', primary: '#4f46e5', heading: '#1e1b4b', text: '#374151' },
-    { name: 'Emeraude', primary: '#059669', heading: '#064e3b', text: '#374151' },
-    { name: 'Rose', primary: '#e11d48', heading: '#4c0519', text: '#374151' },
-    { name: 'Ambre', primary: '#d97706', heading: '#451a03', text: '#374151' },
-    { name: 'Ciel', primary: '#0284c7', heading: '#0c4a6e', text: '#374151' },
-];
-
-const WIZARD_STEPS = [
+const WIZARD_STEPS: WizardStep[] = [
     { id: 1, label: 'Template', icon: LayoutTemplate },
     { id: 2, label: 'Typographie', icon: Type },
     { id: 3, label: 'Couleurs', icon: Palette },
@@ -113,10 +37,6 @@ const WIZARD_STEPS = [
 
 const TOTAL_STEPS = WIZARD_STEPS.length;
 
-// -------------------------------------------------------
-// Main component
-// -------------------------------------------------------
-
 export default function TemplatesIndex({ templates }: Props) {
     const [installing, setInstalling] = useState<string | null>(null);
     const [modalOpen, setModalOpen] = useState(false);
@@ -124,21 +44,12 @@ export default function TemplatesIndex({ templates }: Props) {
     const [details, setDetails] = useState<TemplateDetails | null>(null);
     const [loadingDetails, setLoadingDetails] = useState(false);
 
-    // Wizard step
     const [step, setStep] = useState(1);
-
-    // Step 2: Typography
     const [typographyConfig, setTypographyConfig] = useState<TypographyConfig>(DEFAULT_TYPOGRAPHY_CONFIG);
-
-    // Step 3: Colors
     const [primaryColor, setPrimaryColor] = useState('#4f46e5');
     const [headingColor, setHeadingColor] = useState('#1e1b4b');
     const [textColor, setTextColor] = useState('#374151');
-
-    // Step 4: Animations
     const [animationConfig, setAnimationConfig] = useState<AnimationConfig>(DEFAULT_ANIMATION_CONFIG);
-
-    // Step 5: Options
     const [selectedPages, setSelectedPages] = useState<string[]>([]);
     const [installMenus, setInstallMenus] = useState(true);
     const [installSettings, setInstallSettings] = useState(false);
@@ -174,8 +85,8 @@ export default function TemplatesIndex({ templates }: Props) {
             .then((data: TemplateDetails) => {
                 setDetails(data);
                 setSelectedPages(data.pages.map(p => p.id));
-                if (data.theme_summary) {
-                    if (data.theme_summary.primary_color) setPrimaryColor(data.theme_summary.primary_color);
+                if (data.theme_summary?.primary_color) {
+                    setPrimaryColor(data.theme_summary.primary_color);
                 }
             })
             .catch(() => setDetails(null))
@@ -184,9 +95,7 @@ export default function TemplatesIndex({ templates }: Props) {
 
     const togglePage = useCallback((pageId: string) => {
         setSelectedPages(prev =>
-            prev.includes(pageId)
-                ? prev.filter(id => id !== pageId)
-                : [...prev, pageId]
+            prev.includes(pageId) ? prev.filter(id => id !== pageId) : [...prev, pageId]
         );
     }, []);
 
@@ -228,12 +137,6 @@ export default function TemplatesIndex({ templates }: Props) {
     const canGoPrev = step > 1;
     const isLastStep = step === TOTAL_STEPS;
 
-    const applyPalette = useCallback((palette: typeof COLOR_PALETTES[0]) => {
-        setPrimaryColor(palette.primary);
-        setHeadingColor(palette.heading);
-        setTextColor(palette.text);
-    }, []);
-
     return (
         <AdminLayout
             header={
@@ -258,396 +161,83 @@ export default function TemplatesIndex({ templates }: Props) {
             ) : (
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     {templateList.map(template => (
-                        <Card key={template.slug} className="overflow-hidden">
-                            {template.thumbnail_url ? (
-                                <img
-                                    src={template.thumbnail_url}
-                                    alt={template.name}
-                                    className="h-40 w-full object-cover"
-                                />
-                            ) : (
-                                <div className="h-40 w-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                                    <LayoutTemplate className="h-10 w-10 text-gray-300" />
-                                </div>
-                            )}
-                            <CardContent className="p-4">
-                                <div className="flex items-start justify-between mb-2">
-                                    <h3 className="font-medium text-gray-900">{template.name}</h3>
-                                    {template.category && (
-                                        <Badge
-                                            variant="outline"
-                                            className={`text-xs shrink-0 ml-2 ${categoryColors[template.category] ?? ''}`}
-                                        >
-                                            {categoryLabels[template.category] ?? template.category}
-                                        </Badge>
-                                    )}
-                                </div>
-                                {template.description && (
-                                    <p className="text-sm text-gray-500 mb-4">{template.description}</p>
-                                )}
-                                <Button
-                                    size="sm"
-                                    className="w-full"
-                                    disabled={installing === template.slug}
-                                    onClick={() => openInstallModal(template)}
-                                >
-                                    {installing === template.slug ? (
-                                        <>
-                                            <Loader2 className="h-4 w-4 mr-1 animate-spin" />
-                                            Installation...
-                                        </>
-                                    ) : (
-                                        <>
-                                            <Upload className="h-4 w-4 mr-1" />
-                                            Installer
-                                        </>
-                                    )}
-                                </Button>
-                            </CardContent>
-                        </Card>
+                        <TemplateCard
+                            key={template.slug}
+                            template={template}
+                            installing={installing === template.slug}
+                            onInstall={openInstallModal}
+                        />
                     ))}
                 </div>
             )}
 
-            {/* Install wizard modal */}
             <Dialog open={modalOpen} onOpenChange={setModalOpen}>
                 <DialogContent className="sm:max-w-[680px] flex flex-col max-h-[90vh] overflow-hidden p-0">
-                    {/* Fixed header */}
                     <div className="px-6 pt-6 pb-4 border-b border-gray-100 shrink-0">
-                    <DialogHeader>
-                        <DialogTitle>
-                            Installer &laquo;{selectedTemplate?.name}&raquo;
-                        </DialogTitle>
-                    </DialogHeader>
-
-                    {/* Progress bar */}
-                    <div className="flex items-center gap-1 mt-3">
-                        {WIZARD_STEPS.map((s, i) => {
-                            const isActive = step === s.id;
-                            const isDone = step > s.id;
-                            return (
-                                <div key={s.id} className="flex items-center flex-1">
-                                    <button
-                                        type="button"
-                                        onClick={() => {
-                                            if (isDone || isActive) setStep(s.id);
-                                        }}
-                                        className={`flex items-center gap-1.5 text-xs font-medium px-2 py-1.5 rounded-md w-full transition-colors ${
-                                            isActive
-                                                ? 'bg-indigo-50 text-indigo-700'
-                                                : isDone
-                                                    ? 'text-indigo-600 hover:bg-indigo-50 cursor-pointer'
-                                                    : 'text-gray-400 cursor-default'
-                                        }`}
-                                    >
-                                        <div className={`flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold shrink-0 ${
-                                            isActive
-                                                ? 'bg-indigo-600 text-white'
-                                                : isDone
-                                                    ? 'bg-indigo-100 text-indigo-600'
-                                                    : 'bg-gray-100 text-gray-400'
-                                        }`}>
-                                            {isDone ? <Check className="h-3.5 w-3.5" /> : s.id}
-                                        </div>
-                                        <span className="hidden sm:inline">{s.label}</span>
-                                    </button>
-                                    {i < WIZARD_STEPS.length - 1 && (
-                                        <div className={`h-px w-4 shrink-0 ${isDone ? 'bg-indigo-300' : 'bg-gray-200'}`} />
-                                    )}
-                                </div>
-                            );
-                        })}
+                        <DialogHeader>
+                            <DialogTitle>
+                                Installer &laquo;{selectedTemplate?.name}&raquo;
+                            </DialogTitle>
+                        </DialogHeader>
+                        <WizardProgressBar steps={WIZARD_STEPS} currentStep={step} onStepClick={setStep} />
                     </div>
-                    </div>{/* end fixed header */}
 
-                    {/* Scrollable step content */}
                     <div className="flex-1 overflow-y-auto px-6 py-4">
-                    {loadingDetails ? (
-                        <div className="flex items-center justify-center py-16">
-                            <Loader2 className="h-6 w-6 animate-spin text-gray-400" />
-                        </div>
-                    ) : !details ? (
-                        <p className="text-sm text-red-500 py-8 text-center">
-                            Impossible de charger les details du template.
-                        </p>
-                    ) : (
-                        <>
-                            {/* Step 1: Template summary */}
-                            {step === 1 && (
-                                <div className="space-y-4">
-                                    <div className="flex gap-4">
-                                        {selectedTemplate?.thumbnail_url ? (
-                                            <img
-                                                src={selectedTemplate.thumbnail_url}
-                                                alt={selectedTemplate.name}
-                                                className="w-40 h-28 object-cover rounded-lg border shrink-0"
-                                            />
-                                        ) : (
-                                            <div className="w-40 h-28 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg border flex items-center justify-center shrink-0">
-                                                <LayoutTemplate className="h-8 w-8 text-gray-300" />
-                                            </div>
-                                        )}
-                                        <div className="min-w-0">
-                                            <h3 className="font-semibold text-gray-900 text-lg">{selectedTemplate?.name}</h3>
-                                            {selectedTemplate?.description && (
-                                                <p className="text-sm text-gray-500 mt-1">{selectedTemplate.description}</p>
-                                            )}
-                                            {selectedTemplate?.category && (
-                                                <Badge
-                                                    variant="outline"
-                                                    className={`mt-2 text-xs ${categoryColors[selectedTemplate.category] ?? ''}`}
-                                                >
-                                                    {categoryLabels[selectedTemplate.category] ?? selectedTemplate.category}
-                                                </Badge>
-                                            )}
-                                        </div>
-                                    </div>
-                                    <div className="grid grid-cols-3 gap-3 text-center">
-                                        <div className="bg-gray-50 rounded-lg p-3">
-                                            <p className="text-2xl font-bold text-gray-900">{details.pages.length}</p>
-                                            <p className="text-xs text-gray-500">Pages</p>
-                                        </div>
-                                        <div className="bg-gray-50 rounded-lg p-3">
-                                            <p className="text-2xl font-bold text-gray-900">{details.menus.length}</p>
-                                            <p className="text-xs text-gray-500">Menus</p>
-                                        </div>
-                                        <div className="bg-gray-50 rounded-lg p-3">
-                                            <p className="text-2xl font-bold text-gray-900">
-                                                {details.pages.reduce((sum, p) => sum + p.blocks_count, 0)}
-                                            </p>
-                                            <p className="text-xs text-gray-500">Blocs</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
+                        {loadingDetails ? (
+                            <div className="flex items-center justify-center py-16">
+                                <Loader2 className="h-6 w-6 animate-spin text-gray-400" />
+                            </div>
+                        ) : !details ? (
+                            <p className="text-sm text-red-500 py-8 text-center">
+                                Impossible de charger les details du template.
+                            </p>
+                        ) : (
+                            <>
+                                {step === 1 && <WizardStepSummary template={selectedTemplate} details={details} />}
+                                {step === 2 && (
+                                    <WizardStepTypography
+                                        config={typographyConfig}
+                                        onChange={setTypographyConfig}
+                                        headingColor={headingColor}
+                                        textColor={textColor}
+                                    />
+                                )}
+                                {step === 3 && (
+                                    <WizardStepColors
+                                        primaryColor={primaryColor}
+                                        headingColor={headingColor}
+                                        textColor={textColor}
+                                        onPrimaryChange={setPrimaryColor}
+                                        onHeadingChange={setHeadingColor}
+                                        onTextChange={setTextColor}
+                                    />
+                                )}
+                                {step === 4 && (
+                                    <WizardStepAnimations config={animationConfig} onChange={setAnimationConfig} />
+                                )}
+                                {step === 5 && (
+                                    <WizardStepOptions
+                                        details={details}
+                                        selectedPages={selectedPages}
+                                        installMenus={installMenus}
+                                        installSettings={installSettings}
+                                        installTheme={installTheme}
+                                        overwrite={overwrite}
+                                        includeLegalPages={includeLegalPages}
+                                        onTogglePage={togglePage}
+                                        onSelectAll={selectAllPages}
+                                        onSelectNone={selectNoPages}
+                                        onInstallMenusChange={setInstallMenus}
+                                        onInstallSettingsChange={setInstallSettings}
+                                        onInstallThemeChange={setInstallTheme}
+                                        onOverwriteChange={setOverwrite}
+                                        onIncludeLegalPagesChange={setIncludeLegalPages}
+                                    />
+                                )}
+                            </>
+                        )}
+                    </div>
 
-                            {/* Step 2: Typography */}
-                            {step === 2 && (
-                                <WizardStepTypography
-                                    config={typographyConfig}
-                                    onChange={setTypographyConfig}
-                                    headingColor={headingColor}
-                                    textColor={textColor}
-                                />
-                            )}
-
-                            {/* Step 3: Colors */}
-                            {step === 3 && (
-                                <div className="space-y-5">
-                                    {/* Predefined palettes */}
-                                    <div>
-                                        <Label className="text-sm font-medium mb-2 block">Palettes</Label>
-                                        <div className="flex gap-2">
-                                            {COLOR_PALETTES.map(palette => {
-                                                const isActive = palette.primary === primaryColor && palette.heading === headingColor;
-                                                return (
-                                                    <button
-                                                        key={palette.name}
-                                                        type="button"
-                                                        onClick={() => applyPalette(palette)}
-                                                        className={`flex items-center gap-1.5 px-3 py-2 rounded-lg border text-xs font-medium transition-colors ${
-                                                            isActive
-                                                                ? 'border-indigo-500 bg-indigo-50 text-indigo-700'
-                                                                : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'
-                                                        }`}
-                                                    >
-                                                        <span
-                                                            className="w-4 h-4 rounded-full border border-gray-200"
-                                                            style={{ backgroundColor: palette.primary }}
-                                                        />
-                                                        {palette.name}
-                                                    </button>
-                                                );
-                                            })}
-                                        </div>
-                                    </div>
-
-                                    {/* Custom color pickers */}
-                                    <div className="grid grid-cols-3 gap-4">
-                                        <div>
-                                            <Label htmlFor="primary-color" className="text-sm font-medium mb-1.5 block">
-                                                Couleur principale
-                                            </Label>
-                                            <div className="flex items-center gap-2">
-                                                <input
-                                                    type="color"
-                                                    id="primary-color"
-                                                    value={primaryColor}
-                                                    onChange={e => setPrimaryColor(e.target.value)}
-                                                    className="w-9 h-9 rounded border border-gray-300 cursor-pointer"
-                                                />
-                                                <span className="text-xs text-gray-500 font-mono">{primaryColor}</span>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <Label htmlFor="heading-color" className="text-sm font-medium mb-1.5 block">
-                                                Couleur titres
-                                            </Label>
-                                            <div className="flex items-center gap-2">
-                                                <input
-                                                    type="color"
-                                                    id="heading-color"
-                                                    value={headingColor}
-                                                    onChange={e => setHeadingColor(e.target.value)}
-                                                    className="w-9 h-9 rounded border border-gray-300 cursor-pointer"
-                                                />
-                                                <span className="text-xs text-gray-500 font-mono">{headingColor}</span>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <Label htmlFor="text-color" className="text-sm font-medium mb-1.5 block">
-                                                Couleur texte
-                                            </Label>
-                                            <div className="flex items-center gap-2">
-                                                <input
-                                                    type="color"
-                                                    id="text-color"
-                                                    value={textColor}
-                                                    onChange={e => setTextColor(e.target.value)}
-                                                    className="w-9 h-9 rounded border border-gray-300 cursor-pointer"
-                                                />
-                                                <span className="text-xs text-gray-500 font-mono">{textColor}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* Step 4: Animations */}
-                            {step === 4 && (
-                                <WizardStepAnimations
-                                    config={animationConfig}
-                                    onChange={setAnimationConfig}
-                                />
-                            )}
-
-                            {/* Step 5: Options (pages, menus, settings, legal) */}
-                            {step === 5 && (
-                                <div className="space-y-5">
-                                    {/* Pages selection */}
-                                    <div>
-                                        <div className="flex items-center justify-between mb-3">
-                                            <h3 className="text-sm font-medium text-gray-900">
-                                                Pages ({selectedCount}/{details.pages.length})
-                                            </h3>
-                                            <div className="flex gap-2">
-                                                <button
-                                                    type="button"
-                                                    onClick={selectAllPages}
-                                                    className="text-xs text-blue-600 hover:text-blue-800"
-                                                >
-                                                    Tout
-                                                </button>
-                                                <span className="text-xs text-gray-300">|</span>
-                                                <button
-                                                    type="button"
-                                                    onClick={selectNoPages}
-                                                    className="text-xs text-blue-600 hover:text-blue-800"
-                                                >
-                                                    Aucune
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div className="grid grid-cols-2 gap-2">
-                                            {details.pages.map(page => {
-                                                const isSelected = selectedPages.includes(page.id);
-                                                return (
-                                                    <button
-                                                        key={page.id}
-                                                        type="button"
-                                                        onClick={() => togglePage(page.id)}
-                                                        className={`text-left border rounded-lg p-3 transition-colors ${
-                                                            isSelected
-                                                                ? 'border-blue-500 bg-blue-50'
-                                                                : 'border-gray-200 bg-white hover:border-gray-300'
-                                                        }`}
-                                                    >
-                                                        <div className="flex items-start justify-between">
-                                                            <div className="min-w-0">
-                                                                <p className={`text-sm font-medium truncate ${isSelected ? 'text-blue-900' : 'text-gray-900'}`}>
-                                                                    {page.title}
-                                                                </p>
-                                                                <p className={`text-xs truncate ${isSelected ? 'text-blue-600' : 'text-gray-400'}`}>
-                                                                    /{page.slug}
-                                                                </p>
-                                                                <p className={`text-xs mt-1 ${isSelected ? 'text-blue-500' : 'text-gray-400'}`}>
-                                                                    {page.blocks_count} blocs
-                                                                </p>
-                                                            </div>
-                                                            <div className={`shrink-0 w-4 h-4 rounded border mt-0.5 flex items-center justify-center ${
-                                                                isSelected
-                                                                    ? 'bg-blue-500 border-blue-500'
-                                                                    : 'border-gray-300'
-                                                            }`}>
-                                                                {isSelected && <Check className="h-3 w-3 text-white" />}
-                                                            </div>
-                                                        </div>
-                                                    </button>
-                                                );
-                                            })}
-                                        </div>
-                                    </div>
-
-                                    {/* Toggles */}
-                                    <div className="border-t pt-4 space-y-4">
-                                        {/* Legal pages toggle */}
-                                        <div className="flex items-center justify-between">
-                                            <div>
-                                                <Label htmlFor="legal-pages" className="text-sm">Generer les pages legales</Label>
-                                                <p className="text-xs text-gray-400">
-                                                    Mentions legales, Confidentialite, Cookies
-                                                </p>
-                                            </div>
-                                            <Switch id="legal-pages" checked={includeLegalPages} onCheckedChange={setIncludeLegalPages} />
-                                        </div>
-
-                                        {details.menus.length > 0 && (
-                                            <div className="flex items-center justify-between">
-                                                <div>
-                                                    <Label htmlFor="install-menus" className="text-sm">Importer les menus</Label>
-                                                    <p className="text-xs text-gray-400">
-                                                        {details.menus.map(m => `${m.name} (${m.items_count} items)`).join(', ')}
-                                                    </p>
-                                                </div>
-                                                <Switch id="install-menus" checked={installMenus} onCheckedChange={setInstallMenus} />
-                                            </div>
-                                        )}
-
-                                        {details.has_settings && (
-                                            <div className="flex items-center justify-between">
-                                                <div>
-                                                    <Label htmlFor="install-settings" className="text-sm">Appliquer les parametres</Label>
-                                                    <p className="text-xs text-gray-400">Nom du site, description, etc.</p>
-                                                </div>
-                                                <Switch id="install-settings" checked={installSettings} onCheckedChange={setInstallSettings} />
-                                            </div>
-                                        )}
-
-                                        {details.has_theme_overrides && (
-                                            <div className="flex items-center justify-between">
-                                                <div>
-                                                    <Label htmlFor="install-theme" className="text-sm">Appliquer le theme</Label>
-                                                </div>
-                                                <Switch id="install-theme" checked={installTheme} onCheckedChange={setInstallTheme} />
-                                            </div>
-                                        )}
-
-                                        <div className="flex items-center justify-between">
-                                            <div>
-                                                <Label htmlFor="overwrite" className="text-sm">Remplacer le contenu existant</Label>
-                                                <p className="text-xs text-gray-400">Ecrase les pages/menus avec le meme slug</p>
-                                            </div>
-                                            <Switch id="overwrite" checked={overwrite} onCheckedChange={setOverwrite} />
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-                        </>
-                    )}
-
-                    </div>{/* end scrollable content */}
-
-                    {/* Fixed footer */}
                     <DialogFooter className="flex items-center justify-between sm:justify-between px-6 py-4 border-t border-gray-100 shrink-0">
                         <div>
                             {canGoPrev && (
@@ -662,10 +252,7 @@ export default function TemplatesIndex({ templates }: Props) {
                                 Annuler
                             </Button>
                             {isLastStep ? (
-                                <Button
-                                    onClick={handleInstall}
-                                    disabled={!details || selectedCount === 0}
-                                >
+                                <Button onClick={handleInstall} disabled={!details || selectedCount === 0}>
                                     <Upload className="h-4 w-4 mr-1" />
                                     Installer ({selectedCount})
                                 </Button>

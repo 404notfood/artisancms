@@ -46,14 +46,21 @@ export default function Header({ menu, settings, siteName }: HeaderProps) {
     const name = (settings?.site_name as string) || siteName || 'ArtisanCMS';
 
     return (
-        <header className="sticky top-0 z-50 border-b border-gray-100 bg-[var(--color-background)]/80 backdrop-blur-md">
+        <header className="sticky top-0 z-50 border-b backdrop-blur-md" style={{
+            backgroundColor: 'var(--color-background, #ffffff)',
+            borderColor: 'var(--color-border, #e2e8f0)',
+        }}>
             <div
                 className="mx-auto flex h-16 items-center justify-between px-4"
                 style={{ maxWidth: 'var(--container-width)' }}
             >
                 <Link
                     href="/"
-                    className="font-heading text-xl font-bold text-[var(--color-text)] transition-colors hover:text-[var(--color-primary)]"
+                    className="text-xl font-bold transition-colors hover:text-[var(--color-primary)]"
+                    style={{
+                        fontFamily: 'var(--font-heading)',
+                        color: 'var(--color-text)',
+                    }}
                 >
                     {name}
                 </Link>

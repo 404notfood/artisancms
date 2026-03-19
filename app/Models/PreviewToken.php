@@ -17,9 +17,9 @@ class PreviewToken extends Model
     protected $table = 'cms_preview_tokens';
 
     /**
-     * Disable updated_at (table only has created_at).
+     * Disable updated_at since table only has created_at.
      */
-    public $timestamps = false;
+    public const UPDATED_AT = null;
 
     /**
      * @var list<string>

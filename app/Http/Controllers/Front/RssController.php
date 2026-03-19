@@ -23,20 +23,11 @@ class RssController extends Controller
             ->limit(20)
             ->get();
 
-        $siteName = Setting::get('general.site_name', 'ArtisanCMS');
-        $siteDescription = Setting::get('general.site_description', '');
-        $siteUrl = config('app.url');
-        $language = app()->getLocale();
-
-        return response()
-            ->view('feed.rss', [
-                'siteName' => $siteName,
-                'siteDescription' => $siteDescription,
-                'siteUrl' => $siteUrl,
-                'language' => $language,
-                'posts' => $posts,
-            ])
-            ->header('Content-Type', 'application/rss+xml; charset=UTF-8');
+        return $this->renderFeed(
+            Setting::get('general.site_name', 'ArtisanCMS'),
+            Setting::get('general.site_description', ''),
+            $posts,
+        );
     }
 
     /**
@@ -52,17 +43,24 @@ class RssController extends Controller
             ->limit(20)
             ->get();
 
-        $siteName = Setting::get('general.site_name', 'ArtisanCMS');
-        $siteDescription = Setting::get('general.site_description', '');
-        $siteUrl = config('app.url');
-        $language = app()->getLocale();
+        return $this->renderFeed(
+            Setting::get('general.site_name', 'ArtisanCMS') . ' - ' . $term->name,
+            $term->description ?? Setting::get('general.site_description', ''),
+            $posts,
+        );
+    }
 
+    /**
+     * Render the RSS XML response.
+     */
+    private function renderFeed(string $title, string $description, $posts): Response
+    {
         return response()
             ->view('feed.rss', [
-                'siteName' => $siteName . ' - ' . $term->name,
-                'siteDescription' => $term->description ?? $siteDescription,
-                'siteUrl' => $siteUrl,
-                'language' => $language,
+                'siteName' => $title,
+                'siteDescription' => $description,
+                'siteUrl' => config('app.url'),
+                'language' => app()->getLocale(),
                 'posts' => $posts,
             ])
             ->header('Content-Type', 'application/rss+xml; charset=UTF-8');

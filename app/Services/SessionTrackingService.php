@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Models\UserSession;
+use App\Support\UserAgentParser;
 use Illuminate\Support\Collection;
 use Illuminate\Http\Request;
 
@@ -24,9 +25,9 @@ class SessionTrackingService
                 'user_id' => $userId,
                 'ip_address' => $request->ip(),
                 'user_agent' => $userAgent,
-                'device' => $this->detectDevice($userAgent),
-                'browser' => $this->detectBrowser($userAgent),
-                'os' => $this->detectOS($userAgent),
+                'device' => UserAgentParser::detectDeviceType($userAgent),
+                'browser' => UserAgentParser::detectBrowser($userAgent),
+                'os' => UserAgentParser::detectOS($userAgent),
                 'last_activity' => now(),
             ],
         );
@@ -76,30 +77,4 @@ class SessionTrackingService
             ->delete();
     }
 
-    private function detectDevice(string $ua): string
-    {
-        if (preg_match('/mobile|android|iphone|ipod/i', $ua)) return 'mobile';
-        if (preg_match('/tablet|ipad/i', $ua)) return 'tablet';
-        return 'desktop';
-    }
-
-    private function detectBrowser(string $ua): string
-    {
-        if (str_contains($ua, 'Firefox')) return 'Firefox';
-        if (str_contains($ua, 'Edg')) return 'Edge';
-        if (str_contains($ua, 'Chrome')) return 'Chrome';
-        if (str_contains($ua, 'Safari')) return 'Safari';
-        if (str_contains($ua, 'Opera') || str_contains($ua, 'OPR')) return 'Opera';
-        return 'Unknown';
-    }
-
-    private function detectOS(string $ua): string
-    {
-        if (str_contains($ua, 'Windows')) return 'Windows';
-        if (str_contains($ua, 'Mac OS')) return 'macOS';
-        if (str_contains($ua, 'Linux')) return 'Linux';
-        if (str_contains($ua, 'Android')) return 'Android';
-        if (str_contains($ua, 'iOS') || str_contains($ua, 'iPhone')) return 'iOS';
-        return 'Unknown';
-    }
 }

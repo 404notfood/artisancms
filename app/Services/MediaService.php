@@ -295,24 +295,64 @@ class MediaService
     }
 
     /**
-     * Generate expected thumbnail paths (actual generation can be handled by image optimization plugin).
-     *
-     * @return array<string, string>
+     * Replace a media file keeping the same record.
      */
-    private function generateThumbnailPaths(string $originalPath): array
+    public function replace(Media $media, UploadedFile $file): Media
     {
-        $pathInfo = pathinfo($originalPath);
-        $thumbnails = [];
+        $oldPath = $media->path;
 
-        $sizes = config('cms.media.image_sizes', []);
+        $newPath = $file->storeAs(
+            dirname($oldPath ?: 'media'),
+            $file->hashName(),
+            'public',
+        );
 
-        foreach ($sizes as $sizeName => $dimensions) {
-            $thumbnails[$sizeName] = $pathInfo['dirname']
-                . '/' . $pathInfo['filename']
-                . '-' . $sizeName
-                . '.' . ($pathInfo['extension'] ?? 'jpg');
+        if ($oldPath && Storage::disk('public')->exists($oldPath)) {
+            Storage::disk('public')->delete($oldPath);
         }
 
-        return $thumbnails;
+        $media->update([
+            'path' => $newPath,
+            'filename' => $file->getClientOriginalName(),
+            'mime_type' => $file->getMimeType(),
+            'size' => $file->getSize(),
+        ]);
+
+        CMS::fire('media.replaced', $media);
+
+        return $media->fresh() ?? $media;
     }
+
+    /**
+     * Get media items formatted for the picker (AJAX).
+     *
+     * @param array<string, mixed> $filters
+     * @return \Illuminate\Support\Collection<int, array<string, mixed>>
+     */
+    public function getForPicker(array $filters = []): \Illuminate\Support\Collection
+    {
+        $query = Media::query()->orderByDesc('created_at');
+
+        if (!empty($filters['search'])) {
+            $search = $filters['search'];
+            $query->where(function ($q) use ($search) {
+                $q->where('filename', 'like', "%{$search}%")
+                  ->orWhere('alt_text', 'like', "%{$search}%");
+            });
+        }
+
+        if (!empty($filters['mime_type'])) {
+            $query->where('mime_type', 'like', "{$filters['mime_type']}/%");
+        }
+
+        return $query->limit(40)->get()->map(fn (Media $m) => [
+            'id' => $m->id,
+            'url' => $m->url,
+            'alt' => $m->alt_text ?? '',
+            'filename' => $m->filename,
+            'mime_type' => $m->mime_type,
+            'thumbnail_url' => $m->url,
+        ]);
+    }
+
 }

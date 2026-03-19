@@ -254,7 +254,7 @@
       "primary": {
         "label": "Vert principal",
         "type": "color",
-        "default": "#2d6a2d"
+        "default": "#16a34a"
       },
       "primary_light": {
         "label": "Vert clair",
@@ -264,12 +264,12 @@
       "primary_pale": {
         "label": "Vert très pâle",
         "type": "color",
-        "default": "#f0fdf0"
+        "default": "#f0fdf4"
       },
       "secondary": {
         "label": "Terre / brun chaud",
         "type": "color",
-        "default": "#7c5c3e"
+        "default": "#92400e"
       },
       "secondary_light": {
         "label": "Beige chaud",
@@ -324,12 +324,12 @@
       "link": {
         "label": "Couleur des liens",
         "type": "color",
-        "default": "#2d6a2d"
+        "default": "#16a34a"
       },
       "link_hover": {
         "label": "Liens au survol",
         "type": "color",
-        "default": "#4ade80"
+        "default": "#15803d"
       },
       "success": {
         "label": "Succès",
@@ -601,10 +601,10 @@
     "https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Nunito:wght@300;400;500;600;700&display=swap"
   ],
   "css_variables": {
-    "--color-primary": "#2d6a2d",
+    "--color-primary": "#16a34a",
     "--color-primary-light": "#4ade80",
-    "--color-primary-pale": "#f0fdf0",
-    "--color-secondary": "#7c5c3e",
+    "--color-primary-pale": "#f0fdf4",
+    "--color-secondary": "#92400e",
     "--color-accent": "#8aaa6e",
     "--color-background": "#fafaf7",
     "--color-surface": "#f4f9f0",

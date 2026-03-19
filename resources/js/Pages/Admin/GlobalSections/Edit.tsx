@@ -2,6 +2,8 @@ import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
 import type { GlobalSectionData, BlockNode } from '@/types/cms';
 import { useState } from 'react';
+import StatusBadge from '@/Components/admin/status-badge';
+import { ArrowLeft, Plus, Trash2, ChevronUp, ChevronDown } from 'lucide-react';
 
 interface GlobalSectionsEditProps {
     section: GlobalSectionData;
@@ -88,7 +90,7 @@ export default function GlobalSectionsEdit({ section }: GlobalSectionsEditProps)
             header={
                 <div className="flex items-center gap-4">
                     <Link href="/admin/global-sections" className="text-gray-500 hover:text-gray-700">
-                        <BackIcon />
+                        <ArrowLeft className="h-5 w-5" />
                     </Link>
                     <h1 className="text-xl font-semibold text-gray-900">
                         Modifier la section : {section.name}
@@ -160,7 +162,7 @@ export default function GlobalSectionsEdit({ section }: GlobalSectionsEditProps)
                                 onClick={addBlock}
                                 className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-indigo-700 transition-colors"
                             >
-                                <PlusIcon />
+                                <Plus className="h-4 w-4" />
                                 Ajouter un bloc
                             </button>
                         </div>
@@ -185,7 +187,7 @@ export default function GlobalSectionsEdit({ section }: GlobalSectionsEditProps)
                                                         disabled={index === 0}
                                                         className="text-gray-400 hover:text-gray-600 disabled:opacity-30"
                                                     >
-                                                        <ChevronUpIcon />
+                                                        <ChevronUp className="h-3 w-3" />
                                                     </button>
                                                     <button
                                                         type="button"
@@ -193,7 +195,7 @@ export default function GlobalSectionsEdit({ section }: GlobalSectionsEditProps)
                                                         disabled={index === blocks.length - 1}
                                                         className="text-gray-400 hover:text-gray-600 disabled:opacity-30"
                                                     >
-                                                        <ChevronDownIcon />
+                                                        <ChevronDown className="h-3 w-3" />
                                                     </button>
                                                 </div>
                                                 <span className="text-sm font-medium text-gray-700">
@@ -206,7 +208,7 @@ export default function GlobalSectionsEdit({ section }: GlobalSectionsEditProps)
                                                 className="text-gray-400 hover:text-red-600"
                                                 title="Supprimer"
                                             >
-                                                <TrashIcon />
+                                                <Trash2 className="h-4 w-4" />
                                             </button>
                                         </div>
 
@@ -271,55 +273,4 @@ export default function GlobalSectionsEdit({ section }: GlobalSectionsEditProps)
     );
 }
 
-function StatusBadge({ status }: { status: 'active' | 'inactive' }) {
-    const config = {
-        active: { label: 'Actif', bg: 'bg-emerald-50', text: 'text-emerald-700' },
-        inactive: { label: 'Inactif', bg: 'bg-gray-100', text: 'text-gray-600' },
-    };
-    const c = config[status];
-    return (
-        <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${c.bg} ${c.text}`}>
-            {c.label}
-        </span>
-    );
-}
-
-function BackIcon() {
-    return (
-        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-        </svg>
-    );
-}
-
-function PlusIcon() {
-    return (
-        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-        </svg>
-    );
-}
-
-function TrashIcon() {
-    return (
-        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-        </svg>
-    );
-}
-
-function ChevronUpIcon() {
-    return (
-        <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
-        </svg>
-    );
-}
-
-function ChevronDownIcon() {
-    return (
-        <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-        </svg>
-    );
-}
+// StatusBadge and icons imported from shared modules.

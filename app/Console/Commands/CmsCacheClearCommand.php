@@ -69,7 +69,7 @@ class CmsCacheClearCommand extends Command
 
     protected function clearSettingsCache(): void
     {
-        Cache::forget('cms.settings.all');
+        Cache::forget('cms.settings');
     }
 
     protected function clearThemesCache(): void

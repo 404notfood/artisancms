@@ -18,6 +18,13 @@ class Webhook extends Model
     /**
      * @var list<string>
      */
+    protected $hidden = [
+        'secret',
+    ];
+
+    /**
+     * @var list<string>
+     */
     protected $fillable = [
         'name',
         'url',

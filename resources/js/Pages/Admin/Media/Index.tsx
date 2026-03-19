@@ -1,6 +1,7 @@
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, router } from '@inertiajs/react';
 import { useState, useRef } from 'react';
+import { CloudUpload, FileText, Video, ImageIcon, X } from 'lucide-react';
 import type { MediaData, PaginatedResponse } from '@/types/cms';
 import { MediaFolderTree } from '@/Components/admin/media-folder-tree';
 import { ImageEditor } from '@/Components/admin/image-editor';
@@ -145,7 +146,7 @@ export default function MediaIndex({ media, filters }: MediaIndexProps) {
                             : 'border-gray-300 bg-white hover:border-gray-400'
                     }`}
                 >
-                    <UploadIcon />
+                    <CloudUpload className="h-10 w-10 text-gray-400" />
                     <p className="mt-2 text-sm font-medium text-gray-700">
                         Glissez-déposez vos fichiers ici
                     </p>
@@ -222,7 +223,7 @@ export default function MediaIndex({ media, filters }: MediaIndexProps) {
                     <div className="flex-1">
                         {media.data.length === 0 ? (
                             <div className="rounded-lg border border-gray-200 bg-white py-12 text-center">
-                                <MediaEmptyIcon />
+                                <ImageIcon className="mx-auto h-12 w-12 text-gray-400" />
                                 <p className="mt-2 text-sm text-gray-500">Aucun média trouvé.</p>
                             </div>
                         ) : (
@@ -249,11 +250,11 @@ export default function MediaIndex({ media, filters }: MediaIndexProps) {
                                                 />
                                             ) : isVideo(item.mime_type) ? (
                                                 <div className="flex h-full items-center justify-center">
-                                                    <VideoIcon />
+                                                    <Video className="h-12 w-12 text-gray-400" />
                                                 </div>
                                             ) : (
                                                 <div className="flex h-full items-center justify-center">
-                                                    <FileIcon />
+                                                    <FileText className="h-12 w-12 text-gray-400" />
                                                 </div>
                                             )}
                                         </div>
@@ -311,7 +312,7 @@ export default function MediaIndex({ media, filters }: MediaIndexProps) {
                                     onClick={() => setSidePanel('details')}
                                     className="text-gray-400 hover:text-gray-600"
                                 >
-                                    <CloseIcon />
+                                    <X className="h-4 w-4" />
                                 </button>
                             </div>
                             <StockPhotoSearch
@@ -344,7 +345,7 @@ export default function MediaIndex({ media, filters }: MediaIndexProps) {
                                     onClick={() => setSelectedMedia(null)}
                                     className="text-gray-400 hover:text-gray-600"
                                 >
-                                    <CloseIcon />
+                                    <X className="h-4 w-4" />
                                 </button>
                             </div>
 
@@ -359,7 +360,7 @@ export default function MediaIndex({ media, filters }: MediaIndexProps) {
                                     />
                                 ) : (
                                     <div className="flex h-32 items-center justify-center">
-                                        <FileIcon />
+                                        <FileText className="h-12 w-12 text-gray-400" />
                                     </div>
                                 )}
                             </div>
@@ -431,43 +432,3 @@ export default function MediaIndex({ media, filters }: MediaIndexProps) {
     );
 }
 
-function UploadIcon() {
-    return (
-        <svg className="h-10 w-10 text-gray-400" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
-        </svg>
-    );
-}
-
-function FileIcon() {
-    return (
-        <svg className="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-        </svg>
-    );
-}
-
-function VideoIcon() {
-    return (
-        <svg className="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15.91 11.672a.375.375 0 010 .656l-5.603 3.113a.375.375 0 01-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112z" />
-        </svg>
-    );
-}
-
-function MediaEmptyIcon() {
-    return (
-        <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M2.25 18V6a2.25 2.25 0 012.25-2.25h15A2.25 2.25 0 0121.75 6v12A2.25 2.25 0 0119.5 20.25H4.5A2.25 2.25 0 012.25 18z" />
-        </svg>
-    );
-}
-
-function CloseIcon() {
-    return (
-        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-    );
-}

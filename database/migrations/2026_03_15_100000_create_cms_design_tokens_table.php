@@ -14,14 +14,13 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();
-            $table->enum('category', ['color', 'typography', 'button', 'spacing', 'shadow', 'border']);
+            $table->string('category', 30);
             $table->json('value');
             $table->integer('order')->default(0);
-            $table->unsignedBigInteger('site_id')->nullable();
+            $table->foreignId('site_id')->nullable()->constrained('cms_sites')->nullOnDelete();
             $table->timestamps();
 
             $table->index(['category', 'order']);
-            $table->index('site_id');
         });
     }
 

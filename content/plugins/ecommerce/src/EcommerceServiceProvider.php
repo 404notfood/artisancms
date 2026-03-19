@@ -36,60 +36,26 @@ class EcommerceServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton(ProductService::class, function ($app): ProductService {
-            return new ProductService();
-        });
+        // Services with no constructor dependencies
+        $this->app->singleton(ProductService::class);
+        $this->app->singleton(CartService::class);
+        $this->app->singleton(CouponService::class);
+        $this->app->singleton(PaymentService::class);
+        $this->app->singleton(ShippingService::class);
+        $this->app->singleton(TaxService::class);
+        $this->app->singleton(InvoiceService::class);
+        $this->app->singleton(ReviewService::class);
+        $this->app->singleton(CustomerService::class);
+        $this->app->singleton(WishlistService::class);
+        $this->app->singleton(StockService::class);
+        $this->app->singleton(SalesReportService::class);
 
-        $this->app->singleton(CartService::class, function ($app): CartService {
-            return new CartService();
-        });
-
-        $this->app->singleton(OrderService::class, function ($app): OrderService {
-            return new OrderService(
-                $app->make(CartService::class),
-                $app->make(CouponService::class)
-            );
-        });
-
-        $this->app->singleton(CouponService::class, function ($app): CouponService {
-            return new CouponService();
-        });
-
-        $this->app->singleton(PaymentService::class, function ($app): PaymentService {
-            return new PaymentService();
-        });
-
-        $this->app->singleton(ShippingService::class, function ($app): ShippingService {
-            return new ShippingService();
-        });
-
-        $this->app->singleton(TaxService::class, function ($app): TaxService {
-            return new TaxService();
-        });
-
-        $this->app->singleton(InvoiceService::class, function ($app): InvoiceService {
-            return new InvoiceService();
-        });
-
-        $this->app->singleton(ReviewService::class, function ($app): ReviewService {
-            return new ReviewService();
-        });
-
-        $this->app->singleton(CustomerService::class, function ($app): CustomerService {
-            return new CustomerService();
-        });
-
-        $this->app->singleton(WishlistService::class, function ($app): WishlistService {
-            return new WishlistService();
-        });
-
-        $this->app->singleton(StockService::class, function ($app): StockService {
-            return new StockService();
-        });
-
-        $this->app->singleton(SalesReportService::class, function ($app): SalesReportService {
-            return new SalesReportService();
-        });
+        // OrderService has constructor dependencies
+        $this->app->singleton(OrderService::class, fn ($app) => new OrderService(
+            $app->make(CartService::class),
+            $app->make(CouponService::class),
+            $app->make(StockService::class),
+        ));
     }
 
     /**

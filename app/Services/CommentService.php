@@ -114,6 +114,21 @@ class CommentService
     }
 
     /**
+     * Get comment counts grouped by status.
+     *
+     * @return array<string, int>
+     */
+    public function getStatusCounts(): array
+    {
+        return [
+            'all' => Comment::count(),
+            'pending' => Comment::where('status', 'pending')->count(),
+            'approved' => Comment::where('status', 'approved')->count(),
+            'spam' => Comment::where('status', 'spam')->count(),
+        ];
+    }
+
+    /**
      * Get approved comments for a post, threaded (with replies).
      *
      * @return Collection<int, Comment>

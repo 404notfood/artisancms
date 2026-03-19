@@ -39,6 +39,12 @@ class UserRequest extends FormRequest
             ],
             'role_id' => ['required', 'integer', 'exists:roles,id'],
             'bio' => ['nullable', 'string', 'max:1000'],
+            'profile_visibility' => ['nullable', 'string', Rule::in(['public', 'members_only', 'private'])],
+            'social_links' => ['nullable', 'array'],
+            'social_links.website' => ['nullable', 'url', 'max:255'],
+            'social_links.twitter' => ['nullable', 'url', 'max:255'],
+            'social_links.linkedin' => ['nullable', 'url', 'max:255'],
+            'social_links.github' => ['nullable', 'url', 'max:255'],
         ];
 
         if ($isUpdate) {

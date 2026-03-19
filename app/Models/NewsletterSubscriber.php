@@ -45,13 +45,4 @@ class NewsletterSubscriber extends Model
     {
         return $query->where('status', 'active');
     }
-
-    /**
-     * @param Builder<NewsletterSubscriber> $query
-     * @return Builder<NewsletterSubscriber>
-     */
-    public function scopeSubscribed(Builder $query): Builder
-    {
-        return $query->where('status', 'active');
-    }
 }

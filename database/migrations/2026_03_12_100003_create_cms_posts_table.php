@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->json('content')->nullable();
             $table->text('excerpt')->nullable();
-            $table->string('status')->default('draft');
+            $table->string('status')->default('draft')->index();
             $table->string('featured_image')->nullable();
             $table->foreignId('created_by')->nullable()->constrained('users');
             $table->timestamp('published_at')->nullable();

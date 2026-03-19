@@ -262,7 +262,7 @@
       "accent_neon": {
         "label": "Néon accentuation",
         "type": "color",
-        "default": "#a78bfa"
+        "default": "#c084fc"
       },
       "accent_cyan": {
         "label": "Cyan alternatif",
@@ -583,7 +583,7 @@
   "css_variables": {
     "--color-primary": "#6366f1",
     "--color-primary-hover": "#818cf8",
-    "--color-accent-neon": "#a78bfa",
+    "--color-accent-neon": "#c084fc",
     "--color-background": "#0a0a0a",
     "--color-surface": "#111111",
     "--color-surface-light": "#1a1a1a",

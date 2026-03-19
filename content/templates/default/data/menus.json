@@ -1,0 +1,59 @@
+[
+  {
+    "name": "Menu principal",
+    "location": "header",
+    "items": [
+      {
+        "label": "Accueil",
+        "url": "/",
+        "order": 0
+      },
+      {
+        "label": "Services",
+        "url": "/services",
+        "order": 1
+      },
+      {
+        "label": "A propos",
+        "url": "/a-propos",
+        "order": 2
+      },
+      {
+        "label": "Blog",
+        "url": "/blog",
+        "order": 3
+      },
+      {
+        "label": "Contact",
+        "url": "/contact",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "name": "Menu footer",
+    "location": "footer",
+    "items": [
+      {
+        "label": "Accueil",
+        "url": "/",
+        "order": 0
+      },
+      {
+        "label": "Services",
+        "url": "/services",
+        "order": 1
+      },
+      {
+        "label": "A propos",
+        "url": "/a-propos",
+        "order": 2
+      },
+      {
+        "label": "Contact",
+        "url": "/contact",
+        "order": 3
+      }
+    ]
+  }
+]

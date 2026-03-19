@@ -7,7 +7,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PostRequest;
 use App\Models\Post;
-use App\Models\PreviewToken;
 use App\Models\Revision;
 use App\Services\PostService;
 use App\Services\TaxonomyService;
@@ -115,24 +114,11 @@ class PostController extends Controller
     }
 
     /**
-     * Move a post to trash.
-     */
-    public function trash(Post $post): RedirectResponse
-    {
-        $post->update(['status' => 'trash']);
-
-        return redirect()
-            ->back()
-            ->with('success', __('cms.posts.trashed'));
-    }
-
-    /**
      * Permanently delete a post.
      */
     public function forceDelete(Post $post): RedirectResponse
     {
-        $post->revisions()->delete();
-        $post->forceDelete();
+        $this->postService->forceDelete($post);
 
         return redirect()
             ->back()
@@ -144,12 +130,7 @@ class PostController extends Controller
      */
     public function emptyTrash(): RedirectResponse
     {
-        $trashedPosts = Post::where('status', 'trash')->get();
-
-        foreach ($trashedPosts as $post) {
-            $post->revisions()->delete();
-            $post->forceDelete();
-        }
+        $this->postService->emptyTrash();
 
         return redirect()
             ->back()
@@ -161,12 +142,7 @@ class PostController extends Controller
      */
     public function duplicate(Post $post): RedirectResponse
     {
-        $newPost = $post->replicate(['checked_out_by', 'checked_out_at']);
-        $newPost->title = 'Copie de ' . $post->title;
-        $newPost->slug = $post->slug . '-copy';
-        $newPost->status = 'draft';
-        $newPost->published_at = null;
-        $newPost->save();
+        $newPost = $this->postService->duplicate($post);
 
         return redirect()
             ->route('admin.posts.edit', $newPost)
@@ -271,19 +247,7 @@ class PostController extends Controller
      */
     public function compareRevisions(Post $post, Revision $revision, Revision $compare): JsonResponse
     {
-        $oldData = $compare->data;
-        $newData = $revision->data;
-
-        $changes = [];
-        $allKeys = array_unique(array_merge(array_keys($oldData ?? []), array_keys($newData ?? [])));
-
-        foreach ($allKeys as $key) {
-            $old = $oldData[$key] ?? null;
-            $new = $newData[$key] ?? null;
-            if ($old !== $new) {
-                $changes[$key] = ['old' => $old, 'new' => $new];
-            }
-        }
+        $changes = $this->postService->compareRevisions($revision, $compare);
 
         return response()->json([
             'revision' => $revision,
@@ -312,10 +276,7 @@ class PostController extends Controller
      */
     public function checkout(Post $post): JsonResponse
     {
-        $post->update([
-            'checked_out_by' => auth()->id(),
-            'checked_out_at' => now(),
-        ]);
+        $this->postService->checkout($post, (int) auth()->id());
 
         return response()->json(['success' => true]);
     }
@@ -325,12 +286,7 @@ class PostController extends Controller
      */
     public function checkin(Post $post): JsonResponse
     {
-        if ($post->checked_out_by === auth()->id()) {
-            $post->update([
-                'checked_out_by' => null,
-                'checked_out_at' => null,
-            ]);
-        }
+        $this->postService->checkin($post, (int) auth()->id());
 
         return response()->json(['success' => true]);
     }
@@ -340,14 +296,7 @@ class PostController extends Controller
      */
     public function generatePreview(Post $post): JsonResponse
     {
-        $token = PreviewToken::create([
-            'previewable_type' => Post::class,
-            'previewable_id' => $post->id,
-            'token' => bin2hex(random_bytes(32)),
-            'expires_at' => now()->addHours(48),
-            'created_by' => auth()->id(),
-            'created_at' => now(),
-        ]);
+        $token = $this->postService->generatePreviewToken($post, (int) auth()->id());
 
         return response()->json([
             'url' => route('preview', $token->token),

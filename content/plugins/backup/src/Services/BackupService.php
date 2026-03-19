@@ -6,17 +6,18 @@ namespace Backup\Services;
 
 use App\CMS\Facades\CMS;
 use Backup\Models\Backup;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use RuntimeException;
-use Symfony\Component\Process\ExecutableFinder;
-use Symfony\Component\Process\Process;
 use ZipArchive;
 
 class BackupService
 {
     private const ALLOWED_TYPES = ['full', 'database', 'media'];
+
+    public function __construct(
+        private readonly DatabaseDumper $databaseDumper,
+    ) {}
 
     /**
      * Create a new backup of the given type.
@@ -62,7 +63,7 @@ class BackupService
 
             try {
                 if (in_array($type, ['full', 'database'], true) && ($config['include_database'] ?? true)) {
-                    $this->dumpDatabase($tempDir . '/database.sql');
+                    $this->databaseDumper->dump($tempDir . '/database.sql');
                 }
 
                 if (in_array($type, ['full', 'media'], true) && ($config['include_media'] ?? true)) {
@@ -111,58 +112,6 @@ class BackupService
         return $backup;
     }
 
-    /**
-     * Create a MySQL dump file using mysqldump.
-     *
-     * @throws RuntimeException When the dump fails
-     */
-    public function dumpDatabase(string $path): void
-    {
-        $connection = config('database.default');
-        $dbConfig = config("database.connections.{$connection}");
-
-        if (!$dbConfig || empty($dbConfig['database'])) {
-            throw new RuntimeException("Database connection '{$connection}' is not configured.");
-        }
-
-        $mysqldump = $this->findMysqldumpBinary();
-
-        $args = [
-            $mysqldump,
-            '--host=' . ($dbConfig['host'] ?? '127.0.0.1'),
-            '--port=' . ($dbConfig['port'] ?? '3306'),
-            '--user=' . ($dbConfig['username'] ?? 'root'),
-            '--single-transaction',
-            '--routines',
-            '--triggers',
-            '--add-drop-table',
-            '--result-file=' . str_replace('/', DIRECTORY_SEPARATOR, $path),
-            $dbConfig['database'],
-        ];
-
-        // Pass password via environment variable to avoid exposing it in process list
-        $env = null;
-        $password = $dbConfig['password'] ?? '';
-        if ($password !== '') {
-            $env = array_merge(getenv() ?: [], ['MYSQL_PWD' => $password]);
-        }
-
-        $process = new Process($args, null, $env);
-        $process->setTimeout(300);
-        $process->run();
-
-        if (!$process->isSuccessful()) {
-            $stderr = mb_convert_encoding($process->getErrorOutput(), 'UTF-8', 'UTF-8');
-            throw new RuntimeException(
-                "mysqldump failed (exit {$process->getExitCode()}): {$stderr}"
-            );
-        }
-
-        if (!File::exists($path) || filesize($path) === 0) {
-            throw new RuntimeException('mysqldump produced an empty file.');
-        }
-    }
-
     public function delete(Backup $backup): void
     {
         CMS::fire('backup.deleting', $backup);
@@ -206,8 +155,6 @@ class BackupService
         $monthlyCutoff = now()->subMonths($retention['monthly']);
 
         $deleted = 0;
-
-        // Collect IDs already handled to avoid double-deleting
         $processedIds = [];
 
         // Pass 1: backups older than daily retention but potentially kept as weekly/monthly
@@ -231,7 +178,7 @@ class BackupService
             $processedIds[] = $backup->id;
         }
 
-        // Pass 2: weekly backups that exceeded weekly retention (keep monthly ones)
+        // Pass 2: weekly backups beyond weekly retention (keep monthly ones)
         $weeklyExpired = Backup::completed()
             ->where('created_at', '<', $weeklyCutoff)
             ->whereNotIn('id', $processedIds)
@@ -296,53 +243,6 @@ class BackupService
     // Private helpers
     // -------------------------------------------------------------------------
 
-    /**
-     * Locate the mysqldump binary, checking PATH first then common local dev paths.
-     *
-     * @throws RuntimeException When not found
-     */
-    private function findMysqldumpBinary(): string
-    {
-        $finder = new ExecutableFinder();
-        $found = $finder->find('mysqldump');
-
-        if ($found !== null) {
-            return $found;
-        }
-
-        // Common local dev paths on Windows
-        $patterns = [
-            'C:/laragon/bin/mysql/*/bin/mysqldump.exe',
-            'C:/xampp/mysql/bin/mysqldump.exe',
-            'C:/wamp64/bin/mysql/*/bin/mysqldump.exe',
-        ];
-
-        // Try to detect Laragon from the project path
-        $basePath = base_path();
-        if (preg_match('#([A-Za-z]:[/\\\\].*?[/\\\\]laragon)[/\\\\]#i', $basePath, $m)) {
-            array_unshift($patterns, str_replace('\\', '/', $m[1]) . '/bin/mysql/*/bin/mysqldump.exe');
-        }
-
-        foreach ($patterns as $pattern) {
-            $matches = glob($pattern);
-            if (!$matches) {
-                continue;
-            }
-            foreach ($matches as $candidate) {
-                if (file_exists($candidate)) {
-                    return $candidate;
-                }
-            }
-        }
-
-        throw new RuntimeException(
-            'mysqldump not found. Install MySQL client tools or add them to your PATH.'
-        );
-    }
-
-    /**
-     * Copy media files into a temp directory for archiving.
-     */
     private function copyMedia(string $targetDir): void
     {
         $mediaSource = storage_path('app/public/media');
@@ -380,8 +280,6 @@ class BackupService
     }
 
     /**
-     * Gather system metadata to store alongside the backup record.
-     *
      * @return array<string, mixed>
      */
     private function collectMetadata(string $type, string $checksum, int $duration): array
@@ -399,7 +297,7 @@ class BackupService
         ];
 
         if (in_array($type, ['full', 'database'], true)) {
-            $metadata['tables_count'] = $this->getTableCount();
+            $metadata['tables_count'] = $this->databaseDumper->getTableCount();
         }
 
         if (in_array($type, ['full', 'media'], true)) {
@@ -412,24 +310,5 @@ class BackupService
         }
 
         return $metadata;
-    }
-
-    /**
-     * Get the number of tables in the current database using information_schema
-     * (avoids running COUNT(*) on every table just for metadata).
-     */
-    private function getTableCount(): int
-    {
-        $dbName = config('database.connections.' . config('database.default') . '.database');
-
-        try {
-            $result = DB::selectOne(
-                'SELECT COUNT(*) as cnt FROM information_schema.tables WHERE table_schema = ?',
-                [$dbName]
-            );
-            return (int) ($result->cnt ?? 0);
-        } catch (\Throwable) {
-            return 0;
-        }
     }
 }

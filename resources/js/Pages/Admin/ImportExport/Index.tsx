@@ -70,7 +70,7 @@ export default function ImportExportIndex() {
         formData.append('file', data.file);
         formData.append('format', data.format);
 
-        router.post('/admin/import', formData as any, {
+        router.post('/admin/import', formData, {
             forceFormData: true,
             onSuccess: () => {
                 reset();

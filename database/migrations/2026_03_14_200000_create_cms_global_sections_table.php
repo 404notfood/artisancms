@@ -14,9 +14,9 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();
-            $table->enum('type', ['header', 'footer']);
+            $table->string('type', 20);
             $table->json('content')->nullable();
-            $table->enum('status', ['active', 'inactive'])->default('inactive');
+            $table->string('status', 20)->default('inactive');
             $table->foreignId('site_id')->nullable()->constrained('cms_sites')->nullOnDelete();
             $table->timestamps();
 

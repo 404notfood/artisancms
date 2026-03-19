@@ -8,9 +8,12 @@ interface DefaultLayoutProps {
 
 export default function DefaultLayout({ children, header, footer }: DefaultLayoutProps) {
     return (
-        <div className="min-h-screen flex flex-col" style={{ fontFamily: 'var(--font-body, Inter, sans-serif)' }}>
+        <div className="min-h-screen flex flex-col" style={{ fontFamily: 'var(--font-body, Inter, system-ui, sans-serif)' }}>
             {header && (
-                <header className="sticky top-0 z-50 border-b" style={{ backgroundColor: 'var(--color-background, #ffffff)' }}>
+                <header className="sticky top-0 z-50" style={{
+                    backgroundColor: 'var(--header-background-color, var(--color-background, #ffffff))',
+                    borderBottom: '1px solid var(--color-border, #e2e8f0)',
+                }}>
                     <div className="mx-auto px-4 py-4" style={{ maxWidth: 'var(--container-width, 1280px)' }}>
                         {header}
                     </div>
@@ -24,7 +27,10 @@ export default function DefaultLayout({ children, header, footer }: DefaultLayou
             </main>
 
             {footer && (
-                <footer className="border-t mt-auto" style={{ backgroundColor: 'var(--color-background, #ffffff)' }}>
+                <footer className="mt-auto" style={{
+                    backgroundColor: 'var(--footer-background-color, var(--color-surface, #f8fafc))',
+                    borderTop: '1px solid var(--color-border, #e2e8f0)',
+                }}>
                     <div className="mx-auto px-4 py-6" style={{ maxWidth: 'var(--container-width, 1280px)' }}>
                         {footer}
                     </div>

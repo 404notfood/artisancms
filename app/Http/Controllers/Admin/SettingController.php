@@ -22,7 +22,7 @@ class SettingController extends Controller
      */
     public function index(): Response
     {
-        $groups = ['general', 'seo', 'mail', 'content', 'media', 'maintenance'];
+        $groups = ['general', 'seo', 'mail', 'content', 'media', 'maintenance', 'dashboard'];
 
         $settings = [];
         foreach ($groups as $group) {

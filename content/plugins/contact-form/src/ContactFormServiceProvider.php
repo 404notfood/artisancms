@@ -15,9 +15,7 @@ class ContactFormServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton(FormService::class, function ($app): FormService {
-            return new FormService();
-        });
+        $this->app->singleton(FormService::class);
     }
 
     /**

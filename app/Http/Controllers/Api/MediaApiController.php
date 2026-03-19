@@ -63,19 +63,7 @@ class MediaApiController extends Controller
             $request->input('folder'),
         );
 
-        return $this->created([
-            'id' => $media->id,
-            'filename' => $media->filename,
-            'original_filename' => $media->original_filename,
-            'path' => $media->path,
-            'url' => $media->url,
-            'mime_type' => $media->mime_type,
-            'size' => $media->size,
-            'alt_text' => $media->alt_text,
-            'title' => $media->title,
-            'metadata' => $media->metadata,
-            'thumbnails' => $media->thumbnails,
-        ]);
+        return $this->created(self::formatMediaResponse($media));
     }
 
     /**
@@ -87,20 +75,10 @@ class MediaApiController extends Controller
     {
         $updatedMedia = $this->mediaService->update($media, $request->validated());
 
-        return $this->success([
-            'id' => $updatedMedia->id,
-            'filename' => $updatedMedia->filename,
-            'original_filename' => $updatedMedia->original_filename,
-            'path' => $updatedMedia->path,
-            'url' => $updatedMedia->url,
-            'mime_type' => $updatedMedia->mime_type,
-            'size' => $updatedMedia->size,
-            'alt_text' => $updatedMedia->alt_text,
-            'title' => $updatedMedia->title,
-            'caption' => $updatedMedia->caption,
-            'metadata' => $updatedMedia->metadata,
-            'thumbnails' => $updatedMedia->thumbnails,
-        ], __('cms.media.updated'));
+        $response = self::formatMediaResponse($updatedMedia);
+        $response['caption'] = $updatedMedia->caption;
+
+        return $this->success($response, __('cms.media.updated'));
     }
 
     /**
@@ -113,5 +91,25 @@ class MediaApiController extends Controller
         $this->mediaService->delete($media);
 
         return response()->noContent();
+    }
+
+    /**
+     * Format a Media model into a standard API response array.
+     */
+    private static function formatMediaResponse(Media $media): array
+    {
+        return [
+            'id' => $media->id,
+            'filename' => $media->filename,
+            'original_filename' => $media->original_filename,
+            'path' => $media->path,
+            'url' => $media->url,
+            'mime_type' => $media->mime_type,
+            'size' => $media->size,
+            'alt_text' => $media->alt_text,
+            'title' => $media->title,
+            'metadata' => $media->metadata,
+            'thumbnails' => $media->thumbnails,
+        ];
     }
 }

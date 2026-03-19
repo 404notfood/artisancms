@@ -5,7 +5,7 @@ use App\Http\Controllers\Front\ErrorController;
 use App\Http\Controllers\Front\RssController;
 use App\Http\Controllers\Front\SearchController as FrontSearchController;
 use App\Http\Controllers\FrontController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Front\MemberController;
 use App\Http\Controllers\NewsletterSubscribeController;
 use App\Http\Controllers\PublicCommentController;
 use App\Http\Controllers\SearchController;
@@ -42,9 +42,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile', fn () => redirect('/admin/account'))->name('profile.edit');
 });
 
 require __DIR__.'/auth.php';
@@ -142,10 +140,19 @@ Route::get('/preview/{token}', [FrontController::class, 'preview'])->name('previ
 
 /*
 |--------------------------------------------------------------------------
+| Members (Annuaire & Profil public)
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/members', [MemberController::class, 'index'])->name('members.index');
+Route::get('/members/{user}', [MemberController::class, 'show'])->name('members.show');
+
+/*
+|--------------------------------------------------------------------------
 | Front Catch-All Route (must be LAST)
 |--------------------------------------------------------------------------
 */
 
 Route::get('/{slug}', [FrontController::class, 'show'])
     ->name('front.page')
-    ->where('slug', '(?!admin(?:/|$))(?!api(?:/|$))(?!shop(?:/|$))(?!cart(?:/|$))(?!checkout(?:/|$))(?!payment(?:/|$))(?!account(?:/|$))(?!wishlist(?:/|$))[a-zA-Z0-9\-\/]+');
+    ->where('slug', '(?!admin(?:/|$))(?!api(?:/|$))(?!shop(?:/|$))(?!cart(?:/|$))(?!checkout(?:/|$))(?!payment(?:/|$))(?!account(?:/|$))(?!wishlist(?:/|$))(?!members(?:/|$))[a-zA-Z0-9\-\/]+');

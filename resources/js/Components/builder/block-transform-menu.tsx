@@ -1,4 +1,5 @@
 import { useBuilderStore } from '@/stores/builder-store';
+import { findBlockInTree } from '@/stores/builder-tree-helpers';
 import { ArrowRightLeft } from 'lucide-react';
 
 interface TransformOption {
@@ -24,29 +25,47 @@ interface BlockTransformMenuProps {
     onClose: () => void;
 }
 
+/**
+ * Build the transformed props for a given block type conversion.
+ */
+function buildTransformedProps(
+    fromType: string,
+    toType: string,
+    currentProps: Record<string, unknown>,
+): { type: string; props: Record<string, unknown> } {
+    if (toType === 'gallery' && fromType === 'image') {
+        return {
+            type: toType,
+            props: {
+                images: currentProps.src ? [{ src: currentProps.src, alt: currentProps.alt }] : [],
+            },
+        };
+    }
+    // Default: keep existing props, just change the type
+    return { type: toType, props: currentProps };
+}
+
 export default function BlockTransformMenu({ blockId, blockType, onClose }: BlockTransformMenuProps) {
-    const { findBlock, updateBlock } = useBuilderStore();
     const available = TRANSFORMS.filter((t) => t.from === blockType);
 
     if (available.length === 0) return null;
 
     const handleTransform = (to: string) => {
-        const block = findBlock(blockId);
+        const store = useBuilderStore.getState();
+        const block = store.findBlock(blockId);
         if (!block) return;
 
-        // Keep the content/text props and change the type
-        const store = useBuilderStore.getState();
+        const { type, props } = buildTransformedProps(blockType, to, block.props);
+
         store.pushHistory();
 
+        // Use immer-compatible setState to mutate the block type + props in-place
         useBuilderStore.setState((state) => {
-            const target = findBlockInDraft(state.blocks, blockId);
+            const target = findBlockInTree(state.blocks, blockId);
             if (target) {
-                target.type = to;
-                // Adapt props for the new type
-                if (to === 'gallery' && block.type === 'image') {
-                    target.props = {
-                        images: block.props.src ? [{ src: block.props.src, alt: block.props.alt }] : [],
-                    };
+                target.type = type;
+                if (props !== block.props) {
+                    target.props = props;
                 }
                 state.isDirty = true;
             }
@@ -70,16 +89,4 @@ export default function BlockTransformMenu({ blockId, blockType, onClose }: Bloc
             ))}
         </div>
     );
-}
-
-// Internal helper to find block in immer draft
-function findBlockInDraft(blocks: any[], id: string): any | null {
-    for (const block of blocks) {
-        if (block.id === id) return block;
-        if (block.children?.length) {
-            const found = findBlockInDraft(block.children, id);
-            if (found) return found;
-        }
-    }
-    return null;
 }

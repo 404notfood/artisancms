@@ -5,15 +5,16 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\CMS\Facades\CMS;
-use App\Models\ContentRelation;
 use App\Models\Post;
+use App\Models\PreviewToken;
 use App\Models\Revision;
+use App\Services\Concerns\CreatesRevisions;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 
 class PostService
 {
+    use CreatesRevisions;
     /**
      * Get paginated posts with optional filtering.
      *
@@ -71,7 +72,7 @@ class PostService
 
         $post = Post::create($data);
 
-        $this->createRevision($post, 'auto', 'Post created');
+        $this->createRevision($post, $this->buildPostSnapshot($post), 'auto', 'Post created');
 
         CMS::fire('post.created', $post);
 
@@ -90,7 +91,7 @@ class PostService
         $post->update($data);
 
         if ($contentChanged) {
-            $this->createRevision($post, 'auto', 'Content updated');
+            $this->createRevision($post, $this->buildPostSnapshot($post), 'auto', 'Content updated');
         }
 
         CMS::fire('post.updated', $post);
@@ -151,7 +152,7 @@ class PostService
             'published_at' => now(),
         ]);
 
-        $this->createRevision($post, 'published', 'Post published');
+        $this->createRevision($post, $this->buildPostSnapshot($post), 'published', 'Post published');
 
         CMS::fire('post.published', $post);
 
@@ -182,7 +183,7 @@ class PostService
             'rejection_reason' => null,
         ]);
 
-        $this->createRevision($post, 'workflow', 'Submitted for review');
+        $this->createRevision($post, $this->buildPostSnapshot($post), 'workflow', 'Submitted for review');
 
         CMS::fire('post.submitted_for_review', $post);
 
@@ -201,7 +202,7 @@ class PostService
             'reviewed_at' => now(),
         ]);
 
-        $this->createRevision($post, 'workflow', 'Post approved');
+        $this->createRevision($post, $this->buildPostSnapshot($post), 'workflow', 'Post approved');
 
         CMS::fire('post.approved', $post);
 
@@ -220,11 +221,83 @@ class PostService
             'reviewed_at' => now(),
         ]);
 
-        $this->createRevision($post, 'workflow', 'Post rejected: ' . $reason);
+        $this->createRevision($post, $this->buildPostSnapshot($post), 'workflow', 'Post rejected: ' . $reason);
 
         CMS::fire('post.rejected', $post);
 
         return $post->fresh(['author', 'terms']) ?? $post;
+    }
+
+    /**
+     * Duplicate a post.
+     */
+    public function duplicate(Post $post): Post
+    {
+        $newPost = $post->replicate(['checked_out_by', 'checked_out_at']);
+        $newPost->title = __('cms.posts.copy_prefix') . $post->title;
+        $newPost->slug = $post->slug . '-copy';
+        $newPost->status = 'draft';
+        $newPost->published_at = null;
+        $newPost->save();
+
+        CMS::fire('post.duplicated', $newPost);
+
+        return $newPost;
+    }
+
+    /**
+     * Empty the trash (permanently delete all trashed posts).
+     */
+    public function emptyTrash(): int
+    {
+        $trashedPosts = Post::where('status', 'trash')->get();
+        $count = 0;
+
+        foreach ($trashedPosts as $post) {
+            $this->forceDelete($post);
+            $count++;
+        }
+
+        return $count;
+    }
+
+    /**
+     * Check out a post for editing (acquire content lock).
+     */
+    public function checkout(Post $post, int $userId): void
+    {
+        $post->update([
+            'checked_out_by' => $userId,
+            'checked_out_at' => now(),
+        ]);
+    }
+
+    /**
+     * Check in a post (release content lock).
+     */
+    public function checkin(Post $post, int $userId): void
+    {
+        if ($post->checked_out_by === $userId) {
+            $post->update([
+                'checked_out_by' => null,
+                'checked_out_at' => null,
+            ]);
+        }
+    }
+
+    /**
+     * Generate a shareable preview token for a post.
+     */
+    public function generatePreviewToken(Post $post, int $userId): PreviewToken
+    {
+        return PreviewToken::create([
+            'previewable_type' => Post::class,
+            'previewable_id' => $post->id,
+            'token' => bin2hex(random_bytes(32)),
+            'expires_at' => now()->addHours(48),
+            'created_by' => $userId,
+            'created_at' => now(),
+        ]);
     }
 
     /**
@@ -270,33 +343,19 @@ class PostService
     }
 
     /**
-     * Create a revision for the post.
+     * Build revision snapshot data for a post.
+     *
+     * @return array<string, mixed>
      */
-    private function createRevision(Post $post, string $type = 'auto', string $reason = ''): Revision
+    private function buildPostSnapshot(Post $post): array
     {
-        // Trim old revisions beyond the configured max
-        $maxRevisions = (int) config('cms.revisions.max_per_entity', 30);
-        $existingCount = $post->revisions()->count();
-
-        if ($existingCount >= $maxRevisions) {
-            $post->revisions()
-                ->orderBy('created_at', 'asc')
-                ->limit($existingCount - $maxRevisions + 1)
-                ->delete();
-        }
-
-        return $post->revisions()->create([
-            'data' => [
-                'title' => $post->title,
-                'slug' => $post->slug,
-                'content' => $post->content,
-                'excerpt' => $post->excerpt,
-                'status' => $post->status,
-                'featured_image' => $post->featured_image,
-                'type' => $type,
-            ],
-            'reason' => $reason,
-            'created_by' => Auth::id(),
-        ]);
+        return [
+            'title' => $post->title,
+            'slug' => $post->slug,
+            'content' => $post->content,
+            'excerpt' => $post->excerpt,
+            'status' => $post->status,
+            'featured_image' => $post->featured_image,
+        ];
     }
 }

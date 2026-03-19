@@ -1,0 +1,432 @@
+[
+  {
+    "title": "5 tendances web design a suivre cette annee",
+    "slug": "5-tendances-web-design",
+    "status": "published",
+    "excerpt": "Le web evolue rapidement. Decouvrez les tendances design incontournables pour creer des sites modernes et engageants.",
+    "category": "Design",
+    "tags": ["design", "tendances", "UI/UX"],
+    "author": "admin",
+    "published_at": "2026-03-15",
+    "content": {
+      "blocks": [
+        {
+          "type": "section",
+          "id": "post1-intro",
+          "props": {
+            "backgroundColor": "#ffffff",
+            "paddingTop": 40,
+            "paddingBottom": 40,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 700,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "text",
+              "id": "post1-p1",
+              "props": {
+                "content": "<p style='color:#334155;font-size:1.05rem;line-height:1.8;'>Le design web ne cesse d'evoluer, porte par les nouvelles technologies et les attentes croissantes des utilisateurs. Voici les cinq tendances majeures qui faconnent le web en 2026.</p>"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "post1-sp1",
+              "props": { "height": 24 },
+              "children": []
+            },
+            {
+              "type": "heading",
+              "id": "post1-h1",
+              "props": {
+                "text": "1. Le minimalisme expressif",
+                "level": 2,
+                "alignment": "left",
+                "color": "#0f172a"
+              },
+              "children": []
+            },
+            {
+              "type": "text",
+              "id": "post1-p2",
+              "props": {
+                "content": "<p style='color:#334155;font-size:1.05rem;line-height:1.8;'>Moins de bruit, plus d'impact. Les sites les plus reussis misent sur des mises en page epurees avec une typographie forte et des espaces genereux. Chaque element a sa raison d'etre.</p>"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "post1-sp2",
+              "props": { "height": 24 },
+              "children": []
+            },
+            {
+              "type": "heading",
+              "id": "post1-h2",
+              "props": {
+                "text": "2. Les micro-interactions",
+                "level": 2,
+                "alignment": "left",
+                "color": "#0f172a"
+              },
+              "children": []
+            },
+            {
+              "type": "text",
+              "id": "post1-p3",
+              "props": {
+                "content": "<p style='color:#334155;font-size:1.05rem;line-height:1.8;'>Les petites animations au survol, au clic ou au scroll rendent l'experience plus vivante et engageante. Elles guident l'utilisateur et ajoutent une touche de personnalite.</p>"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "post1-sp3",
+              "props": { "height": 24 },
+              "children": []
+            },
+            {
+              "type": "heading",
+              "id": "post1-h3",
+              "props": {
+                "text": "3. Le dark mode par defaut",
+                "level": 2,
+                "alignment": "left",
+                "color": "#0f172a"
+              },
+              "children": []
+            },
+            {
+              "type": "text",
+              "id": "post1-p4",
+              "props": {
+                "content": "<p style='color:#334155;font-size:1.05rem;line-height:1.8;'>De plus en plus de sites proposent un mode sombre natif. Confort visuel, elegance et economie d'energie sur les ecrans OLED : le dark mode n'est plus une option.</p>"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "post1-sp4",
+              "props": { "height": 24 },
+              "children": []
+            },
+            {
+              "type": "heading",
+              "id": "post1-h4",
+              "props": {
+                "text": "4. La typographie variable",
+                "level": 2,
+                "alignment": "left",
+                "color": "#0f172a"
+              },
+              "children": []
+            },
+            {
+              "type": "text",
+              "id": "post1-p5",
+              "props": {
+                "content": "<p style='color:#334155;font-size:1.05rem;line-height:1.8;'>Les polices variables permettent de jouer avec la graisse, la largeur et le style en un seul fichier. Resultat : des pages plus legeres et des titres plus expressifs.</p>"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "post1-sp5",
+              "props": { "height": 24 },
+              "children": []
+            },
+            {
+              "type": "heading",
+              "id": "post1-h5",
+              "props": {
+                "text": "5. L'IA au service du design",
+                "level": 2,
+                "alignment": "left",
+                "color": "#0f172a"
+              },
+              "children": []
+            },
+            {
+              "type": "text",
+              "id": "post1-p6",
+              "props": {
+                "content": "<p style='color:#334155;font-size:1.05rem;line-height:1.8;'>L'intelligence artificielle assiste les designers dans la generation de layouts, la selection de palettes de couleurs et meme la redaction de contenu. Un outil, pas un remplacement.</p>"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "post1-sp6",
+              "props": { "height": 32 },
+              "children": []
+            },
+            {
+              "type": "blockquote",
+              "id": "post1-quote",
+              "props": {
+                "content": "Le bon design est celui qui semble evident. Il ne force pas l'utilisateur a reflechir.",
+                "citation": "Steve Krug"
+              },
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    "taxonomies": {
+      "categories": ["design"],
+      "tags": ["design", "tendances", "ui-ux"]
+    }
+  },
+  {
+    "title": "Comment choisir le bon CMS pour son projet",
+    "slug": "choisir-bon-cms-projet",
+    "status": "published",
+    "excerpt": "WordPress, Joomla, Strapi ou sur-mesure ? Guide pratique pour choisir le systeme de gestion de contenu adapte a vos besoins.",
+    "category": "Conseils",
+    "tags": ["CMS", "conseils", "technique"],
+    "author": "admin",
+    "published_at": "2026-03-10",
+    "content": {
+      "blocks": [
+        {
+          "type": "section",
+          "id": "post2-content",
+          "props": {
+            "backgroundColor": "#ffffff",
+            "paddingTop": 40,
+            "paddingBottom": 40,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 700,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "text",
+              "id": "post2-p1",
+              "props": {
+                "content": "<p style='color:#334155;font-size:1.05rem;line-height:1.8;'>Le choix d'un CMS est une decision structurante pour votre projet web. Il conditionne la facilite de gestion, les performances et l'evolutivite de votre site. Voici les criteres essentiels a evaluer.</p>"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "post2-sp1",
+              "props": { "height": 24 },
+              "children": []
+            },
+            {
+              "type": "heading",
+              "id": "post2-h1",
+              "props": {
+                "text": "Definir vos besoins",
+                "level": 2,
+                "alignment": "left",
+                "color": "#0f172a"
+              },
+              "children": []
+            },
+            {
+              "type": "text",
+              "id": "post2-p2",
+              "props": {
+                "content": "<p style='color:#334155;font-size:1.05rem;line-height:1.8;'>Avant de comparer les outils, posez-vous les bonnes questions : quel type de contenu allez-vous publier ? Qui va gerer le site au quotidien ? Avez-vous besoin d'un e-commerce ? D'un blog ? D'un espace membre ?</p>"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "post2-sp2",
+              "props": { "height": 24 },
+              "children": []
+            },
+            {
+              "type": "heading",
+              "id": "post2-h2",
+              "props": {
+                "text": "Les criteres cles",
+                "level": 2,
+                "alignment": "left",
+                "color": "#0f172a"
+              },
+              "children": []
+            },
+            {
+              "type": "list",
+              "id": "post2-list",
+              "props": {
+                "items": [
+                  "Facilite d'utilisation pour les non-techniciens",
+                  "Performance et temps de chargement",
+                  "Securite et mises a jour",
+                  "Extensibilite (plugins, API)",
+                  "Qualite du support et de la communaute",
+                  "Cout total de possession (hebergement, maintenance)"
+                ],
+                "style": "unordered"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "post2-sp3",
+              "props": { "height": 24 },
+              "children": []
+            },
+            {
+              "type": "heading",
+              "id": "post2-h3",
+              "props": {
+                "text": "Notre recommandation",
+                "level": 2,
+                "alignment": "left",
+                "color": "#0f172a"
+              },
+              "children": []
+            },
+            {
+              "type": "text",
+              "id": "post2-p3",
+              "props": {
+                "content": "<p style='color:#334155;font-size:1.05rem;line-height:1.8;'>Pour la majorite des projets de sites vitrines et de blogs, un CMS leger et moderne comme ArtisanCMS offre le meilleur equilibre entre simplicite, performances et flexibilite. Pas de surcharge de plugins, pas de failles de securite liees a des extensions tierces.</p>"
+              },
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    "taxonomies": {
+      "categories": ["conseils"],
+      "tags": ["cms", "conseils", "technique"]
+    }
+  },
+  {
+    "title": "L'importance de la performance web en 2026",
+    "slug": "importance-performance-web",
+    "status": "published",
+    "excerpt": "Un site rapide est un site qui convertit. Decouvrez pourquoi la performance web est plus cruciale que jamais et comment l'ameliorer.",
+    "category": "Technique",
+    "tags": ["performance", "SEO", "technique"],
+    "author": "admin",
+    "published_at": "2026-03-05",
+    "content": {
+      "blocks": [
+        {
+          "type": "section",
+          "id": "post3-content",
+          "props": {
+            "backgroundColor": "#ffffff",
+            "paddingTop": 40,
+            "paddingBottom": 40,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 700,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "text",
+              "id": "post3-p1",
+              "props": {
+                "content": "<p style='color:#334155;font-size:1.05rem;line-height:1.8;'>Selon Google, 53% des visiteurs mobiles quittent un site qui met plus de 3 secondes a charger. La performance n'est pas un luxe technique, c'est un imperatif business.</p>"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "post3-sp1",
+              "props": { "height": 24 },
+              "children": []
+            },
+            {
+              "type": "heading",
+              "id": "post3-h1",
+              "props": {
+                "text": "L'impact sur le SEO",
+                "level": 2,
+                "alignment": "left",
+                "color": "#0f172a"
+              },
+              "children": []
+            },
+            {
+              "type": "text",
+              "id": "post3-p2",
+              "props": {
+                "content": "<p style='color:#334155;font-size:1.05rem;line-height:1.8;'>Les Core Web Vitals (LCP, INP, CLS) sont desormais des criteres de classement officiels de Google. Un site performant est un site mieux reference. Les trois metriques cles a surveiller :</p>"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "post3-sp2",
+              "props": { "height": 16 },
+              "children": []
+            },
+            {
+              "type": "list",
+              "id": "post3-list",
+              "props": {
+                "items": [
+                  "LCP (Largest Contentful Paint) : le plus gros element visible doit charger en moins de 2.5 secondes",
+                  "INP (Interaction to Next Paint) : les interactions doivent repondre en moins de 200ms",
+                  "CLS (Cumulative Layout Shift) : les elements de la page ne doivent pas bouger de maniere inattendue"
+                ],
+                "style": "unordered"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "post3-sp3",
+              "props": { "height": 24 },
+              "children": []
+            },
+            {
+              "type": "heading",
+              "id": "post3-h2",
+              "props": {
+                "text": "Les leviers d'optimisation",
+                "level": 2,
+                "alignment": "left",
+                "color": "#0f172a"
+              },
+              "children": []
+            },
+            {
+              "type": "text",
+              "id": "post3-p3",
+              "props": {
+                "content": "<p style='color:#334155;font-size:1.05rem;line-height:1.8;'>Optimiser les images (formats modernes comme WebP, lazy loading), minimiser le CSS et JavaScript, utiliser un CDN, mettre en cache intelligemment, et choisir un hebergement de qualite. Chaque milliseconde compte.</p>"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "post3-sp4",
+              "props": { "height": 24 },
+              "children": []
+            },
+            {
+              "type": "blockquote",
+              "id": "post3-quote",
+              "props": {
+                "content": "La vitesse n'est pas une fonctionnalite, c'est LE fonctionnalite.",
+                "citation": "Tobias Lutke, CEO de Shopify"
+              },
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    "taxonomies": {
+      "categories": ["technique"],
+      "tags": ["performance", "seo", "technique"]
+    }
+  }
+]

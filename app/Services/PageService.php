@@ -5,15 +5,17 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\CMS\Facades\CMS;
-use App\Models\ContentRelation;
 use App\Models\Page;
+use App\Models\PreviewToken;
 use App\Models\Revision;
+use App\Services\Concerns\CreatesRevisions;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class PageService
 {
+    use CreatesRevisions;
     /**
      * Get paginated pages with optional filtering.
      *
@@ -77,7 +79,7 @@ class PageService
 
         $page = Page::create($data);
 
-        $this->createRevision($page, 'auto', 'Page created');
+        $this->createRevision($page, $this->buildPageSnapshot($page), 'auto', 'Page created');
 
         CMS::fire('page.created', $page);
 
@@ -96,7 +98,7 @@ class PageService
         $page->update($data);
 
         if ($contentChanged) {
-            $this->createRevision($page, 'auto', 'Content updated');
+            $this->createRevision($page, $this->buildPageSnapshot($page), 'auto', 'Content updated');
         }
 
         CMS::fire('page.updated', $page);
@@ -120,14 +122,19 @@ class PageService
 
     /**
      * Restore a trashed page (set status back to 'draft').
+     * Handles both status-based trash and SoftDeletes.
      */
     public function restore(Page $page): bool
     {
+        // Restore from SoftDeletes if applicable
         if ($page->trashed()) {
             $page->restore();
         }
 
-        $page->update(['status' => 'draft']);
+        // Reset status from 'trash' to 'draft'
+        if ($page->status === 'trash') {
+            $page->update(['status' => 'draft']);
+        }
 
         CMS::fire('page.restored', $page);
 
@@ -157,7 +164,7 @@ class PageService
             'published_at' => now(),
         ]);
 
-        $this->createRevision($page, 'published', 'Page published');
+        $this->createRevision($page, $this->buildPageSnapshot($page), 'published', 'Page published');
 
         CMS::fire('page.published', $page);
 
@@ -188,7 +195,7 @@ class PageService
             'rejection_reason' => null,
         ]);
 
-        $this->createRevision($page, 'workflow', 'Submitted for review');
+        $this->createRevision($page, $this->buildPageSnapshot($page), 'workflow', 'Submitted for review');
 
         CMS::fire('page.submitted_for_review', $page);
 
@@ -207,7 +214,7 @@ class PageService
             'reviewed_at' => now(),
         ]);
 
-        $this->createRevision($page, 'workflow', 'Page approved');
+        $this->createRevision($page, $this->buildPageSnapshot($page), 'workflow', 'Page approved');
 
         CMS::fire('page.approved', $page);
 
@@ -226,11 +233,99 @@ class PageService
             'reviewed_at' => now(),
         ]);
 
-        $this->createRevision($page, 'workflow', 'Page rejected: ' . $reason);
+        $this->createRevision($page, $this->buildPageSnapshot($page), 'workflow', 'Page rejected: ' . $reason);
 
         CMS::fire('page.rejected', $page);
 
         return $page->fresh(['author', 'parent']) ?? $page;
+    }
+
+    /**
+     * Duplicate a page.
+     */
+    public function duplicate(Page $page): Page
+    {
+        $newPage = $page->replicate(['checked_out_by', 'checked_out_at']);
+        $newPage->title = __('cms.pages.copy_prefix') . $page->title;
+        $newPage->slug = $page->slug . '-copy';
+        $newPage->status = 'draft';
+        $newPage->published_at = null;
+        $newPage->save();
+
+        CMS::fire('page.duplicated', $newPage);
+
+        return $newPage;
+    }
+
+    /**
+     * Empty the trash (permanently delete all trashed pages).
+     */
+    public function emptyTrash(): int
+    {
+        $trashedPages = Page::where('status', 'trash')->get();
+        $count = 0;
+
+        foreach ($trashedPages as $page) {
+            $this->forceDelete($page);
+            $count++;
+        }
+
+        return $count;
+    }
+
+    /**
+     * Check out a page for editing (acquire content lock).
+     */
+    public function checkout(Page $page, int $userId): void
+    {
+        $page->update([
+            'checked_out_by' => $userId,
+            'checked_out_at' => now(),
+        ]);
+    }
+
+    /**
+     * Check in a page (release content lock).
+     */
+    public function checkin(Page $page, int $userId): void
+    {
+        if ($page->checked_out_by === $userId) {
+            $page->update([
+                'checked_out_by' => null,
+                'checked_out_at' => null,
+            ]);
+        }
+    }
+
+    /**
+     * Generate a shareable preview token for a page.
+     */
+    public function generatePreviewToken(Page $page, int $userId): PreviewToken
+    {
+        return PreviewToken::create([
+            'previewable_type' => Page::class,
+            'previewable_id' => $page->id,
+            'token' => bin2hex(random_bytes(32)),
+            'expires_at' => now()->addHours(48),
+            'created_by' => $userId,
+            'created_at' => now(),
+        ]);
+    }
+
+    /**
+     * Get parent page options for dropdowns.
+     *
+     * @return Collection<int, Page>
+     */
+    public function getParentOptions(?int $excludeId = null): Collection
+    {
+        $query = Page::whereNull('parent_id')->orderBy('title');
+
+        if ($excludeId !== null) {
+            $query->where('id', '!=', $excludeId);
+        }
+
+        return $query->get(['id', 'title']);
     }
 
     /**
@@ -276,34 +371,20 @@ class PageService
     }
 
     /**
-     * Create a revision for the page.
+     * Build revision snapshot data for a page.
+     *
+     * @return array<string, mixed>
      */
-    private function createRevision(Page $page, string $type = 'auto', string $reason = ''): Revision
+    private function buildPageSnapshot(Page $page): array
     {
-        // Trim old revisions beyond the configured max
-        $maxRevisions = (int) config('cms.revisions.max_per_entity', 30);
-        $existingCount = $page->revisions()->count();
-
-        if ($existingCount >= $maxRevisions) {
-            $page->revisions()
-                ->orderBy('created_at', 'asc')
-                ->limit($existingCount - $maxRevisions + 1)
-                ->delete();
-        }
-
-        return $page->revisions()->create([
-            'data' => [
-                'title' => $page->title,
-                'slug' => $page->slug,
-                'content' => $page->content,
-                'status' => $page->status,
-                'template' => $page->template,
-                'meta_title' => $page->meta_title,
-                'meta_description' => $page->meta_description,
-                'type' => $type,
-            ],
-            'reason' => $reason,
-            'created_by' => Auth::id(),
-        ]);
+        return [
+            'title' => $page->title,
+            'slug' => $page->slug,
+            'content' => $page->content,
+            'status' => $page->status,
+            'template' => $page->template,
+            'meta_title' => $page->meta_title,
+            'meta_description' => $page->meta_description,
+        ];
     }
 }

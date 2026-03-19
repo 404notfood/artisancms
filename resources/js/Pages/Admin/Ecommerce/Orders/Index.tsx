@@ -2,6 +2,8 @@ import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, Link, router } from '@inertiajs/react';
 import { useState } from 'react';
 import type { OrderData, PaginatedResponse } from '@/types/cms';
+import { formatDate } from '@/lib/format';
+import StatusBadge from '@/Components/admin/status-badge';
 
 interface OrdersIndexProps {
     orders: PaginatedResponse<OrderData>;
@@ -35,16 +37,6 @@ export default function OrdersIndex({ orders, filters }: OrdersIndexProps) {
 
     function formatPrice(price: number): string {
         return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(price);
-    }
-
-    function formatDate(dateStr: string): string {
-        return new Date(dateStr).toLocaleDateString('fr-FR', {
-            day: '2-digit',
-            month: 'short',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-        });
     }
 
     return (
@@ -132,10 +124,10 @@ export default function OrdersIndex({ orders, filters }: OrdersIndexProps) {
                                             {formatPrice(order.total)}
                                         </td>
                                         <td className="px-4 py-3">
-                                            <OrderStatusBadge status={order.status} />
+                                            <StatusBadge status={order.status} />
                                         </td>
                                         <td className="hidden px-4 py-3 md:table-cell">
-                                            <PaymentBadge status={order.payment_status} />
+                                            <StatusBadge status={order.payment_status} />
                                         </td>
                                         <td className="hidden px-4 py-3 text-gray-500 sm:table-cell">
                                             {formatDate(order.created_at)}
@@ -183,46 +175,3 @@ export default function OrdersIndex({ orders, filters }: OrdersIndexProps) {
     );
 }
 
-function OrderStatusBadge({ status }: { status: string }) {
-    const styles: Record<string, string> = {
-        pending: 'bg-yellow-100 text-yellow-800',
-        processing: 'bg-blue-100 text-blue-800',
-        shipped: 'bg-purple-100 text-purple-800',
-        completed: 'bg-green-100 text-green-800',
-        cancelled: 'bg-red-100 text-red-800',
-        refunded: 'bg-gray-100 text-gray-800',
-    };
-    const labels: Record<string, string> = {
-        pending: 'En attente',
-        processing: 'En cours',
-        shipped: 'Expediee',
-        completed: 'Terminee',
-        cancelled: 'Annulee',
-        refunded: 'Remboursee',
-    };
-    return (
-        <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${styles[status] ?? 'bg-gray-100 text-gray-800'}`}>
-            {labels[status] ?? status}
-        </span>
-    );
-}
-
-function PaymentBadge({ status }: { status: string }) {
-    const styles: Record<string, string> = {
-        pending: 'bg-yellow-100 text-yellow-800',
-        paid: 'bg-green-100 text-green-800',
-        failed: 'bg-red-100 text-red-800',
-        refunded: 'bg-gray-100 text-gray-800',
-    };
-    const labels: Record<string, string> = {
-        pending: 'En attente',
-        paid: 'Paye',
-        failed: 'Echoue',
-        refunded: 'Rembourse',
-    };
-    return (
-        <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${styles[status] ?? 'bg-gray-100 text-gray-800'}`}>
-            {labels[status] ?? status}
-        </span>
-    );
-}

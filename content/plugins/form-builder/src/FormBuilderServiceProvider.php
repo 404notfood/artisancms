@@ -16,19 +16,9 @@ class FormBuilderServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton(SpamProtectionService::class, function (): SpamProtectionService {
-            return new SpamProtectionService();
-        });
-
-        $this->app->singleton(FormService::class, function (): FormService {
-            return new FormService();
-        });
-
-        $this->app->singleton(SubmissionService::class, function ($app): SubmissionService {
-            return new SubmissionService(
-                $app->make(SpamProtectionService::class),
-            );
-        });
+        $this->app->singleton(SpamProtectionService::class);
+        $this->app->singleton(FormService::class);
+        $this->app->singleton(SubmissionService::class);
     }
 
     /**

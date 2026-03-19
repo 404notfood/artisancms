@@ -2,6 +2,7 @@ import { useState } from 'react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, router } from '@inertiajs/react';
 import { Mail, Trash2, Eye, Clock, User, AtSign, Inbox } from 'lucide-react';
+import { formatDate } from '@/lib/format';
 
 interface Submission {
     id: number;
@@ -42,16 +43,6 @@ export default function ContactFormSubmissions({ submissions, unreadCount }: Pro
         fetch(`/admin/plugins/contact-form/submissions/${sub.id}`, {
             headers: { Accept: 'application/json' },
         }).catch(() => {});
-    }
-
-    function formatDate(dateStr: string) {
-        return new Date(dateStr).toLocaleDateString('fr-FR', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-        });
     }
 
     return (

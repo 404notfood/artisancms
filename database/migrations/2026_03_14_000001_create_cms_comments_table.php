@@ -26,10 +26,8 @@ return new class extends Migration
             $table->string('user_agent')->nullable();
             $table->timestamps();
 
-            $table->index('post_id');
             $table->index('status');
-            $table->index('parent_id');
-            $table->index('user_id');
+            $table->index(['post_id', 'status']);
         });
     }
 

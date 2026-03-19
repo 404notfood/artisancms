@@ -17,8 +17,6 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->foreignId('site_id')->nullable()->constrained('cms_sites')->nullOnDelete();
             $table->timestamps();
-
-            $table->index('site_id');
         });
 
         Schema::create('cms_widgets', function (Blueprint $table) {

@@ -2,6 +2,8 @@ import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, Link, router } from '@inertiajs/react';
 import { useState } from 'react';
 import type { PaginatedResponse, ProductReviewData } from '@/types/cms';
+import { formatDate } from '@/lib/format';
+import StatusBadge from '@/Components/admin/status-badge';
 
 interface ReviewsIndexProps {
     reviews: PaginatedResponse<ProductReviewData>;
@@ -98,14 +100,6 @@ export default function ReviewsIndex({ reviews, filters, products }: ReviewsInde
     function startReply(review: ProductReviewData) {
         setReplyingId(review.id);
         setReplyText(review.admin_reply ?? '');
-    }
-
-    function formatDate(dateStr: string): string {
-        return new Date(dateStr).toLocaleDateString('fr-FR', {
-            day: '2-digit',
-            month: 'short',
-            year: 'numeric',
-        });
     }
 
     function renderStars(rating: number): string {
@@ -240,7 +234,7 @@ export default function ReviewsIndex({ reviews, filters, products }: ReviewsInde
                                                 {review.title}
                                             </td>
                                             <td className="px-4 py-3">
-                                                <ReviewStatusBadge status={review.status} />
+                                                <StatusBadge status={review.status} />
                                             </td>
                                             <td className="hidden px-4 py-3 text-gray-500 sm:table-cell">
                                                 {formatDate(review.created_at)}
@@ -367,20 +361,3 @@ export default function ReviewsIndex({ reviews, filters, products }: ReviewsInde
     );
 }
 
-function ReviewStatusBadge({ status }: { status: string }) {
-    const styles: Record<string, string> = {
-        pending: 'bg-yellow-100 text-yellow-800',
-        approved: 'bg-green-100 text-green-800',
-        rejected: 'bg-red-100 text-red-800',
-    };
-    const labels: Record<string, string> = {
-        pending: 'En attente',
-        approved: 'Approuve',
-        rejected: 'Rejete',
-    };
-    return (
-        <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${styles[status] ?? 'bg-gray-100 text-gray-800'}`}>
-            {labels[status] ?? status}
-        </span>
-    );
-}

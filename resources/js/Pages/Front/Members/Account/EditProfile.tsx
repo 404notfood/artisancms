@@ -1,5 +1,8 @@
 import { Head, useForm, router } from '@inertiajs/react';
 import { useState } from 'react';
+import type { MenuData } from '@/types/cms';
+import FrontLayout from '@/Layouts/FrontLayout';
+import type { ThemeStyle } from '@/Layouts/Front/theme-helpers';
 
 interface ProfileData {
     display_name: string;
@@ -33,13 +36,19 @@ interface CustomField {
 }
 
 interface EditProfileProps {
+    menus: Record<string, MenuData>;
+    theme: {
+        customizations: Record<string, string | boolean>;
+        layouts: Array<{ slug: string; name: string }>;
+        style?: ThemeStyle;
+    };
     user: { id: number; name: string; email: string };
     profile: ProfileData;
     customFields: CustomField[];
     fieldValues: Record<number, string>;
 }
 
-export default function EditProfile({ user, profile, customFields, fieldValues }: EditProfileProps) {
+export default function EditProfile({ menus, theme, user, profile, customFields, fieldValues }: EditProfileProps) {
     const { data, setData, put, processing, errors } = useForm({
         display_name: profile.display_name || user.name,
         first_name: profile.first_name || '',
@@ -84,17 +93,19 @@ export default function EditProfile({ user, profile, customFields, fieldValues }
         router.post('/members/account/cover', formData);
     }
 
-    const inputClass = 'mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500';
+    const inputClass = 'mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[var(--color-primary,#6366f1)] focus:outline-none focus:ring-1 focus:ring-[var(--color-primary,#6366f1)]';
     const labelClass = 'block text-sm font-medium text-gray-700';
 
     const avatarUrl = avatarPreview || (profile.avatar ? `/storage/${profile.avatar}` : null);
 
     return (
-        <>
+        <FrontLayout menus={menus} theme={theme}>
             <Head title="Modifier mon profil" />
 
             <div className="mx-auto max-w-3xl px-4 py-8">
-                <h1 className="mb-8 text-2xl font-bold text-gray-900">Modifier mon profil</h1>
+                <h1 className="mb-8 text-2xl font-bold text-gray-900" style={{ fontFamily: 'var(--font-heading)' }}>
+                    Modifier mon profil
+                </h1>
 
                 {/* Avatar + Cover */}
                 <div className="mb-8 rounded-xl border border-gray-200 bg-white p-6">
@@ -102,19 +113,19 @@ export default function EditProfile({ user, profile, customFields, fieldValues }
                     <div className="flex items-center gap-6">
                         <div>
                             {avatarUrl ? (
-                                <img src={avatarUrl} alt="Avatar" className="h-20 w-20 rounded-full object-cover" />
+                                <img src={avatarUrl} alt="Avatar" className="h-20 w-20 rounded-full object-cover ring-2 ring-[var(--color-primary,#6366f1)]/20" />
                             ) : (
-                                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-indigo-100 text-2xl font-bold text-indigo-600">
+                                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-[var(--color-primary,#6366f1)]/10 text-2xl font-bold text-[var(--color-primary,#6366f1)]">
                                     {data.display_name.charAt(0).toUpperCase()}
                                 </div>
                             )}
                         </div>
                         <div className="space-y-2">
-                            <label className="inline-flex cursor-pointer items-center rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50">
+                            <label className="inline-flex cursor-pointer items-center rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
                                 Changer la photo
                                 <input type="file" accept="image/jpeg,image/png,image/webp" onChange={handleAvatarUpload} className="hidden" />
                             </label>
-                            <label className="ml-2 inline-flex cursor-pointer items-center rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50">
+                            <label className="ml-2 inline-flex cursor-pointer items-center rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
                                 Couverture
                                 <input type="file" accept="image/jpeg,image/png,image/webp" onChange={handleCoverUpload} className="hidden" />
                             </label>
@@ -209,15 +220,15 @@ export default function EditProfile({ user, profile, customFields, fieldValues }
 
                         <div className="space-y-2">
                             <label className="flex items-center gap-2">
-                                <input type="checkbox" checked={data.show_in_directory} onChange={(e) => setData('show_in_directory', e.target.checked)} className="h-4 w-4 rounded border-gray-300 text-indigo-600" />
+                                <input type="checkbox" checked={data.show_in_directory} onChange={(e) => setData('show_in_directory', e.target.checked)} className="h-4 w-4 rounded border-gray-300 text-[var(--color-primary,#6366f1)]" />
                                 <span className="text-sm text-gray-700">Apparaitre dans l'annuaire</span>
                             </label>
                             <label className="flex items-center gap-2">
-                                <input type="checkbox" checked={data.show_email} onChange={(e) => setData('show_email', e.target.checked)} className="h-4 w-4 rounded border-gray-300 text-indigo-600" />
+                                <input type="checkbox" checked={data.show_email} onChange={(e) => setData('show_email', e.target.checked)} className="h-4 w-4 rounded border-gray-300 text-[var(--color-primary,#6366f1)]" />
                                 <span className="text-sm text-gray-700">Afficher mon email</span>
                             </label>
                             <label className="flex items-center gap-2">
-                                <input type="checkbox" checked={data.show_phone} onChange={(e) => setData('show_phone', e.target.checked)} className="h-4 w-4 rounded border-gray-300 text-indigo-600" />
+                                <input type="checkbox" checked={data.show_phone} onChange={(e) => setData('show_phone', e.target.checked)} className="h-4 w-4 rounded border-gray-300 text-[var(--color-primary,#6366f1)]" />
                                 <span className="text-sm text-gray-700">Afficher mon telephone</span>
                             </label>
                         </div>
@@ -259,7 +270,7 @@ export default function EditProfile({ user, profile, customFields, fieldValues }
                                                 type="checkbox"
                                                 checked={(data.custom_fields as Record<number, string>)[field.id] === '1'}
                                                 onChange={(e) => setData('custom_fields', { ...data.custom_fields, [field.id]: e.target.checked ? '1' : '0' })}
-                                                className="h-4 w-4 rounded border-gray-300 text-indigo-600"
+                                                className="h-4 w-4 rounded border-gray-300 text-[var(--color-primary,#6366f1)]"
                                             />
                                             <span className="text-sm text-gray-600">{field.placeholder || field.name}</span>
                                         </label>
@@ -282,13 +293,13 @@ export default function EditProfile({ user, profile, customFields, fieldValues }
                         <button
                             type="submit"
                             disabled={processing}
-                            className="rounded-lg bg-indigo-600 px-6 py-2.5 text-sm font-medium text-white hover:bg-indigo-700 disabled:opacity-50 transition-colors"
+                            className="rounded-lg bg-[var(--color-primary,#6366f1)] px-6 py-2.5 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50 transition-all"
                         >
                             {processing ? 'Enregistrement...' : 'Enregistrer'}
                         </button>
                     </div>
                 </form>
             </div>
-        </>
+        </FrontLayout>
     );
 }

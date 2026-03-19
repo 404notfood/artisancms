@@ -5,10 +5,18 @@ declare(strict_types=1);
 namespace Seo;
 
 use App\CMS\Facades\CMS;
+use App\CMS\Traits\ReadsPluginSettings;
 use Illuminate\Support\ServiceProvider;
 
 class SeoServiceProvider extends ServiceProvider
 {
+    use ReadsPluginSettings;
+
+    protected function pluginSlug(): string
+    {
+        return 'seo';
+    }
+
     /**
      * Register any plugin services.
      */
@@ -80,33 +88,7 @@ class SeoServiceProvider extends ServiceProvider
                 $jsonLd['dateModified'] = $page->updated_at->toIso8601String();
             }
 
-            // Share the JSON-LD data so the front-end can inject it into <head>
             CMS::fire('seo.jsonld', $jsonLd);
         }, 10);
-    }
-
-    /**
-     * Retrieve a plugin setting value from the CMS plugin record.
-     */
-    private function getPluginSetting(string $key, mixed $default = null): mixed
-    {
-        $plugin = \App\Models\CmsPlugin::where('slug', 'seo')->first();
-
-        if ($plugin === null) {
-            return $default;
-        }
-
-        $settings = $plugin->settings;
-
-        if (!is_array($settings)) {
-            return $default;
-        }
-
-        // Settings may store the schema (with 'default') or direct values
-        if (isset($settings[$key]['default'])) {
-            return $settings[$key]['value'] ?? $settings[$key]['default'] ?? $default;
-        }
-
-        return $settings[$key] ?? $default;
     }
 }

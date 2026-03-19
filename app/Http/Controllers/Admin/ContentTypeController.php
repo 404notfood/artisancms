@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ContentTypeRequest;
 use App\Models\ContentType;
 use App\Services\ContentTypeService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -41,33 +41,13 @@ class ContentTypeController extends Controller
     /**
      * Store a newly created content type.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(ContentTypeRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'slug' => ['required', 'string', 'max:255', 'unique:content_types,slug'],
-            'description' => ['nullable', 'string', 'max:1000'],
-            'icon' => ['nullable', 'string', 'max:50'],
-            'fields' => ['nullable', 'array'],
-            'fields.*.name' => ['required', 'string', 'max:255'],
-            'fields.*.slug' => ['required', 'string', 'max:255'],
-            'fields.*.type' => ['required', 'string', 'in:text,textarea,number,email,url,date,datetime,select,checkbox,radio,file,image,color,wysiwyg'],
-            'fields.*.required' => ['boolean'],
-            'fields.*.placeholder' => ['nullable', 'string', 'max:255'],
-            'fields.*.options' => ['nullable', 'array'],
-            'fields.*.order' => ['integer'],
-            'supports' => ['nullable', 'array'],
-            'supports.*' => ['string', 'in:title,slug,featured_image,excerpt,content,taxonomies,revisions,comments'],
-            'has_archive' => ['boolean'],
-            'public' => ['boolean'],
-            'menu_position' => ['integer', 'min:0'],
-        ]);
-
-        $this->contentTypeService->create($validated);
+        $this->contentTypeService->create($request->validated());
 
         return redirect()
             ->route('admin.content-types.index')
-            ->with('success', 'Type de contenu cree avec succes.');
+            ->with('success', __('cms.content_types.created'));
     }
 
     /**
@@ -83,33 +63,13 @@ class ContentTypeController extends Controller
     /**
      * Update the specified content type.
      */
-    public function update(Request $request, ContentType $contentType): RedirectResponse
+    public function update(ContentTypeRequest $request, ContentType $contentType): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'slug' => ['required', 'string', 'max:255', 'unique:content_types,slug,' . $contentType->id],
-            'description' => ['nullable', 'string', 'max:1000'],
-            'icon' => ['nullable', 'string', 'max:50'],
-            'fields' => ['nullable', 'array'],
-            'fields.*.name' => ['required', 'string', 'max:255'],
-            'fields.*.slug' => ['required', 'string', 'max:255'],
-            'fields.*.type' => ['required', 'string', 'in:text,textarea,number,email,url,date,datetime,select,checkbox,radio,file,image,color,wysiwyg'],
-            'fields.*.required' => ['boolean'],
-            'fields.*.placeholder' => ['nullable', 'string', 'max:255'],
-            'fields.*.options' => ['nullable', 'array'],
-            'fields.*.order' => ['integer'],
-            'supports' => ['nullable', 'array'],
-            'supports.*' => ['string', 'in:title,slug,featured_image,excerpt,content,taxonomies,revisions,comments'],
-            'has_archive' => ['boolean'],
-            'public' => ['boolean'],
-            'menu_position' => ['integer', 'min:0'],
-        ]);
-
-        $this->contentTypeService->update($contentType, $validated);
+        $this->contentTypeService->update($contentType, $request->validated());
 
         return redirect()
             ->route('admin.content-types.index')
-            ->with('success', 'Type de contenu mis a jour.');
+            ->with('success', __('cms.content_types.updated'));
     }
 
     /**
@@ -122,11 +82,11 @@ class ContentTypeController extends Controller
 
             return redirect()
                 ->route('admin.content-types.index')
-                ->with('success', 'Type de contenu supprime.');
-        } catch (\RuntimeException $e) {
+                ->with('success', __('cms.content_types.deleted'));
+        } catch (\RuntimeException) {
             return redirect()
                 ->back()
-                ->with('error', 'Impossible de supprimer ce type : des entrees existent encore.');
+                ->with('error', __('cms.content_types.has_entries'));
         }
     }
 }

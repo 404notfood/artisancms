@@ -15,10 +15,10 @@ return new class extends Migration
             $table->string('name');
             $table->string('title')->nullable();
             $table->text('content')->nullable();
-            $table->enum('type', ['modal', 'banner', 'slide-in'])->default('modal');
-            $table->enum('trigger', ['page_load', 'exit_intent', 'scroll', 'delay'])->default('page_load');
+            $table->string('type', 20)->default('modal');
+            $table->string('trigger', 20)->default('page_load');
             $table->string('trigger_value')->nullable();
-            $table->enum('display_frequency', ['always', 'once', 'once_per_session'])->default('once');
+            $table->string('display_frequency', 20)->default('once');
             $table->json('pages')->nullable();
             $table->string('cta_text')->nullable();
             $table->string('cta_url')->nullable();

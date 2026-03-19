@@ -1,0 +1,1107 @@
+[
+  {
+    "id": "home",
+    "title": "Accueil",
+    "slug": "accueil",
+    "template": "default",
+    "is_homepage": true,
+    "status": "published",
+    "meta_title": "Accueil - Bienvenue sur notre site",
+    "meta_description": "Decouvrez nos services professionnels et notre expertise. Nous accompagnons les entreprises et les particuliers dans leurs projets.",
+    "content": {
+      "blocks": [
+        {
+          "type": "section",
+          "id": "def-home-hero",
+          "props": {
+            "backgroundColor": "#0f172a",
+            "paddingTop": 100,
+            "paddingBottom": 100,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 800,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "text",
+              "id": "def-home-hero-label",
+              "props": {
+                "content": "<p style='text-align:center;color:rgba(255,255,255,0.5);font-size:0.75rem;text-transform:uppercase;letter-spacing:0.2em;margin-bottom:0;'>Bienvenue</p>"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "def-home-hero-sp1",
+              "props": { "height": 16 },
+              "children": []
+            },
+            {
+              "type": "heading",
+              "id": "def-home-hero-title",
+              "props": {
+                "text": "Des solutions sur mesure pour vos projets",
+                "level": 1,
+                "alignment": "center",
+                "color": "#ffffff"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "def-home-hero-sp2",
+              "props": { "height": 20 },
+              "children": []
+            },
+            {
+              "type": "text",
+              "id": "def-home-hero-desc",
+              "props": {
+                "content": "<p style='text-align:center;color:rgba(255,255,255,0.7);font-size:1.125rem;line-height:1.8;max-width:600px;margin:0 auto;'>Nous accompagnons les entreprises et les particuliers dans la realisation de leurs ambitions. Expertise, creativite et rigueur au service de votre reussite.</p>"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "def-home-hero-sp3",
+              "props": { "height": 32 },
+              "children": []
+            },
+            {
+              "type": "button",
+              "id": "def-home-hero-cta",
+              "props": {
+                "text": "Decouvrir nos services",
+                "url": "/services",
+                "style": "primary",
+                "size": "lg"
+              },
+              "children": []
+            }
+          ]
+        },
+        {
+          "type": "section",
+          "id": "def-home-services",
+          "props": {
+            "backgroundColor": "#ffffff",
+            "paddingTop": 80,
+            "paddingBottom": 80,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 1000,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "text",
+              "id": "def-home-svc-label",
+              "props": {
+                "content": "<p style='text-align:center;color:#6366f1;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.2em;font-weight:600;'>Nos services</p>"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "def-home-svc-sp1",
+              "props": { "height": 12 },
+              "children": []
+            },
+            {
+              "type": "heading",
+              "id": "def-home-svc-title",
+              "props": {
+                "text": "Ce que nous faisons",
+                "level": 2,
+                "alignment": "center",
+                "color": "#0f172a"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "def-home-svc-sp2",
+              "props": { "height": 12 },
+              "children": []
+            },
+            {
+              "type": "text",
+              "id": "def-home-svc-desc",
+              "props": {
+                "content": "<p style='text-align:center;color:#64748b;font-size:1rem;line-height:1.7;max-width:600px;margin:0 auto;'>Une gamme complete de services pour repondre a vos besoins. Chaque projet est unique et merite une attention particuliere.</p>"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "def-home-svc-sp3",
+              "props": { "height": 40 },
+              "children": []
+            },
+            {
+              "type": "grid",
+              "id": "def-home-svc-grid",
+              "props": { "columns": 3, "gap": 32 },
+              "children": [
+                {
+                  "type": "text",
+                  "id": "def-home-svc-card1",
+                  "props": {
+                    "content": "<div style='padding:32px;background:#f8fafc;border-radius:12px;text-align:center;'><div style='font-size:2rem;margin-bottom:16px;'>🎯</div><h3 style='font-size:1.125rem;font-weight:600;color:#0f172a;margin-bottom:8px;'>Conseil & Strategie</h3><p style='color:#64748b;font-size:0.875rem;line-height:1.7;'>Nous analysons vos besoins et definissons une strategie adaptee pour atteindre vos objectifs.</p></div>"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "text",
+                  "id": "def-home-svc-card2",
+                  "props": {
+                    "content": "<div style='padding:32px;background:#f8fafc;border-radius:12px;text-align:center;'><div style='font-size:2rem;margin-bottom:16px;'>💻</div><h3 style='font-size:1.125rem;font-weight:600;color:#0f172a;margin-bottom:8px;'>Conception & Design</h3><p style='color:#64748b;font-size:0.875rem;line-height:1.7;'>Des interfaces modernes et intuitives, pensees pour offrir la meilleure experience utilisateur.</p></div>"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "text",
+                  "id": "def-home-svc-card3",
+                  "props": {
+                    "content": "<div style='padding:32px;background:#f8fafc;border-radius:12px;text-align:center;'><div style='font-size:2rem;margin-bottom:16px;'>🚀</div><h3 style='font-size:1.125rem;font-weight:600;color:#0f172a;margin-bottom:8px;'>Developpement & Lancement</h3><p style='color:#64748b;font-size:0.875rem;line-height:1.7;'>De la realisation technique au deploiement, nous assurons chaque etape avec rigueur.</p></div>"
+                  },
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "section",
+          "id": "def-home-about",
+          "props": {
+            "backgroundColor": "#f8fafc",
+            "paddingTop": 80,
+            "paddingBottom": 80,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 900,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "text",
+              "id": "def-home-about-label",
+              "props": {
+                "content": "<p style='text-align:center;color:#6366f1;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.2em;font-weight:600;'>A propos</p>"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "def-home-about-sp1",
+              "props": { "height": 12 },
+              "children": []
+            },
+            {
+              "type": "heading",
+              "id": "def-home-about-title",
+              "props": {
+                "text": "Pourquoi nous choisir ?",
+                "level": 2,
+                "alignment": "center",
+                "color": "#0f172a"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "def-home-about-sp2",
+              "props": { "height": 20 },
+              "children": []
+            },
+            {
+              "type": "text",
+              "id": "def-home-about-desc",
+              "props": {
+                "content": "<p style='text-align:center;color:#64748b;font-size:1.05rem;line-height:1.8;max-width:700px;margin:0 auto;'>Avec plus de 10 ans d'experience, notre equipe combine expertise technique et vision creative. Nous croyons en des partenariats durables, fondes sur la transparence et l'excellence.</p>"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "def-home-about-sp3",
+              "props": { "height": 40 },
+              "children": []
+            },
+            {
+              "type": "counter",
+              "id": "def-home-stats",
+              "props": {
+                "columns": 4,
+                "align": "center",
+                "items": [
+                  { "value": 150, "suffix": "+", "prefix": "", "label": "Projets realises" },
+                  { "value": 50, "suffix": "+", "prefix": "", "label": "Clients satisfaits" },
+                  { "value": 10, "suffix": "", "prefix": "", "label": "Annees d'experience" },
+                  { "value": 5, "suffix": "", "prefix": "", "label": "Experts dedies" }
+                ],
+                "valueColor": "#6366f1",
+                "labelColor": "#64748b"
+              },
+              "children": []
+            }
+          ]
+        },
+        {
+          "type": "section",
+          "id": "def-home-testimonials",
+          "props": {
+            "backgroundColor": "#ffffff",
+            "paddingTop": 80,
+            "paddingBottom": 80,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 1000,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "text",
+              "id": "def-home-testi-label",
+              "props": {
+                "content": "<p style='text-align:center;color:#6366f1;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.2em;font-weight:600;'>Temoignages</p>"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "def-home-testi-sp1",
+              "props": { "height": 12 },
+              "children": []
+            },
+            {
+              "type": "heading",
+              "id": "def-home-testi-title",
+              "props": {
+                "text": "Ce que disent nos clients",
+                "level": 2,
+                "alignment": "center",
+                "color": "#0f172a"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "def-home-testi-sp2",
+              "props": { "height": 40 },
+              "children": []
+            },
+            {
+              "type": "testimonials",
+              "id": "def-home-testi-items",
+              "props": {
+                "items": [
+                  {
+                    "name": "Marie Dupont",
+                    "role": "Directrice",
+                    "company": "Studio Lumiere",
+                    "content": "Un travail remarquable du debut a la fin. L'equipe a su comprendre nos besoins et proposer des solutions innovantes. Je recommande vivement.",
+                    "rating": 5
+                  },
+                  {
+                    "name": "Thomas Martin",
+                    "role": "Fondateur",
+                    "company": "TechVision",
+                    "content": "Professionnalisme et reactivite au rendez-vous. Notre site a ete livre dans les temps avec une qualite irreprochable.",
+                    "rating": 5
+                  },
+                  {
+                    "name": "Sophie Leroy",
+                    "role": "Responsable marketing",
+                    "company": "GreenLeaf",
+                    "content": "Une collaboration fluide et agreable. Les resultats ont depasse nos attentes, avec une augmentation significative de notre visibilite en ligne.",
+                    "rating": 5
+                  }
+                ],
+                "layout": "grid",
+                "columns": 3,
+                "colorScheme": "light"
+              },
+              "children": []
+            }
+          ]
+        },
+        {
+          "type": "section",
+          "id": "def-home-cta",
+          "props": {
+            "backgroundColor": "#6366f1",
+            "paddingTop": 80,
+            "paddingBottom": 80,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 700,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "def-home-cta-title",
+              "props": {
+                "text": "Pret a lancer votre projet ?",
+                "level": 2,
+                "alignment": "center",
+                "color": "#ffffff"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "def-home-cta-sp1",
+              "props": { "height": 16 },
+              "children": []
+            },
+            {
+              "type": "text",
+              "id": "def-home-cta-desc",
+              "props": {
+                "content": "<p style='text-align:center;color:rgba(255,255,255,0.85);font-size:1.05rem;line-height:1.7;'>Contactez-nous des aujourd'hui pour discuter de votre projet. Nous serons ravis de vous accompagner.</p>"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "def-home-cta-sp2",
+              "props": { "height": 28 },
+              "children": []
+            },
+            {
+              "type": "button",
+              "id": "def-home-cta-btn",
+              "props": {
+                "text": "Nous contacter",
+                "url": "/contact",
+                "style": "secondary",
+                "size": "lg"
+              },
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "about",
+    "title": "A propos",
+    "slug": "a-propos",
+    "template": "default",
+    "is_homepage": false,
+    "status": "published",
+    "meta_title": "A propos - Notre histoire et nos valeurs",
+    "meta_description": "Decouvrez notre equipe, notre histoire et les valeurs qui guident notre travail au quotidien.",
+    "content": {
+      "blocks": [
+        {
+          "type": "section",
+          "id": "def-about-hero",
+          "props": {
+            "backgroundColor": "#0f172a",
+            "paddingTop": 80,
+            "paddingBottom": 80,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 700,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "text",
+              "id": "def-about-hero-label",
+              "props": {
+                "content": "<p style='text-align:center;color:rgba(255,255,255,0.5);font-size:0.75rem;text-transform:uppercase;letter-spacing:0.2em;'>Notre histoire</p>"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "def-about-hero-sp1",
+              "props": { "height": 16 },
+              "children": []
+            },
+            {
+              "type": "heading",
+              "id": "def-about-hero-title",
+              "props": {
+                "text": "A propos de nous",
+                "level": 1,
+                "alignment": "center",
+                "color": "#ffffff"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "def-about-hero-sp2",
+              "props": { "height": 16 },
+              "children": []
+            },
+            {
+              "type": "text",
+              "id": "def-about-hero-desc",
+              "props": {
+                "content": "<p style='text-align:center;color:rgba(255,255,255,0.7);font-size:1.05rem;line-height:1.8;'>Fondes en 2015, nous sommes une equipe passionnee par la creation d'experiences digitales exceptionnelles.</p>"
+              },
+              "children": []
+            }
+          ]
+        },
+        {
+          "type": "section",
+          "id": "def-about-story",
+          "props": {
+            "backgroundColor": "#ffffff",
+            "paddingTop": 80,
+            "paddingBottom": 80,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 800,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "def-about-story-title",
+              "props": {
+                "text": "Notre parcours",
+                "level": 2,
+                "alignment": "left",
+                "color": "#0f172a"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "def-about-story-sp1",
+              "props": { "height": 20 },
+              "children": []
+            },
+            {
+              "type": "text",
+              "id": "def-about-story-text",
+              "props": {
+                "content": "<p style='color:#334155;font-size:1.05rem;line-height:1.8;'>Tout a commence avec une idee simple : rendre le digital accessible et performant pour toutes les entreprises. Au fil des annees, nous avons accompagne des dizaines de clients dans leur transformation numerique.</p><p style='color:#334155;font-size:1.05rem;line-height:1.8;margin-top:16px;'>Notre approche repose sur trois piliers : l'ecoute, l'innovation et la qualite. Chaque projet est une nouvelle aventure humaine et technique que nous abordons avec enthousiasme.</p>"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "def-about-story-sp2",
+              "props": { "height": 40 },
+              "children": []
+            },
+            {
+              "type": "timeline",
+              "id": "def-about-timeline",
+              "props": {
+                "style": "left",
+                "lineColor": "#6366f1",
+                "events": [
+                  {
+                    "date": "2015",
+                    "title": "Creation",
+                    "content": "Lancement de notre activite avec une vision claire : l'excellence digitale pour tous."
+                  },
+                  {
+                    "date": "2018",
+                    "title": "Croissance",
+                    "content": "L'equipe s'agrandit et nous franchissons le cap des 50 projets realises."
+                  },
+                  {
+                    "date": "2021",
+                    "title": "Innovation",
+                    "content": "Adoption des dernieres technologies et lancement de notre offre de conseil strategique."
+                  },
+                  {
+                    "date": "2024",
+                    "title": "Aujourd'hui",
+                    "content": "Plus de 150 projets livres et une equipe de 5 experts passionnes."
+                  }
+                ]
+              },
+              "children": []
+            }
+          ]
+        },
+        {
+          "type": "section",
+          "id": "def-about-values",
+          "props": {
+            "backgroundColor": "#f8fafc",
+            "paddingTop": 80,
+            "paddingBottom": 80,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 1000,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "def-about-values-title",
+              "props": {
+                "text": "Nos valeurs",
+                "level": 2,
+                "alignment": "center",
+                "color": "#0f172a"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "def-about-values-sp1",
+              "props": { "height": 40 },
+              "children": []
+            },
+            {
+              "type": "grid",
+              "id": "def-about-values-grid",
+              "props": { "columns": 3, "gap": 32 },
+              "children": [
+                {
+                  "type": "text",
+                  "id": "def-about-val1",
+                  "props": {
+                    "content": "<div style='text-align:center;padding:24px;'><div style='font-size:2.5rem;margin-bottom:16px;'>✨</div><h3 style='font-size:1.125rem;font-weight:600;color:#0f172a;margin-bottom:8px;'>Excellence</h3><p style='color:#64748b;font-size:0.875rem;line-height:1.7;'>Nous visons la perfection dans chaque detail, du design au code.</p></div>"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "text",
+                  "id": "def-about-val2",
+                  "props": {
+                    "content": "<div style='text-align:center;padding:24px;'><div style='font-size:2.5rem;margin-bottom:16px;'>🤝</div><h3 style='font-size:1.125rem;font-weight:600;color:#0f172a;margin-bottom:8px;'>Transparence</h3><p style='color:#64748b;font-size:0.875rem;line-height:1.7;'>Communication ouverte et honnete tout au long du projet.</p></div>"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "text",
+                  "id": "def-about-val3",
+                  "props": {
+                    "content": "<div style='text-align:center;padding:24px;'><div style='font-size:2.5rem;margin-bottom:16px;'>💡</div><h3 style='font-size:1.125rem;font-weight:600;color:#0f172a;margin-bottom:8px;'>Innovation</h3><p style='color:#64748b;font-size:0.875rem;line-height:1.7;'>Toujours a la pointe des technologies et des tendances.</p></div>"
+                  },
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "services",
+    "title": "Services",
+    "slug": "services",
+    "template": "default",
+    "is_homepage": false,
+    "status": "published",
+    "meta_title": "Nos services - Solutions digitales sur mesure",
+    "meta_description": "Decouvrez l'ensemble de nos services : conseil, conception, developpement web et accompagnement digital.",
+    "content": {
+      "blocks": [
+        {
+          "type": "section",
+          "id": "def-svc-hero",
+          "props": {
+            "backgroundColor": "#0f172a",
+            "paddingTop": 80,
+            "paddingBottom": 80,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 700,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "text",
+              "id": "def-svc-hero-label",
+              "props": {
+                "content": "<p style='text-align:center;color:rgba(255,255,255,0.5);font-size:0.75rem;text-transform:uppercase;letter-spacing:0.2em;'>Ce que nous faisons</p>"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "def-svc-hero-sp1",
+              "props": { "height": 16 },
+              "children": []
+            },
+            {
+              "type": "heading",
+              "id": "def-svc-hero-title",
+              "props": {
+                "text": "Nos services",
+                "level": 1,
+                "alignment": "center",
+                "color": "#ffffff"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "def-svc-hero-sp2",
+              "props": { "height": 16 },
+              "children": []
+            },
+            {
+              "type": "text",
+              "id": "def-svc-hero-desc",
+              "props": {
+                "content": "<p style='text-align:center;color:rgba(255,255,255,0.7);font-size:1.05rem;line-height:1.8;'>Des solutions completes pour votre presence en ligne, de la strategie a la mise en oeuvre.</p>"
+              },
+              "children": []
+            }
+          ]
+        },
+        {
+          "type": "section",
+          "id": "def-svc-list",
+          "props": {
+            "backgroundColor": "#ffffff",
+            "paddingTop": 80,
+            "paddingBottom": 80,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 1000,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "grid",
+              "id": "def-svc-grid1",
+              "props": { "columns": 2, "gap": 40 },
+              "children": [
+                {
+                  "type": "text",
+                  "id": "def-svc-item1",
+                  "props": {
+                    "content": "<div style='padding:32px;border:1px solid #e2e8f0;border-radius:12px;'><div style='font-size:2rem;margin-bottom:16px;'>🎯</div><h3 style='font-size:1.25rem;font-weight:600;color:#0f172a;margin-bottom:12px;'>Conseil & Strategie</h3><p style='color:#64748b;font-size:0.9rem;line-height:1.7;'>Audit de votre presence en ligne, definition d'objectifs clairs et elaboration d'une feuille de route pour atteindre vos ambitions.</p></div>"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "text",
+                  "id": "def-svc-item2",
+                  "props": {
+                    "content": "<div style='padding:32px;border:1px solid #e2e8f0;border-radius:12px;'><div style='font-size:2rem;margin-bottom:16px;'>🎨</div><h3 style='font-size:1.25rem;font-weight:600;color:#0f172a;margin-bottom:12px;'>Design UI/UX</h3><p style='color:#64748b;font-size:0.9rem;line-height:1.7;'>Conception d'interfaces intuitives et esthetiques, centrees sur l'experience utilisateur et la conversion.</p></div>"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "text",
+                  "id": "def-svc-item3",
+                  "props": {
+                    "content": "<div style='padding:32px;border:1px solid #e2e8f0;border-radius:12px;'><div style='font-size:2rem;margin-bottom:16px;'>💻</div><h3 style='font-size:1.25rem;font-weight:600;color:#0f172a;margin-bottom:12px;'>Developpement Web</h3><p style='color:#64748b;font-size:0.9rem;line-height:1.7;'>Sites vitrines, applications web et e-commerce. Des solutions techniques robustes et performantes.</p></div>"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "text",
+                  "id": "def-svc-item4",
+                  "props": {
+                    "content": "<div style='padding:32px;border:1px solid #e2e8f0;border-radius:12px;'><div style='font-size:2rem;margin-bottom:16px;'>📱</div><h3 style='font-size:1.25rem;font-weight:600;color:#0f172a;margin-bottom:12px;'>Mobile & Responsive</h3><p style='color:#64748b;font-size:0.9rem;line-height:1.7;'>Des experiences optimisees pour tous les ecrans. Votre site sera parfait sur desktop, tablette et mobile.</p></div>"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "text",
+                  "id": "def-svc-item5",
+                  "props": {
+                    "content": "<div style='padding:32px;border:1px solid #e2e8f0;border-radius:12px;'><div style='font-size:2rem;margin-bottom:16px;'>📈</div><h3 style='font-size:1.25rem;font-weight:600;color:#0f172a;margin-bottom:12px;'>SEO & Referencement</h3><p style='color:#64748b;font-size:0.9rem;line-height:1.7;'>Optimisation pour les moteurs de recherche, audit technique et strategie de contenu pour gagner en visibilite.</p></div>"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "text",
+                  "id": "def-svc-item6",
+                  "props": {
+                    "content": "<div style='padding:32px;border:1px solid #e2e8f0;border-radius:12px;'><div style='font-size:2rem;margin-bottom:16px;'>🛡️</div><h3 style='font-size:1.25rem;font-weight:600;color:#0f172a;margin-bottom:12px;'>Maintenance & Support</h3><p style='color:#64748b;font-size:0.9rem;line-height:1.7;'>Mises a jour, surveillance, sauvegardes et support technique reactif pour garder votre site en pleine forme.</p></div>"
+                  },
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "section",
+          "id": "def-svc-process",
+          "props": {
+            "backgroundColor": "#f8fafc",
+            "paddingTop": 80,
+            "paddingBottom": 80,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 800,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "def-svc-process-title",
+              "props": {
+                "text": "Notre processus",
+                "level": 2,
+                "alignment": "center",
+                "color": "#0f172a"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "def-svc-process-sp1",
+              "props": { "height": 12 },
+              "children": []
+            },
+            {
+              "type": "text",
+              "id": "def-svc-process-desc",
+              "props": {
+                "content": "<p style='text-align:center;color:#64748b;font-size:1rem;line-height:1.7;'>Une methode eprouvee en 4 etapes pour garantir le succes de votre projet.</p>"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "def-svc-process-sp2",
+              "props": { "height": 40 },
+              "children": []
+            },
+            {
+              "type": "timeline",
+              "id": "def-svc-timeline",
+              "props": {
+                "style": "left",
+                "lineColor": "#6366f1",
+                "events": [
+                  {
+                    "date": "Etape 1",
+                    "title": "Decouverte",
+                    "content": "Nous ecoutons vos besoins, analysons votre marche et definissons les objectifs du projet."
+                  },
+                  {
+                    "date": "Etape 2",
+                    "title": "Conception",
+                    "content": "Maquettes, prototypes et validation du design avant de passer au developpement."
+                  },
+                  {
+                    "date": "Etape 3",
+                    "title": "Realisation",
+                    "content": "Developpement iteratif avec des points reguliers pour valider chaque fonctionnalite."
+                  },
+                  {
+                    "date": "Etape 4",
+                    "title": "Lancement",
+                    "content": "Tests, optimisation, deploiement et formation pour une prise en main en toute serenite."
+                  }
+                ]
+              },
+              "children": []
+            }
+          ]
+        },
+        {
+          "type": "section",
+          "id": "def-svc-cta",
+          "props": {
+            "backgroundColor": "#6366f1",
+            "paddingTop": 60,
+            "paddingBottom": 60,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 600,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "def-svc-cta-title",
+              "props": {
+                "text": "Un projet en tete ?",
+                "level": 2,
+                "alignment": "center",
+                "color": "#ffffff"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "def-svc-cta-sp1",
+              "props": { "height": 16 },
+              "children": []
+            },
+            {
+              "type": "text",
+              "id": "def-svc-cta-desc",
+              "props": {
+                "content": "<p style='text-align:center;color:rgba(255,255,255,0.85);font-size:1rem;line-height:1.7;'>Discutons ensemble de votre projet. Premier rendez-vous gratuit et sans engagement.</p>"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "def-svc-cta-sp2",
+              "props": { "height": 24 },
+              "children": []
+            },
+            {
+              "type": "button",
+              "id": "def-svc-cta-btn",
+              "props": {
+                "text": "Demander un devis",
+                "url": "/contact",
+                "style": "secondary",
+                "size": "lg"
+              },
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "blog",
+    "title": "Blog",
+    "slug": "blog",
+    "template": "default",
+    "is_homepage": false,
+    "status": "published",
+    "meta_title": "Blog - Actualites et conseils",
+    "meta_description": "Retrouvez nos articles, conseils et actualites sur le digital, le design et le developpement web.",
+    "content": {
+      "blocks": [
+        {
+          "type": "section",
+          "id": "def-blog-hero",
+          "props": {
+            "backgroundColor": "#0f172a",
+            "paddingTop": 80,
+            "paddingBottom": 80,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 700,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "def-blog-hero-title",
+              "props": {
+                "text": "Notre blog",
+                "level": 1,
+                "alignment": "center",
+                "color": "#ffffff"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "def-blog-hero-sp1",
+              "props": { "height": 16 },
+              "children": []
+            },
+            {
+              "type": "text",
+              "id": "def-blog-hero-desc",
+              "props": {
+                "content": "<p style='text-align:center;color:rgba(255,255,255,0.7);font-size:1.05rem;line-height:1.8;'>Conseils, actualites et retours d'experience sur le monde du digital.</p>"
+              },
+              "children": []
+            }
+          ]
+        },
+        {
+          "type": "section",
+          "id": "def-blog-content",
+          "props": {
+            "backgroundColor": "#ffffff",
+            "paddingTop": 60,
+            "paddingBottom": 60,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 800,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "text",
+              "id": "def-blog-info",
+              "props": {
+                "content": "<p style='text-align:center;color:#64748b;font-size:1rem;line-height:1.7;'>Les derniers articles s'afficheront automatiquement ici. Vous pouvez gerer vos articles depuis l'espace d'administration dans la section <strong>Articles</strong>.</p>"
+              },
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "contact",
+    "title": "Contact",
+    "slug": "contact",
+    "template": "default",
+    "is_homepage": false,
+    "status": "published",
+    "meta_title": "Contact - Parlons de votre projet",
+    "meta_description": "Contactez-nous pour discuter de votre projet. Nous vous repondrons dans les 24 heures.",
+    "content": {
+      "blocks": [
+        {
+          "type": "section",
+          "id": "def-contact-hero",
+          "props": {
+            "backgroundColor": "#0f172a",
+            "paddingTop": 80,
+            "paddingBottom": 80,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 700,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "def-contact-hero-title",
+              "props": {
+                "text": "Contactez-nous",
+                "level": 1,
+                "alignment": "center",
+                "color": "#ffffff"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "def-contact-hero-sp1",
+              "props": { "height": 16 },
+              "children": []
+            },
+            {
+              "type": "text",
+              "id": "def-contact-hero-desc",
+              "props": {
+                "content": "<p style='text-align:center;color:rgba(255,255,255,0.7);font-size:1.05rem;line-height:1.8;'>Nous serions ravis d'echanger avec vous. N'hesitez pas a nous ecrire.</p>"
+              },
+              "children": []
+            }
+          ]
+        },
+        {
+          "type": "section",
+          "id": "def-contact-info",
+          "props": {
+            "backgroundColor": "#ffffff",
+            "paddingTop": 80,
+            "paddingBottom": 80,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 1000,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "grid",
+              "id": "def-contact-grid",
+              "props": { "columns": 3, "gap": 32 },
+              "children": [
+                {
+                  "type": "text",
+                  "id": "def-contact-email",
+                  "props": {
+                    "content": "<div style='text-align:center;padding:32px;background:#f8fafc;border-radius:12px;'><div style='font-size:2rem;margin-bottom:12px;'>✉️</div><h3 style='font-size:1rem;font-weight:600;color:#0f172a;margin-bottom:8px;'>Email</h3><p style='color:#6366f1;font-size:0.9rem;'>contact@monsite.com</p></div>"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "text",
+                  "id": "def-contact-phone",
+                  "props": {
+                    "content": "<div style='text-align:center;padding:32px;background:#f8fafc;border-radius:12px;'><div style='font-size:2rem;margin-bottom:12px;'>📞</div><h3 style='font-size:1rem;font-weight:600;color:#0f172a;margin-bottom:8px;'>Telephone</h3><p style='color:#6366f1;font-size:0.9rem;'>+33 1 23 45 67 89</p></div>"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "text",
+                  "id": "def-contact-address",
+                  "props": {
+                    "content": "<div style='text-align:center;padding:32px;background:#f8fafc;border-radius:12px;'><div style='font-size:2rem;margin-bottom:12px;'>📍</div><h3 style='font-size:1rem;font-weight:600;color:#0f172a;margin-bottom:8px;'>Adresse</h3><p style='color:#6366f1;font-size:0.9rem;'>12 rue de la Paix<br>75002 Paris</p></div>"
+                  },
+                  "children": []
+                }
+              ]
+            },
+            {
+              "type": "spacer",
+              "id": "def-contact-sp1",
+              "props": { "height": 48 },
+              "children": []
+            },
+            {
+              "type": "heading",
+              "id": "def-contact-form-title",
+              "props": {
+                "text": "Envoyez-nous un message",
+                "level": 2,
+                "alignment": "center",
+                "color": "#0f172a"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "def-contact-sp2",
+              "props": { "height": 12 },
+              "children": []
+            },
+            {
+              "type": "text",
+              "id": "def-contact-form-desc",
+              "props": {
+                "content": "<p style='text-align:center;color:#64748b;font-size:1rem;line-height:1.7;max-width:500px;margin:0 auto;'>Remplissez le formulaire ci-dessous et nous vous repondrons dans les meilleurs delais. Vous pouvez aussi installer le plugin <strong>Form Builder</strong> pour creer un formulaire de contact interactif.</p>"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "def-contact-sp3",
+              "props": { "height": 32 },
+              "children": []
+            },
+            {
+              "type": "accordion",
+              "id": "def-contact-faq",
+              "props": {
+                "items": [
+                  {
+                    "title": "Quel est le delai de reponse ?",
+                    "content": "Nous nous engageons a repondre a toutes les demandes dans un delai de 24 heures ouvrables."
+                  },
+                  {
+                    "title": "Proposez-vous un premier rendez-vous gratuit ?",
+                    "content": "Oui, le premier echange de 30 minutes est gratuit et sans engagement. C'est l'occasion de discuter de votre projet et de voir si nous pouvons vous aider."
+                  },
+                  {
+                    "title": "Travaillez-vous avec des clients a distance ?",
+                    "content": "Absolument. Nous travaillons avec des clients partout en France et a l'international, grace a nos outils de collaboration en ligne."
+                  }
+                ],
+                "style": "default"
+              },
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

@@ -1,4 +1,7 @@
 import { Head, Link, router } from '@inertiajs/react';
+import type { MenuData } from '@/types/cms';
+import FrontLayout from '@/Layouts/FrontLayout';
+import type { ThemeStyle } from '@/Layouts/Front/theme-helpers';
 
 interface PlanData {
     id: number;
@@ -20,6 +23,12 @@ interface MembershipData {
 }
 
 interface MembershipProps {
+    menus: Record<string, MenuData>;
+    theme: {
+        customizations: Record<string, string | boolean>;
+        layouts: Array<{ slug: string; name: string }>;
+        style?: ThemeStyle;
+    };
     membership: MembershipData | null;
     plans: PlanData[];
 }
@@ -40,18 +49,20 @@ const STATUS_COLORS: Record<string, string> = {
     pending: 'bg-yellow-100 text-yellow-700',
 };
 
-export default function Membership({ membership, plans }: MembershipProps) {
+export default function Membership({ menus, theme, membership, plans }: MembershipProps) {
     function handleCancel() {
         if (!confirm('Annuler votre abonnement ?')) return;
         router.post('/members/membership/cancel');
     }
 
     return (
-        <>
+        <FrontLayout menus={menus} theme={theme}>
             <Head title="Mon abonnement" />
 
             <div className="mx-auto max-w-2xl px-4 py-8">
-                <h1 className="mb-8 text-2xl font-bold text-gray-900">Mon abonnement</h1>
+                <h1 className="mb-8 text-2xl font-bold text-gray-900" style={{ fontFamily: 'var(--font-heading)' }}>
+                    Mon abonnement
+                </h1>
 
                 {membership ? (
                     <div className="rounded-xl border border-gray-200 bg-white p-6 space-y-4">
@@ -118,13 +129,13 @@ export default function Membership({ membership, plans }: MembershipProps) {
                         <p className="mb-4 text-gray-500">Vous n'avez pas d'abonnement actif.</p>
                         <Link
                             href="/members/plans"
-                            className="inline-flex rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-indigo-700"
+                            className="inline-flex rounded-lg bg-[var(--color-primary,#6366f1)] px-5 py-2.5 text-sm font-medium text-white hover:opacity-90 transition-all"
                         >
                             Voir les offres
                         </Link>
                     </div>
                 )}
             </div>
-        </>
+        </FrontLayout>
     );
 }

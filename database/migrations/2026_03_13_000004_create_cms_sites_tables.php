@@ -26,8 +26,6 @@ return new class extends Migration
             $table->timestamp('expires_at')->nullable();
             $table->timestamps();
 
-            $table->index('domain');
-            $table->index('subdomain');
             $table->index('is_active');
         });
 

@@ -1,0 +1,24 @@
+{
+  "name": "Site vitrine",
+  "slug": "default",
+  "version": "1.0.0",
+  "category": "business",
+  "description": "Template polyvalent pour site vitrine professionnel. Inclut une page d'accueil moderne, une page A propos, Services, Blog et Contact. Parfait pour les freelances, agences et PME.",
+  "author": "ArtisanCMS",
+  "preview": "assets/images/preview.png",
+  "tags": ["vitrine", "business", "professionnel", "polyvalent", "starter"],
+  "requires": {
+    "cms": ">=1.0.0",
+    "theme": "default"
+  },
+  "compatible_themes": ["default", "lumiere", "noir"],
+  "suggested_theme": "default",
+  "pages_count": 5,
+  "posts_count": 3,
+  "data_files": {
+    "pages": "data/pages.json",
+    "posts": "data/posts.json",
+    "menus": "data/menus.json",
+    "settings": "data/settings.json"
+  }
+}

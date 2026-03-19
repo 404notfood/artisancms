@@ -104,23 +104,7 @@ class TemplateController extends Controller
             $report = $this->templateService->install(
                 $slug,
                 (int) $request->user()->id,
-                [
-                    'overwrite' => $validated['overwrite'] ?? false,
-                    'pages' => $validated['pages'] ?? null,
-                    'install_menus' => $validated['install_menus'] ?? true,
-                    'install_settings' => $validated['install_settings'] ?? true,
-                    'install_theme' => $validated['install_theme'] ?? true,
-                    'heading_font' => $validated['heading_font'] ?? null,
-                    'body_font' => $validated['body_font'] ?? null,
-                    'primary_color' => $validated['primary_color'] ?? null,
-                    'heading_color' => $validated['heading_color'] ?? null,
-                    'text_color' => $validated['text_color'] ?? null,
-                    'include_legal_pages' => $validated['include_legal_pages'] ?? false,
-                    'typography_preset' => $validated['typography_preset'] ?? null,
-                    'typography_config' => $validated['typography_config'] ?? null,
-                    'animation_preset' => $validated['animation_preset'] ?? null,
-                    'animation_config' => $validated['animation_config'] ?? null,
-                ],
+                $validated,
             );
 
             return redirect()

@@ -11,6 +11,7 @@ use App\Models\Role;
 use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -28,15 +29,6 @@ class InstallerService
         'directories' => ['label' => 'Création des dossiers', 'weight' => 5],
         'finalize'    => ['label' => 'Finalisation', 'weight' => 10],
     ];
-
-    private array $log = [];
-    private ?\Closure $progressCallback = null;
-
-    public function onProgress(\Closure $callback): self
-    {
-        $this->progressCallback = $callback;
-        return $this;
-    }
 
     public function runStep(string $stepName, array $config): array
     {
@@ -128,8 +120,8 @@ class InstallerService
             config('database.connections.mysql'),
             $dbConfig,
         )]);
-        \Illuminate\Support\Facades\DB::purge('mysql');
-        \Illuminate\Support\Facades\DB::reconnect('mysql');
+        DB::purge('mysql');
+        DB::reconnect('mysql');
 
         Artisan::call('migrate', ['--force' => true]);
     }
@@ -171,24 +163,6 @@ class InstallerService
         }
 
         return ['success' => true, 'message' => 'Installation terminée.'];
-    }
-
-    private function step(string $name, \Closure $action): void
-    {
-        $stepConfig = self::STEPS[$name];
-        $this->log[] = "▶ {$stepConfig['label']}...";
-
-        if ($this->progressCallback) {
-            ($this->progressCallback)($name, 'running', $stepConfig['label']);
-        }
-
-        $action();
-
-        $this->log[] = "✅ {$stepConfig['label']} terminé.";
-
-        if ($this->progressCallback) {
-            ($this->progressCallback)($name, 'completed', $stepConfig['label']);
-        }
     }
 
     private function seedRoles(): void
@@ -409,28 +383,6 @@ class InstallerService
             if (!is_dir($dir)) {
                 mkdir($dir, 0755, true);
             }
-        }
-    }
-
-    private function updateEnv(string $key, string $value): void
-    {
-        $envPath = base_path('.env');
-        $envContent = file_get_contents($envPath);
-        $escapedValue = str_contains($value, ' ') ? "\"{$value}\"" : $value;
-
-        if (preg_match("/^{$key}=.*/m", $envContent)) {
-            $envContent = preg_replace("/^{$key}=.*/m", "{$key}={$escapedValue}", $envContent);
-        } else {
-            $envContent .= "\n{$key}={$escapedValue}";
-        }
-
-        $tmpPath = $envPath . '.tmp';
-        file_put_contents($tmpPath, $envContent);
-        if (DIRECTORY_SEPARATOR === '\\') {
-            copy($tmpPath, $envPath);
-            @unlink($tmpPath);
-        } else {
-            rename($tmpPath, $envPath);
         }
     }
 }

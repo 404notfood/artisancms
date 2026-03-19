@@ -8,8 +8,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CustomFieldGroupRequest;
 use App\Models\CustomField;
 use App\Models\CustomFieldGroup;
-use App\Models\Page;
-use App\Models\Post;
 use App\Services\CustomFieldService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -103,30 +101,16 @@ class CustomFieldController extends Controller
      */
     public function apiValues(Request $request): JsonResponse
     {
-        $request->validate([
+        $validated = $request->validate([
             'entity_type' => ['required', 'string', 'in:page,post'],
             'entity_id'   => ['required', 'integer'],
         ]);
 
-        $entityType = $request->input('entity_type');
-        $entityId   = (int) $request->input('entity_id');
+        $result = $this->customFieldService->getFieldsAndValuesForEntity(
+            $validated['entity_type'],
+            (int) $validated['entity_id'],
+        );
 
-        $entity = match ($entityType) {
-            'page' => Page::findOrFail($entityId),
-            'post' => Post::findOrFail($entityId),
-        };
-
-        $template = null;
-        if ($entityType === 'page' && !empty($entity->template)) {
-            $template = $entity->template;
-        }
-
-        $groups = $this->customFieldService->getGroupsForEntity($entityType, $template);
-        $values = $this->customFieldService->getValuesForEntity($entity);
-
-        return response()->json([
-            'groups' => $groups,
-            'values' => $values,
-        ]);
+        return response()->json($result);
     }
 }

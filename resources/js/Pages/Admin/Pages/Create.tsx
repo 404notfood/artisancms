@@ -1,6 +1,7 @@
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
 import type { PageData } from '@/types/cms';
+import { ArrowLeft } from 'lucide-react';
 
 interface PagesCreateProps {
     parentPages: PageData[];
@@ -46,7 +47,7 @@ export default function PagesCreate({ parentPages }: PagesCreateProps) {
             header={
                 <div className="flex items-center gap-4">
                     <Link href="/admin/pages" className="text-gray-500 hover:text-gray-700">
-                        <BackIcon />
+                        <ArrowLeft className="h-5 w-5" />
                     </Link>
                     <h1 className="text-xl font-semibold text-gray-900">Nouvelle page</h1>
                 </div>
@@ -243,10 +244,4 @@ export default function PagesCreate({ parentPages }: PagesCreateProps) {
     );
 }
 
-function BackIcon() {
-    return (
-        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-        </svg>
-    );
-}
+// ArrowLeft icon imported from lucide-react.

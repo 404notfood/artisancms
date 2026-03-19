@@ -9,8 +9,6 @@ use App\Http\Requests\MenuItemsRequest;
 use App\Http\Requests\MenuRequest;
 use App\Models\Menu;
 use App\Models\MenuItem;
-use App\Models\Page;
-use App\Models\Post;
 use App\Services\MenuService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -61,19 +59,12 @@ class MenuController extends Controller
     public function edit(Menu $menu): Response
     {
         $menu = $this->menuService->find($menu->id);
-
-        $pages = Page::where('status', 'published')
-            ->orderBy('title')
-            ->get(['id', 'title', 'slug']);
-
-        $posts = Post::published()
-            ->orderBy('title')
-            ->get(['id', 'title', 'slug']);
+        $linkables = $this->menuService->getLinkableItems();
 
         return Inertia::render('Admin/Menus/Edit', [
             'menu' => $menu,
-            'pages' => $pages,
-            'posts' => $posts,
+            'pages' => $linkables['pages'],
+            'posts' => $linkables['posts'],
         ]);
     }
 
@@ -182,11 +173,7 @@ class MenuController extends Controller
             'items.*.order' => ['required', 'integer'],
         ]);
 
-        foreach ($validated['items'] as $itemData) {
-            MenuItem::where('id', $itemData['id'])
-                ->where('menu_id', $menu->id)
-                ->update(['order' => $itemData['order']]);
-        }
+        $this->menuService->reorderItems($menu, $validated['items']);
 
         return redirect()
             ->back()

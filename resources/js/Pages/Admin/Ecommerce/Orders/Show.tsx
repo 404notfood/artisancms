@@ -1,6 +1,9 @@
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
 import type { OrderData, AddressData } from '@/types/cms';
+import { formatDate } from '@/lib/format';
+import StatusBadge from '@/Components/admin/status-badge';
+import { ArrowLeft } from 'lucide-react';
 
 interface OrderShowProps {
     order: OrderData;
@@ -29,25 +32,15 @@ export default function OrderShow({ order }: OrderShowProps) {
         return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(price);
     }
 
-    function formatDate(dateStr: string): string {
-        return new Date(dateStr).toLocaleDateString('fr-FR', {
-            day: '2-digit',
-            month: 'long',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-        });
-    }
-
     return (
         <AdminLayout
             header={
                 <div className="flex items-center gap-4">
                     <Link href="/admin/shop/orders" className="text-gray-500 hover:text-gray-700">
-                        <BackIcon />
+                        <ArrowLeft className="h-5 w-5" />
                     </Link>
                     <h1 className="text-xl font-semibold text-gray-900">Commande #{order.id}</h1>
-                    <OrderStatusBadge status={order.status} />
+                    <StatusBadge status={order.status} />
                     <span className="text-sm text-gray-500">
                         {formatDate(order.created_at)}
                     </span>
@@ -182,7 +175,7 @@ export default function OrderShow({ order }: OrderShowProps) {
                             </div>
                             <div className="flex justify-between">
                                 <span className="text-gray-600">Statut paiement</span>
-                                <PaymentBadge status={order.payment_status} />
+                                <StatusBadge status={order.payment_status} />
                             </div>
                             {order.completed_at && (
                                 <div className="flex justify-between">
@@ -249,54 +242,3 @@ function AddressCard({ title, address }: { title: string; address: AddressData |
     );
 }
 
-function OrderStatusBadge({ status }: { status: string }) {
-    const styles: Record<string, string> = {
-        pending: 'bg-yellow-100 text-yellow-800',
-        processing: 'bg-blue-100 text-blue-800',
-        shipped: 'bg-purple-100 text-purple-800',
-        completed: 'bg-green-100 text-green-800',
-        cancelled: 'bg-red-100 text-red-800',
-        refunded: 'bg-gray-100 text-gray-800',
-    };
-    const labels: Record<string, string> = {
-        pending: 'En attente',
-        processing: 'En cours',
-        shipped: 'Expediee',
-        completed: 'Terminee',
-        cancelled: 'Annulee',
-        refunded: 'Remboursee',
-    };
-    return (
-        <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${styles[status] ?? 'bg-gray-100 text-gray-800'}`}>
-            {labels[status] ?? status}
-        </span>
-    );
-}
-
-function PaymentBadge({ status }: { status: string }) {
-    const styles: Record<string, string> = {
-        pending: 'bg-yellow-100 text-yellow-800',
-        paid: 'bg-green-100 text-green-800',
-        failed: 'bg-red-100 text-red-800',
-        refunded: 'bg-gray-100 text-gray-800',
-    };
-    const labels: Record<string, string> = {
-        pending: 'En attente',
-        paid: 'Paye',
-        failed: 'Echoue',
-        refunded: 'Rembourse',
-    };
-    return (
-        <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${styles[status] ?? 'bg-gray-100 text-gray-800'}`}>
-            {labels[status] ?? status}
-        </span>
-    );
-}
-
-function BackIcon() {
-    return (
-        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-        </svg>
-    );
-}

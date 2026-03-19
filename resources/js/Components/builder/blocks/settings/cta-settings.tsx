@@ -1,62 +1,62 @@
 import type { BlockSettingsProps } from '../block-registry';
+import { TextInput, SelectField, ColorPicker, AlignmentSelect } from '../shared/setting-controls';
 
 export default function CtaSettings({ block, onUpdate }: BlockSettingsProps) {
-    const title = (block.props.title as string) || '';
-    const description = (block.props.description as string) || '';
-    const buttonText = (block.props.buttonText as string) || '';
-    const buttonUrl = (block.props.buttonUrl as string) || '';
-    const buttonVariant = (block.props.buttonVariant as string) || 'primary';
-    const backgroundColor = (block.props.backgroundColor as string) || '#1e40af';
-    const textColor = (block.props.textColor as string) || '#ffffff';
-    const align = (block.props.align as string) || 'center';
-
     return (
         <div className="space-y-4">
-            <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Titre</label>
-                <input type="text" value={title} onChange={(e) => onUpdate({ title: e.target.value })} className="w-full border rounded px-3 py-2 text-sm" />
-            </div>
+            <TextInput
+                label="Titre"
+                value={(block.props.title as string) || ''}
+                onChange={(v) => onUpdate({ title: v })}
+            />
             <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                <textarea value={description} onChange={(e) => onUpdate({ description: e.target.value })} className="w-full border rounded px-3 py-2 text-sm" rows={3} />
+                <textarea
+                    value={(block.props.description as string) || ''}
+                    onChange={(e) => onUpdate({ description: e.target.value })}
+                    className="w-full border rounded px-3 py-2 text-sm"
+                    rows={3}
+                />
             </div>
-            <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Texte du bouton</label>
-                <input type="text" value={buttonText} onChange={(e) => onUpdate({ buttonText: e.target.value })} className="w-full border rounded px-3 py-2 text-sm" />
-            </div>
-            <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">URL du bouton</label>
-                <input type="text" value={buttonUrl} onChange={(e) => onUpdate({ buttonUrl: e.target.value })} className="w-full border rounded px-3 py-2 text-sm" placeholder="https://..." />
-            </div>
-            <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Style du bouton</label>
-                <select value={buttonVariant} onChange={(e) => onUpdate({ buttonVariant: e.target.value })} className="w-full border rounded px-3 py-2 text-sm">
-                    <option value="primary">Primaire (blanc)</option>
-                    <option value="secondary">Secondaire (sombre)</option>
-                    <option value="outline">Contour</option>
-                </select>
-            </div>
-            <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Couleur de fond</label>
-                <div className="flex gap-2">
-                    <input type="color" value={backgroundColor} onChange={(e) => onUpdate({ backgroundColor: e.target.value })} className="w-10 h-10 rounded border cursor-pointer" />
-                    <input type="text" value={backgroundColor} onChange={(e) => onUpdate({ backgroundColor: e.target.value })} className="flex-1 border rounded px-3 py-2 text-sm" />
-                </div>
-            </div>
-            <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Couleur du texte</label>
-                <div className="flex gap-2">
-                    <input type="color" value={textColor} onChange={(e) => onUpdate({ textColor: e.target.value })} className="w-10 h-10 rounded border cursor-pointer" />
-                    <input type="text" value={textColor} onChange={(e) => onUpdate({ textColor: e.target.value })} className="flex-1 border rounded px-3 py-2 text-sm" />
-                </div>
-            </div>
-            <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Alignement</label>
-                <select value={align} onChange={(e) => onUpdate({ align: e.target.value })} className="w-full border rounded px-3 py-2 text-sm">
-                    <option value="center">Centré</option>
-                    <option value="left">Gauche</option>
-                </select>
-            </div>
+            <TextInput
+                label="Texte du bouton"
+                value={(block.props.buttonText as string) || ''}
+                onChange={(v) => onUpdate({ buttonText: v })}
+            />
+            <TextInput
+                label="URL du bouton"
+                value={(block.props.buttonUrl as string) || ''}
+                onChange={(v) => onUpdate({ buttonUrl: v })}
+                placeholder="https://..."
+            />
+            <SelectField
+                label="Style du bouton"
+                value={(block.props.buttonVariant as string) || 'primary'}
+                onChange={(v) => onUpdate({ buttonVariant: v })}
+                options={[
+                    { value: 'primary', label: 'Primaire (blanc)' },
+                    { value: 'secondary', label: 'Secondaire (sombre)' },
+                    { value: 'outline', label: 'Contour' },
+                ]}
+            />
+            <ColorPicker
+                label="Couleur de fond"
+                value={(block.props.backgroundColor as string) || '#1e40af'}
+                onChange={(v) => onUpdate({ backgroundColor: v })}
+            />
+            <ColorPicker
+                label="Couleur du texte"
+                value={(block.props.textColor as string) || '#ffffff'}
+                onChange={(v) => onUpdate({ textColor: v })}
+            />
+            <AlignmentSelect
+                value={(block.props.align as string) || 'center'}
+                onChange={(v) => onUpdate({ align: v })}
+                options={[
+                    { value: 'center', label: 'Centre' },
+                    { value: 'left', label: 'Gauche' },
+                ]}
+            />
         </div>
     );
 }

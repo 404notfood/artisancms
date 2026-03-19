@@ -1,9 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, Link, router } from '@inertiajs/react';
 import { useState, useRef, type FormEvent } from 'react';
-import { Input } from '@/Components/ui/input';
-import { Label } from '@/Components/ui/label';
-import { Switch } from '@/Components/ui/switch';
 import { Button } from '@/Components/ui/button';
 import {
     Layout,
@@ -15,41 +12,17 @@ import {
     Sparkles,
     ChevronRight,
     RotateCcw,
-    Upload,
 } from 'lucide-react';
-
-// ─── Types ──────────────────────────────────────────────────────────────────
-
-interface FieldDefinition {
-    label: string;
-    type: 'color' | 'font' | 'select' | 'text' | 'boolean' | 'image';
-    default: string | boolean;
-    options?: string[];
-}
-
-type SchemaSection = Record<string, FieldDefinition>;
-type Schema = Record<string, SchemaSection>;
+import { type Schema } from './components/types';
+import FieldRenderer from './components/FieldRenderer';
+import FontsSectionLayout from './components/FontsSectionLayout';
+import LivePreview from './components/LivePreview';
 
 interface CustomizeProps {
     theme: { slug: string; name: string };
     schema: Schema;
     values: Record<string, string | boolean>;
 }
-
-// ─── Constants ──────────────────────────────────────────────────────────────
-
-const FONT_OPTIONS = [
-    { value: 'Inter', label: 'Inter' },
-    { value: 'Roboto', label: 'Roboto' },
-    { value: 'Open Sans', label: 'Open Sans' },
-    { value: 'Lato', label: 'Lato' },
-    { value: 'Montserrat', label: 'Montserrat' },
-    { value: 'Poppins', label: 'Poppins' },
-    { value: 'Playfair Display', label: 'Playfair Display' },
-    { value: 'Merriweather', label: 'Merriweather' },
-    { value: 'Georgia', label: 'Georgia' },
-    { value: 'system-ui', label: 'System UI' },
-];
 
 const SECTION_META: Record<string, { label: string; icon: typeof Layout }> = {
     header: { label: 'En-tete', icon: Layout },
@@ -60,8 +33,6 @@ const SECTION_META: Record<string, { label: string; icon: typeof Layout }> = {
     ecommerce: { label: 'E-commerce', icon: ShoppingBag },
     global_styles: { label: 'Styles globaux', icon: Sparkles },
 };
-
-// ─── Component ──────────────────────────────────────────────────────────────
 
 export default function Customize({ theme, schema, values }: CustomizeProps) {
     const sections = Object.keys(schema).filter((s) => SECTION_META[s]);
@@ -218,55 +189,7 @@ export default function Customize({ theme, schema, values }: CustomizeProps) {
                     </div>
 
                     {/* Live Preview iframe */}
-                    <div className="flex-1 bg-gray-100 relative">
-                        <iframe
-                            src="/"
-                            className="w-full h-full border-0"
-                            title="Live preview"
-                            ref={(el) => {
-                                if (!el) return;
-                                // Inject CSS variables into iframe on data change
-                                try {
-                                    const doc = el.contentDocument;
-                                    if (!doc) return;
-                                    let style = doc.getElementById('theme-preview-vars');
-                                    if (!style) {
-                                        style = doc.createElement('style');
-                                        style.id = 'theme-preview-vars';
-                                        doc.head.appendChild(style);
-                                    }
-                                    const vars = Object.entries(data)
-                                        .filter(([, v]) => typeof v === 'string' && v !== '')
-                                        .map(([k, v]) => {
-                                            const dotIdx = k.indexOf('.');
-                                            if (dotIdx === -1) return '';
-                                            const section = k.substring(0, dotIdx);
-                                            const key = k.substring(dotIdx + 1);
-                                            const prefixes: Record<string, string> = {
-                                                colors: '--color-',
-                                                fonts: '--font-',
-                                                layout: '--',
-                                                header: '--header-',
-                                                footer: '--footer-',
-                                                global_styles: '--global-',
-                                            };
-                                            const prefix = prefixes[section];
-                                            if (!prefix) return '';
-                                            if (String(v).startsWith('/') || String(v).startsWith('http')) return '';
-                                            return `${prefix}${key.replace(/_/g, '-')}: ${v};`;
-                                        })
-                                        .filter(Boolean)
-                                        .join('\n  ');
-                                    style.textContent = `:root {\n  ${vars}\n}`;
-                                } catch {
-                                    // Cross-origin or not loaded yet
-                                }
-                            }}
-                        />
-                        <div className="absolute bottom-3 right-3 bg-white/80 backdrop-blur-sm rounded-lg px-3 py-1.5 text-xs text-gray-500 shadow-sm border">
-                            Apercu en direct
-                        </div>
-                    </div>
+                    <LivePreview data={data} />
                 </div>
 
                 {/* Bottom bar */}
@@ -299,205 +222,4 @@ export default function Customize({ theme, schema, values }: CustomizeProps) {
             </form>
         </AdminLayout>
     );
-}
-
-// ─── Fonts Section Layout ────────────────────────────────────────────────────
-// Affiche les polices en sections groupées : fonts principales, tailles heading en 2 cols
-
-interface FontsSectionLayoutProps {
-    fields: SchemaSection;
-    data: Record<string, string | boolean>;
-    activeSection: string;
-    onChange: (dotKey: string, val: string | boolean) => void;
-    onImageUpload: (dotKey: string, file: File) => void;
-}
-
-function FontsSectionLayout({ fields, data, activeSection, onChange, onImageUpload }: FontsSectionLayoutProps) {
-    const headingSizeKeys = ['h1_size', 'h2_size', 'h3_size', 'h4_size', 'h5_size', 'h6_size'];
-    const otherKeys = Object.keys(fields).filter((k) => !headingSizeKeys.includes(k));
-    const existingHeadingKeys = headingSizeKeys.filter((k) => k in fields);
-
-    return (
-        <div className="space-y-5">
-            {/* Polices et taille de base */}
-            {otherKeys.map((key) => {
-                const definition = fields[key];
-                const dotKey = `${activeSection}.${key}`;
-                const value = data[dotKey] ?? definition.default;
-                return (
-                    <FieldRenderer
-                        key={dotKey}
-                        dotKey={dotKey}
-                        definition={definition}
-                        value={value}
-                        onChange={(val) => onChange(dotKey, val)}
-                        onImageUpload={(file) => onImageUpload(dotKey, file)}
-                    />
-                );
-            })}
-
-            {/* Tailles des headings en grille 2 colonnes */}
-            {existingHeadingKeys.length > 0 && (
-                <div>
-                    <Label className="mb-2 block text-sm font-medium text-gray-700">Tailles des titres</Label>
-                    <div className="grid grid-cols-2 gap-2">
-                        {existingHeadingKeys.map((key) => {
-                            const definition = fields[key];
-                            const dotKey = `${activeSection}.${key}`;
-                            const value = data[dotKey] ?? definition.default;
-                            return (
-                                <div key={dotKey}>
-                                    <label className="mb-1 block text-xs text-gray-500">{definition.label}</label>
-                                    <Input
-                                        value={String(value || '')}
-                                        onChange={(e) => onChange(dotKey, e.target.value)}
-                                        className="h-8 font-mono text-xs"
-                                    />
-                                </div>
-                            );
-                        })}
-                    </div>
-                </div>
-            )}
-        </div>
-    );
-}
-
-// ─── Field Renderer ─────────────────────────────────────────────────────────
-
-interface FieldRendererProps {
-    dotKey: string;
-    definition: FieldDefinition;
-    value: string | boolean;
-    onChange: (value: string | boolean) => void;
-    onImageUpload: (file: File) => void;
-}
-
-function FieldRenderer({ dotKey, definition, value, onChange, onImageUpload }: FieldRendererProps) {
-    switch (definition.type) {
-        case 'color':
-            return (
-                <div>
-                    <Label htmlFor={dotKey}>{definition.label}</Label>
-                    <div className="mt-1 flex items-center gap-3">
-                        <input
-                            type="color"
-                            id={dotKey}
-                            value={String(value || definition.default)}
-                            onChange={(e) => onChange(e.target.value)}
-                            className="h-10 w-20 cursor-pointer rounded border"
-                        />
-                        <Input
-                            value={String(value || definition.default)}
-                            onChange={(e) => onChange(e.target.value)}
-                            placeholder="#000000"
-                            className="max-w-32 font-mono"
-                        />
-                    </div>
-                </div>
-            );
-
-        case 'font':
-            return (
-                <div>
-                    <Label htmlFor={dotKey}>{definition.label}</Label>
-                    <select
-                        id={dotKey}
-                        value={String(value || definition.default)}
-                        onChange={(e) => onChange(e.target.value)}
-                        className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                    >
-                        {FONT_OPTIONS.map((font) => (
-                            <option key={font.value} value={font.value}>
-                                {font.label}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-            );
-
-        case 'select':
-            return (
-                <div>
-                    <Label htmlFor={dotKey}>{definition.label}</Label>
-                    <select
-                        id={dotKey}
-                        value={String(value ?? definition.default)}
-                        onChange={(e) => onChange(e.target.value)}
-                        className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                    >
-                        {(definition.options || []).map((opt) => (
-                            <option key={opt} value={opt}>
-                                {opt}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-            );
-
-        case 'text':
-            return (
-                <div>
-                    <Label htmlFor={dotKey}>{definition.label}</Label>
-                    <Input
-                        id={dotKey}
-                        value={String(value || '')}
-                        onChange={(e) => onChange(e.target.value)}
-                        className="mt-1"
-                    />
-                </div>
-            );
-
-        case 'boolean':
-            return (
-                <div className="flex items-center justify-between rounded-lg border border-gray-200 px-4 py-3">
-                    <Label htmlFor={dotKey} className="cursor-pointer">
-                        {definition.label}
-                    </Label>
-                    <Switch
-                        id={dotKey}
-                        checked={Boolean(value)}
-                        onCheckedChange={(checked) => onChange(checked)}
-                    />
-                </div>
-            );
-
-        case 'image':
-            return (
-                <div>
-                    <Label>{definition.label}</Label>
-                    <div className="mt-1 flex items-center gap-3">
-                        <Input
-                            value={String(value || '')}
-                            onChange={(e) => onChange(e.target.value)}
-                            placeholder="/storage/media/logo.png"
-                            className="flex-1"
-                        />
-                        <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50">
-                            <Upload className="h-4 w-4" />
-                            Upload
-                            <input
-                                type="file"
-                                accept="image/*"
-                                className="hidden"
-                                onChange={(e) => {
-                                    const file = e.target.files?.[0];
-                                    if (file) onImageUpload(file);
-                                }}
-                            />
-                        </label>
-                    </div>
-                    {value && typeof value === 'string' && value.length > 0 && (
-                        <img
-                            src={value}
-                            alt="Preview"
-                            className="mt-2 h-12 rounded border object-contain"
-                        />
-                    )}
-                </div>
-            );
-
-        default:
-            return null;
-    }
 }

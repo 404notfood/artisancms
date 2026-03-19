@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
 use App\Models\Role;
 use App\Models\User;
+use App\Services\AvatarService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -16,6 +17,10 @@ use Inertia\Response;
 
 class UserController extends Controller
 {
+    public function __construct(
+        private readonly AvatarService $avatarService,
+    ) {}
+
     /**
      * Display a paginated list of users with search and role filter.
      */
@@ -23,7 +28,7 @@ class UserController extends Controller
     {
         $filters = $request->only(['search', 'role_id', 'per_page']);
 
-        $query = User::with('role');
+        $query = User::with('role')->withCount(['posts', 'pages']);
 
         if (isset($filters['search']) && $filters['search'] !== '') {
             $search = $filters['search'];
@@ -76,6 +81,8 @@ class UserController extends Controller
             'password' => Hash::make($validated['password']),
             'role_id' => $validated['role_id'],
             'bio' => $validated['bio'] ?? null,
+            'profile_visibility' => $validated['profile_visibility'] ?? 'public',
+            'social_links' => $validated['social_links'] ?? null,
         ]);
 
         return redirect()
@@ -88,7 +95,7 @@ class UserController extends Controller
      */
     public function edit(User $user): Response
     {
-        $user->load('role');
+        $user->load('role')->loadCount(['posts', 'pages']);
 
         $roles = Role::orderBy('name')->get(['id', 'name', 'slug']);
 
@@ -110,6 +117,8 @@ class UserController extends Controller
             'email' => $validated['email'],
             'role_id' => $validated['role_id'],
             'bio' => $validated['bio'] ?? null,
+            'profile_visibility' => $validated['profile_visibility'] ?? $user->profile_visibility,
+            'social_links' => $validated['social_links'] ?? $user->social_links,
         ];
 
         if (!empty($validated['password'])) {
@@ -124,31 +133,35 @@ class UserController extends Controller
     }
 
     /**
+     * Upload an avatar for the specified user.
+     */
+    public function uploadAvatar(Request $request, User $user): RedirectResponse
+    {
+        $request->validate([
+            'avatar' => ['required', 'image', 'max:2048'],
+        ]);
+
+        $this->avatarService->upload($user, $request->file('avatar'));
+
+        return redirect()->back()->with('success', __('cms.users.avatar_updated'));
+    }
+
+    /**
+     * Remove the avatar of the specified user.
+     */
+    public function removeAvatar(User $user): RedirectResponse
+    {
+        $this->avatarService->remove($user);
+
+        return redirect()->back()->with('success', __('cms.users.avatar_removed'));
+    }
+
+    /**
      * Delete the specified user.
      */
-    public function destroy(Request $request, User $user): RedirectResponse
+    public function destroy(User $user): RedirectResponse
     {
-        $currentUser = $request->user();
-
-        // Prevent deleting self
-        if ($currentUser && $currentUser->id === $user->id) {
-            return redirect()
-                ->back()
-                ->with('error', __('cms.users.cannot_delete_self'));
-        }
-
-        // Prevent deleting the last admin
-        if ($user->isAdmin()) {
-            $adminCount = User::whereHas('role', function ($q): void {
-                $q->where('slug', 'admin');
-            })->count();
-
-            if ($adminCount <= 1) {
-                return redirect()
-                    ->back()
-                    ->with('error', __('cms.users.cannot_delete_last_admin'));
-            }
-        }
+        $this->authorize('delete', $user);
 
         $user->delete();
 

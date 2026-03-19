@@ -44,36 +44,6 @@ class SubmissionService
     }
 
     /**
-     * Mark a submission as read.
-     */
-    public function markAsRead(FormSubmission $submission): FormSubmission
-    {
-        $submission->update(['status' => 'read']);
-
-        return $submission;
-    }
-
-    /**
-     * Mark a submission as spam.
-     */
-    public function markAsSpam(FormSubmission $submission): FormSubmission
-    {
-        $submission->update(['status' => 'spam']);
-
-        return $submission;
-    }
-
-    /**
-     * Mark a submission as replied.
-     */
-    public function markAsReplied(FormSubmission $submission): FormSubmission
-    {
-        $submission->update(['status' => 'replied']);
-
-        return $submission;
-    }
-
-    /**
      * Update the status of a submission.
      */
     public function updateStatus(FormSubmission $submission, string $status): FormSubmission

@@ -52,8 +52,15 @@ export default function FrontLayout({ children, menus, theme }: FrontLayoutProps
     }, [customizations]);
 
     const allVars: Record<string, string> = { ...cssVariables };
+    // Use serif fallback for known serif fonts, sans-serif otherwise
+    const serifFonts = ['Cormorant Garamond', 'Lora', 'Playfair Display', 'Merriweather', 'Libre Baskerville', 'Crimson Text', 'EB Garamond', 'Noto Serif', 'Source Serif Pro', 'Bitter'];
     if (fontBody) allVars['--font-body'] = `'${fontBody}', system-ui, sans-serif`;
-    if (fontHeading) allVars['--font-heading'] = `'${fontHeading}', Georgia, serif`;
+    if (fontHeading) {
+        const isSerif = serifFonts.some(sf => fontHeading.toLowerCase().includes(sf.toLowerCase()));
+        allVars['--font-heading'] = isSerif
+            ? `'${fontHeading}', Georgia, serif`
+            : `'${fontHeading}', system-ui, sans-serif`;
+    }
 
     const cssVarBlock = Object.entries(allVars)
         .map(([k, v]) => `${k}:${v}`)

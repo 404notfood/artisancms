@@ -11,11 +11,11 @@ class SettingObserver
 {
     public function saved(Setting $setting): void
     {
-        Cache::forget('cms.settings.all');
+        Cache::forget('cms.settings');
     }
 
     public function deleted(Setting $setting): void
     {
-        Cache::forget('cms.settings.all');
+        Cache::forget('cms.settings');
     }
 }

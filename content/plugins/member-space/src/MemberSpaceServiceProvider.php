@@ -35,25 +35,18 @@ class MemberSpaceServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->app->singleton(MemberSettingsService::class, fn ($app) => new MemberSettingsService());
-        $this->app->singleton(ProfileService::class, fn ($app) => new ProfileService());
-        $this->app->singleton(CustomFieldService::class, fn ($app) => new CustomFieldService());
-        $this->app->singleton(SocialLoginService::class, fn ($app) => new SocialLoginService());
-        $this->app->singleton(TwoFactorService::class, fn ($app) => new TwoFactorService());
-        $this->app->singleton(ContentRestrictionService::class, fn ($app) => new ContentRestrictionService());
+        // Services with no constructor dependencies
+        $this->app->singleton(MemberSettingsService::class);
+        $this->app->singleton(ProfileService::class);
+        $this->app->singleton(CustomFieldService::class);
+        $this->app->singleton(SocialLoginService::class);
+        $this->app->singleton(TwoFactorService::class);
+        $this->app->singleton(ContentRestrictionService::class);
 
-        $this->app->singleton(MemberDirectoryService::class, fn ($app) => new MemberDirectoryService(
-            $app->make(MemberSettingsService::class)
-        ));
-
-        $this->app->singleton(MembershipService::class, fn ($app) => new MembershipService(
-            $app->make(MemberSettingsService::class),
-            $app->make(ProfileService::class)
-        ));
-
-        $this->app->singleton(VerificationService::class, fn ($app) => new VerificationService(
-            $app->make(ProfileService::class)
-        ));
+        // Services with constructor dependencies (auto-resolved by the container)
+        $this->app->singleton(MemberDirectoryService::class);
+        $this->app->singleton(MembershipService::class);
+        $this->app->singleton(VerificationService::class);
     }
 
     public function boot(): void

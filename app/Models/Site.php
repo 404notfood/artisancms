@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Site extends Model
 {
@@ -72,36 +71,6 @@ class Site extends Model
         return $this->belongsToMany(User::class, 'cms_site_users')
             ->withPivot(['role_id', 'is_owner'])
             ->withTimestamps();
-    }
-
-    /**
-     * Pages belonging to this site.
-     *
-     * @return HasMany<Page, $this>
-     */
-    public function pages(): HasMany
-    {
-        return $this->hasMany(Page::class);
-    }
-
-    /**
-     * Posts belonging to this site.
-     *
-     * @return HasMany<Post, $this>
-     */
-    public function posts(): HasMany
-    {
-        return $this->hasMany(Post::class);
-    }
-
-    /**
-     * Media belonging to this site.
-     *
-     * @return HasMany<Media, $this>
-     */
-    public function media(): HasMany
-    {
-        return $this->hasMany(Media::class);
     }
 
     /**

@@ -578,6 +578,7 @@
     "--color-primary-dark": "#a07b20",
     "--color-secondary": "#faf9f7",
     "--color-accent": "#f5f0e8",
+    "--color-background": "#ffffff",
     "--color-dark": "#1c1917",
     "--color-surface": "#faf9f7",
     "--color-text": "#1c1917",

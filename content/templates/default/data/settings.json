@@ -1,0 +1,18 @@
+{
+  "general": {
+    "site_name": "Mon Site",
+    "site_description": "Site vitrine professionnel cree avec ArtisanCMS",
+    "site_tagline": "Solutions digitales sur mesure"
+  },
+  "seo": {
+    "meta_title_suffix": " | Mon Site",
+    "default_meta_description": "Decouvrez nos services professionnels et notre expertise digitale.",
+    "robots_index": true
+  },
+  "social": {
+    "twitter": "",
+    "facebook": "",
+    "instagram": "",
+    "linkedin": ""
+  }
+}
