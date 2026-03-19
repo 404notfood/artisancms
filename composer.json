@@ -32,6 +32,7 @@
             "ContactForm\\": "content/plugins/contact-form/src/",
             "Ecommerce\\": "content/plugins/ecommerce/src/",
             "FormBuilder\\": "content/plugins/form-builder/src/",
+            "MemberSpace\\": "content/plugins/member-space/src/",
             "Seo\\": "content/plugins/seo/src/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"

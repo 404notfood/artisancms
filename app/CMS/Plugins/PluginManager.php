@@ -7,6 +7,7 @@ namespace App\CMS\Plugins;
 use App\CMS\Facades\CMS;
 use App\Models\CmsPlugin;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 
@@ -74,6 +75,7 @@ class PluginManager
 
         try {
             $this->bootPlugin($slug);
+            $this->runMigrations($slug);
         } catch (\Throwable $e) {
             // Rollback: don't leave a broken plugin enabled
             $plugin->update(['enabled' => false, 'activated_at' => null]);
@@ -246,6 +248,36 @@ class PluginManager
             }
             app()->register($providerClass);
         }
+    }
+
+    /**
+     * Run pending migrations for a specific plugin.
+     * The plugin's ServiceProvider must have been booted first
+     * (so that loadMigrationsFrom() has registered its migration paths).
+     */
+    private function runMigrations(string $slug): void
+    {
+        $pluginsPath = config('cms.paths.plugins');
+        $migrationsPath = $pluginsPath . '/' . $slug . '/database/migrations';
+
+        if (!File::isDirectory($migrationsPath)) {
+            return;
+        }
+
+        $relativePath = str_replace('\\', '/', str_replace(
+            str_replace('\\', '/', base_path()) . '/',
+            '',
+            str_replace('\\', '/', $migrationsPath),
+        ));
+
+        Artisan::call('migrate', [
+            '--path' => $relativePath,
+            '--force' => true,
+        ]);
+
+        Log::info("Plugin '{$slug}': migrations executed.", [
+            'output' => trim(Artisan::output()),
+        ]);
     }
 
     // -------------------------------------------------------------------------

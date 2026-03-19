@@ -1,0 +1,11 @@
+{
+    "name": "artisancms/member-space",
+    "description": "Member Space plugin for ArtisanCMS",
+    "type": "artisancms-plugin",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "MemberSpace\\": "src/"
+        }
+    }
+}

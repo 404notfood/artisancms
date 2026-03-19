@@ -132,6 +132,16 @@ class HandleInertiaRequests extends Middleware
             $badges['pending_orders'] = 0;
         }
 
+        try {
+            if (class_exists(\MemberSpace\Models\MemberVerification::class)) {
+                $badges['pending_verifications'] = \MemberSpace\Models\MemberVerification::where('status', 'pending')->count();
+            } else {
+                $badges['pending_verifications'] = 0;
+            }
+        } catch (\Throwable) {
+            $badges['pending_verifications'] = 0;
+        }
+
         return $badges;
     }
 

@@ -1,0 +1,93 @@
+{
+    "name": "Member Space",
+    "slug": "member-space",
+    "version": "1.0.0",
+    "description": "Espace membre complet avec profils, annuaire, restriction de contenu, social login, 2FA et abonnements",
+    "author": {
+        "name": "ArtisanCMS"
+    },
+    "license": "MIT",
+    "requires": {
+        "cms": ">=1.0.0",
+        "php": ">=8.2"
+    },
+    "providers": [
+        "MemberSpace\\MemberSpaceServiceProvider"
+    ],
+    "blocks": [
+        "member-profile-card",
+        "member-directory",
+        "membership-plans",
+        "login-form",
+        "register-form",
+        "restricted-content"
+    ],
+    "routes": true,
+    "migrations": true,
+    "settings": {
+        "modules": {
+            "type": "object",
+            "label": "Modules actifs",
+            "default": {
+                "member_directory": true,
+                "content_restriction": true,
+                "custom_fields": true,
+                "social_login": false,
+                "two_factor": false,
+                "membership_plans": false,
+                "user_verification": false
+            }
+        },
+        "profile": {
+            "type": "object",
+            "label": "Profils",
+            "default": {
+                "default_visibility": "public",
+                "require_avatar": false,
+                "max_bio_length": 500,
+                "enable_cover_photo": true
+            }
+        },
+        "directory": {
+            "type": "object",
+            "label": "Annuaire",
+            "default": {
+                "per_page": 12,
+                "default_sort": "newest",
+                "show_search": true,
+                "layout": "grid"
+            }
+        },
+        "registration": {
+            "type": "object",
+            "label": "Inscription",
+            "default": {
+                "enable_custom_registration": true,
+                "require_email_verification": true,
+                "auto_create_profile": true,
+                "default_role": "subscriber"
+            }
+        },
+        "social_login": {
+            "type": "object",
+            "label": "Social Login",
+            "default": {
+                "google_client_id": "",
+                "google_client_secret": "",
+                "facebook_client_id": "",
+                "facebook_client_secret": "",
+                "github_client_id": "",
+                "github_client_secret": ""
+            }
+        },
+        "stripe": {
+            "type": "object",
+            "label": "Stripe",
+            "default": {
+                "publishable_key": "",
+                "secret_key": "",
+                "webhook_secret": ""
+            }
+        }
+    }
+}

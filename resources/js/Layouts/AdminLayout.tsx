@@ -42,6 +42,11 @@ import {
     Star,
     Warehouse,
     BarChart3,
+    Users,
+    UserCheck,
+    Crown,
+    Shield,
+    Lock,
     ChevronDown,
     type LucideIcon,
 } from 'lucide-react';
@@ -108,6 +113,18 @@ const navigationDefs: NavGroup[] = [
             { label: 'Avis', href: '/admin/shop/reviews', icon: Star },
             { label: 'Rapports', href: '/admin/shop/reports', icon: BarChart3 },
             { label: 'Parametres', href: '/admin/shop/settings', icon: Settings },
+        ],
+    },
+    {
+        title: 'Espace Membres',
+        requiresPlugin: 'member-space',
+        items: [
+            { label: 'Membres', href: '/admin/member-space/members', icon: Users },
+            { label: 'Plans', href: '/admin/member-space/plans', icon: Crown },
+            { label: 'Champs perso.', href: '/admin/member-space/fields', icon: ClipboardList },
+            { label: 'Verifications', href: '/admin/member-space/verifications', icon: UserCheck, badgeKey: 'pending_verifications' },
+            { label: 'Restrictions', href: '/admin/member-space/restrictions', icon: Lock },
+            { label: 'Parametres', href: '/admin/member-space/settings', icon: Settings },
         ],
     },
     {
