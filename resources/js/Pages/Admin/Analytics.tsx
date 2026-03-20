@@ -101,8 +101,10 @@ function LineChart({ data }: { data: DailyData[] }) {
 }
 
 export default function Analytics({ overview, period, periods }: Props) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const changePeriod = (newPeriod: string) => {
-        router.get('/admin/analytics', { period: newPeriod }, { preserveState: true });
+        router.get(`/${prefix}/analytics`, { period: newPeriod }, { preserveState: true });
     };
 
     const totalDevices = overview.device_breakdown?.reduce((sum, d) => sum + d.count, 0) || 1;

@@ -1,6 +1,6 @@
-import { useForm } from '@inertiajs/react';
+import { useForm , usePage } from '@inertiajs/react';
 import { useState } from 'react';
-import type { ContentTypeData, ContentTypeFieldDef } from '@/types/cms';
+import type { ContentTypeData, ContentTypeFieldDef, SharedProps } from '@/types/cms';
 import { Plus } from 'lucide-react';
 import { supportOptions, slugify, createEmptyField } from './components/content-type-helpers';
 import FieldRow from './components/FieldRow';
@@ -10,6 +10,8 @@ interface ContentTypeFormProps {
 }
 
 export default function ContentTypeForm({ contentType }: ContentTypeFormProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const isEditing = !!contentType;
 
     const { data, setData, post, put, processing, errors } = useForm({
@@ -76,7 +78,7 @@ export default function ContentTypeForm({ contentType }: ContentTypeFormProps) {
         if (isEditing) {
             put(`/admin/content-types/${contentType.id}`);
         } else {
-            post('/admin/content-types');
+            post(`/${prefix}/content-types`);
         }
     }
 
@@ -265,7 +267,7 @@ export default function ContentTypeForm({ contentType }: ContentTypeFormProps) {
             {/* Submit */}
             <div className="flex items-center justify-end gap-3">
                 <a
-                    href="/admin/content-types"
+                    href={`/${prefix}/content-types`}
                     className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
                 >
                     Annuler

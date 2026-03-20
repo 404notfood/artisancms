@@ -43,6 +43,8 @@ interface Props {
 }
 
 export default function RedirectsIndex({ redirects, filters }: Props) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const [searchQuery, setSearchQuery] = useState(filters.search ?? '');
     const [editingRedirect, setEditingRedirect] = useState<RedirectItem | null>(null);
 
@@ -64,12 +66,12 @@ export default function RedirectsIndex({ redirects, filters }: Props) {
 
     const handleSearch = (e: FormEvent) => {
         e.preventDefault();
-        router.get('/admin/redirects', { search: searchQuery }, { preserveState: true });
+        router.get(`/${prefix}/redirects`, { search: searchQuery }, { preserveState: true });
     };
 
     const handleCreate = (e: FormEvent) => {
         e.preventDefault();
-        createForm.post('/admin/redirects', {
+        createForm.post(`/${prefix}/redirects`, {
             preserveScroll: true,
             onSuccess: () => {
                 createForm.reset();

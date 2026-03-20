@@ -1,6 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link, router } from '@inertiajs/react';
-import type { CustomFieldGroupData, PaginatedResponse } from '@/types/cms';
+import { Head, Link, router , usePage } from '@inertiajs/react';
+import type { CustomFieldGroupData, PaginatedResponse, SharedProps } from '@/types/cms';
 import { Plus, Pencil, Trash2 } from 'lucide-react';
 
 interface Props {
@@ -26,6 +26,8 @@ function formatAppliesTo(appliesTo: string[]): string {
 }
 
 export default function CustomFieldsIndex({ groups }: Props) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     function handleDelete(group: CustomFieldGroupData) {
         if (
             !confirm(
@@ -57,7 +59,7 @@ export default function CustomFieldsIndex({ groups }: Props) {
                 <div className="flex items-center justify-between">
                     <h1 className="text-xl font-semibold text-gray-900">Champs personnalisés</h1>
                     <Link
-                        href="/admin/custom-fields/create"
+                        href={`/${prefix}/custom-fields/create`}
                         className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 transition-colors"
                     >
                         <Plus className="h-4 w-4" />

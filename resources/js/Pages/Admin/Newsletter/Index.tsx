@@ -1,5 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, router } from '@inertiajs/react';
+import { Head, router , usePage } from '@inertiajs/react';
+import type { SharedProps } from '@/types/cms';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
@@ -37,11 +38,13 @@ interface Props {
 }
 
 export default function NewsletterIndex({ subscribers, stats, filters }: Props) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const [search, setSearch] = useState(filters.search ?? '');
     const [statusFilter, setStatusFilter] = useState(filters.status ?? '');
 
     const applyFilters = () => {
-        router.get('/admin/newsletter', {
+        router.get(`/${prefix}/newsletter`, {
             ...(search ? { search } : {}),
             ...(statusFilter ? { status: statusFilter } : {}),
         }, { preserveState: true });
@@ -64,7 +67,7 @@ export default function NewsletterIndex({ subscribers, stats, filters }: Props) 
                         <Mail className="h-5 w-5" />
                         Newsletter
                     </h1>
-                    <a href="/admin/newsletter/export">
+                    <a href={`/${prefix}/newsletter/export`}>
                         <Button variant="outline" size="sm">
                             <Download className="h-4 w-4 mr-1" />
                             Exporter CSV

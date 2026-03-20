@@ -37,6 +37,8 @@ const categoryIcons: Record<string, ReactNode> = {
 };
 
 export default function StyleBookIndex({ tokens, categories }: StyleBookProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const [activeCategory, setActiveCategory] = useState(categories[0]?.key ?? 'color');
     const [editingId, setEditingId] = useState<number | null>(null);
     const [showNewForm, setShowNewForm] = useState(false);
@@ -65,7 +67,7 @@ export default function StyleBookIndex({ tokens, categories }: StyleBookProps) {
                         variant="outline"
                         size="sm"
                         className="gap-1.5"
-                        onClick={() => router.post('/admin/design-tokens/seed-defaults')}
+                        onClick={() => router.post(`/${prefix}/design-tokens/seed-defaults`)}
                     >
                         <Wand2 className="h-4 w-4" />
                         Generer les tokens par defaut

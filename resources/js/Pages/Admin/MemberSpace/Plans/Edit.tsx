@@ -1,5 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, useForm, Link } from '@inertiajs/react';
+import { Head, useForm, Link , usePage } from '@inertiajs/react';
+import type { SharedProps } from '@/types/cms';
 import { useState } from 'react';
 
 interface PlanData {
@@ -24,6 +25,8 @@ interface EditPlanProps {
 }
 
 export default function EditPlan({ plan }: EditPlanProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const { data, setData, put, processing, errors } = useForm({
         name: plan.name,
         description: plan.description || '',
@@ -63,7 +66,7 @@ export default function EditPlan({ plan }: EditPlanProps) {
     return (
         <AdminLayout header={
             <div className="flex items-center gap-3">
-                <Link href="/admin/member-space/plans" className="text-gray-400 hover:text-gray-600">&larr;</Link>
+                <Link href={`/${prefix}/member-space/plans`} className="text-gray-400 hover:text-gray-600">&larr;</Link>
                 <h1 className="text-xl font-semibold text-gray-900">Modifier : {plan.name}</h1>
             </div>
         }>

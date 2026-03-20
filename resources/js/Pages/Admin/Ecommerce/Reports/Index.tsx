@@ -113,8 +113,10 @@ export default function ReportsIndex({
     recentOrders,
     lowStock,
 }: ReportsProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     function changePeriod(newPeriod: string) {
-        router.get('/admin/shop/reports', { period: newPeriod }, { preserveState: true });
+        router.get(`/${prefix}/shop/reports`, { period: newPeriod }, { preserveState: true });
     }
 
     const maxRevenue = Math.max(...revenueChart.map((p) => p.revenue), 1);

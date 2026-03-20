@@ -1,5 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link, useForm, router } from '@inertiajs/react';
+import { Head, Link, useForm, router , usePage } from '@inertiajs/react';
+import type { SharedProps } from '@/types/cms';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
@@ -32,6 +33,8 @@ interface Props {
 }
 
 export default function PopupsCreate({ popup }: Props) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const isEditing = !!popup;
     const [showPreview, setShowPreview] = useState(false);
 
@@ -60,7 +63,7 @@ export default function PopupsCreate({ popup }: Props) {
 
         const pagesArray = data.pages.trim() ? data.pages.split('\n').map(p => p.trim()).filter(Boolean) : null;
 
-        router.visit(isEditing ? `/admin/popups/${popup!.id}` : '/admin/popups', {
+        router.visit(isEditing ? `/admin/popups/${popup!.id}` : `/${prefix}/popups`, {
             method: isEditing ? 'put' : 'post',
             data: {
                 ...data,
@@ -73,7 +76,7 @@ export default function PopupsCreate({ popup }: Props) {
         <AdminLayout
             header={
                 <div className="flex items-center gap-3">
-                    <Link href="/admin/popups">
+                    <Link href={`/${prefix}/popups`}>
                         <Button variant="outline" size="sm">
                             <ArrowLeft className="h-4 w-4" />
                         </Button>
@@ -354,7 +357,7 @@ export default function PopupsCreate({ popup }: Props) {
                                 : (isEditing ? 'Mettre \u00e0 jour' : 'Cr\u00e9er le popup')
                             }
                         </Button>
-                        <Link href="/admin/popups">
+                        <Link href={`/${prefix}/popups`}>
                             <Button variant="outline">Annuler</Button>
                         </Link>
                     </div>

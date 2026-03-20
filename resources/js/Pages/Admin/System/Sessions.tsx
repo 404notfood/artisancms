@@ -26,6 +26,8 @@ const DEVICE_ICONS: Record<string, typeof Monitor> = {
 };
 
 export default function Sessions({ sessions }: SessionsProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     function handleForceLogout(sessionId: number) {
         if (!confirm('Forcer la déconnexion de cette session ?')) return;
         router.delete(`/admin/system/sessions/${sessionId}`);
@@ -33,7 +35,7 @@ export default function Sessions({ sessions }: SessionsProps) {
 
     function handleLogoutAll() {
         if (!confirm('Déconnecter toutes les autres sessions ?')) return;
-        router.post('/admin/system/sessions/logout-all');
+        router.post(`/${prefix}/system/sessions/logout-all`);
     }
 
     return (

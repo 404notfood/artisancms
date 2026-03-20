@@ -9,6 +9,8 @@ interface MenusIndexProps {
 }
 
 export default function MenusIndex({ menus }: MenusIndexProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const [showCreate, setShowCreate] = useState(false);
 
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -36,7 +38,7 @@ export default function MenusIndex({ menus }: MenusIndexProps) {
 
     function handleCreate(e: React.FormEvent) {
         e.preventDefault();
-        post('/admin/menus', {
+        post(`/${prefix}/menus`, {
             onSuccess: () => {
                 reset();
                 setShowCreate(false);

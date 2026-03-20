@@ -32,6 +32,8 @@ interface Props {
 // ---------------------------------------------------------------------------
 
 export default function WidgetsIndex({ areas, widgetTypes }: Props) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const [showCreateArea, setShowCreateArea] = useState(false);
     const [newAreaName, setNewAreaName] = useState('');
     const [newAreaSlug, setNewAreaSlug] = useState('');
@@ -41,7 +43,7 @@ export default function WidgetsIndex({ areas, widgetTypes }: Props) {
         (e: FormEvent) => {
             e.preventDefault();
             router.post(
-                '/admin/widget-areas',
+                `/${prefix}/widget-areas`,
                 {
                     name: newAreaName,
                     slug: newAreaSlug,

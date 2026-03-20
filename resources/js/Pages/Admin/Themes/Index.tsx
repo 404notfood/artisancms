@@ -19,6 +19,8 @@ interface ThemesIndexProps {
 }
 
 export default function ThemesIndex({ themes }: ThemesIndexProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const { flash } = usePage().props as unknown as { flash: FlashMessages };
     const [uploadOpen, setUploadOpen] = useState(false);
     const [deleteSlug, setDeleteSlug] = useState<string | null>(null);
@@ -204,7 +206,7 @@ function UploadModal({ onClose }: { onClose: () => void }) {
         formData.append('theme_zip', file);
         setUploading(true);
 
-        router.post('/admin/themes/upload', formData, {
+        router.post(`/${prefix}/themes/upload`, formData, {
             forceFormData: true,
             onFinish: () => {
                 setUploading(false);

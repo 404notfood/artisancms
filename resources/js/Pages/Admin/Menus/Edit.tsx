@@ -1,7 +1,7 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link, useForm, router } from '@inertiajs/react';
+import { Head, Link, useForm, router , usePage } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
-import type { MenuData, MenuItemData, PageData, PostData } from '@/types/cms';
+import type { MenuData, MenuItemData, PageData, PostData, SharedProps } from '@/types/cms';
 import { ArrowLeft, Plus } from 'lucide-react';
 import AddItemForm, { defaultNewItem, type NewItemForm } from './components/AddItemForm';
 import MenuItemRow from './components/MenuItemRow';
@@ -13,6 +13,8 @@ interface MenusEditProps {
 }
 
 export default function MenusEdit({ menu, pages, posts }: MenusEditProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const { data, setData, put, processing, errors } = useForm({
         name: menu.name,
         slug: menu.slug,
@@ -84,7 +86,7 @@ export default function MenusEdit({ menu, pages, posts }: MenusEditProps) {
         <AdminLayout
             header={
                 <div className="flex items-center gap-4">
-                    <Link href="/admin/menus" className="text-gray-500 hover:text-gray-700">
+                    <Link href={`/${prefix}/menus`} className="text-gray-500 hover:text-gray-700">
                         <ArrowLeft className="h-5 w-5" />
                     </Link>
                     <h1 className="text-xl font-semibold text-gray-900">Modifier le menu : {menu.name}</h1>

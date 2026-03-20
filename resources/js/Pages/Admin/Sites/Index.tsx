@@ -1,5 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, router , usePage } from '@inertiajs/react';
+import type { SharedProps } from '@/types/cms';
 import { Card, CardContent } from '@/Components/ui/card';
 import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
@@ -22,6 +23,8 @@ interface Props {
 }
 
 export default function SitesIndex({ sites, currentSite }: Props) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const handleDelete = (id: number, name: string) => {
         if (!confirm(`Supprimer le site "${name}" ? Tout le contenu de ce site sera perdu.`)) return;
         router.delete(`/admin/sites/${id}`);
@@ -39,7 +42,7 @@ export default function SitesIndex({ sites, currentSite }: Props) {
                         <Globe className="h-5 w-5" />
                         Multi-site
                     </h1>
-                    <Link href="/admin/sites/create">
+                    <Link href={`/${prefix}/sites/create`}>
                         <Button size="sm" className="gap-1.5">
                             <Plus className="h-4 w-4" />
                             Nouveau site

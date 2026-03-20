@@ -1,5 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link, useForm, router } from '@inertiajs/react';
+import { Head, Link, useForm, router , usePage } from '@inertiajs/react';
+import type { SharedProps } from '@/types/cms';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
@@ -25,6 +26,8 @@ interface Props {
 }
 
 export default function WebhooksEdit({ webhook, availableEvents }: Props) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const [showSecret, setShowSecret] = useState(false);
     const { data, setData, put, processing, errors } = useForm({
         name: webhook.name,
@@ -65,7 +68,7 @@ export default function WebhooksEdit({ webhook, availableEvents }: Props) {
             header={
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                        <Link href="/admin/webhooks">
+                        <Link href={`/${prefix}/webhooks`}>
                             <Button variant="outline" size="sm">
                                 <ArrowLeft className="h-4 w-4" />
                             </Button>
@@ -170,7 +173,7 @@ export default function WebhooksEdit({ webhook, availableEvents }: Props) {
                     <Button type="submit" disabled={processing}>
                         {processing ? 'Enregistrement...' : 'Enregistrer'}
                     </Button>
-                    <Link href="/admin/webhooks">
+                    <Link href={`/${prefix}/webhooks`}>
                         <Button variant="outline">Annuler</Button>
                     </Link>
                 </div>

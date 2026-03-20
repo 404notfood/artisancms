@@ -1,11 +1,16 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { router } from '@inertiajs/react';
+import { router, usePage } from '@inertiajs/react';
 import { Search } from 'lucide-react';
-import { COMMANDS } from './command-palette/commands';
+import { getCommands } from './command-palette/commands';
 import { type CommandItem } from './command-palette/types';
+import type { SharedProps } from '@/types/cms';
 import CommandResults from './command-palette/CommandResults';
 
 export default function CommandPalette() {
+    const { cms } = usePage<SharedProps>().props;
+    const adminPrefix = cms?.adminPrefix ?? 'admin';
+    const commands = useMemo(() => getCommands(adminPrefix), [adminPrefix]);
+
     const [open, setOpen] = useState(false);
     const [query, setQuery] = useState('');
     const [selectedIndex, setSelectedIndex] = useState(0);
@@ -38,9 +43,9 @@ export default function CommandPalette() {
 
     // Fuzzy search
     const filtered = useMemo(() => {
-        if (!query.trim()) return COMMANDS;
+        if (!query.trim()) return commands;
         const q = query.toLowerCase();
-        return COMMANDS.filter((cmd) => {
+        return commands.filter((cmd) => {
             const haystack = [
                 cmd.label,
                 cmd.description ?? '',
@@ -51,7 +56,7 @@ export default function CommandPalette() {
                 .toLowerCase();
             return haystack.includes(q);
         });
-    }, [query]);
+    }, [query, commands]);
 
     // Group by category
     const grouped = useMemo(() => {

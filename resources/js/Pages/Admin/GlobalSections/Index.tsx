@@ -1,7 +1,7 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, router , usePage } from '@inertiajs/react';
 import { useState } from 'react';
-import type { GlobalSectionData, PaginatedResponse } from '@/types/cms';
+import type { GlobalSectionData, PaginatedResponse, SharedProps } from '@/types/cms';
 import StatusBadge from '@/Components/admin/status-badge';
 import { Plus, Check, Pencil, Trash2 } from 'lucide-react';
 
@@ -14,11 +14,13 @@ interface GlobalSectionsIndexProps {
 }
 
 export default function GlobalSectionsIndex({ sections, filters }: GlobalSectionsIndexProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const [search, setSearch] = useState(filters.search ?? '');
     const [typeFilter, setTypeFilter] = useState(filters.type ?? '');
 
     function applyFilters(overrides: { type?: string; search?: string } = {}) {
-        router.get('/admin/global-sections', {
+        router.get(`/${prefix}/global-sections`, {
             type: overrides.type ?? typeFilter,
             search: overrides.search ?? search,
         }, {
@@ -52,7 +54,7 @@ export default function GlobalSectionsIndex({ sections, filters }: GlobalSection
                 <div className="flex items-center justify-between">
                     <h1 className="text-xl font-semibold text-gray-900">Sections globales</h1>
                     <Link
-                        href="/admin/global-sections/create"
+                        href={`/${prefix}/global-sections/create`}
                         className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 transition-colors"
                     >
                         <Plus className="h-4 w-4" />
@@ -187,7 +189,7 @@ export default function GlobalSectionsIndex({ sections, filters }: GlobalSection
                                 {Array.from({ length: sections.last_page }, (_, i) => i + 1).map((page) => (
                                     <button
                                         key={page}
-                                        onClick={() => router.get('/admin/global-sections', {
+                                        onClick={() => router.get(`/${prefix}/global-sections`, {
                                             page,
                                             type: typeFilter,
                                             search,

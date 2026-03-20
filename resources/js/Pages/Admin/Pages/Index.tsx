@@ -31,6 +31,8 @@ const bulkActions = [
 ];
 
 export default function PagesIndex({ pages, filters }: PagesIndexProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const { flash } = usePage().props as unknown as { flash: FlashMessages };
     const [search, setSearch] = useState(filters.search ?? '');
     const [selected, setSelected] = useState<number[]>([]);
@@ -55,12 +57,12 @@ export default function PagesIndex({ pages, filters }: PagesIndexProps) {
     function handleSearch(e: React.FormEvent) {
         e.preventDefault();
         setSelected([]);
-        router.get('/admin/pages', { search, status: filters.status }, { preserveState: true });
+        router.get(`/${prefix}/pages`, { search, status: filters.status }, { preserveState: true });
     }
 
     function handleTabChange(status: string) {
         setSelected([]);
-        router.get('/admin/pages', { status, search: filters.search }, { preserveState: true });
+        router.get(`/${prefix}/pages`, { status, search: filters.search }, { preserveState: true });
     }
 
     function handleDelete(page: PageData) {
@@ -79,7 +81,7 @@ export default function PagesIndex({ pages, filters }: PagesIndexProps) {
 
     function handleEmptyTrash() {
         if (!confirm('Vider la corbeille ? Toutes les pages seront supprimées définitivement.')) return;
-        router.post('/admin/pages/empty-trash');
+        router.post(`/${prefix}/pages/empty-trash`);
     }
 
     function handleDuplicate(page: PageData) {
@@ -96,7 +98,7 @@ export default function PagesIndex({ pages, filters }: PagesIndexProps) {
     }
 
     function executeBulk(action: string) {
-        router.post('/admin/pages/bulk', { ids: selected, action }, {
+        router.post(`/${prefix}/pages/bulk`, { ids: selected, action }, {
             onSuccess: () => { setSelected([]); setBulkAction(''); setConfirmBulkDelete(false); },
         });
     }
@@ -107,7 +109,7 @@ export default function PagesIndex({ pages, filters }: PagesIndexProps) {
                 <div className="flex items-center justify-between">
                     <h1 className="text-xl font-semibold text-gray-900">Pages</h1>
                     <Link
-                        href="/admin/pages/create"
+                        href={`/${prefix}/pages/create`}
                         className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 transition-colors"
                     >
                         <Plus className="h-4 w-4" />

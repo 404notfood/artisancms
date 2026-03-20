@@ -24,11 +24,25 @@ Route::get('/', [FrontController::class, 'home'])->name('front.home');
 /*
 |--------------------------------------------------------------------------
 | Admin Routes (loaded from routes/admin.php)
+| Prefix is dynamique — configurable via Settings > Securite
 |--------------------------------------------------------------------------
 */
 
-Route::prefix('admin')
-    ->middleware(['web', 'auth'])
+$adminPrefix = config('cms.admin.prefix', 'admin');
+try {
+    $dbPrefix = \App\Models\Setting::get('security.admin_prefix');
+    if ($dbPrefix && is_string($dbPrefix) && preg_match('/^[a-zA-Z0-9\-_]+$/', $dbPrefix)) {
+        $adminPrefix = $dbPrefix;
+    }
+} catch (\Throwable) {
+    // DB not available yet (install wizard, migrations not run)
+}
+
+// Store resolved prefix in config for other parts of the app
+config(['cms.admin.resolved_prefix' => $adminPrefix]);
+
+Route::prefix($adminPrefix)
+    ->middleware(config('cms.admin.middleware', ['web', 'auth']))
     ->group(base_path('routes/admin.php'));
 
 /*
@@ -38,11 +52,13 @@ Route::prefix('admin')
 */
 
 Route::get('/dashboard', function () {
-    return redirect('/admin');
+    $prefix = config('cms.admin.resolved_prefix', 'admin');
+    return redirect("/{$prefix}");
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', fn () => redirect('/admin/account'))->name('profile.edit');
+    $prefix = config('cms.admin.resolved_prefix', 'admin');
+    Route::get('/profile', fn () => redirect("/{$prefix}/account"))->name('profile.edit');
 });
 
 require __DIR__.'/auth.php';
@@ -150,9 +166,11 @@ Route::get('/members/{user}', [MemberController::class, 'show'])->name('members.
 /*
 |--------------------------------------------------------------------------
 | Front Catch-All Route (must be LAST)
+| Excludes dynamic admin prefix and other reserved paths
 |--------------------------------------------------------------------------
 */
 
+$escapedAdminPrefix = preg_quote($adminPrefix, '/');
 Route::get('/{slug}', [FrontController::class, 'show'])
     ->name('front.page')
-    ->where('slug', '(?!admin(?:/|$))(?!api(?:/|$))(?!shop(?:/|$))(?!cart(?:/|$))(?!checkout(?:/|$))(?!payment(?:/|$))(?!account(?:/|$))(?!wishlist(?:/|$))(?!members(?:/|$))[a-zA-Z0-9\-\/]+');
+    ->where('slug', "(?!{$escapedAdminPrefix}(?:/|$))(?!api(?:/|$))(?!shop(?:/|$))(?!cart(?:/|$))(?!checkout(?:/|$))(?!payment(?:/|$))(?!account(?:/|$))(?!wishlist(?:/|$))(?!members(?:/|$))[a-zA-Z0-9\\-\\/]+");

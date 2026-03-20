@@ -1,7 +1,7 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link, useForm, router } from '@inertiajs/react';
+import { Head, Link, useForm, router , usePage } from '@inertiajs/react';
 import { useState, type FormEvent } from 'react';
-import type { UserData, RoleData } from '@/types/cms';
+import type { UserData, RoleData, SharedProps } from '@/types/cms';
 import { formatDate } from '@/lib/format';
 import AvatarUpload from '@/Components/admin/avatar-upload';
 import RoleBadge from '@/Components/admin/role-badge';
@@ -322,11 +322,13 @@ function DangerZone({ user }: { user: UsersEditProps['user'] }) {
 // ─── Main Page ───────────────────────────────────────────────────────────────
 
 export default function UsersEdit({ user, roles }: UsersEditProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     return (
         <AdminLayout
             header={
                 <div className="flex items-center gap-4">
-                    <Link href="/admin/users" className="text-gray-500 hover:text-gray-700">
+                    <Link href={`/${prefix}/users`} className="text-gray-500 hover:text-gray-700">
                         <ArrowLeft className="h-5 w-5" />
                     </Link>
                     <h1 className="text-xl font-semibold text-gray-900">Modifier l'utilisateur</h1>

@@ -40,6 +40,8 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 export default function VerificationsIndex({ verifications, filters, pendingCount }: VerificationsIndexProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const [adminNotes, setAdminNotes] = useState<Record<number, string>>({});
 
     function handleApprove(id: number) {
@@ -58,7 +60,7 @@ export default function VerificationsIndex({ verifications, filters, pendingCoun
     }
 
     function filterByStatus(status: string) {
-        router.get('/admin/member-space/verifications', status ? { status } : {}, { preserveState: true });
+        router.get(`/${prefix}/member-space/verifications`, status ? { status } : {}, { preserveState: true });
     }
 
     return (

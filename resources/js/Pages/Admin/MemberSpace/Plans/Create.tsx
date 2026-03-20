@@ -1,8 +1,11 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, useForm, Link } from '@inertiajs/react';
+import { Head, useForm, Link , usePage } from '@inertiajs/react';
+import type { SharedProps } from '@/types/cms';
 import { useState } from 'react';
 
 export default function CreatePlan() {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const { data, setData, post, processing, errors } = useForm({
         name: '',
         description: '',
@@ -33,7 +36,7 @@ export default function CreatePlan() {
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        post('/admin/member-space/plans');
+        post(`/${prefix}/member-space/plans`);
     }
 
     const inputClass = 'mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500';
@@ -42,7 +45,7 @@ export default function CreatePlan() {
     return (
         <AdminLayout header={
             <div className="flex items-center gap-3">
-                <Link href="/admin/member-space/plans" className="text-gray-400 hover:text-gray-600">&larr;</Link>
+                <Link href={`/${prefix}/member-space/plans`} className="text-gray-400 hover:text-gray-600">&larr;</Link>
                 <h1 className="text-xl font-semibold text-gray-900">Nouveau plan</h1>
             </div>
         }>

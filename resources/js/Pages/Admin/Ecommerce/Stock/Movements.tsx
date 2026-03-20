@@ -1,5 +1,5 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link , usePage } from '@inertiajs/react';
 import { ArrowLeft } from 'lucide-react';
 import { ProductData, StockMovementData, PaginatedResponse } from '@/types/cms';
 
@@ -17,6 +17,8 @@ const TYPE_LABELS: Record<string, { label: string; color: string }> = {
 };
 
 export default function StockMovements({ product, movements, variantId }: StockMovementsProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     return (
         <AdminLayout>
             <Head title={`Historique stock - ${product.name}`} />
@@ -24,7 +26,7 @@ export default function StockMovements({ product, movements, variantId }: StockM
             <div className="space-y-6">
                 <div className="flex items-center gap-4">
                     <Link
-                        href="/admin/shop/stock"
+                        href={`/${prefix}/shop/stock`}
                         className="text-gray-500 hover:text-gray-700"
                     >
                         <ArrowLeft className="w-5 h-5" />

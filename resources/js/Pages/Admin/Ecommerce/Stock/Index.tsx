@@ -19,6 +19,8 @@ const formatCurrency = (amount: number) =>
     new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(amount);
 
 export default function StockIndex({ products, filter, lowStockCount, outOfStockCount }: StockIndexProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const [adjustingId, setAdjustingId] = useState<number | null>(null);
 
     const adjustForm = useForm({
@@ -37,7 +39,7 @@ export default function StockIndex({ products, filter, lowStockCount, outOfStock
     }
 
     function setFilter(f: string) {
-        router.get('/admin/shop/stock', f === 'all' ? {} : { filter: f }, { preserveState: true });
+        router.get(`/${prefix}/shop/stock`, f === 'all' ? {} : { filter: f }, { preserveState: true });
     }
 
     function getStockBadge(product: StockProduct) {

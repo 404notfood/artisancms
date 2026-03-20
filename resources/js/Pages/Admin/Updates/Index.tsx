@@ -76,6 +76,8 @@ const STATUS_MAP: Record<string, { label: string; color: string }> = {
 };
 
 export default function UpdatesIndex({ updates, history, health }: UpdatesIndexProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const [checking, setChecking] = useState(false);
     const [safeMode, setSafeMode] = useState(health.safe_mode);
     const [recoveryUrl, setRecoveryUrl] = useState<string | null>(null);
@@ -85,7 +87,7 @@ export default function UpdatesIndex({ updates, history, health }: UpdatesIndexP
     async function handleCheckUpdates() {
         setChecking(true);
         try {
-            await fetch('/admin/updates/check', {
+            await fetch(`/${prefix}/updates/check`, {
                 headers: { Accept: 'application/json' },
             });
             window.location.reload();
@@ -95,7 +97,7 @@ export default function UpdatesIndex({ updates, history, health }: UpdatesIndexP
     }
 
     async function handleToggleSafeMode() {
-        const res = await fetch('/admin/updates/safe-mode', {
+        const res = await fetch(`/${prefix}/updates/safe-mode`, {
             method: 'POST',
             headers: {
                 'X-CSRF-TOKEN': csrfToken,
@@ -108,7 +110,7 @@ export default function UpdatesIndex({ updates, history, health }: UpdatesIndexP
     }
 
     async function handleGenerateToken() {
-        const res = await fetch('/admin/updates/recovery-token', {
+        const res = await fetch(`/${prefix}/updates/recovery-token`, {
             method: 'POST',
             headers: {
                 'X-CSRF-TOKEN': csrfToken,

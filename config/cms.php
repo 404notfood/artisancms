@@ -39,8 +39,12 @@ return [
         ],
     ],
     'admin' => [
-        'prefix' => 'admin',
+        'prefix' => env('CMS_ADMIN_PREFIX', 'admin'),
         'middleware' => ['web', 'auth'],
+    ],
+    'auth' => [
+        'login_path' => env('CMS_LOGIN_PATH', 'login'),
+        'register_path' => env('CMS_REGISTER_PATH', 'register'),
     ],
     'cache' => [
         'enabled' => env('CMS_CACHE_ENABLED', true),

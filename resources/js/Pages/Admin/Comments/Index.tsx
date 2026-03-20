@@ -29,15 +29,17 @@ const statusTabs = [
 ];
 
 export default function CommentsIndex({ comments, filters, counts }: Props) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const [search, setSearch] = useState(filters.search ?? '');
 
     function handleSearch(e: React.FormEvent) {
         e.preventDefault();
-        router.get('/admin/comments', { search, status: filters.status }, { preserveState: true });
+        router.get(`/${prefix}/comments`, { search, status: filters.status }, { preserveState: true });
     }
 
     function handleTabChange(status: string) {
-        router.get('/admin/comments', { status, search: filters.search }, { preserveState: true });
+        router.get(`/${prefix}/comments`, { status, search: filters.search }, { preserveState: true });
     }
 
     function handleApprove(id: number) {
@@ -211,7 +213,7 @@ export default function CommentsIndex({ comments, filters, counts }: Props) {
                                     href={`/admin/comments?page=${p}&status=${filters.status ?? ''}&search=${filters.search ?? ''}`}
                                     onClick={(e) => {
                                         e.preventDefault();
-                                        router.get('/admin/comments', {
+                                        router.get(`/${prefix}/comments`, {
                                             page: p,
                                             status: filters.status ?? '',
                                             search: filters.search ?? '',

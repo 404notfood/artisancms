@@ -1,5 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link , usePage } from '@inertiajs/react';
+import type { SharedProps } from '@/types/cms';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
@@ -40,11 +41,13 @@ const statusConfig = {
 };
 
 export default function WebhookDeliveries({ webhook, deliveries }: Props) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     return (
         <AdminLayout
             header={
                 <div className="flex items-center gap-3">
-                    <Link href="/admin/webhooks">
+                    <Link href={`/${prefix}/webhooks`}>
                         <Button variant="outline" size="sm">
                             <ArrowLeft className="h-4 w-4" />
                         </Button>

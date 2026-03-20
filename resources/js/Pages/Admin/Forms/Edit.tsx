@@ -1,5 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, Link, useForm , usePage } from '@inertiajs/react';
+import type { SharedProps } from '@/types/cms';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
@@ -25,6 +26,8 @@ interface Form {
 interface Props { form: Form; }
 
 export default function FormsEdit({ form }: Props) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const { data, setData, put, processing, errors } = useForm({
         name: form.name,
         fields: form.fields,
@@ -57,7 +60,7 @@ export default function FormsEdit({ form }: Props) {
         <AdminLayout
             header={
                 <div className="flex items-center gap-3">
-                    <Link href="/admin/forms">
+                    <Link href={`/${prefix}/forms`}>
                         <Button variant="outline" size="sm"><ArrowLeft className="h-4 w-4" /></Button>
                     </Link>
                     <h1 className="text-xl font-semibold text-gray-900">{form.name}</h1>
@@ -128,7 +131,7 @@ export default function FormsEdit({ form }: Props) {
 
                 <div className="flex gap-3">
                     <Button type="submit" disabled={processing}>{processing ? 'Enregistrement...' : 'Enregistrer'}</Button>
-                    <Link href="/admin/forms"><Button variant="outline">Annuler</Button></Link>
+                    <Link href={`/${prefix}/forms`}><Button variant="outline">Annuler</Button></Link>
                 </div>
             </form>
         </AdminLayout>

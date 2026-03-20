@@ -24,6 +24,8 @@ const statusTabs = [
 ];
 
 export default function ReviewsIndex({ reviews, filters, products }: ReviewsIndexProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const [search, setSearch] = useState(filters.search ?? '');
     const [expandedId, setExpandedId] = useState<number | null>(null);
     const [replyText, setReplyText] = useState('');
@@ -31,7 +33,7 @@ export default function ReviewsIndex({ reviews, filters, products }: ReviewsInde
 
     function handleSearch(e: React.FormEvent) {
         e.preventDefault();
-        router.get('/admin/shop/reviews', {
+        router.get(`/${prefix}/shop/reviews`, {
             search,
             status: filters.status,
             product_id: filters.product_id,
@@ -40,7 +42,7 @@ export default function ReviewsIndex({ reviews, filters, products }: ReviewsInde
     }
 
     function handleTabChange(status: string) {
-        router.get('/admin/shop/reviews', {
+        router.get(`/${prefix}/shop/reviews`, {
             status,
             search: filters.search,
             product_id: filters.product_id,
@@ -49,7 +51,7 @@ export default function ReviewsIndex({ reviews, filters, products }: ReviewsInde
     }
 
     function handleProductFilter(productId: string) {
-        router.get('/admin/shop/reviews', {
+        router.get(`/${prefix}/shop/reviews`, {
             product_id: productId,
             status: filters.status,
             search: filters.search,
@@ -58,7 +60,7 @@ export default function ReviewsIndex({ reviews, filters, products }: ReviewsInde
     }
 
     function handleRatingFilter(rating: string) {
-        router.get('/admin/shop/reviews', {
+        router.get(`/${prefix}/shop/reviews`, {
             rating,
             status: filters.status,
             search: filters.search,

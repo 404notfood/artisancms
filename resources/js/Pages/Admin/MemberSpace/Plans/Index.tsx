@@ -1,5 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, router , usePage } from '@inertiajs/react';
+import type { SharedProps } from '@/types/cms';
 import { Plus, Pencil, Trash2 } from 'lucide-react';
 
 interface PlanData {
@@ -25,6 +26,8 @@ const PERIOD_LABELS: Record<string, string> = {
 };
 
 export default function PlansIndex({ plans }: PlansIndexProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     function handleDelete(plan: PlanData) {
         if (!confirm(`Supprimer le plan "${plan.name}" ?`)) return;
         router.delete(`/admin/member-space/plans/${plan.id}`);
@@ -34,7 +37,7 @@ export default function PlansIndex({ plans }: PlansIndexProps) {
         <AdminLayout header={
             <div className="flex items-center justify-between">
                 <h1 className="text-xl font-semibold text-gray-900">Plans d'abonnement</h1>
-                <Link href="/admin/member-space/plans/create" className="inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-indigo-700">
+                <Link href={`/${prefix}/member-space/plans/create`} className="inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-indigo-700">
                     <Plus className="h-4 w-4" /> Nouveau plan
                 </Link>
             </div>

@@ -16,6 +16,8 @@ interface Props {
 }
 
 export default function AiAssistantSettings({ provider, is_configured, has_openai_key, has_anthropic_key }: Props) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const [showOpenAiKey, setShowOpenAiKey] = useState(false);
     const [showAnthropicKey, setShowAnthropicKey] = useState(false);
 
@@ -27,7 +29,7 @@ export default function AiAssistantSettings({ provider, is_configured, has_opena
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        post('/admin/ai-assistant/settings');
+        post(`/${prefix}/ai-assistant/settings`);
     };
 
     const capabilities = [

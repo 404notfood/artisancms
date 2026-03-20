@@ -1,5 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head } from '@inertiajs/react';
+import { Head , usePage } from '@inertiajs/react';
+import type { SharedProps } from '@/types/cms';
 import {
     FileText,
     Newspaper,
@@ -29,6 +30,8 @@ export default function Dashboard({
     analytics,
     system,
 }: DashboardProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     return (
         <AdminLayout
             header={
@@ -46,7 +49,7 @@ export default function Dashboard({
                         icon={<FileText className="h-5 w-5" />}
                         iconBg="bg-blue-50"
                         iconColor="text-blue-600"
-                        href="/admin/pages"
+                        href={`/${prefix}/pages`}
                     />
                     <StatCard
                         label="Articles"
@@ -54,7 +57,7 @@ export default function Dashboard({
                         icon={<Newspaper className="h-5 w-5" />}
                         iconBg="bg-emerald-50"
                         iconColor="text-emerald-600"
-                        href="/admin/posts"
+                        href={`/${prefix}/posts`}
                     />
                     <StatCard
                         label="Medias"
@@ -62,7 +65,7 @@ export default function Dashboard({
                         icon={<Image className="h-5 w-5" />}
                         iconBg="bg-purple-50"
                         iconColor="text-purple-600"
-                        href="/admin/media"
+                        href={`/${prefix}/media`}
                     />
                     <StatCard
                         label="Utilisateurs"
@@ -81,7 +84,7 @@ export default function Dashboard({
                         icon={<Eye className="h-5 w-5" />}
                         iconBg="bg-cyan-50"
                         iconColor="text-cyan-600"
-                        href="/admin/analytics"
+                        href={`/${prefix}/analytics`}
                     />
                     <StatCard
                         label="Vues cette semaine"
@@ -89,7 +92,7 @@ export default function Dashboard({
                         icon={<TrendingUp className="h-5 w-5" />}
                         iconBg="bg-indigo-50"
                         iconColor="text-indigo-600"
-                        href="/admin/analytics"
+                        href={`/${prefix}/analytics`}
                     />
                     <StatCard
                         label="Commentaires en attente"
@@ -97,7 +100,7 @@ export default function Dashboard({
                         icon={<MessageSquare className="h-5 w-5" />}
                         iconBg="bg-amber-50"
                         iconColor="text-amber-600"
-                        href="/admin/comments"
+                        href={`/${prefix}/comments`}
                     />
                 </div>
 

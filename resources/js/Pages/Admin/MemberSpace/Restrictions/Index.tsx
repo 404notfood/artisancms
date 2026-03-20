@@ -46,6 +46,8 @@ const MODEL_LABELS: Record<string, string> = {
 };
 
 export default function RestrictionsIndex({ restrictions, plans }: RestrictionsIndexProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const [showForm, setShowForm] = useState(false);
 
     const { data, setData, post, processing } = useForm({
@@ -62,7 +64,7 @@ export default function RestrictionsIndex({ restrictions, plans }: RestrictionsI
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        post('/admin/member-space/restrictions', { onSuccess: () => setShowForm(false) });
+        post(`/${prefix}/member-space/restrictions`, { onSuccess: () => setShowForm(false) });
     }
 
     function handleDelete(id: number) {

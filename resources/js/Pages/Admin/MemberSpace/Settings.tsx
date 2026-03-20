@@ -26,12 +26,14 @@ const MODULE_LABELS: Record<string, { label: string; description: string }> = {
 };
 
 export default function Settings({ settings }: SettingsProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const { data, setData, put, processing } = useForm(settings);
     const [activeTab, setActiveTab] = useState('modules');
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        put('/admin/member-space/settings');
+        put(`/${prefix}/member-space/settings`);
     }
 
     function toggleModule(key: string) {

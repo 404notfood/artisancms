@@ -11,16 +11,37 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('guest')->group(function () {
-    Route::get('register', [RegisteredUserController::class, 'create'])
+// Resolve custom auth paths from DB settings (fallback to config/env)
+try {
+    $loginPath = \App\Models\Setting::get('security.login_path') ?? config('cms.auth.login_path', 'login');
+    $registerPath = \App\Models\Setting::get('security.register_path') ?? config('cms.auth.register_path', 'register');
+} catch (\Throwable) {
+    $loginPath = config('cms.auth.login_path', 'login');
+    $registerPath = config('cms.auth.register_path', 'register');
+}
+
+// Ensure clean paths (no leading slash)
+$loginPath = ltrim((string) $loginPath, '/');
+$registerPath = ltrim((string) $registerPath, '/');
+
+// 301 redirects from default paths if custom ones are set
+if ($loginPath !== 'login') {
+    Route::get('login', fn () => redirect("/{$loginPath}", 301))->name('login.redirect');
+}
+if ($registerPath !== 'register') {
+    Route::get('register', fn () => redirect("/{$registerPath}", 301))->name('register.redirect');
+}
+
+Route::middleware('guest')->group(function () use ($loginPath, $registerPath) {
+    Route::get($registerPath, [RegisteredUserController::class, 'create'])
         ->name('register');
 
-    Route::post('register', [RegisteredUserController::class, 'store']);
+    Route::post($registerPath, [RegisteredUserController::class, 'store']);
 
-    Route::get('login', [AuthenticatedSessionController::class, 'create'])
+    Route::get($loginPath, [AuthenticatedSessionController::class, 'create'])
         ->name('login');
 
-    Route::post('login', [AuthenticatedSessionController::class, 'store']);
+    Route::post($loginPath, [AuthenticatedSessionController::class, 'store']);
 
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
         ->name('password.request');

@@ -1,5 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link, useForm, router } from '@inertiajs/react';
+import { Head, Link, useForm, router , usePage } from '@inertiajs/react';
+import type { SharedProps } from '@/types/cms';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
@@ -34,6 +35,8 @@ interface Props {
 }
 
 export default function EmailTemplatesEdit({ emailTemplate, availableVariables, categories }: Props) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const [testEmail, setTestEmail] = useState('');
     const [showTestDialog, setShowTestDialog] = useState(false);
     const [activeTab, setActiveTab] = useState<'html' | 'text' | 'preview'>('html');
@@ -72,7 +75,7 @@ export default function EmailTemplatesEdit({ emailTemplate, availableVariables, 
             header={
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                        <Link href="/admin/email-templates">
+                        <Link href={`/${prefix}/email-templates`}>
                             <Button variant="outline" size="sm">
                                 <ArrowLeft className="h-4 w-4" />
                             </Button>
@@ -191,7 +194,7 @@ export default function EmailTemplatesEdit({ emailTemplate, availableVariables, 
                             <Button type="submit" disabled={processing}>
                                 {processing ? 'Enregistrement...' : 'Enregistrer'}
                             </Button>
-                            <Link href="/admin/email-templates">
+                            <Link href={`/${prefix}/email-templates`}>
                                 <Button variant="outline">Annuler</Button>
                             </Link>
                         </div>

@@ -1,7 +1,7 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, router , usePage } from '@inertiajs/react';
 import { useState } from 'react';
-import type { ProductData, ProductCategoryData, PaginatedResponse } from '@/types/cms';
+import type { ProductData, ProductCategoryData, PaginatedResponse, SharedProps } from '@/types/cms';
 import StatusBadge from '@/Components/admin/status-badge';
 import { Plus, Pencil, Trash2, ImageIcon } from 'lucide-react';
 
@@ -23,6 +23,8 @@ const statusTabs = [
 ];
 
 export default function ProductsIndex({ products, categories, filters }: ProductsIndexProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const [search, setSearch] = useState(filters.search ?? '');
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
 
@@ -46,7 +48,7 @@ export default function ProductsIndex({ products, categories, filters }: Product
     function handleSearch(e: React.FormEvent) {
         e.preventDefault();
         router.get(
-            '/admin/shop/products',
+            `/${prefix}/shop/products`,
             { search, status: filters.status, category_id: filters.category_id },
             { preserveState: true },
         );
@@ -54,7 +56,7 @@ export default function ProductsIndex({ products, categories, filters }: Product
 
     function handleTabChange(status: string) {
         router.get(
-            '/admin/shop/products',
+            `/${prefix}/shop/products`,
             { status, search: filters.search, category_id: filters.category_id },
             { preserveState: true },
         );
@@ -62,7 +64,7 @@ export default function ProductsIndex({ products, categories, filters }: Product
 
     function handleCategoryChange(categoryId: string) {
         router.get(
-            '/admin/shop/products',
+            `/${prefix}/shop/products`,
             { category_id: categoryId, status: filters.status, search: filters.search },
             { preserveState: true },
         );
@@ -92,7 +94,7 @@ export default function ProductsIndex({ products, categories, filters }: Product
                 <div className="flex items-center justify-between">
                     <h1 className="text-xl font-semibold text-gray-900">Produits</h1>
                     <Link
-                        href="/admin/shop/products/create"
+                        href={`/${prefix}/shop/products/create`}
                         className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 transition-colors"
                     >
                         <Plus className="h-4 w-4" />

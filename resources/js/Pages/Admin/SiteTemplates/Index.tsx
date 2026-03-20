@@ -39,6 +39,8 @@ const categoryColors: Record<string, string> = {
 };
 
 export default function SiteTemplatesIndex({ templates }: Props) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const [installing, setInstalling] = useState<string | null>(null);
     const [showExport, setShowExport] = useState(false);
 
@@ -50,7 +52,7 @@ export default function SiteTemplatesIndex({ templates }: Props) {
     const handleInstall = (slug: string, name: string) => {
         if (!confirm(`Installer le template "${name}" ? Cela créera des pages, menus et paramètres. Cette action ne peut pas être annulée facilement.`)) return;
         setInstalling(slug);
-        router.post('/admin/site-templates/install', { slug }, {
+        router.post(`/${prefix}/site-templates/install`, { slug }, {
             onFinish: () => setInstalling(null),
         });
     };

@@ -10,6 +10,8 @@ interface TaxIndexProps {
 }
 
 export default function TaxIndex({ rules }: TaxIndexProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const [editingId, setEditingId] = useState<number | null>(null);
     const [showCreateForm, setShowCreateForm] = useState(false);
 
@@ -45,7 +47,7 @@ export default function TaxIndex({ rules }: TaxIndexProps) {
             active: createForm.data.active,
         };
 
-        router.post('/admin/shop/tax', payload, {
+        router.post(`/${prefix}/shop/tax`, payload, {
             onSuccess: () => {
                 createForm.reset();
                 setShowCreateForm(false);

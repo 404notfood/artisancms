@@ -24,15 +24,17 @@ const statusTabs = [
 ];
 
 export default function OrdersIndex({ orders, filters }: OrdersIndexProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const [search, setSearch] = useState(filters.search ?? '');
 
     function handleSearch(e: React.FormEvent) {
         e.preventDefault();
-        router.get('/admin/shop/orders', { search, status: filters.status }, { preserveState: true });
+        router.get(`/${prefix}/shop/orders`, { search, status: filters.status }, { preserveState: true });
     }
 
     function handleTabChange(status: string) {
-        router.get('/admin/shop/orders', { status, search: filters.search }, { preserveState: true });
+        router.get(`/${prefix}/shop/orders`, { status, search: filters.search }, { preserveState: true });
     }
 
     function formatPrice(price: number): string {

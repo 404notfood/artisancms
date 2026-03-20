@@ -9,6 +9,8 @@ interface CategoriesIndexProps {
 }
 
 export default function CategoriesIndex({ categories }: CategoriesIndexProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const [editingId, setEditingId] = useState<number | null>(null);
 
     const createForm = useForm({
@@ -48,7 +50,7 @@ export default function CategoriesIndex({ categories }: CategoriesIndexProps) {
 
     function handleCreate(e: React.FormEvent) {
         e.preventDefault();
-        createForm.post('/admin/shop/categories', {
+        createForm.post(`/${prefix}/shop/categories`, {
             onSuccess: () => {
                 createForm.reset();
             },

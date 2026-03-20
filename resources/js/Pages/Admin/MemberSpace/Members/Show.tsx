@@ -1,5 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link , usePage } from '@inertiajs/react';
+import type { SharedProps } from '@/types/cms';
 
 interface MemberUser {
     id: number;
@@ -48,13 +49,15 @@ interface ShowProps {
 }
 
 export default function MemberShow({ member, profile, recentActivity, stats }: ShowProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const avatarUrl = profile?.avatar ? `/storage/${profile.avatar}` : null;
     const displayName = profile?.display_name || member.name;
 
     return (
         <AdminLayout header={
             <div className="flex items-center gap-3">
-                <Link href="/admin/member-space/members" className="text-gray-400 hover:text-gray-600">&larr;</Link>
+                <Link href={`/${prefix}/member-space/members`} className="text-gray-400 hover:text-gray-600">&larr;</Link>
                 <h1 className="text-xl font-semibold text-gray-900">{displayName}</h1>
             </div>
         }>

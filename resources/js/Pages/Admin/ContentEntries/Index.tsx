@@ -1,7 +1,7 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, router , usePage } from '@inertiajs/react';
 import { useState } from 'react';
-import type { ContentTypeData, ContentEntryData, PaginatedResponse } from '@/types/cms';
+import type { ContentTypeData, ContentEntryData, PaginatedResponse, SharedProps } from '@/types/cms';
 import { formatDate } from '@/lib/format';
 import StatusBadge from '@/Components/admin/status-badge';
 import { ArrowLeft, Plus, Pencil, Trash2 } from 'lucide-react';
@@ -24,6 +24,8 @@ const statusTabs = [
 ];
 
 export default function ContentEntriesIndex({ contentType, entries, filters }: ContentEntriesIndexProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const [search, setSearch] = useState(filters.search ?? '');
 
     const baseUrl = `/admin/content/${contentType.id}/entries`;
@@ -48,7 +50,7 @@ export default function ContentEntriesIndex({ contentType, entries, filters }: C
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <Link
-                            href="/admin/content-types"
+                            href={`/${prefix}/content-types`}
                             className="text-gray-400 hover:text-gray-600"
                             title="Retour aux types de contenu"
                         >

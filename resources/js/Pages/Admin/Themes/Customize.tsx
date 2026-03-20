@@ -1,5 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, router , usePage } from '@inertiajs/react';
+import type { SharedProps } from '@/types/cms';
 import { useState, useRef, type FormEvent } from 'react';
 import { Button } from '@/Components/ui/button';
 import {
@@ -35,6 +36,8 @@ const SECTION_META: Record<string, { label: string; icon: typeof Layout }> = {
 };
 
 export default function Customize({ theme, schema, values }: CustomizeProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const sections = Object.keys(schema).filter((s) => SECTION_META[s]);
     const [activeSection, setActiveSection] = useState(sections[0] || 'colors');
     const [data, setDataState] = useState<Record<string, string | boolean>>({ ...values });
@@ -80,7 +83,7 @@ export default function Customize({ theme, schema, values }: CustomizeProps) {
         const formData = new FormData();
         formData.append('file', file);
 
-        fetch('/admin/media', {
+        fetch(`/${prefix}/media`, {
             method: 'POST',
             body: formData,
             headers: {
@@ -106,7 +109,7 @@ export default function Customize({ theme, schema, values }: CustomizeProps) {
         <AdminLayout
             header={
                 <div className="flex items-center gap-2 text-sm">
-                    <Link href="/admin/themes" className="text-gray-500 hover:text-gray-700">
+                    <Link href={`/${prefix}/themes`} className="text-gray-500 hover:text-gray-700">
                         Themes
                     </Link>
                     <ChevronRight className="h-4 w-4 text-gray-400" />
@@ -212,7 +215,7 @@ export default function Customize({ theme, schema, values }: CustomizeProps) {
                     </div>
                     <div className="flex items-center gap-3">
                         <Button type="button" variant="outline" size="sm" asChild>
-                            <Link href="/admin/themes">Annuler</Link>
+                            <Link href={`/${prefix}/themes`}>Annuler</Link>
                         </Button>
                         <Button type="submit" size="sm" disabled={processing}>
                             {processing ? 'Enregistrement...' : 'Enregistrer'}

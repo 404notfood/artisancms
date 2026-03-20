@@ -1,5 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, router , usePage } from '@inertiajs/react';
+import type { SharedProps } from '@/types/cms';
 import { FileText, Plus, Eye, Settings, Trash2, BarChart2 } from 'lucide-react';
 
 interface Form {
@@ -28,6 +29,8 @@ function isPageinated(forms: Form[] | PaginatedForms): forms is PaginatedForms {
 }
 
 export default function FormsIndex({ forms: rawForms }: Props) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const forms = isPageinated(rawForms) ? rawForms.data : (Array.isArray(rawForms) ? rawForms : []);
     const pagination = isPageinated(rawForms) ? rawForms : null;
 
@@ -45,7 +48,7 @@ export default function FormsIndex({ forms: rawForms }: Props) {
                         Formulaires
                     </h1>
                     <Link
-                        href="/admin/forms/create"
+                        href={`/${prefix}/forms/create`}
                         className="inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3 py-2 text-sm font-medium text-white hover:bg-indigo-700 transition-colors"
                     >
                         <Plus className="h-4 w-4" />
@@ -66,7 +69,7 @@ export default function FormsIndex({ forms: rawForms }: Props) {
                         Creez votre premier formulaire pour collecter des donnees de vos visiteurs.
                     </p>
                     <Link
-                        href="/admin/forms/create"
+                        href={`/${prefix}/forms/create`}
                         className="mt-5 inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-indigo-700 transition-colors"
                     >
                         <Plus className="h-4 w-4" />

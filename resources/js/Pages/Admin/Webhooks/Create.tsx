@@ -1,5 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, Link, useForm , usePage } from '@inertiajs/react';
+import type { SharedProps } from '@/types/cms';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
@@ -15,6 +16,8 @@ interface Props {
 }
 
 export default function WebhooksCreate({ availableEvents, generatedSecret }: Props) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const [showSecret, setShowSecret] = useState(false);
     const { data, setData, post, processing, errors } = useForm({
         name: '',
@@ -36,7 +39,7 @@ export default function WebhooksCreate({ availableEvents, generatedSecret }: Pro
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        post('/admin/webhooks');
+        post(`/${prefix}/webhooks`);
     };
 
     const copySecret = () => {
@@ -55,7 +58,7 @@ export default function WebhooksCreate({ availableEvents, generatedSecret }: Pro
         <AdminLayout
             header={
                 <div className="flex items-center gap-3">
-                    <Link href="/admin/webhooks">
+                    <Link href={`/${prefix}/webhooks`}>
                         <Button variant="outline" size="sm">
                             <ArrowLeft className="h-4 w-4" />
                         </Button>
@@ -203,7 +206,7 @@ export default function WebhooksCreate({ availableEvents, generatedSecret }: Pro
                     <Button type="submit" disabled={processing}>
                         {processing ? 'Création...' : 'Créer le webhook'}
                     </Button>
-                    <Link href="/admin/webhooks">
+                    <Link href={`/${prefix}/webhooks`}>
                         <Button variant="outline">Annuler</Button>
                     </Link>
                 </div>

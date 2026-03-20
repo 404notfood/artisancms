@@ -1,5 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link, useForm, router } from '@inertiajs/react';
+import { Head, Link, useForm, router , usePage } from '@inertiajs/react';
+import type { SharedProps } from '@/types/cms';
 import { ArrowLeft } from 'lucide-react';
 import type { FieldEntry } from './components/types';
 import { createEmptyField, generateGroupSlug, prepareFieldsForSubmit } from './components/types';
@@ -12,6 +13,8 @@ interface Props {
 }
 
 export default function CustomFieldsCreate({ fieldTypes }: Props) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const {
         fields,
         updateField,
@@ -58,7 +61,7 @@ export default function CustomFieldsCreate({ fieldTypes }: Props) {
     function handleFormSubmit(e: React.FormEvent) {
         e.preventDefault();
 
-        router.post('/admin/custom-fields', {
+        router.post(`/${prefix}/custom-fields`, {
             name: data.name,
             slug: data.slug,
             description: data.description,
@@ -74,7 +77,7 @@ export default function CustomFieldsCreate({ fieldTypes }: Props) {
         <AdminLayout
             header={
                 <div className="flex items-center gap-4">
-                    <Link href="/admin/custom-fields" className="text-gray-500 hover:text-gray-700">
+                    <Link href={`/${prefix}/custom-fields`} className="text-gray-500 hover:text-gray-700">
                         <ArrowLeft className="h-5 w-5" />
                     </Link>
                     <h1 className="text-xl font-semibold text-gray-900">
@@ -117,7 +120,7 @@ export default function CustomFieldsCreate({ fieldTypes }: Props) {
                 {/* Actions */}
                 <div className="flex items-center justify-end gap-3">
                     <Link
-                        href="/admin/custom-fields"
+                        href={`/${prefix}/custom-fields`}
                         className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
                     >
                         Annuler

@@ -1,5 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, router , usePage } from '@inertiajs/react';
+import type { SharedProps } from '@/types/cms';
 import { Button } from '@/Components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import PluginSettingsForm from '@/Components/admin/plugin-settings-form';
@@ -29,6 +30,8 @@ interface PluginSettingsProps {
 }
 
 export default function PluginSettings({ plugin, settings, schema }: PluginSettingsProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const [values, setValues] = useState<Record<string, unknown>>({ ...settings });
     const [processing, setProcessing] = useState(false);
 
@@ -51,7 +54,7 @@ export default function PluginSettings({ plugin, settings, schema }: PluginSetti
         <AdminLayout
             header={
                 <div className="flex items-center gap-2 text-sm">
-                    <Link href="/admin/plugins" className="text-gray-500 hover:text-gray-700">
+                    <Link href={`/${prefix}/plugins`} className="text-gray-500 hover:text-gray-700">
                         Plugins
                     </Link>
                     <ChevronRight className="h-4 w-4 text-gray-400" />
@@ -80,7 +83,7 @@ export default function PluginSettings({ plugin, settings, schema }: PluginSetti
 
                 <div className="mt-4 flex justify-end gap-3">
                     <Button type="button" variant="outline" size="sm" asChild>
-                        <Link href="/admin/plugins">Retour</Link>
+                        <Link href={`/${prefix}/plugins`}>Retour</Link>
                     </Button>
                     <Button type="submit" size="sm" disabled={processing} className="gap-1.5">
                         <Save className="h-4 w-4" />

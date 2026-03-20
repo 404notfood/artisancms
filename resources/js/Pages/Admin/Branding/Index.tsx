@@ -1,5 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, useForm } from '@inertiajs/react';
+import { Head, useForm , usePage } from '@inertiajs/react';
+import type { SharedProps } from '@/types/cms';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
@@ -29,6 +30,8 @@ interface Props {
 }
 
 export default function BrandingIndex({ branding }: Props) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const { data, setData, put, processing, errors } = useForm({
         brand_name: branding.brand_name ?? '',
         brand_logo: branding.brand_logo ?? '',
@@ -45,7 +48,7 @@ export default function BrandingIndex({ branding }: Props) {
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        put('/admin/branding');
+        put(`/${prefix}/branding`);
     };
 
     return (
@@ -57,7 +60,7 @@ export default function BrandingIndex({ branding }: Props) {
                         White-labeling
                     </h1>
                     <div className="flex gap-2">
-                        <a href="/admin/branding/export">
+                        <a href={`/${prefix}/branding/export`}>
                             <Button variant="outline" size="sm" className="gap-1.5">
                                 <Download className="h-4 w-4" />
                                 Exporter

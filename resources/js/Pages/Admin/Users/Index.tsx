@@ -1,7 +1,7 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, router , usePage } from '@inertiajs/react';
 import { useState } from 'react';
-import type { UserData, RoleData, PaginatedResponse } from '@/types/cms';
+import type { UserData, RoleData, PaginatedResponse, SharedProps } from '@/types/cms';
 import { formatDate } from '@/lib/format';
 import UserAvatar from '@/Components/admin/user-avatar';
 import RoleBadge from '@/Components/admin/role-badge';
@@ -17,15 +17,17 @@ interface UsersIndexProps {
 }
 
 export default function UsersIndex({ users, roles, filters }: UsersIndexProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const [search, setSearch] = useState(filters.search ?? '');
 
     function handleSearch(e: React.FormEvent) {
         e.preventDefault();
-        router.get('/admin/users', { search, role_id: filters.role_id }, { preserveState: true });
+        router.get(`/${prefix}/users`, { search, role_id: filters.role_id }, { preserveState: true });
     }
 
     function handleRoleFilter(roleId: string) {
-        router.get('/admin/users', { role_id: roleId, search: filters.search }, { preserveState: true });
+        router.get(`/${prefix}/users`, { role_id: roleId, search: filters.search }, { preserveState: true });
     }
 
     function handleDelete(user: UserData) {
@@ -42,7 +44,7 @@ export default function UsersIndex({ users, roles, filters }: UsersIndexProps) {
                         Utilisateurs
                     </h1>
                     <Link
-                        href="/admin/users/create"
+                        href={`/${prefix}/users/create`}
                         className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 transition-colors"
                     >
                         <Plus className="h-4 w-4" />

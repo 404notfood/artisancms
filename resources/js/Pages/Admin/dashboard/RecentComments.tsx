@@ -1,4 +1,5 @@
-import { Link } from '@inertiajs/react';
+import { Link , usePage } from '@inertiajs/react';
+import type { SharedProps } from '@/types/cms';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import { formatTimeAgo } from '@/lib/format';
 import { MessageSquare } from 'lucide-react';
@@ -6,6 +7,8 @@ import { StatusBadge } from './StatusBadge';
 import type { CommentItem } from './types';
 
 export function RecentComments({ recentComments }: { recentComments: CommentItem[] }) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     return (
         <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-4">
@@ -14,7 +17,7 @@ export function RecentComments({ recentComments }: { recentComments: CommentItem
                     Commentaires recents
                 </CardTitle>
                 <Link
-                    href="/admin/comments"
+                    href={`/${prefix}/comments`}
                     className="text-sm font-medium text-indigo-600 hover:text-indigo-500 transition-colors"
                 >
                     Voir tout

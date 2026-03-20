@@ -1,5 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, Link, useForm , usePage } from '@inertiajs/react';
+import type { SharedProps } from '@/types/cms';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
@@ -9,6 +10,8 @@ import { ArrowLeft } from 'lucide-react';
 import { FormEvent } from 'react';
 
 export default function SitesCreate() {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const { data, setData, post, processing, errors } = useForm({
         name: '',
         slug: '',
@@ -20,14 +23,14 @@ export default function SitesCreate() {
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        post('/admin/sites');
+        post(`/${prefix}/sites`);
     };
 
     return (
         <AdminLayout
             header={
                 <div className="flex items-center gap-3">
-                    <Link href="/admin/sites">
+                    <Link href={`/${prefix}/sites`}>
                         <Button variant="outline" size="sm"><ArrowLeft className="h-4 w-4" /></Button>
                     </Link>
                     <h1 className="text-xl font-semibold text-gray-900">Nouveau site</h1>
@@ -116,7 +119,7 @@ export default function SitesCreate() {
                     <Button type="submit" disabled={processing}>
                         {processing ? 'Création...' : 'Créer le site'}
                     </Button>
-                    <Link href="/admin/sites">
+                    <Link href={`/${prefix}/sites`}>
                         <Button variant="outline">Annuler</Button>
                     </Link>
                 </div>

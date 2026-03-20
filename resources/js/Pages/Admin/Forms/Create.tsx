@@ -1,5 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, Link, useForm , usePage } from '@inertiajs/react';
+import type { SharedProps } from '@/types/cms';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
@@ -34,6 +35,8 @@ interface Field {
 }
 
 export default function FormsCreate() {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const { data, setData, post, processing, errors } = useForm({
         name: '',
         fields: [] as Field[],
@@ -67,14 +70,14 @@ export default function FormsCreate() {
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        post('/admin/forms');
+        post(`/${prefix}/forms`);
     };
 
     return (
         <AdminLayout
             header={
                 <div className="flex items-center gap-3">
-                    <Link href="/admin/forms">
+                    <Link href={`/${prefix}/forms`}>
                         <Button variant="outline" size="sm"><ArrowLeft className="h-4 w-4" /></Button>
                     </Link>
                     <h1 className="text-xl font-semibold text-gray-900">Nouveau formulaire</h1>
@@ -181,7 +184,7 @@ export default function FormsCreate() {
                     <Button type="submit" disabled={processing}>
                         {processing ? 'Création...' : 'Créer le formulaire'}
                     </Button>
-                    <Link href="/admin/forms">
+                    <Link href={`/${prefix}/forms`}>
                         <Button variant="outline">Annuler</Button>
                     </Link>
                 </div>

@@ -1,6 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link, useForm } from '@inertiajs/react';
-import type { TaxonomyData } from '@/types/cms';
+import { Head, Link, useForm , usePage } from '@inertiajs/react';
+import type { TaxonomyData, SharedProps } from '@/types/cms';
 import { ArrowLeft } from 'lucide-react';
 
 interface PostsCreateProps {
@@ -8,6 +8,8 @@ interface PostsCreateProps {
 }
 
 export default function PostsCreate({ taxonomies }: PostsCreateProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const { data, setData, post, processing, errors } = useForm({
         title: '',
         slug: '',
@@ -45,14 +47,14 @@ export default function PostsCreate({ taxonomies }: PostsCreateProps) {
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        post('/admin/posts');
+        post(`/${prefix}/posts`);
     }
 
     return (
         <AdminLayout
             header={
                 <div className="flex items-center gap-4">
-                    <Link href="/admin/posts" className="text-gray-500 hover:text-gray-700">
+                    <Link href={`/${prefix}/posts`} className="text-gray-500 hover:text-gray-700">
                         <ArrowLeft className="h-5 w-5" />
                     </Link>
                     <h1 className="text-xl font-semibold text-gray-900">Nouvel article</h1>
@@ -223,7 +225,7 @@ export default function PostsCreate({ taxonomies }: PostsCreateProps) {
                 {/* Actions */}
                 <div className="flex items-center justify-end gap-3">
                     <Link
-                        href="/admin/posts"
+                        href={`/${prefix}/posts`}
                         className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
                     >
                         Annuler

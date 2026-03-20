@@ -26,6 +26,8 @@ const typeFilters = [
 type SidePanel = 'details' | 'stock' | 'editor';
 
 export default function MediaIndex({ media, filters }: MediaIndexProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const [search, setSearch] = useState(filters.search ?? '');
     const [selectedMedia, setSelectedMedia] = useState<MediaData | null>(null);
     const [isDragging, setIsDragging] = useState(false);
@@ -35,16 +37,16 @@ export default function MediaIndex({ media, filters }: MediaIndexProps) {
 
     function handleSearch(e: React.FormEvent) {
         e.preventDefault();
-        router.get('/admin/media', { search, type: filters.type, folder: currentFolder }, { preserveState: true });
+        router.get(`/${prefix}/media`, { search, type: filters.type, folder: currentFolder }, { preserveState: true });
     }
 
     function handleTypeChange(type: string) {
-        router.get('/admin/media', { type, search: filters.search, folder: currentFolder }, { preserveState: true });
+        router.get(`/${prefix}/media`, { type, search: filters.search, folder: currentFolder }, { preserveState: true });
     }
 
     function handleFolderChange(folder: string) {
         setCurrentFolder(folder);
-        router.get('/admin/media', { folder, type: filters.type, search: filters.search }, { preserveState: true });
+        router.get(`/${prefix}/media`, { folder, type: filters.type, search: filters.search }, { preserveState: true });
     }
 
     function handleUpload(files: FileList | null) {
@@ -59,7 +61,7 @@ export default function MediaIndex({ media, filters }: MediaIndexProps) {
             formData.append('file', file);
             if (currentFolder) formData.append('folder', currentFolder);
 
-            fetch('/admin/media', {
+            fetch(`/${prefix}/media`, {
                 method: 'POST',
                 body: formData,
                 headers: {
@@ -282,7 +284,7 @@ export default function MediaIndex({ media, filters }: MediaIndexProps) {
                                         <button
                                             key={p}
                                             onClick={() =>
-                                                router.get('/admin/media', {
+                                                router.get(`/${prefix}/media`, {
                                                     page: p,
                                                     type: filters.type ?? '',
                                                     search: filters.search ?? '',

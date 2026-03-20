@@ -38,6 +38,8 @@ const FIELD_TYPES = [
 ];
 
 export default function FieldsIndex({ fields }: FieldsIndexProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const [showForm, setShowForm] = useState(false);
     const [editing, setEditing] = useState<FieldData | null>(null);
 
@@ -92,7 +94,7 @@ export default function FieldsIndex({ fields }: FieldsIndexProps) {
         if (editing) {
             router.put(`/admin/member-space/fields/${editing.id}`, payload, { onSuccess: () => setShowForm(false) });
         } else {
-            router.post('/admin/member-space/fields', payload, { onSuccess: () => setShowForm(false) });
+            router.post(`/${prefix}/member-space/fields`, payload, { onSuccess: () => setShowForm(false) });
         }
     }
 

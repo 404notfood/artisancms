@@ -294,6 +294,7 @@ export interface SharedProps {
         version: string;
         enabledPlugins: string[];
         dashboardTheme?: string;
+        adminPrefix?: string;
     };
     sidebar_badges?: Record<string, number>;
     notifications_count?: number;

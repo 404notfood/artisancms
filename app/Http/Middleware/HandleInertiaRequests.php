@@ -57,6 +57,7 @@ class HandleInertiaRequests extends Middleware
                     fn () => (string) (Setting::get('dashboard.theme') ?? 'indigo'),
                     'indigo',
                 ),
+                'adminPrefix' => config('cms.admin.resolved_prefix', config('cms.admin.prefix', 'admin')),
             ],
             'notifications_count' => fn () => $this->safeQuery(
                 fn () => auth()->check()

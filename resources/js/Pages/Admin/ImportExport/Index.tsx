@@ -23,6 +23,8 @@ interface ImportResult {
 }
 
 export default function ImportExportIndex() {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const [exportType, setExportType] = useState<ExportType>('all');
     const [exporting, setExporting] = useState(false);
     const [dragOver, setDragOver] = useState(false);
@@ -41,7 +43,7 @@ export default function ImportExportIndex() {
         // Use a form submission to trigger file download
         const form = document.createElement('form');
         form.method = 'POST';
-        form.action = '/admin/export';
+        form.action = `/${prefix}/export`;
 
         const csrfInput = document.createElement('input');
         csrfInput.type = 'hidden';
@@ -70,7 +72,7 @@ export default function ImportExportIndex() {
         formData.append('file', data.file);
         formData.append('format', data.format);
 
-        router.post('/admin/import', formData, {
+        router.post(`/${prefix}/import`, formData, {
             forceFormData: true,
             onSuccess: () => {
                 reset();

@@ -1,5 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, Link, useForm , usePage } from '@inertiajs/react';
+import type { SharedProps } from '@/types/cms';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
@@ -23,6 +24,8 @@ interface Props {
 }
 
 export default function SitesEdit({ site }: Props) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const { data, setData, put, processing, errors } = useForm({
         name: site.name,
         domain: site.domain ?? '',
@@ -40,7 +43,7 @@ export default function SitesEdit({ site }: Props) {
         <AdminLayout
             header={
                 <div className="flex items-center gap-3">
-                    <Link href="/admin/sites">
+                    <Link href={`/${prefix}/sites`}>
                         <Button variant="outline" size="sm"><ArrowLeft className="h-4 w-4" /></Button>
                     </Link>
                     <h1 className="text-xl font-semibold text-gray-900">Modifier le site</h1>
@@ -95,7 +98,7 @@ export default function SitesEdit({ site }: Props) {
                     <Button type="submit" disabled={processing}>
                         {processing ? 'Enregistrement...' : 'Enregistrer'}
                     </Button>
-                    <Link href="/admin/sites">
+                    <Link href={`/${prefix}/sites`}>
                         <Button variant="outline">Annuler</Button>
                     </Link>
                 </div>

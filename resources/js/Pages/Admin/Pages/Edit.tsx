@@ -1,7 +1,7 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link, useForm, router } from '@inertiajs/react';
+import { Head, Link, useForm, router , usePage } from '@inertiajs/react';
 import { useState } from 'react';
-import type { PageData } from '@/types/cms';
+import type { PageData, SharedProps } from '@/types/cms';
 import RevisionHistory from '@/Components/admin/revision-history';
 import StatusBadge from '@/Components/admin/status-badge';
 import RejectModal from '@/Components/admin/RejectModal';
@@ -15,6 +15,8 @@ interface PagesEditProps {
 }
 
 export default function PagesEdit({ page, parentPages }: PagesEditProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const [showRejectModal, setShowRejectModal] = useState(false);
     const preview = usePreviewLink(`/admin/pages/${page.id}/preview`);
 
@@ -67,7 +69,7 @@ export default function PagesEdit({ page, parentPages }: PagesEditProps) {
             header={
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                        <Link href="/admin/pages" className="text-gray-500 hover:text-gray-700">
+                        <Link href={`/${prefix}/pages`} className="text-gray-500 hover:text-gray-700">
                             <ArrowLeft className="h-5 w-5" />
                         </Link>
                         <h1 className="text-xl font-semibold text-gray-900">Modifier la page</h1>
@@ -209,7 +211,7 @@ export default function PagesEdit({ page, parentPages }: PagesEditProps) {
                 <RevisionHistory entityType="page" entityId={page.id} />
 
                 <div className="flex items-center justify-end gap-3">
-                    <Link href="/admin/pages" className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">Annuler</Link>
+                    <Link href={`/${prefix}/pages`} className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">Annuler</Link>
                     <button type="submit" disabled={processing} className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 disabled:opacity-50 transition-colors">
                         {processing ? 'Enregistrement...' : 'Enregistrer'}
                     </button>

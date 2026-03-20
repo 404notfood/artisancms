@@ -1,6 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link, useForm } from '@inertiajs/react';
-import type { OrderData, AddressData } from '@/types/cms';
+import { Head, Link, useForm , usePage } from '@inertiajs/react';
+import type { OrderData, AddressData, SharedProps } from '@/types/cms';
 import { formatDate } from '@/lib/format';
 import StatusBadge from '@/Components/admin/status-badge';
 import { ArrowLeft } from 'lucide-react';
@@ -19,6 +19,8 @@ const statusOptions = [
 ];
 
 export default function OrderShow({ order }: OrderShowProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const { data, setData, put, processing } = useForm({
         status: order.status,
     });
@@ -36,7 +38,7 @@ export default function OrderShow({ order }: OrderShowProps) {
         <AdminLayout
             header={
                 <div className="flex items-center gap-4">
-                    <Link href="/admin/shop/orders" className="text-gray-500 hover:text-gray-700">
+                    <Link href={`/${prefix}/shop/orders`} className="text-gray-500 hover:text-gray-700">
                         <ArrowLeft className="h-5 w-5" />
                     </Link>
                     <h1 className="text-xl font-semibold text-gray-900">Commande #{order.id}</h1>

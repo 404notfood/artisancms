@@ -30,11 +30,13 @@ interface MembersIndexProps {
 }
 
 export default function MembersIndex({ members, filters }: MembersIndexProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const [search, setSearch] = useState(filters.search || '');
 
     function handleSearch(e: React.FormEvent) {
         e.preventDefault();
-        router.get('/admin/member-space/members', { search }, { preserveState: true });
+        router.get(`/${prefix}/member-space/members`, { search }, { preserveState: true });
     }
 
     return (

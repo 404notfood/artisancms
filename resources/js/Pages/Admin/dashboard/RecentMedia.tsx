@@ -1,9 +1,12 @@
-import { Link } from '@inertiajs/react';
+import { Link , usePage } from '@inertiajs/react';
+import type { SharedProps } from '@/types/cms';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import { Image, FileText } from 'lucide-react';
 import type { MediaItem } from './types';
 
 export function RecentMedia({ recentMedia }: { recentMedia: MediaItem[] }) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     return (
         <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-4">

@@ -23,6 +23,8 @@ interface PaymentMethodsSectionProps {
 }
 
 export default function PaymentMethodsSection({ paymentMethods }: PaymentMethodsSectionProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const [showPmForm, setShowPmForm] = useState(false);
     const [editingPm, setEditingPm] = useState<(PaymentMethodData & { config?: Record<string, string> }) | null>(null);
     const [pmForm, setPmForm] = useState({
@@ -62,7 +64,7 @@ export default function PaymentMethodsSection({ paymentMethods }: PaymentMethods
                 },
             });
         } else {
-            router.post('/admin/shop/payment-methods', pmForm, {
+            router.post(`/${prefix}/shop/payment-methods`, pmForm, {
                 onFinish: () => {
                     setPmProcessing(false);
                     setShowPmForm(false);

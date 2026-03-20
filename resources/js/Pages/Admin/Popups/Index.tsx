@@ -1,5 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, router , usePage } from '@inertiajs/react';
+import type { SharedProps } from '@/types/cms';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
@@ -42,6 +43,8 @@ const triggerLabels: Record<string, string> = {
 };
 
 export default function PopupsIndex({ popups }: Props) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const handleDelete = (id: number) => {
         if (!confirm('Supprimer ce popup ?')) return;
         router.delete(`/admin/popups/${id}`);
@@ -62,7 +65,7 @@ export default function PopupsIndex({ popups }: Props) {
                         <MessageSquare className="h-5 w-5" />
                         Popups
                     </h1>
-                    <Link href="/admin/popups/create">
+                    <Link href={`/${prefix}/popups/create`}>
                         <Button size="sm">
                             <Plus className="h-4 w-4 mr-1" />
                             Cr\u00e9er un popup
@@ -82,7 +85,7 @@ export default function PopupsIndex({ popups }: Props) {
                         <div className="flex flex-col items-center justify-center py-12 text-center">
                             <MessageSquare className="h-10 w-10 text-gray-300 mb-3" />
                             <p className="text-gray-500">Aucun popup</p>
-                            <Link href="/admin/popups/create" className="mt-3">
+                            <Link href={`/${prefix}/popups/create`} className="mt-3">
                                 <Button variant="outline" size="sm">
                                     <Plus className="h-4 w-4 mr-1" />
                                     Cr\u00e9er un popup

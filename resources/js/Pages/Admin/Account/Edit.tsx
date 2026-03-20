@@ -1,8 +1,12 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, useForm, router } from '@inertiajs/react';
-import { useState, type FormEvent } from 'react';
-import type { UserData, RoleData } from '@/types/cms';
-import AvatarUpload from '@/Components/admin/avatar-upload';
+import { Head, router, usePage } from '@inertiajs/react';
+import { useState, useRef } from 'react';
+import { Camera, User, Shield, AlertTriangle } from 'lucide-react';
+import type { UserData, RoleData, SharedProps } from '@/types/cms';
+import { adminTabActive } from '@/lib/admin-theme';
+import ProfileTab from './ProfileTab';
+import SecurityTab from './SecurityTab';
+import DangerTab from './DangerTab';
 
 interface AccountEditProps {
     user: UserData & {
@@ -14,292 +18,140 @@ interface AccountEditProps {
     roles: RoleData[];
 }
 
-// ─── Profile Info Section ────────────────────────────────────────────────────
+const TABS = [
+    { key: 'profile', label: 'Profil', icon: User },
+    { key: 'security', label: 'Securite', icon: Shield },
+    { key: 'danger', label: 'Danger', icon: AlertTriangle },
+] as const;
 
-function ProfileSection({ user }: { user: AccountEditProps['user'] }) {
-    const socialLinks = user.social_links || {};
-
-    const form = useForm({
-        name: user.name || '',
-        email: user.email || '',
-        bio: user.bio || '',
-        profile_visibility: (user.profile_visibility || 'public') as string,
-        social_links: {
-            website: socialLinks.website || '',
-            twitter: socialLinks.twitter || '',
-            linkedin: socialLinks.linkedin || '',
-            github: socialLinks.github || '',
-        } as Record<string, string>,
-    });
-
-    const submit = (e: FormEvent) => {
-        e.preventDefault();
-        // Filter out empty social links
-        const filtered: Record<string, string> = {};
-        Object.entries(form.data.social_links).forEach(([k, v]) => {
-            if (v) filtered[k] = v;
-        });
-        form.transform((data) => ({
-            ...data,
-            social_links: Object.keys(filtered).length > 0 ? filtered : null,
-        }));
-        form.put('/admin/account');
-    };
-
-    return (
-        <section className="rounded-xl border border-gray-200 bg-white p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Informations</h2>
-            <form onSubmit={submit} className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Nom</label>
-                        <input
-                            id="name"
-                            type="text"
-                            value={form.data.name}
-                            onChange={(e) => form.setData('name', e.target.value)}
-                            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500"
-                        />
-                        {form.errors.name && <p className="mt-1 text-xs text-red-600">{form.errors.name}</p>}
-                    </div>
-                    <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                        <input
-                            id="email"
-                            type="email"
-                            value={form.data.email}
-                            onChange={(e) => form.setData('email', e.target.value)}
-                            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500"
-                        />
-                        {form.errors.email && <p className="mt-1 text-xs text-red-600">{form.errors.email}</p>}
-                    </div>
-                </div>
-
-                <div>
-                    <label htmlFor="bio" className="block text-sm font-medium text-gray-700 mb-1">Bio</label>
-                    <textarea
-                        id="bio"
-                        rows={3}
-                        value={form.data.bio}
-                        onChange={(e) => form.setData('bio', e.target.value)}
-                        className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500"
-                        maxLength={1000}
-                    />
-                    <p className="text-xs text-gray-500 mt-1">{form.data.bio.length}/1000</p>
-                    {form.errors.bio && <p className="mt-1 text-xs text-red-600">{form.errors.bio}</p>}
-                </div>
-
-                <div>
-                    <label htmlFor="visibility" className="block text-sm font-medium text-gray-700 mb-1">Visibilite du profil</label>
-                    <select
-                        id="visibility"
-                        value={form.data.profile_visibility}
-                        onChange={(e) => form.setData('profile_visibility', e.target.value)}
-                        className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500"
-                    >
-                        <option value="public">Public</option>
-                        <option value="members_only">Membres uniquement</option>
-                        <option value="private">Prive</option>
-                    </select>
-                </div>
-
-                <div>
-                    <h3 className="text-sm font-medium text-gray-700 mb-2">Liens sociaux</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        {[
-                            { key: 'website', label: 'Site web', placeholder: 'https://monsite.com' },
-                            { key: 'twitter', label: 'Twitter / X', placeholder: 'https://x.com/username' },
-                            { key: 'linkedin', label: 'LinkedIn', placeholder: 'https://linkedin.com/in/username' },
-                            { key: 'github', label: 'GitHub', placeholder: 'https://github.com/username' },
-                        ].map(({ key, label, placeholder }) => (
-                            <div key={key}>
-                                <label htmlFor={`social-${key}`} className="block text-xs text-gray-500 mb-1">{label}</label>
-                                <input
-                                    id={`social-${key}`}
-                                    type="url"
-                                    value={form.data.social_links[key] || ''}
-                                    onChange={(e) =>
-                                        form.setData('social_links', { ...form.data.social_links, [key]: e.target.value })
-                                    }
-                                    placeholder={placeholder}
-                                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500"
-                                />
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                <div className="flex justify-end">
-                    <button
-                        type="submit"
-                        disabled={form.processing}
-                        className="inline-flex items-center rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-indigo-500 disabled:opacity-50"
-                    >
-                        {form.processing ? 'Enregistrement...' : 'Enregistrer'}
-                    </button>
-                </div>
-            </form>
-        </section>
-    );
-}
-
-// ─── Security Section ────────────────────────────────────────────────────────
-
-function SecuritySection() {
-    const form = useForm({
-        current_password: '',
-        password: '',
-        password_confirmation: '',
-    });
-
-    const submit = (e: FormEvent) => {
-        e.preventDefault();
-        form.put('/admin/account/password', {
-            onSuccess: () => form.reset(),
-        });
-    };
-
-    return (
-        <section className="rounded-xl border border-gray-200 bg-white p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Securite</h2>
-            <form onSubmit={submit} className="space-y-4 max-w-md">
-                <div>
-                    <label htmlFor="current_password" className="block text-sm font-medium text-gray-700 mb-1">
-                        Mot de passe actuel
-                    </label>
-                    <input
-                        id="current_password"
-                        type="password"
-                        value={form.data.current_password}
-                        onChange={(e) => form.setData('current_password', e.target.value)}
-                        className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500"
-                    />
-                    {form.errors.current_password && (
-                        <p className="mt-1 text-xs text-red-600">{form.errors.current_password}</p>
-                    )}
-                </div>
-                <div>
-                    <label htmlFor="new_password" className="block text-sm font-medium text-gray-700 mb-1">
-                        Nouveau mot de passe
-                    </label>
-                    <input
-                        id="new_password"
-                        type="password"
-                        value={form.data.password}
-                        onChange={(e) => form.setData('password', e.target.value)}
-                        className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500"
-                    />
-                    {form.errors.password && <p className="mt-1 text-xs text-red-600">{form.errors.password}</p>}
-                </div>
-                <div>
-                    <label htmlFor="password_confirmation" className="block text-sm font-medium text-gray-700 mb-1">
-                        Confirmer le mot de passe
-                    </label>
-                    <input
-                        id="password_confirmation"
-                        type="password"
-                        value={form.data.password_confirmation}
-                        onChange={(e) => form.setData('password_confirmation', e.target.value)}
-                        className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500"
-                    />
-                </div>
-                <div className="flex justify-end">
-                    <button
-                        type="submit"
-                        disabled={form.processing}
-                        className="inline-flex items-center rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-indigo-500 disabled:opacity-50"
-                    >
-                        {form.processing ? 'Mise a jour...' : 'Changer le mot de passe'}
-                    </button>
-                </div>
-            </form>
-        </section>
-    );
-}
-
-// ─── Danger Zone ─────────────────────────────────────────────────────────────
-
-function DangerZone() {
-    const [confirmOpen, setConfirmOpen] = useState(false);
-    const form = useForm({ password: '' });
-
-    const submit = (e: FormEvent) => {
-        e.preventDefault();
-        form.delete('/admin/account');
-    };
-
-    return (
-        <section className="rounded-xl border border-red-200 bg-white p-6">
-            <h2 className="text-lg font-semibold text-red-600 mb-2">Zone danger</h2>
-            <p className="text-sm text-gray-600 mb-4">
-                Une fois votre compte supprime, toutes les donnees seront definitivement effacees.
-            </p>
-
-            {!confirmOpen ? (
-                <button
-                    type="button"
-                    onClick={() => setConfirmOpen(true)}
-                    className="inline-flex items-center rounded-lg border border-red-300 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50"
-                >
-                    Supprimer mon compte
-                </button>
-            ) : (
-                <form onSubmit={submit} className="space-y-3 max-w-md">
-                    <p className="text-sm font-medium text-red-600">
-                        Confirmez en entrant votre mot de passe :
-                    </p>
-                    <input
-                        type="password"
-                        value={form.data.password}
-                        onChange={(e) => form.setData('password', e.target.value)}
-                        placeholder="Mot de passe"
-                        className="w-full rounded-lg border border-red-300 px-3 py-2 text-sm focus:border-red-500 focus:ring-red-500"
-                    />
-                    {form.errors.password && <p className="text-xs text-red-600">{form.errors.password}</p>}
-                    <div className="flex gap-2">
-                        <button
-                            type="submit"
-                            disabled={form.processing}
-                            className="inline-flex items-center rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-50"
-                        >
-                            Confirmer la suppression
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => setConfirmOpen(false)}
-                            className="inline-flex items-center rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-                        >
-                            Annuler
-                        </button>
-                    </div>
-                </form>
-            )}
-        </section>
-    );
-}
-
-// ─── Main Page ───────────────────────────────────────────────────────────────
+type TabKey = typeof TABS[number]['key'];
 
 export default function AccountEdit({ user, roles }: AccountEditProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
+    const [activeTab, setActiveTab] = useState<TabKey>('profile');
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+    const [uploading, setUploading] = useState(false);
+
+    const displayAvatar = avatarPreview || user.avatar_url;
+    const userInitials = user.name?.split(' ').map((n) => n[0]).slice(0, 2).join('').toUpperCase() ?? '?';
+
+    function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        setAvatarPreview(URL.createObjectURL(file));
+        const formData = new FormData();
+        formData.append('avatar', file);
+        setUploading(true);
+        router.post(`/${prefix}/account/avatar`, formData, {
+            forceFormData: true,
+            onFinish: () => setUploading(false),
+        });
+    }
+
     return (
         <AdminLayout>
             <Head title="Mon compte" />
 
-            <div className="max-w-3xl mx-auto space-y-6">
-                <div>
-                    <h1 className="text-2xl font-bold text-gray-900">Mon compte</h1>
-                    <p className="text-sm text-gray-500 mt-1">Gerez votre profil, securite et preferences</p>
+            <div className="max-w-3xl mx-auto">
+                {/* Header gradient */}
+                <div
+                    className="relative h-36 rounded-t-2xl overflow-hidden"
+                    style={{
+                        background: `linear-gradient(135deg, var(--admin-primary, #6366f1) 0%, color-mix(in srgb, var(--admin-primary, #6366f1) 70%, #000) 100%)`,
+                    }}
+                >
+                    {/* Decorative dots pattern */}
+                    <div
+                        className="absolute inset-0 opacity-[0.07]"
+                        style={{
+                            backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)',
+                            backgroundSize: '20px 20px',
+                        }}
+                    />
                 </div>
 
-                <AvatarUpload
-                    name={user.name}
-                    avatarUrl={user.avatar_url}
-                    uploadUrl="/admin/account/avatar"
-                    deleteUrl="/admin/account/avatar"
-                />
-                <ProfileSection user={user} />
-                <SecuritySection />
-                <DangerZone />
+                {/* Avatar overlapping header */}
+                <div className="relative px-6 -mt-12 mb-4">
+                    <div className="flex flex-col items-center sm:flex-row sm:items-end sm:gap-5">
+                        <button
+                            type="button"
+                            onClick={() => fileInputRef.current?.click()}
+                            disabled={uploading}
+                            className="group relative shrink-0"
+                        >
+                            {displayAvatar ? (
+                                <img
+                                    src={displayAvatar}
+                                    alt={user.name}
+                                    className="h-24 w-24 rounded-full object-cover border-4 border-white shadow-lg"
+                                />
+                            ) : (
+                                <div
+                                    className="flex h-24 w-24 items-center justify-center rounded-full border-4 border-white shadow-lg"
+                                    style={{ backgroundColor: 'var(--admin-primary, #6366f1)' }}
+                                >
+                                    <span className="text-2xl font-bold text-white">{userInitials}</span>
+                                </div>
+                            )}
+                            {/* Hover overlay */}
+                            <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <Camera className="h-6 w-6 text-white" />
+                            </div>
+                        </button>
+                        <input
+                            ref={fileInputRef}
+                            type="file"
+                            accept="image/*"
+                            onChange={handleAvatarChange}
+                            className="hidden"
+                        />
+                        <div className="mt-3 text-center sm:text-left sm:pb-1">
+                            <h1 className="text-xl font-bold text-gray-900">{user.name}</h1>
+                            <p className="text-sm text-gray-500">{user.email}</p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Tabs */}
+                <div className="border-b border-gray-200 px-6 mb-6">
+                    <nav className="flex gap-1 -mb-px">
+                        {TABS.map((tab) => {
+                            const Icon = tab.icon;
+                            const isActive = activeTab === tab.key;
+                            return (
+                                <button
+                                    key={tab.key}
+                                    type="button"
+                                    onClick={() => setActiveTab(tab.key)}
+                                    className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium rounded-t-lg transition-colors ${
+                                        isActive ? '' : 'text-gray-500 hover:text-gray-700'
+                                    } ${tab.key === 'danger' && isActive ? '' : ''}`}
+                                    style={
+                                        isActive
+                                            ? tab.key === 'danger'
+                                                ? { backgroundColor: 'rgb(254 242 242)', color: 'rgb(220 38 38)' }
+                                                : adminTabActive
+                                            : undefined
+                                    }
+                                >
+                                    <Icon className="h-4 w-4" />
+                                    {tab.label}
+                                </button>
+                            );
+                        })}
+                    </nav>
+                </div>
+
+                {/* Tab content */}
+                <div className="px-6 pb-8">
+                    <div className="rounded-xl border border-gray-200 bg-white p-6">
+                        {activeTab === 'profile' && <ProfileTab user={user} />}
+                        {activeTab === 'security' && <SecurityTab />}
+                        {activeTab === 'danger' && <DangerTab />}
+                    </div>
+                </div>
             </div>
         </AdminLayout>
     );

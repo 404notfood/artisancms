@@ -48,11 +48,13 @@ function formatBytes(bytes: number): string {
 }
 
 export default function BackupsIndex({ backups, stats }: Props) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const [creating, setCreating] = useState(false);
 
     const handleCreate = (type: string) => {
         setCreating(true);
-        router.post('/admin/backups', { type }, { onFinish: () => setCreating(false) });
+        router.post(`/${prefix}/backups`, { type }, { onFinish: () => setCreating(false) });
     };
 
     const handleDelete = (id: number) => {

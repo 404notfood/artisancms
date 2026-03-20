@@ -22,6 +22,8 @@ interface RolesEditProps {
 }
 
 export default function RolesEdit({ role, isNew }: RolesEditProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const [name, setName] = useState(role.name);
     const [slug, setSlug] = useState(role.slug);
     const [permissions, setPermissions] = useState<string[]>(role.permissions ?? []);
@@ -48,7 +50,7 @@ export default function RolesEdit({ role, isNew }: RolesEditProps) {
         const data = { name, slug, permissions };
 
         if (isNew) {
-            router.post('/admin/settings/roles', data, {
+            router.post(`/${prefix}/settings/roles`, data, {
                 onFinish: () => setSaving(false),
             });
         } else {

@@ -29,6 +29,8 @@ export default function TaxonomyListPanel({
     onSelectTaxonomy,
     onDeleteTaxonomy,
 }: TaxonomyListPanelProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const [showCreateTaxonomy, setShowCreateTaxonomy] = useState(false);
 
     const taxonomyForm = useForm({
@@ -50,7 +52,7 @@ export default function TaxonomyListPanel({
 
     function handleCreateTaxonomy(e: React.FormEvent) {
         e.preventDefault();
-        taxonomyForm.post('/admin/taxonomies', {
+        taxonomyForm.post(`/${prefix}/taxonomies`, {
             onSuccess: () => {
                 taxonomyForm.reset();
                 setShowCreateTaxonomy(false);

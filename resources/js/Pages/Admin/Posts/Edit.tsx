@@ -1,7 +1,7 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link, useForm, router } from '@inertiajs/react';
+import { Head, Link, useForm, router , usePage } from '@inertiajs/react';
 import { useState } from 'react';
-import type { PostData, TaxonomyData } from '@/types/cms';
+import type { PostData, TaxonomyData, SharedProps } from '@/types/cms';
 import RevisionHistory from '@/Components/admin/revision-history';
 import StatusBadge from '@/Components/admin/status-badge';
 import RejectModal from '@/Components/admin/RejectModal';
@@ -15,6 +15,8 @@ interface PostsEditProps {
 }
 
 export default function PostsEdit({ post, taxonomies }: PostsEditProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const currentTermIds = post.terms?.map((t) => t.id) ?? [];
     const [showRejectModal, setShowRejectModal] = useState(false);
     const preview = usePreviewLink(`/admin/posts/${post.id}/preview`);
@@ -73,7 +75,7 @@ export default function PostsEdit({ post, taxonomies }: PostsEditProps) {
             header={
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                        <Link href="/admin/posts" className="text-gray-500 hover:text-gray-700">
+                        <Link href={`/${prefix}/posts`} className="text-gray-500 hover:text-gray-700">
                             <ArrowLeft className="h-5 w-5" />
                         </Link>
                         <h1 className="text-xl font-semibold text-gray-900">Modifier l'article</h1>
@@ -223,7 +225,7 @@ export default function PostsEdit({ post, taxonomies }: PostsEditProps) {
                 <RevisionHistory entityType="post" entityId={post.id} />
 
                 <div className="flex items-center justify-end gap-3">
-                    <Link href="/admin/posts" className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">Annuler</Link>
+                    <Link href={`/${prefix}/posts`} className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">Annuler</Link>
                     <button type="submit" disabled={processing} className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 disabled:opacity-50 transition-colors">
                         {processing ? 'Enregistrement...' : 'Enregistrer'}
                     </button>

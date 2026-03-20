@@ -1,6 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link, useForm } from '@inertiajs/react';
-import type { ProductCategoryData } from '@/types/cms';
+import { Head, Link, useForm , usePage } from '@inertiajs/react';
+import type { ProductCategoryData, SharedProps } from '@/types/cms';
 import { ArrowLeft } from 'lucide-react';
 import type { VariantFormData } from './components/types';
 import ProductInfoSection from './components/ProductInfoSection';
@@ -15,6 +15,8 @@ interface ProductsCreateProps {
 }
 
 export default function ProductsCreate({ categories }: ProductsCreateProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const { data, setData, post, processing, errors } = useForm({
         name: '',
         slug: '',
@@ -49,14 +51,14 @@ export default function ProductsCreate({ categories }: ProductsCreateProps) {
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        post('/admin/shop/products');
+        post(`/${prefix}/shop/products`);
     }
 
     return (
         <AdminLayout
             header={
                 <div className="flex items-center gap-4">
-                    <Link href="/admin/shop/products" className="text-gray-500 hover:text-gray-700">
+                    <Link href={`/${prefix}/shop/products`} className="text-gray-500 hover:text-gray-700">
                         <ArrowLeft className="h-5 w-5" />
                     </Link>
                     <h1 className="text-xl font-semibold text-gray-900">Ajouter un produit</h1>
@@ -79,7 +81,7 @@ export default function ProductsCreate({ categories }: ProductsCreateProps) {
                 {/* Actions */}
                 <div className="flex items-center justify-end gap-3">
                     <Link
-                        href="/admin/shop/products"
+                        href={`/${prefix}/shop/products`}
                         className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
                     >
                         Annuler

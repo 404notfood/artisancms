@@ -1,7 +1,7 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, router , usePage } from '@inertiajs/react';
 import { useState } from 'react';
-import type { PostData, PaginatedResponse } from '@/types/cms';
+import type { PostData, PaginatedResponse, SharedProps } from '@/types/cms';
 import { formatDate } from '@/lib/format';
 import StatusBadge from '@/Components/admin/status-badge';
 import { Plus, Pencil, Copy, Trash2 } from 'lucide-react';
@@ -24,15 +24,17 @@ const statusTabs = [
 ];
 
 export default function PostsIndex({ posts, filters }: PostsIndexProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const [search, setSearch] = useState(filters.search ?? '');
 
     function handleSearch(e: React.FormEvent) {
         e.preventDefault();
-        router.get('/admin/posts', { search, status: filters.status }, { preserveState: true });
+        router.get(`/${prefix}/posts`, { search, status: filters.status }, { preserveState: true });
     }
 
     function handleTabChange(status: string) {
-        router.get('/admin/posts', { status, search: filters.search }, { preserveState: true });
+        router.get(`/${prefix}/posts`, { status, search: filters.search }, { preserveState: true });
     }
 
     function handleDelete(post: PostData) {
@@ -51,7 +53,7 @@ export default function PostsIndex({ posts, filters }: PostsIndexProps) {
 
     function handleEmptyTrash() {
         if (!confirm('Êtes-vous sûr de vouloir vider la corbeille ? Tous les articles seront supprimés définitivement.')) return;
-        router.post('/admin/posts/empty-trash');
+        router.post(`/${prefix}/posts/empty-trash`);
     }
 
     function handleDuplicate(post: PostData) {
@@ -66,7 +68,7 @@ export default function PostsIndex({ posts, filters }: PostsIndexProps) {
                 <div className="flex items-center justify-between">
                     <h1 className="text-xl font-semibold text-gray-900">Articles</h1>
                     <Link
-                        href="/admin/posts/create"
+                        href={`/${prefix}/posts/create`}
                         className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 transition-colors"
                     >
                         <Plus className="h-4 w-4" />

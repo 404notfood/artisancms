@@ -1,4 +1,5 @@
-import { Link } from '@inertiajs/react';
+import { Link , usePage } from '@inertiajs/react';
+import type { SharedProps } from '@/types/cms';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import { TrendingUp, BarChart3 } from 'lucide-react';
 import type { DashboardProps } from './types';

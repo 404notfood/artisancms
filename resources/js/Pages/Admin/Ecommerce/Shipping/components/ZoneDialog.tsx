@@ -9,6 +9,8 @@ interface ZoneDialogProps {
 }
 
 export default function ZoneDialog({ editingZone, onClose }: ZoneDialogProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const zoneForm = useForm({
         name: editingZone?.name ?? '',
         countries: editingZone?.countries.join(', ') ?? '',
@@ -33,7 +35,7 @@ export default function ZoneDialog({ editingZone, onClose }: ZoneDialogProps) {
                 onSuccess: () => onClose(),
             });
         } else {
-            router.post('/admin/shop/shipping/zones', payload, {
+            router.post(`/${prefix}/shop/shipping/zones`, payload, {
                 onSuccess: () => onClose(),
             });
         }

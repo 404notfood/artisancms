@@ -1,5 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, router , usePage } from '@inertiajs/react';
+import type { SharedProps } from '@/types/cms';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
@@ -25,6 +26,8 @@ interface Props {
 }
 
 export default function WebhooksIndex({ webhooks }: Props) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const handleDelete = (id: number, name: string) => {
         if (!confirm(`Supprimer le webhook "${name}" ?`)) return;
         router.delete(`/admin/webhooks/${id}`);
@@ -42,7 +45,7 @@ export default function WebhooksIndex({ webhooks }: Props) {
                         <Webhook className="h-5 w-5" />
                         Webhooks
                     </h1>
-                    <Link href="/admin/webhooks/create">
+                    <Link href={`/${prefix}/webhooks/create`}>
                         <Button size="sm" className="gap-1.5">
                             <Plus className="h-4 w-4" />
                             Nouveau webhook
@@ -61,7 +64,7 @@ export default function WebhooksIndex({ webhooks }: Props) {
                         <p className="text-sm text-gray-400 mt-1 mb-4">
                             Les webhooks permettent de notifier des services externes lors d'événements CMS.
                         </p>
-                        <Link href="/admin/webhooks/create">
+                        <Link href={`/${prefix}/webhooks/create`}>
                             <Button size="sm">
                                 <Plus className="h-4 w-4 mr-1" />
                                 Créer un webhook

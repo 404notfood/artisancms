@@ -1,6 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link, useForm } from '@inertiajs/react';
-import type { CouponData } from '@/types/cms';
+import { Head, Link, useForm , usePage } from '@inertiajs/react';
+import type { CouponData, SharedProps } from '@/types/cms';
 import { ArrowLeft, RefreshCw } from 'lucide-react';
 
 interface CouponsCreateProps {
@@ -8,6 +8,8 @@ interface CouponsCreateProps {
 }
 
 export default function CouponsCreate({ coupon }: CouponsCreateProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const isEdit = !!coupon;
 
     const { data, setData, post, put, processing, errors } = useForm({
@@ -35,7 +37,7 @@ export default function CouponsCreate({ coupon }: CouponsCreateProps) {
         if (isEdit) {
             put(`/admin/shop/coupons/${coupon!.id}`);
         } else {
-            post('/admin/shop/coupons');
+            post(`/${prefix}/shop/coupons`);
         }
     }
 
@@ -43,7 +45,7 @@ export default function CouponsCreate({ coupon }: CouponsCreateProps) {
         <AdminLayout
             header={
                 <div className="flex items-center gap-4">
-                    <Link href="/admin/shop/coupons" className="text-gray-500 hover:text-gray-700">
+                    <Link href={`/${prefix}/shop/coupons`} className="text-gray-500 hover:text-gray-700">
                         <ArrowLeft className="h-5 w-5" />
                     </Link>
                     <h1 className="text-xl font-semibold text-gray-900">
@@ -214,7 +216,7 @@ export default function CouponsCreate({ coupon }: CouponsCreateProps) {
                 {/* Actions */}
                 <div className="flex items-center justify-end gap-3">
                     <Link
-                        href="/admin/shop/coupons"
+                        href={`/${prefix}/shop/coupons`}
                         className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
                     >
                         Annuler

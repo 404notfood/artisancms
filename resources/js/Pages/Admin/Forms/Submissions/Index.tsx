@@ -1,5 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, router , usePage } from '@inertiajs/react';
+import type { SharedProps } from '@/types/cms';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
@@ -25,6 +26,8 @@ interface Props {
 }
 
 export default function SubmissionsIndex({ form, submissions }: Props) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const handleDelete = (id: number) => {
         if (!confirm('Supprimer cette soumission ?')) return;
         router.delete(`/admin/forms/${form.id}/submissions/${id}`);
@@ -34,7 +37,7 @@ export default function SubmissionsIndex({ form, submissions }: Props) {
         <AdminLayout
             header={
                 <div className="flex items-center gap-3">
-                    <Link href="/admin/forms">
+                    <Link href={`/${prefix}/forms`}>
                         <Button variant="outline" size="sm"><ArrowLeft className="h-4 w-4" /></Button>
                     </Link>
                     <h1 className="text-xl font-semibold text-gray-900">

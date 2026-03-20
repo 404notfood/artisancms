@@ -1,6 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link, useForm } from '@inertiajs/react';
-import type { BlockNode } from '@/types/cms';
+import { Head, Link, useForm , usePage } from '@inertiajs/react';
+import type { BlockNode, SharedProps } from '@/types/cms';
 import { useState } from 'react';
 import { ArrowLeft, Plus, Trash2 } from 'lucide-react';
 
@@ -17,6 +17,8 @@ interface GlobalSectionFormData {
 }
 
 export default function GlobalSectionsCreate() {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     // @ts-expect-error Inertia FormDataType doesn't support nested objects/arrays
     const { data, setData, post, processing, errors } = useForm<GlobalSectionFormData>({
         name: '',
@@ -76,14 +78,14 @@ export default function GlobalSectionsCreate() {
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        post('/admin/global-sections');
+        post(`/${prefix}/global-sections`);
     }
 
     return (
         <AdminLayout
             header={
                 <div className="flex items-center gap-4">
-                    <Link href="/admin/global-sections" className="text-gray-500 hover:text-gray-700">
+                    <Link href={`/${prefix}/global-sections`} className="text-gray-500 hover:text-gray-700">
                         <ArrowLeft className="h-5 w-5" />
                     </Link>
                     <h1 className="text-xl font-semibold text-gray-900">Nouvelle section globale</h1>
@@ -225,7 +227,7 @@ export default function GlobalSectionsCreate() {
                     {/* Actions */}
                     <div className="flex justify-end gap-3">
                         <Link
-                            href="/admin/global-sections"
+                            href={`/${prefix}/global-sections`}
                             className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
                         >
                             Annuler

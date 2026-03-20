@@ -6,6 +6,8 @@ interface StoreSettingsFormProps {
 }
 
 export default function StoreSettingsForm({ settings }: StoreSettingsFormProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const { data, setData, put, processing, errors } = useForm({
         store_name: settings.store_name,
         currency: settings.currency,
@@ -17,7 +19,7 @@ export default function StoreSettingsForm({ settings }: StoreSettingsFormProps) 
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        put('/admin/shop/settings');
+        put(`/${prefix}/shop/settings`);
     }
 
     return (

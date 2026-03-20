@@ -12,6 +12,8 @@ interface EditTokenFormProps {
 }
 
 export default function EditTokenForm({ token, category, onClose }: EditTokenFormProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const isEdit = !!token;
     const form = useForm({
         name: token?.name ?? '',
@@ -26,7 +28,7 @@ export default function EditTokenForm({ token, category, onClose }: EditTokenFor
         if (isEdit) {
             form.put(`/admin/design-tokens/${token.id}`, { onSuccess: onClose });
         } else {
-            form.post('/admin/design-tokens', { onSuccess: onClose });
+            form.post(`/${prefix}/design-tokens`, { onSuccess: onClose });
         }
     };
 

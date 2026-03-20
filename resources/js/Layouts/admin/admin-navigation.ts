@@ -49,87 +49,142 @@ export interface NavGroup {
     requiresPlugin?: string;
 }
 
-const NAV_DEFS: NavGroup[] = [
+/**
+ * Raw nav definitions using relative paths (no prefix).
+ * The prefix is prepended at runtime by buildNavDefs().
+ */
+interface RawNavItem {
+    label: string;
+    path: string; // relative path (e.g. 'pages', 'shop/products', '' for dashboard)
+    icon: LucideIcon;
+    badgeKey?: string;
+    requiresPlugin?: string;
+}
+
+interface RawNavGroup {
+    title: string;
+    items: RawNavItem[];
+    requiresPlugin?: string;
+}
+
+const RAW_DASHBOARD: RawNavItem = { label: 'Tableau de bord', path: '', icon: LayoutDashboard };
+
+const RAW_NAV_DEFS: RawNavGroup[] = [
     {
         title: 'Contenu',
         items: [
-            { label: 'Tableau de bord', href: '/admin', icon: LayoutDashboard },
-            { label: 'Pages', href: '/admin/pages', icon: FileText },
-            { label: 'Articles', href: '/admin/posts', icon: Newspaper },
-            { label: 'Medias', href: '/admin/media', icon: Image },
-            { label: 'Commentaires', href: '/admin/comments', icon: MessageSquare, badgeKey: 'unread_comments' },
+            { label: 'Pages', path: 'pages', icon: FileText },
+            { label: 'Articles', path: 'posts', icon: Newspaper },
+            { label: 'Medias', path: 'media', icon: Image },
+            { label: 'Commentaires', path: 'comments', icon: MessageSquare, badgeKey: 'unread_comments' },
         ],
     },
     {
         title: 'Structure',
         items: [
-            { label: 'Menus', href: '/admin/menus', icon: Menu },
-            { label: 'Sections globales', href: '/admin/global-sections', icon: LayoutTemplate },
-            { label: 'Widgets', href: '/admin/widgets', icon: LayoutGrid },
-            { label: 'Taxonomies', href: '/admin/taxonomies', icon: Tags },
+            { label: 'Menus', path: 'menus', icon: Menu },
+            { label: 'Sections globales', path: 'global-sections', icon: LayoutTemplate },
+            { label: 'Widgets', path: 'widgets', icon: LayoutGrid },
+            { label: 'Taxonomies', path: 'taxonomies', icon: Tags },
         ],
     },
     {
         title: 'Boutique',
         requiresPlugin: 'ecommerce',
         items: [
-            { label: 'Produits', href: '/admin/shop/products', icon: Package },
-            { label: 'Commandes', href: '/admin/shop/orders', icon: ShoppingCart, badgeKey: 'pending_orders' },
-            { label: 'Coupons', href: '/admin/shop/coupons', icon: Ticket },
-            { label: 'Categories', href: '/admin/shop/categories', icon: FolderTree },
-            { label: 'Livraison', href: '/admin/shop/shipping', icon: Truck },
-            { label: 'Taxes', href: '/admin/shop/tax', icon: Receipt },
-            { label: 'Stock', href: '/admin/shop/stock', icon: Warehouse },
-            { label: 'Avis', href: '/admin/shop/reviews', icon: Star },
-            { label: 'Rapports', href: '/admin/shop/reports', icon: BarChart3 },
-            { label: 'Parametres', href: '/admin/shop/settings', icon: Settings },
+            { label: 'Produits', path: 'shop/products', icon: Package },
+            { label: 'Commandes', path: 'shop/orders', icon: ShoppingCart, badgeKey: 'pending_orders' },
+            { label: 'Coupons', path: 'shop/coupons', icon: Ticket },
+            { label: 'Categories', path: 'shop/categories', icon: FolderTree },
+            { label: 'Livraison', path: 'shop/shipping', icon: Truck },
+            { label: 'Taxes', path: 'shop/tax', icon: Receipt },
+            { label: 'Stock', path: 'shop/stock', icon: Warehouse },
+            { label: 'Avis', path: 'shop/reviews', icon: Star },
+            { label: 'Rapports', path: 'shop/reports', icon: BarChart3 },
+            { label: 'Parametres', path: 'shop/settings', icon: Settings },
         ],
     },
     {
         title: 'Espace Membres',
         requiresPlugin: 'member-space',
         items: [
-            { label: 'Membres', href: '/admin/member-space/members', icon: Users },
-            { label: 'Plans', href: '/admin/member-space/plans', icon: Crown },
-            { label: 'Champs perso.', href: '/admin/member-space/fields', icon: ClipboardList },
-            { label: 'Verifications', href: '/admin/member-space/verifications', icon: UserCheck, badgeKey: 'pending_verifications' },
-            { label: 'Restrictions', href: '/admin/member-space/restrictions', icon: Lock },
-            { label: 'Parametres', href: '/admin/member-space/settings', icon: Settings },
+            { label: 'Membres', path: 'member-space/members', icon: Users },
+            { label: 'Plans', path: 'member-space/plans', icon: Crown },
+            { label: 'Champs perso.', path: 'member-space/fields', icon: ClipboardList },
+            { label: 'Verifications', path: 'member-space/verifications', icon: UserCheck, badgeKey: 'pending_verifications' },
+            { label: 'Restrictions', path: 'member-space/restrictions', icon: Lock },
+            { label: 'Parametres', path: 'member-space/settings', icon: Settings },
         ],
     },
     {
         title: 'Outils',
         items: [
-            { label: 'Form Builder', href: '/admin/forms', icon: ClipboardList, requiresPlugin: 'form-builder', badgeKey: 'new_forms' },
-            { label: 'Messages contact', href: '/admin/plugins/contact-form/submissions', icon: Mail, requiresPlugin: 'contact-form', badgeKey: 'new_contacts' },
-            { label: 'Sauvegardes', href: '/admin/backups', icon: HardDrive, requiresPlugin: 'backup' },
-            { label: 'Assistant IA', href: '/admin/ai/settings', icon: Sparkles, requiresPlugin: 'ai-assistant' },
+            { label: 'Form Builder', path: 'forms', icon: ClipboardList, requiresPlugin: 'form-builder', badgeKey: 'new_forms' },
+            { label: 'Messages contact', path: 'plugins/contact-form/submissions', icon: Mail, requiresPlugin: 'contact-form', badgeKey: 'new_contacts' },
+            { label: 'Sauvegardes', path: 'backups', icon: HardDrive, requiresPlugin: 'backup' },
+            { label: 'Assistant IA', path: 'ai/settings', icon: Sparkles, requiresPlugin: 'ai-assistant' },
         ],
     },
     {
         title: 'Apparence',
         items: [
-            { label: 'Themes', href: '/admin/themes', icon: Palette },
-            { label: 'Style Book', href: '/admin/design-tokens', icon: Palette },
-            { label: 'Templates', href: '/admin/templates', icon: BookTemplate },
-            { label: 'Plugins', href: '/admin/plugins', icon: Puzzle },
+            { label: 'Themes', path: 'themes', icon: Palette },
+            { label: 'Style Book', path: 'design-tokens', icon: Palette },
+            { label: 'Templates', path: 'templates', icon: BookTemplate },
+            { label: 'Plugins', path: 'plugins', icon: Puzzle },
         ],
     },
     {
         title: 'Systeme',
         items: [
-            { label: 'Utilisateurs', href: '/admin/users', icon: Users },
-            { label: 'Roles', href: '/admin/roles', icon: Shield },
-            { label: 'Redirections', href: '/admin/redirects', icon: ArrowRightLeft },
-            { label: 'Parametres', href: '/admin/settings', icon: Settings },
+            { label: 'Utilisateurs', path: 'users', icon: Users },
+            { label: 'Roles', path: 'roles', icon: Shield },
+            { label: 'Redirections', path: 'redirects', icon: ArrowRightLeft },
+            { label: 'Parametres', path: 'settings', icon: Settings },
         ],
     },
 ];
 
-export { NAV_DEFS };
+function buildItem(raw: RawNavItem, prefix: string): NavItem {
+    return {
+        label: raw.label,
+        href: raw.path ? `/${prefix}/${raw.path}` : `/${prefix}`,
+        icon: raw.icon,
+        ...(raw.badgeKey && { badgeKey: raw.badgeKey }),
+        ...(raw.requiresPlugin && { requiresPlugin: raw.requiresPlugin }),
+    };
+}
 
-export function getNavigation(enabledPlugins: string[]): NavGroup[] {
-    return NAV_DEFS
+/**
+ * Build the dashboard item with the given admin prefix.
+ */
+export function buildDashboardItem(prefix: string = 'admin'): NavItem {
+    return buildItem(RAW_DASHBOARD, prefix);
+}
+
+/** Default dashboard item (for backwards compatibility). */
+export const DASHBOARD_ITEM: NavItem = buildDashboardItem('admin');
+
+/**
+ * Build all nav groups with the given admin prefix.
+ */
+export function buildNavDefs(prefix: string = 'admin'): NavGroup[] {
+    return RAW_NAV_DEFS.map((g) => ({
+        title: g.title,
+        items: g.items.map((i) => buildItem(i, prefix)),
+        ...(g.requiresPlugin && { requiresPlugin: g.requiresPlugin }),
+    }));
+}
+
+/** Default nav defs (backwards compatible). */
+export const NAV_DEFS: NavGroup[] = buildNavDefs('admin');
+
+/**
+ * Get navigation filtered by enabled plugins.
+ */
+export function getNavigation(enabledPlugins: string[], prefix: string = 'admin'): NavGroup[] {
+    const defs = buildNavDefs(prefix);
+    return defs
         .filter((g) => !g.requiresPlugin || enabledPlugins.includes(g.requiresPlugin))
         .map((g) => ({
             ...g,
@@ -138,7 +193,11 @@ export function getNavigation(enabledPlugins: string[]): NavGroup[] {
         .filter((g) => g.items.length > 0);
 }
 
-export function isActive(href: string, currentUrl: string): boolean {
-    if (href === '/admin') return currentUrl === '/admin' || currentUrl === '/admin/';
+/**
+ * Check if a nav item is active based on current URL.
+ */
+export function isActive(href: string, currentUrl: string, prefix: string = 'admin'): boolean {
+    const dashboardHref = `/${prefix}`;
+    if (href === dashboardHref) return currentUrl === dashboardHref || currentUrl === `${dashboardHref}/`;
     return currentUrl.startsWith(href);
 }

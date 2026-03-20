@@ -7,7 +7,7 @@ import CommandPalette from '@/Components/admin/command-palette';
 import { ErrorBoundary } from '@/Components/error-boundary';
 import FlashToasts from '@/Layouts/admin/FlashToasts';
 import SidebarNavItem from '@/Layouts/admin/SidebarNavItem';
-import { getNavigation, isActive, NAV_DEFS } from '@/Layouts/admin/admin-navigation';
+import { getNavigation, isActive, buildDashboardItem } from '@/Layouts/admin/admin-navigation';
 import { getDashboardTheme, buildDashboardCssVars } from '@/Layouts/admin/dashboard-themes';
 import {
     Bell, LogOut, ChevronsLeft, ChevronsRight, PanelLeft, User, X, ChevronDown,
@@ -28,7 +28,9 @@ export default function AdminLayout({ header, children }: AdminLayoutProps) {
     const currentUrl = usePage().url;
 
     const enabledPlugins = cms?.enabledPlugins ?? [];
-    const navigation = useMemo(() => getNavigation(enabledPlugins), [enabledPlugins]);
+    const adminPrefix = cms?.adminPrefix ?? 'admin';
+    const navigation = useMemo(() => getNavigation(enabledPlugins, adminPrefix), [enabledPlugins, adminPrefix]);
+    const dashboardItem = useMemo(() => buildDashboardItem(adminPrefix), [adminPrefix]);
     const badges = sidebar_badges ?? {};
 
     // Dashboard theme
@@ -45,8 +47,8 @@ export default function AdminLayout({ header, children }: AdminLayoutProps) {
         const expanded = new Set<string>();
         for (const group of NAV_DEFS) {
             for (const item of group.items) {
-                if (isActive(item.href, currentUrl)) expanded.add(group.title);
-                item.children?.forEach((c) => { if (isActive(c.href, currentUrl)) expanded.add(group.title); });
+                if (isActive(item.href, currentUrl, adminPrefix)) expanded.add(group.title);
+                item.children?.forEach((c) => { if (isActive(c.href, currentUrl, adminPrefix)) expanded.add(group.title); });
             }
         }
         return expanded;
@@ -76,7 +78,7 @@ export default function AdminLayout({ header, children }: AdminLayoutProps) {
         setNotifOpen((prev) => {
             if (!prev && notifications.length === 0) {
                 setNotifLoading(true);
-                fetch('/admin/notifications', { headers: { Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest' }, credentials: 'same-origin' })
+                fetch(`/${adminPrefix}/notifications`, { headers: { Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest' }, credentials: 'same-origin' })
                     .then((r) => r.json()).then((d) => setNotifications(d.data ?? []))
                     .catch(() => {}).finally(() => setNotifLoading(false));
             }
@@ -85,12 +87,12 @@ export default function AdminLayout({ header, children }: AdminLayoutProps) {
     }, [notifications.length]);
 
     const markAsRead = useCallback((id: number) => {
-        fetch(`/admin/notifications/${id}/read`, { method: 'POST', headers: jsonHeaders(), credentials: 'same-origin' })
+        fetch(`/${adminPrefix}/notifications/${id}/read`, { method: 'POST', headers: jsonHeaders(), credentials: 'same-origin' })
             .then(() => { setNotifications((p) => p.map((n) => n.id === id ? { ...n, read_at: new Date().toISOString() } : n)); router.reload({ only: ['notifications_count'] }); });
     }, [jsonHeaders]);
 
     const markAllAsRead = useCallback(() => {
-        fetch('/admin/notifications/read-all', { method: 'POST', headers: jsonHeaders(), credentials: 'same-origin' })
+        fetch(`/${adminPrefix}/notifications/read-all`, { method: 'POST', headers: jsonHeaders(), credentials: 'same-origin' })
             .then(() => { setNotifications((p) => p.map((n) => ({ ...n, read_at: n.read_at ?? new Date().toISOString() }))); router.reload({ only: ['notifications_count'] }); });
     }, [jsonHeaders]);
 
@@ -110,21 +112,31 @@ export default function AdminLayout({ header, children }: AdminLayoutProps) {
 
     const sidebarContent = (
         <>
+            {/* Logo */}
             <div className={cn('flex h-16 items-center shrink-0 border-b border-white/10', collapsed ? 'justify-center px-2' : 'gap-3 px-5')}>
                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg shadow-md" style={{ background: dashboardTheme.colors.logoGradient }}>
                     <span className="text-sm font-bold text-white">A</span>
                 </div>
                 {!collapsed && <span className="text-base font-semibold text-white tracking-tight truncate">{cms?.name ?? 'ArtisanCMS'}</span>}
             </div>
+
             <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-1 scrollbar-thin">
-                {navigation.map((group) => {
+                {/* Dashboard — pinned at top */}
+                <div className="mb-2">
+                    <SidebarNavItem item={dashboardItem} active={isActive(dashboardItem.href, currentUrl)} collapsed={collapsed} />
+                </div>
+                {!collapsed && <div className="mx-3 h-px bg-white/[0.06] mb-2" />}
+                {collapsed && <div className="mx-auto h-px w-4 rounded-full bg-white/[0.08] mb-2" />}
+
+                {/* Navigation groups */}
+                {navigation.map((group, idx) => {
                     const isExpanded = expandedGroups.has(group.title);
-                    const hasActive = group.items.some((i) => isActive(i.href, currentUrl) || i.children?.some((c) => isActive(c.href, currentUrl)));
+                    const hasActive = group.items.some((i) => isActive(i.href, currentUrl) || i.children?.some((c) => isActive(c.href, currentUrl, adminPrefix)));
                     if (collapsed) return (
                         <div key={group.title}>
-                            <div className="mb-1 mx-auto h-px w-6 bg-white/10" />
+                            {idx > 0 && <div className="my-1.5 mx-auto h-px w-4 rounded-full bg-white/[0.08]" />}
                             <div className="space-y-0.5">
-                                {group.items.map((item) => <SidebarNavItem key={item.href} item={item} active={isActive(item.href, currentUrl)} collapsed badge={item.badgeKey ? badges[item.badgeKey] : undefined} />)}
+                                {group.items.map((item) => <SidebarNavItem key={item.href} item={item} active={isActive(item.href, currentUrl, adminPrefix)} collapsed badge={item.badgeKey ? badges[item.badgeKey] : undefined} />)}
                             </div>
                         </div>
                     );
@@ -136,34 +148,69 @@ export default function AdminLayout({ header, children }: AdminLayoutProps) {
                             </button>
                             {isExpanded && (
                                 <div className="mt-0.5 space-y-0.5">
-                                    {group.items.map((item) => <SidebarNavItem key={item.href} item={item} active={isActive(item.href, currentUrl)} collapsed={false} badge={item.badgeKey ? badges[item.badgeKey] : undefined} />)}
+                                    {group.items.map((item) => <SidebarNavItem key={item.href} item={item} active={isActive(item.href, currentUrl, adminPrefix)} collapsed={false} badge={item.badgeKey ? badges[item.badgeKey] : undefined} />)}
                                 </div>
                             )}
                         </div>
                     );
                 })}
             </nav>
+
+            {/* Collapse button */}
             <div className="hidden lg:block border-t border-white/10">
-                <button onClick={toggleCollapsed} className="flex w-full items-center justify-center gap-2 py-3 text-slate-500 hover:text-slate-300 transition-colors" title={collapsed ? 'Agrandir le menu' : 'Reduire le menu'}>
-                    {collapsed ? <ChevronsRight className="h-4 w-4" /> : <ChevronsLeft className="h-4 w-4" />}
-                    {!collapsed && <span className="text-xs font-medium">Reduire</span>}
+                <button
+                    onClick={toggleCollapsed}
+                    className={cn(
+                        'flex w-full items-center justify-center py-3 transition-colors',
+                        collapsed ? 'px-0' : 'gap-2 px-4',
+                    )}
+                    title={collapsed ? 'Agrandir le menu' : 'Reduire le menu'}
+                >
+                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/5 text-slate-500 hover:bg-white/10 hover:text-slate-300 transition-colors">
+                        {collapsed ? <ChevronsRight className="h-3.5 w-3.5" /> : <ChevronsLeft className="h-3.5 w-3.5" />}
+                    </span>
+                    {!collapsed && <span className="text-xs font-medium text-slate-500">Reduire</span>}
                 </button>
             </div>
+
+            {/* User zone */}
             <div className={cn('border-t border-white/10 p-3', collapsed && 'flex flex-col items-center gap-2 py-3')}>
                 <div className={cn('flex items-center', collapsed ? 'flex-col gap-2' : 'gap-3')}>
-                    {auth.user?.avatar_url ? <img src={auth.user.avatar_url} alt={auth.user.name} className="h-9 w-9 shrink-0 rounded-full object-cover ring-2 ring-white/20" /> : (
-                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full ring-2 ring-white/20" style={{ backgroundColor: 'var(--admin-primary, #6366f1)' }}>
-                            <span className="text-xs font-semibold text-white">{userInitials}</span>
-                        </div>
-                    )}
-                    {!collapsed && (
+                    {collapsed ? (
+                        /* Collapsed: avatar with tooltip */
+                        <Link href={`/${adminPrefix}/account`} className="group relative">
+                            {auth.user?.avatar_url ? (
+                                <img src={auth.user.avatar_url} alt={auth.user.name} className="h-9 w-9 shrink-0 rounded-full object-cover ring-2 ring-white/20 transition-transform group-hover:scale-105" />
+                            ) : (
+                                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full ring-2 ring-white/20 transition-transform group-hover:scale-105" style={{ backgroundColor: 'var(--admin-primary, #6366f1)' }}>
+                                    <span className="text-xs font-semibold text-white">{userInitials}</span>
+                                </div>
+                            )}
+                            {/* Tooltip */}
+                            <span className="pointer-events-none absolute left-full ml-3 flex items-center opacity-0 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0 -translate-x-1 z-50">
+                                <span className="h-2 w-2 -mr-1 rotate-45 border-l border-b" style={{ backgroundColor: 'var(--admin-sidebar-bg, #0f172a)', borderColor: 'rgba(255,255,255,0.08)' }} />
+                                <span className="rounded-md px-2.5 py-1.5 text-xs text-slate-200 shadow-lg whitespace-nowrap border" style={{ backgroundColor: 'var(--admin-sidebar-bg, #0f172a)', borderColor: 'rgba(255,255,255,0.08)' }}>
+                                    <span className="font-medium">{auth.user?.name}</span>
+                                    <span className="block text-slate-500 text-[10px]">{auth.user?.email}</span>
+                                </span>
+                            </span>
+                        </Link>
+                    ) : (
+                        /* Expanded: full user info */
                         <>
+                            {auth.user?.avatar_url ? (
+                                <img src={auth.user.avatar_url} alt={auth.user.name} className="h-9 w-9 shrink-0 rounded-full object-cover ring-2 ring-white/20" />
+                            ) : (
+                                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full ring-2 ring-white/20" style={{ backgroundColor: 'var(--admin-primary, #6366f1)' }}>
+                                    <span className="text-xs font-semibold text-white">{userInitials}</span>
+                                </div>
+                            )}
                             <div className="flex-1 min-w-0">
                                 <p className="truncate text-sm font-medium text-slate-200">{auth.user?.name}</p>
                                 <p className="truncate text-xs text-slate-500">{auth.user?.email}</p>
                             </div>
                             <div className="flex items-center gap-1">
-                                <Link href="/admin/account" className="rounded-md p-1.5 text-slate-500 hover:bg-white/5 hover:text-slate-300 transition-colors" title="Mon compte"><User className="h-4 w-4" /></Link>
+                                <Link href={`/${adminPrefix}/account`} className="rounded-md p-1.5 text-slate-500 hover:bg-white/5 hover:text-slate-300 transition-colors" title="Mon compte"><User className="h-4 w-4" /></Link>
                                 <Link href="/logout" method="post" as="button" className="rounded-md p-1.5 text-slate-500 hover:bg-white/5 hover:text-red-400 transition-colors" title="Deconnexion"><LogOut className="h-4 w-4" /></Link>
                             </div>
                         </>
@@ -226,7 +273,7 @@ export default function AdminLayout({ header, children }: AdminLayoutProps) {
                                 </div>
                             )}
                         </div>
-                        <Link href="/admin/account" className="flex items-center gap-2 rounded-lg p-1.5 hover:bg-gray-100 transition-colors">
+                        <Link href={`/${adminPrefix}/account`} className="flex items-center gap-2 rounded-lg p-1.5 hover:bg-gray-100 transition-colors">
                             {auth.user?.avatar_url ? <img src={auth.user.avatar_url} alt={auth.user.name} className="h-8 w-8 rounded-full object-cover" /> : (
                                 <div className="flex h-8 w-8 items-center justify-center rounded-full text-white" style={{ backgroundColor: 'var(--admin-primary, #6366f1)' }}><span className="text-xs font-semibold">{userInitials}</span></div>
                             )}

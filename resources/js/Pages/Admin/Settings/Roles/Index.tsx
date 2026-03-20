@@ -1,5 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, router , usePage } from '@inertiajs/react';
+import type { SharedProps } from '@/types/cms';
 import { Button } from '@/Components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import { Plus, Shield, Users, Pencil, Trash2 } from 'lucide-react';
@@ -18,6 +19,8 @@ interface RolesIndexProps {
 }
 
 export default function RolesIndex({ roles }: RolesIndexProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     function handleDelete(role: Role) {
         if (role.is_system) return;
         if (!confirm(`Supprimer le rôle "${role.name}" ? Les utilisateurs seront réaffectés au rôle par défaut.`)) return;
@@ -36,7 +39,7 @@ export default function RolesIndex({ roles }: RolesIndexProps) {
                         Gérez les rôles et les permissions de vos utilisateurs.
                     </p>
                     <Button asChild>
-                        <Link href="/admin/settings/roles/create">
+                        <Link href={`/${prefix}/settings/roles/create`}>
                             <Plus className="mr-2 h-4 w-4" />
                             Nouveau rôle
                         </Link>
