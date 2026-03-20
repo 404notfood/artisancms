@@ -67,7 +67,7 @@ export default function ShopShow({ product, relatedProducts, settings, menus, th
                                 onMouseEnter={e => (e.currentTarget.style.color = T.primary)}
                                 onMouseLeave={e => (e.currentTarget.style.color = '#888')}
                             >Boutique</Link>
-                            <span style={{ opacity: 0.4 }}>></span>
+                            <span style={{ opacity: 0.4 }}>&gt;</span>
                             {product.category && (
                                 <>
                                     <Link href={`/shop/category/${product.category.slug}`}
@@ -75,7 +75,7 @@ export default function ShopShow({ product, relatedProducts, settings, menus, th
                                         onMouseEnter={e => (e.currentTarget.style.color = T.primary)}
                                         onMouseLeave={e => (e.currentTarget.style.color = '#888')}
                                     >{product.category.name}</Link>
-                                    <span style={{ opacity: 0.4 }}>></span>
+                                    <span style={{ opacity: 0.4 }}>&gt;</span>
                                 </>
                             )}
                             <span style={{ color: T.text, fontWeight: 500 }}>{product.name}</span>
@@ -317,7 +317,7 @@ export default function ShopShow({ product, relatedProducts, settings, menus, th
                                     fontFamily: T.body, fontSize: '13px', fontWeight: 500,
                                     color: T.gold, textDecoration: 'none', letterSpacing: '0.05em',
                                 }}>
-                                    Voir tout ->
+                                    Voir tout &rarr;
                                 </Link>
                             </div>
                             <div className="shop-related-grid" style={{
