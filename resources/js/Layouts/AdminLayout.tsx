@@ -45,7 +45,7 @@ export default function AdminLayout({ header, children }: AdminLayoutProps) {
     const [notifLoading, setNotifLoading] = useState(false);
     const [expandedGroups, setExpandedGroups] = useState<Set<string>>(() => {
         const expanded = new Set<string>();
-        for (const group of NAV_DEFS) {
+        for (const group of navigation) {
             for (const item of group.items) {
                 if (isActive(item.href, currentUrl, adminPrefix)) expanded.add(group.title);
                 item.children?.forEach((c) => { if (isActive(c.href, currentUrl, adminPrefix)) expanded.add(group.title); });
