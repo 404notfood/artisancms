@@ -15,7 +15,7 @@ export function RecentMedia({ recentMedia }: { recentMedia: MediaItem[] }) {
                     Derniers medias
                 </CardTitle>
                 <Link
-                    href="/admin/media"
+                    href={`/${prefix}/media`}
                     className="text-sm font-medium text-indigo-600 hover:text-indigo-500 transition-colors"
                 >
                     Voir tout

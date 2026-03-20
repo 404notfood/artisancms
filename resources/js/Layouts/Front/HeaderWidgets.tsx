@@ -1,6 +1,7 @@
 import { Link, usePage } from '@inertiajs/react';
 import { useEffect, useRef, useState } from 'react';
 import type { HamburgerIconProps, UserMenuProps } from './header-types';
+import type { SharedProps } from '@/types/cms';
 
 // ─── Hamburger Icon (animated) ──────────────────────────────────────────────
 
@@ -19,7 +20,9 @@ export function HamburgerIcon({ open, color }: HamburgerIconProps) {
 // ─── User Menu (dropdown) ────────────────────────────────────────────────────
 
 export function UserMenu({ textColor, isDark, primaryColor }: UserMenuProps) {
-    const { auth } = usePage().props as { auth?: { user?: { id: number; name: string; email: string; avatar_url?: string | null } }; [key: string]: unknown };
+    const pageProps = usePage<SharedProps>().props;
+    const { auth, cms } = pageProps;
+    const adminPrefix = cms?.adminPrefix ?? 'admin';
     const user = auth?.user;
     const [open, setOpen] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
@@ -84,7 +87,7 @@ export function UserMenu({ textColor, isDark, primaryColor }: UserMenuProps) {
                     </div>
                     {[
                         { href: `/members/${user.id}`, label: 'Mon profil' },
-                        { href: '/admin/account', label: 'Mon compte' },
+                        { href: `/${adminPrefix}/account`, label: 'Mon compte' },
                     ].map((item) => (
                         <Link
                             key={item.href}

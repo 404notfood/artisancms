@@ -293,7 +293,7 @@ export default function BrandingIndex({ branding }: Props) {
                                 <CardTitle className="text-base">Importer une configuration</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <form action="/admin/branding/import" method="post" encType="multipart/form-data" className="flex gap-2">
+                                <form action={`/${prefix}/branding/import`} method="post" encType="multipart/form-data" className="flex gap-2">
                                     <input type="hidden" name="_token" value={document.querySelector('meta[name=csrf-token]')?.getAttribute('content') ?? ''} />
                                     <Input type="file" name="file" accept=".json" />
                                     <Button type="submit" variant="outline">
@@ -310,7 +310,7 @@ export default function BrandingIndex({ branding }: Props) {
                                 <CardTitle className="text-base text-red-700">Zone de danger</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <form action="/admin/branding/reset" method="post">
+                                <form action={`/${prefix}/branding/reset`} method="post">
                                     <input type="hidden" name="_token" value={document.querySelector('meta[name=csrf-token]')?.getAttribute('content') ?? ''} />
                                     <input type="hidden" name="_method" value="POST" />
                                     <Button

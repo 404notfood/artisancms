@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import { usePage } from '@inertiajs/react';
 import { Search, Download, Loader2, ExternalLink } from 'lucide-react';
 import { Button } from '@/Components/ui/button';
+import type { SharedProps } from '@/types/cms';
 
 interface StockPhoto {
     id: string;
@@ -15,6 +17,8 @@ interface StockPhotoSearchProps {
 }
 
 export function StockPhotoSearch({ onSelect }: StockPhotoSearchProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const [query, setQuery] = useState('');
     const [provider, setProvider] = useState<'unsplash' | 'pexels'>('unsplash');
     const [results, setResults] = useState<StockPhoto[]>([]);
@@ -31,7 +35,7 @@ export function StockPhotoSearch({ onSelect }: StockPhotoSearchProps) {
 
         try {
             const res = await fetch(
-                `/admin/media/stock-search?provider=${provider}&query=${encodeURIComponent(query)}`,
+                `/${prefix}/media/stock-search?provider=${provider}&query=${encodeURIComponent(query)}`,
                 { headers: { Accept: 'application/json' } },
             );
             const data = await res.json();
@@ -48,7 +52,7 @@ export function StockPhotoSearch({ onSelect }: StockPhotoSearchProps) {
         const csrfToken = document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]')?.content || '';
 
         try {
-            const res = await fetch('/admin/media/stock-download', {
+            const res = await fetch(`/${prefix}/media/stock-download`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

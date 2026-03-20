@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
+import { usePage } from '@inertiajs/react';
 import { Folder, FolderOpen, ChevronRight, ChevronDown, Plus } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import type { SharedProps } from '@/types/cms';
 
 interface FolderNode {
     name: string;
@@ -14,13 +16,15 @@ interface MediaFolderTreeProps {
 }
 
 export function MediaFolderTree({ currentFolder, onSelectFolder }: MediaFolderTreeProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const [folders, setFolders] = useState<FolderNode[]>([]);
     const [loading, setLoading] = useState(true);
     const [newFolderName, setNewFolderName] = useState('');
     const [showNew, setShowNew] = useState(false);
 
     useEffect(() => {
-        fetch('/admin/media/folders', {
+        fetch(`/${prefix}/media/folders`, {
             headers: { Accept: 'application/json' },
         })
             .then((res) => res.json())
@@ -36,7 +40,7 @@ export function MediaFolderTree({ currentFolder, onSelectFolder }: MediaFolderTr
         if (!newFolderName.trim()) return;
 
         const csrfToken = document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]')?.content || '';
-        fetch('/admin/media/folders', {
+        fetch(`/${prefix}/media/folders`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

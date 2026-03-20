@@ -1,10 +1,13 @@
 import { Link, usePage } from '@inertiajs/react';
 import type { MobileUserLinksProps } from './header-types';
+import type { SharedProps } from '@/types/cms';
 
 // ─── Mobile User Links ──────────────────────────────────────────────────────
 
 export function MobileUserLinks({ textColor, isDark, onClose }: MobileUserLinksProps) {
-    const { auth } = usePage().props as { auth?: { user?: { id: number; name: string; email: string; avatar_url?: string | null } }; [key: string]: unknown };
+    const pageProps = usePage<SharedProps>().props;
+    const { auth, cms } = pageProps;
+    const adminPrefix = cms?.adminPrefix ?? 'admin';
     const user = auth?.user;
 
     const borderColor = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)';
@@ -39,7 +42,7 @@ export function MobileUserLinks({ textColor, isDark, onClose }: MobileUserLinksP
             </div>
             {[
                 { href: `/members/${user.id}`, label: 'Mon profil' },
-                { href: '/admin/account', label: 'Mon compte' },
+                { href: `/${adminPrefix}/account`, label: 'Mon compte' },
             ].map((item) => (
                 <Link
                     key={item.href}

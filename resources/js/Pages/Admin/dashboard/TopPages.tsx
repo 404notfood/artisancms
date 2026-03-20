@@ -5,6 +5,8 @@ import { TrendingUp, BarChart3 } from 'lucide-react';
 import type { DashboardProps } from './types';
 
 export function TopPages({ analytics }: { analytics: DashboardProps['analytics'] }) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     return (
         <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-4">
@@ -13,7 +15,7 @@ export function TopPages({ analytics }: { analytics: DashboardProps['analytics']
                     Pages populaires
                 </CardTitle>
                 <Link
-                    href="/admin/analytics"
+                    href={`/${prefix}/analytics`}
                     className="text-sm font-medium text-indigo-600 hover:text-indigo-500 transition-colors"
                 >
                     Voir tout

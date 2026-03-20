@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
+import { usePage } from '@inertiajs/react';
 import { useBuilderStore } from '@/stores/builder-store';
 import { nanoid } from 'nanoid';
 import { Layers, Trash2 } from 'lucide-react';
-import type { BlockNode } from '@/types/cms';
+import type { BlockNode, SharedProps } from '@/types/cms';
 
 interface PatternData {
     id: number;
@@ -23,6 +24,8 @@ function reassignIds(blocks: unknown[]): unknown[] {
 }
 
 export default function PatternLibrary() {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const [patterns, setPatterns] = useState<PatternData[]>([]);
     const [categories, setCategories] = useState<string[]>([]);
     const [loading, setLoading] = useState(true);
@@ -30,7 +33,7 @@ export default function PatternLibrary() {
     const { addBlock, blocks } = useBuilderStore();
 
     useEffect(() => {
-        fetch('/admin/block-patterns', {
+        fetch(`/${prefix}/block-patterns`, {
             headers: { Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
             credentials: 'same-origin',
         })

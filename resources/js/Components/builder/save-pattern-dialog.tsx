@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { usePage } from '@inertiajs/react';
 import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
 import { Label } from '@/Components/ui/label';
 import { useBuilderStore } from '@/stores/builder-store';
 import { X, Save } from 'lucide-react';
+import type { SharedProps } from '@/types/cms';
 
 interface SavePatternDialogProps {
     open: boolean;
@@ -12,6 +14,8 @@ interface SavePatternDialogProps {
 }
 
 export default function SavePatternDialog({ open, onClose, blockIds }: SavePatternDialogProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const [name, setName] = useState('');
     const [category, setCategory] = useState('general');
     const [isSynced, setIsSynced] = useState(false);
@@ -33,7 +37,7 @@ export default function SavePatternDialog({ open, onClose, blockIds }: SavePatte
 
         setSaving(true);
         try {
-            await fetch('/admin/block-patterns', {
+            await fetch(`/${prefix}/block-patterns`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
