@@ -204,7 +204,17 @@ function setupEnv(): array {
         return ['success' => false, 'message' => 'Impossible de copier .env.example vers .env'];
     }
 
-    return ['success' => true, 'message' => 'Fichier .env créé depuis .env.example.'];
+    // Auto-detect APP_URL from current request
+    $env = file_get_contents(ENV_FILE);
+    $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+    $host = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? 'localhost';
+    $appUrl = "{$scheme}://{$host}";
+    $env = preg_replace('/^APP_URL=.*$/m', "APP_URL={$appUrl}", $env);
+    $env = preg_replace('/^APP_ENV=.*$/m', 'APP_ENV=production', $env);
+    $env = preg_replace('/^APP_DEBUG=.*$/m', 'APP_DEBUG=false', $env);
+    file_put_contents(ENV_FILE, $env);
+
+    return ['success' => true, 'message' => "Fichier .env créé (APP_URL={$appUrl})."];
 }
 
 function generateKey(): array {
