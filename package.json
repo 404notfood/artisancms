@@ -8,6 +8,7 @@
     ],
     "scripts": {
         "build": "turbo run build && vite build",
+        "build:prod": "vite build",
         "dev": "concurrently \"vite\" \"turbo run dev --filter=./packages/*\"",
         "dev:app": "vite",
         "build:app": "tsc && vite build",

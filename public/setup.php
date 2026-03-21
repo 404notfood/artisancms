@@ -221,6 +221,22 @@ function generateKey(): array {
         }
     }
 
+    if (!canExecShell()) {
+        // Generate key in pure PHP without shell_exec
+        $key = 'base64:' . base64_encode(random_bytes(32));
+        if (file_exists(ENV_FILE)) {
+            $env = file_get_contents(ENV_FILE);
+            if (str_contains($env, 'APP_KEY=')) {
+                $env = preg_replace('/^APP_KEY=.*$/m', "APP_KEY={$key}", $env);
+            } else {
+                $env .= "\nAPP_KEY={$key}\n";
+            }
+            file_put_contents(ENV_FILE, $env);
+            return ['success' => true, 'message' => 'Clé APP_KEY générée (PHP natif).'];
+        }
+        return ['success' => false, 'message' => 'Fichier .env introuvable.'];
+    }
+
     $cmd = "cd " . escapeshellarg(BASE_PATH) . " && php artisan key:generate --force 2>&1";
     $output = shell_exec($cmd);
 
@@ -236,6 +252,10 @@ function generateKey(): array {
 function runNpm(): array {
     if (is_dir(BASE_PATH . '/node_modules') && file_exists(BASE_PATH . '/node_modules/.package-lock.json')) {
         return ['success' => true, 'message' => 'Les dépendances npm sont déjà installées.'];
+    }
+
+    if (!canExecShell()) {
+        return ['success' => false, 'message' => "shell_exec est désactivé sur ce serveur.\nExécutez manuellement en SSH :\ncd " . BASE_PATH . " && npm install"];
     }
 
     $cmd = "cd " . escapeshellarg(BASE_PATH) . " && npm install 2>&1";
@@ -254,6 +274,10 @@ function runBuild(): array {
     $altManifestPath = BASE_PATH . '/public/build/manifest.json';
     if (file_exists($manifestPath) || file_exists($altManifestPath)) {
         return ['success' => true, 'message' => 'Le build frontend existe déjà.'];
+    }
+
+    if (!canExecShell()) {
+        return ['success' => false, 'message' => "shell_exec est désactivé sur ce serveur.\nExécutez manuellement en SSH :\ncd " . BASE_PATH . " && npm run build"];
     }
 
     $cmd = "cd " . escapeshellarg(BASE_PATH) . " && npm run build 2>&1";
@@ -309,9 +333,11 @@ function fixPermissions(): array {
         BASE_PATH . '/content' => '775',
     ];
 
-    foreach ($paths as $path => $perms) {
-        if (is_dir($path)) {
-            shell_exec("chmod -R {$perms} " . escapeshellarg($path) . " 2>/dev/null");
+    if (canExecShell()) {
+        foreach ($paths as $path => $perms) {
+            if (is_dir($path)) {
+                shell_exec("chmod -R {$perms} " . escapeshellarg($path) . " 2>/dev/null");
+            }
         }
     }
 
@@ -534,6 +560,18 @@ if ($vendorReady && $envReady && $buildReady && !file_exists(INSTALLED_FILE)) {
             <h1>Artisan<span>CMS</span></h1>
             <p>Configuration initiale du serveur</p>
         </div>
+
+        <?php if (!canExecShell()): ?>
+        <div class="error-box" style="margin-bottom:1.5rem;">
+            <strong>shell_exec() est désactivé sur ce serveur.</strong><br>
+            Exécutez ces commandes en SSH avant de lancer la configuration :
+            <pre>cd <?= htmlspecialchars(BASE_PATH) ?>
+composer install --no-dev --optimize-autoloader
+npm install
+npm run build</pre>
+            Les étapes déjà complétées seront automatiquement détectées.
+        </div>
+        <?php endif; ?>
 
         <ul class="steps" id="stepsList">
             <li class="step pending" data-step="check">
