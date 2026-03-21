@@ -112,12 +112,10 @@ class RequirementsChecker
     private function getCommandVersion(string $command): ?string
     {
         try {
-            $output = [];
-            $returnCode = 0;
-            exec("{$command} 2>&1", $output, $returnCode);
+            $output = shell_exec("{$command} 2>&1");
 
-            if ($returnCode === 0 && !empty($output[0])) {
-                return ltrim(trim($output[0]), 'v');
+            if ($output !== null && trim($output) !== '') {
+                return ltrim(trim(explode("\n", $output)[0]), 'v');
             }
         } catch (\Throwable) {
         }

@@ -26,8 +26,7 @@ define('INSTALLED_FILE', BASE_PATH . '/storage/.installed');
  */
 function canExecShell(): bool {
     $disabled = array_map('trim', explode(',', ini_get('disable_functions') ?: ''));
-    return function_exists('shell_exec') && !in_array('shell_exec', $disabled)
-        && function_exists('exec') && !in_array('exec', $disabled);
+    return function_exists('shell_exec') && !in_array('shell_exec', $disabled);
 }
 
 // ─── Already installed? Redirect to site ───
@@ -560,18 +559,6 @@ if ($vendorReady && $envReady && $buildReady && !file_exists(INSTALLED_FILE)) {
             <h1>Artisan<span>CMS</span></h1>
             <p>Configuration initiale du serveur</p>
         </div>
-
-        <?php if (!canExecShell()): ?>
-        <div class="error-box" style="margin-bottom:1.5rem;">
-            <strong>shell_exec() est désactivé sur ce serveur.</strong><br>
-            Exécutez ces commandes en SSH avant de lancer la configuration :
-            <pre>cd <?= htmlspecialchars(BASE_PATH) ?>
-composer install --no-dev --optimize-autoloader
-npm install
-npm run build</pre>
-            Les étapes déjà complétées seront automatiquement détectées.
-        </div>
-        <?php endif; ?>
 
         <ul class="steps" id="stepsList">
             <li class="step pending" data-step="check">

@@ -132,12 +132,11 @@ class RestoreService
 
         $command .= " {$database} < {$inputPath} 2>&1";
 
-        exec($command, $output, $returnCode);
+        $output = shell_exec($command);
 
-        if ($returnCode !== 0) {
-            $errorOutput = implode("\n", $output);
+        if ($output !== null && str_contains(strtolower($output), 'error')) {
             throw new RuntimeException(
-                "Database restore failed (exit code {$returnCode}): {$errorOutput}"
+                "Database restore failed: {$output}"
             );
         }
 
