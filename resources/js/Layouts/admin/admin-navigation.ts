@@ -138,7 +138,7 @@ const RAW_NAV_DEFS: RawNavGroup[] = [
         title: 'Systeme',
         items: [
             { label: 'Utilisateurs', path: 'users', icon: Users },
-            { label: 'Roles', path: 'roles', icon: Shield },
+            { label: 'Roles', path: 'settings/roles', icon: Shield },
             { label: 'Redirections', path: 'redirects', icon: ArrowRightLeft },
             { label: 'Parametres', path: 'settings', icon: Settings },
         ],

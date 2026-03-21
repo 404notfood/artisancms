@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, router } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
+import type { SharedProps } from '@/types/cms';
 
 interface VerificationData {
     id: number;

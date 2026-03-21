@@ -1,5 +1,5 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, router } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
@@ -14,7 +14,7 @@ import {
 } from '@/Components/ui/dialog';
 import { LayoutGrid, Plus } from 'lucide-react';
 import { useState, useCallback, type FormEvent } from 'react';
-import type { WidgetAreaData, WidgetTypeDefinition } from '@/types/cms';
+import type { WidgetAreaData, WidgetTypeDefinition, SharedProps } from '@/types/cms';
 import { getWidgetIcon } from './components/widget-icons';
 import { WidgetAreaSection } from './components/WidgetAreaSection';
 

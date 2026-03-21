@@ -1,4 +1,5 @@
-import { useForm } from '@inertiajs/react';
+import { useForm, usePage } from '@inertiajs/react';
+import type { SharedProps } from '@/types/cms';
 import { router } from '@inertiajs/react';
 import type { ShippingZoneData } from './types';
 import DialogOverlay from './DialogOverlay';

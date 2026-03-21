@@ -5,7 +5,7 @@ import SidebarLayout from '@/Layouts/SidebarLayout';
 import BlockRenderer from '@/Components/front/block-renderer';
 
 interface FrontPageProps {
-    page: PageData;
+    page: PageData | null;
     menus: Record<string, MenuData>;
     theme: {
         slug?: string;
@@ -21,8 +21,24 @@ const LEGAL_SLUGS = ['mentions-legales', 'politique-de-confidentialite', 'politi
 const SIDEBAR_THEMES = ['studio'];
 
 export default function FrontPage({ page, menus, theme }: FrontPageProps) {
-    const isLegal = LEGAL_SLUGS.includes(page.slug ?? '');
     const useSidebar = theme.slug ? SIDEBAR_THEMES.includes(theme.slug) : (theme.supports ?? []).includes('sidebar');
+
+    if (!page) {
+        const empty = (
+            <>
+                <Head><title>Accueil</title></Head>
+                <main>
+                    <div className="container py-20 text-center text-gray-400">
+                        Cette page n&apos;a pas encore de contenu.
+                    </div>
+                </main>
+            </>
+        );
+        if (useSidebar) return <SidebarLayout menus={menus} theme={theme}>{empty}</SidebarLayout>;
+        return <FrontLayout menus={menus} theme={theme}>{empty}</FrontLayout>;
+    }
+
+    const isLegal = LEGAL_SLUGS.includes(page.slug ?? '');
 
     const rawContent = page.content;
     const blocks: BlockNode[] | undefined = Array.isArray(rawContent)

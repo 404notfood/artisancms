@@ -1,7 +1,7 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, router } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
-import type { CommentData, PaginatedResponse } from '@/types/cms';
+import type { CommentData, PaginatedResponse, SharedProps } from '@/types/cms';
 import { formatDate } from '@/lib/format';
 import StatusBadge from '@/Components/admin/status-badge';
 import { MessageSquare } from 'lucide-react';

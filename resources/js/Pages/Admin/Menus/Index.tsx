@@ -1,7 +1,7 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link, router, useForm } from '@inertiajs/react';
+import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
 import { useState } from 'react';
-import type { MenuData } from '@/types/cms';
+import type { MenuData, SharedProps } from '@/types/cms';
 import { Plus, Pencil, Trash2 } from 'lucide-react';
 
 interface MenusIndexProps {

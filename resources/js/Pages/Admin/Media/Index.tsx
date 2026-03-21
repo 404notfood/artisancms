@@ -1,8 +1,8 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, router } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
 import { useState, useRef } from 'react';
 import { CloudUpload, FileText, Video, ImageIcon, X } from 'lucide-react';
-import type { MediaData, PaginatedResponse } from '@/types/cms';
+import type { MediaData, PaginatedResponse, SharedProps } from '@/types/cms';
 import { MediaFolderTree } from '@/Components/admin/media-folder-tree';
 import { ImageEditor } from '@/Components/admin/image-editor';
 import { StockPhotoSearch } from '@/Components/admin/stock-photo-search';

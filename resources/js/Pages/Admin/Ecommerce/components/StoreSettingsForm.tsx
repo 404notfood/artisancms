@@ -1,5 +1,5 @@
-import { useForm } from '@inertiajs/react';
-import type { EcommerceSettingsData } from '@/types/cms';
+import { useForm, usePage } from '@inertiajs/react';
+import type { EcommerceSettingsData, SharedProps } from '@/types/cms';
 
 interface StoreSettingsFormProps {
     settings: EcommerceSettingsData;

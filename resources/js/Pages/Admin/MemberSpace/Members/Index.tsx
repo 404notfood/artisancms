@@ -1,5 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
+import type { SharedProps } from '@/types/cms';
 import { useState } from 'react';
 
 interface MemberItem {

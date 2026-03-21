@@ -1,8 +1,8 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, router, useForm } from '@inertiajs/react';
+import { Head, router, useForm, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import { Package } from 'lucide-react';
-import { ProductData, PaginatedResponse } from '@/types/cms';
+import { ProductData, PaginatedResponse, SharedProps } from '@/types/cms';
 
 type StockProduct = Omit<ProductData, 'category'> & {
     category?: { id: number; name: string };

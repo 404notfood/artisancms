@@ -1,7 +1,7 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, useForm, router } from '@inertiajs/react';
+import { Head, useForm, router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
-import type { ProductCategoryData } from '@/types/cms';
+import type { ProductCategoryData, SharedProps } from '@/types/cms';
 import CategoryRow, { flattenCategories } from './components/CategoryRow';
 
 interface CategoriesIndexProps {

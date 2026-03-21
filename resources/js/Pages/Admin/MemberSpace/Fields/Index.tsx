@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, router, useForm } from '@inertiajs/react';
+import { Head, router, useForm, usePage } from '@inertiajs/react';
+import type { SharedProps } from '@/types/cms';
 import { Plus, Pencil, Trash2 } from 'lucide-react';
 
 interface FieldData {

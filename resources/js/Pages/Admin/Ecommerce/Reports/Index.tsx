@@ -1,5 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, router } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
+import type { SharedProps } from '@/types/cms';
 import { DollarSign, ShoppingBag, ShoppingCart, Package, CheckCircle } from 'lucide-react';
 
 interface KpiData {

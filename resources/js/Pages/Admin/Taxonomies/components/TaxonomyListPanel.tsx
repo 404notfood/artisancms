@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import type { TaxonomyData } from '@/types/cms';
-import { useForm } from '@inertiajs/react';
+import type { TaxonomyData, SharedProps } from '@/types/cms';
+import { useForm, usePage } from '@inertiajs/react';
 import { Plus, Trash2 } from 'lucide-react';
 
 function TypeBadge({ type }: { type: string }) {

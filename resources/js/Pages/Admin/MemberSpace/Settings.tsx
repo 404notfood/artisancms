@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, useForm } from '@inertiajs/react';
+import { Head, useForm, usePage } from '@inertiajs/react';
+import type { SharedProps } from '@/types/cms';
 
 interface SettingsData {
     modules: Record<string, boolean>;

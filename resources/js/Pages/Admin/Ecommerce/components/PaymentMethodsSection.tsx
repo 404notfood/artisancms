@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { router } from '@inertiajs/react';
-import type { PaymentMethodData } from '@/types/cms';
+import { router, usePage } from '@inertiajs/react';
+import type { PaymentMethodData, SharedProps } from '@/types/cms';
 import { CreditCard, Plus, Pencil, Trash2, ToggleLeft, ToggleRight } from 'lucide-react';
 import DriverConfigFields from './DriverConfigFields';
 
