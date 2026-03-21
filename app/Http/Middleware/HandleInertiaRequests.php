@@ -25,12 +25,40 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         $locale = app()->getLocale();
+        $isInstalled = file_exists(storage_path('.installed'));
 
         // Flatten translation array for frontend
         $translations = [];
         $cmsTranslations = __('cms') ?? [];
         if (is_array($cmsTranslations)) {
             $this->flattenTranslations($cmsTranslations, '', $translations);
+        }
+
+        // Minimal shared data when not installed (install wizard)
+        if (! $isInstalled) {
+            return [
+                ...parent::share($request),
+                'auth' => ['user' => null],
+                'flash' => [
+                    'success' => fn () => $request->session()->get('success'),
+                    'error' => fn () => $request->session()->get('error'),
+                    'warning' => fn () => $request->session()->get('warning'),
+                    'info' => fn () => $request->session()->get('info'),
+                ],
+                'translations' => $translations,
+                'locale' => $locale,
+                'cms' => [
+                    'name' => config('cms.name', 'ArtisanCMS'),
+                    'version' => config('cms.version', '1.0.0'),
+                    'enabledPlugins' => [],
+                    'dashboardTheme' => 'indigo',
+                    'adminPrefix' => config('cms.admin.resolved_prefix', config('cms.admin.prefix', 'admin')),
+                ],
+                'notifications_count' => 0,
+                'sidebar_badges' => [],
+                'popups' => [],
+                'cookie_consent' => ['enabled' => false, 'position' => 'bottom', 'type' => 'opt-in', 'privacy_url' => '/politique-de-confidentialite'],
+            ];
         }
 
         return [

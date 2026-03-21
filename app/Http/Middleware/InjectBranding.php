@@ -20,7 +20,16 @@ class InjectBranding
 
     public function handle(Request $request, Closure $next): Response
     {
-        $brandingData = $this->branding->all();
+        // Skip if not installed yet or on install routes
+        if (! file_exists(storage_path('.installed')) || $request->is('install', 'install/*')) {
+            return $next($request);
+        }
+
+        try {
+            $brandingData = $this->branding->all();
+        } catch (\Throwable) {
+            return $next($request);
+        }
 
         Inertia::share('branding', [
             'name' => $brandingData['brand_name'],

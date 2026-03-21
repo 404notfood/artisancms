@@ -17,12 +17,21 @@ class HandleRedirects
 
     public function handle(Request $request, Closure $next): Response
     {
+        // Skip if not installed yet or on install routes
+        if (! file_exists(storage_path('.installed')) || $request->is('install', 'install/*')) {
+            return $next($request);
+        }
+
         // Only check redirects for GET requests
         if ($request->method() !== 'GET') {
             return $next($request);
         }
 
-        $redirect = $this->redirectService->findByPath($request->path());
+        try {
+            $redirect = $this->redirectService->findByPath($request->path());
+        } catch (\Throwable) {
+            return $next($request);
+        }
 
         if ($redirect !== null) {
             $this->redirectService->incrementHits($redirect);

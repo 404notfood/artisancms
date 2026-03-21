@@ -41,9 +41,18 @@ return Application::configure(basePath: dirname(__DIR__))
                 return null;
             }
 
-            /** @var ErrorController $controller */
-            $controller = app(ErrorController::class);
+            // Don't use custom 404 page if not installed yet
+            if (! file_exists(storage_path('.installed'))) {
+                return null;
+            }
 
-            return $controller->notFound()->toResponse($request)->setStatusCode(404);
+            try {
+                /** @var ErrorController $controller */
+                $controller = app(ErrorController::class);
+
+                return $controller->notFound()->toResponse($request)->setStatusCode(404);
+            } catch (\Throwable) {
+                return null;
+            }
         });
     })->create();
