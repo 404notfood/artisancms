@@ -21,6 +21,15 @@ define('ENV_FILE', BASE_PATH . '/.env');
 define('ENV_EXAMPLE', BASE_PATH . '/.env.example');
 define('INSTALLED_FILE', BASE_PATH . '/storage/.installed');
 
+/**
+ * Check if shell execution functions are available
+ */
+function canExecShell(): bool {
+    $disabled = array_map('trim', explode(',', ini_get('disable_functions') ?: ''));
+    return function_exists('shell_exec') && !in_array('shell_exec', $disabled)
+        && function_exists('exec') && !in_array('exec', $disabled);
+}
+
 // ─── Already installed? Redirect to site ───
 if (file_exists(INSTALLED_FILE)) {
     header('Location: /');
@@ -98,17 +107,24 @@ function checkRequirements(): array {
     $checks[] = ['name' => 'Composer', 'value' => $composerPath ?: 'Non trouvé', 'ok' => (bool) $composerPath, 'required' => true];
     if (!$composerPath) $allPassed = false;
 
-    // Node.js
-    $nodeVersion = trim(shell_exec('node --version 2>/dev/null') ?? '');
-    $nodeOk = !empty($nodeVersion);
-    $checks[] = ['name' => 'Node.js 20+', 'value' => $nodeVersion ?: 'Non trouvé', 'ok' => $nodeOk, 'required' => true];
-    if (!$nodeOk) $allPassed = false;
+    // Node.js & npm — detect via shell or check if deps are already installed
+    if (canExecShell()) {
+        $nodeVersion = trim(shell_exec('node --version 2>/dev/null 2>NUL') ?? '');
+        $nodeOk = !empty($nodeVersion);
+        $checks[] = ['name' => 'Node.js 20+', 'value' => $nodeVersion ?: 'Non trouvé', 'ok' => $nodeOk, 'required' => true];
+        if (!$nodeOk) $allPassed = false;
 
-    // npm
-    $npmVersion = trim(shell_exec('npm --version 2>/dev/null') ?? '');
-    $npmOk = !empty($npmVersion);
-    $checks[] = ['name' => 'npm', 'value' => $npmVersion ? "v{$npmVersion}" : 'Non trouvé', 'ok' => $npmOk, 'required' => true];
-    if (!$npmOk) $allPassed = false;
+        $npmVersion = trim(shell_exec('npm --version 2>/dev/null 2>NUL') ?? '');
+        $npmOk = !empty($npmVersion);
+        $checks[] = ['name' => 'npm', 'value' => $npmVersion ? "v{$npmVersion}" : 'Non trouvé', 'ok' => $npmOk, 'required' => true];
+        if (!$npmOk) $allPassed = false;
+    } else {
+        // shell_exec disabled — check if node_modules and build already exist
+        $nodeModulesExist = is_dir(BASE_PATH . '/node_modules');
+        $buildExists = file_exists(BASE_PATH . '/public/build/.vite/manifest.json') || file_exists(BASE_PATH . '/public/build/manifest.json');
+        $checks[] = ['name' => 'Node.js / npm', 'value' => $nodeModulesExist ? 'node_modules présent' : 'shell_exec désactivé — lancez npm install en SSH', 'ok' => $nodeModulesExist, 'required' => true];
+        if (!$nodeModulesExist) $allPassed = false;
+    }
 
     // Writable directories
     $writables = ['storage', 'bootstrap/cache', 'content'];
@@ -123,10 +139,20 @@ function checkRequirements(): array {
 }
 
 function findComposer(): ?string {
+    // If vendor already exists, composer is not strictly needed right now
+    if (is_dir(VENDOR_PATH) && file_exists(VENDOR_PATH . '/autoload.php')) {
+        return 'already-installed';
+    }
+
+    if (!canExecShell()) {
+        // Can't detect composer without shell — check if vendor exists
+        return null;
+    }
+
     // Check common paths
     $paths = ['composer', 'composer.phar', '/usr/local/bin/composer', '/usr/bin/composer'];
     foreach ($paths as $path) {
-        $output = shell_exec("{$path} --version 2>/dev/null");
+        $output = shell_exec("{$path} --version 2>/dev/null 2>NUL");
         if ($output && str_contains($output, 'Composer')) {
             return $path;
         }
@@ -141,6 +167,10 @@ function findComposer(): ?string {
 function runComposer(): array {
     if (is_dir(VENDOR_PATH) && file_exists(VENDOR_PATH . '/autoload.php')) {
         return ['success' => true, 'message' => 'Les dépendances Composer sont déjà installées.'];
+    }
+
+    if (!canExecShell()) {
+        return ['success' => false, 'message' => "shell_exec est désactivé sur ce serveur.\nExécutez manuellement en SSH :\ncd " . BASE_PATH . " && composer install --no-dev --optimize-autoloader"];
     }
 
     $composer = findComposer();
