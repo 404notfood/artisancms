@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\BrandingImportRequest;
+use App\Http\Requests\BrandingUpdateRequest;
 use App\Services\BrandingService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -31,21 +32,9 @@ class BrandingController extends Controller
     /**
      * Update branding settings.
      */
-    public function update(Request $request): RedirectResponse
+    public function update(BrandingUpdateRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'brand_name' => ['nullable', 'string', 'max:100'],
-            'brand_logo' => ['nullable', 'string', 'max:500'],
-            'brand_logo_dark' => ['nullable', 'string', 'max:500'],
-            'brand_favicon' => ['nullable', 'string', 'max:500'],
-            'brand_color_primary' => ['nullable', 'string', 'regex:/^#[0-9a-fA-F]{6}$/'],
-            'brand_color_accent' => ['nullable', 'string', 'regex:/^#[0-9a-fA-F]{6}$/'],
-            'brand_login_bg' => ['nullable', 'string', 'max:500'],
-            'brand_login_message' => ['nullable', 'string', 'max:500'],
-            'brand_show_credit' => ['nullable', 'boolean'],
-            'brand_custom_css' => ['nullable', 'string', 'max:10000'],
-            'brand_footer_text' => ['nullable', 'string', 'max:500'],
-        ]);
+        $validated = $request->validated();
 
         $this->branding->update($validated);
 
@@ -71,12 +60,8 @@ class BrandingController extends Controller
     /**
      * Import branding config from JSON upload.
      */
-    public function import(Request $request): RedirectResponse
+    public function import(BrandingImportRequest $request): RedirectResponse
     {
-        $request->validate([
-            'file' => ['required', 'file', 'mimes:json', 'max:1024'],
-        ]);
-
         $content = file_get_contents($request->file('file')->getRealPath());
         $data = json_decode($content, true);
 

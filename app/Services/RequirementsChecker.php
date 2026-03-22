@@ -112,7 +112,11 @@ class RequirementsChecker
     private function getCommandVersion(string $command): ?string
     {
         try {
-            $output = shell_exec("{$command} 2>&1");
+            if (!function_exists('shell_exec') || in_array('shell_exec', array_map('trim', explode(',', (string) ini_get('disable_functions'))), true)) {
+                return null;
+            }
+
+            $output = @shell_exec("{$command} 2>&1");
 
             if ($output !== null && trim($output) !== '') {
                 return ltrim(trim(explode("\n", $output)[0]), 'v');

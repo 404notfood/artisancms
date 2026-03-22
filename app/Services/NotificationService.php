@@ -52,6 +52,18 @@ class NotificationService
     }
 
     /**
+     * Recuperer les notifications paginées d'un utilisateur.
+     *
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function paginateForUser(User $user, int $perPage = 20): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    {
+        return Notification::where('user_id', $user->id)
+            ->latest()
+            ->paginate($perPage);
+    }
+
+    /**
      * Compter les notifications non lues.
      */
     public function getUnreadCount(User $user): int

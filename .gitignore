@@ -108,5 +108,6 @@ yarn-error.log*
 
 blueprints-site
 /.claude
+/.turbo
 CLAUDE.md
 error-github.md

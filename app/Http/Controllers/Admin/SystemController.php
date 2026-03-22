@@ -51,7 +51,7 @@ class SystemController extends Controller
 
         return redirect()
             ->back()
-            ->with('success', 'Session terminée.');
+            ->with('success', __('cms.system.session_terminated'));
     }
 
     public function logoutAllSessions(Request $request): RedirectResponse
@@ -63,7 +63,7 @@ class SystemController extends Controller
 
         return redirect()
             ->back()
-            ->with('success', 'Toutes les autres sessions ont été déconnectées.');
+            ->with('success', __('cms.system.all_sessions_terminated'));
     }
 
     public function healthCheck(): Response

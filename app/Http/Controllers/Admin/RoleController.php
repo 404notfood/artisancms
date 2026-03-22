@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Role;
+use App\Services\RoleService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -13,15 +14,14 @@ use Inertia\Response;
 
 class RoleController extends Controller
 {
+    public function __construct(
+        private readonly RoleService $roleService,
+    ) {}
+
     public function index(): Response
     {
-        $roles = Role::withCount('users')
-            ->orderByDesc('is_system')
-            ->orderBy('name')
-            ->get();
-
         return Inertia::render('Admin/Settings/Roles/Index', [
-            'roles' => $roles,
+            'roles' => $this->roleService->all(),
         ]);
     }
 
@@ -47,16 +47,11 @@ class RoleController extends Controller
             'permissions.*' => ['string'],
         ]);
 
-        Role::create([
-            'name' => $validated['name'],
-            'slug' => $validated['slug'],
-            'permissions' => $validated['permissions'] ?? [],
-            'is_system' => false,
-        ]);
+        $this->roleService->create($validated);
 
         return redirect()
             ->route('admin.roles.index')
-            ->with('success', 'Rôle créé avec succès.');
+            ->with('success', __('cms.roles.created'));
     }
 
     public function edit(Role $role): Response
@@ -76,18 +71,11 @@ class RoleController extends Controller
             'permissions.*' => ['string'],
         ]);
 
-        $data = ['permissions' => $validated['permissions'] ?? []];
-
-        if (!$role->is_system) {
-            $data['name'] = $validated['name'];
-            $data['slug'] = $validated['slug'];
-        }
-
-        $role->update($data);
+        $this->roleService->update($role, $validated);
 
         return redirect()
             ->route('admin.roles.index')
-            ->with('success', 'Rôle mis à jour.');
+            ->with('success', __('cms.roles.updated'));
     }
 
     public function destroy(Role $role): RedirectResponse
@@ -95,19 +83,13 @@ class RoleController extends Controller
         if ($role->is_system) {
             return redirect()
                 ->route('admin.roles.index')
-                ->with('error', 'Les rôles système ne peuvent pas être supprimés.');
+                ->with('error', __('cms.roles.system_cannot_delete'));
         }
 
-        // Reassign users to default role
-        $defaultRole = Role::where('slug', 'subscriber')->first();
-        if ($defaultRole) {
-            $role->users()->update(['role_id' => $defaultRole->id]);
-        }
-
-        $role->delete();
+        $this->roleService->delete($role);
 
         return redirect()
             ->route('admin.roles.index')
-            ->with('success', 'Rôle supprimé.');
+            ->with('success', __('cms.roles.deleted'));
     }
 }

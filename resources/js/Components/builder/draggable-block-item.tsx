@@ -1,6 +1,9 @@
 import { useDraggable } from '@dnd-kit/core';
 import * as LucideIcons from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { useBuilderStore } from '@/stores/builder-store';
+
+const iconMap: Record<string, LucideIcon> = LucideIcons as unknown as Record<string, LucideIcon>;
 
 interface DraggableBlockItemProps {
     slug: string;
@@ -16,8 +19,7 @@ export default function DraggableBlockItem({ slug, label, icon }: DraggableBlock
 
     const addBlock = useBuilderStore((s) => s.addBlock);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const IconComponent = (LucideIcons as any)[icon] || LucideIcons.Box;
+    const IconComponent = iconMap[icon] ?? LucideIcons.Box;
 
     return (
         <div

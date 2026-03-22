@@ -1,7 +1,8 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, useForm, router } from '@inertiajs/react';
+import { Head, useForm, router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import { Plus } from 'lucide-react';
+import type { SharedProps } from '@/types/cms';
 import TaxCreateForm from './components/TaxCreateForm';
 import TaxRuleRow, { type TaxRuleData } from './components/TaxRuleRow';
 

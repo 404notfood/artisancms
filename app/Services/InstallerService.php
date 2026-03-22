@@ -59,6 +59,17 @@ class InstallerService
     private function stepEnv(array $config): void
     {
         $envPath = base_path('.env');
+
+        // Auto-create .env from .env.example if missing (FTP/git clone install)
+        if (!file_exists($envPath)) {
+            $examplePath = base_path('.env.example');
+            if (file_exists($examplePath)) {
+                copy($examplePath, $envPath);
+            } else {
+                file_put_contents($envPath, "APP_NAME=ArtisanCMS\nAPP_ENV=local\nAPP_DEBUG=true\nAPP_URL=http://localhost\n");
+            }
+        }
+
         $envContent = file_get_contents($envPath);
 
         $replacements = [

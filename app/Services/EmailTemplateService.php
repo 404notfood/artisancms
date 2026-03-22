@@ -12,6 +12,18 @@ use RuntimeException;
 class EmailTemplateService
 {
     /**
+     * Get all email templates ordered by category and name.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection<int, EmailTemplate>
+     */
+    public function all(): \Illuminate\Database\Eloquent\Collection
+    {
+        return EmailTemplate::orderBy('category')
+            ->orderBy('name')
+            ->get();
+    }
+
+    /**
      * Render a template by slug with the given variables.
      *
      * @param array<string, mixed> $variables
@@ -237,6 +249,18 @@ HTML;
      *
      * @throws RuntimeException
      */
+    /**
+     * Update an email template.
+     *
+     * @param array<string, mixed> $data
+     */
+    public function update(EmailTemplate $template, array $data): EmailTemplate
+    {
+        $template->update($data);
+
+        return $template->fresh() ?? $template;
+    }
+
     public function resetToDefault(EmailTemplate $template): void
     {
         if ($template->default_body_html === null && $template->default_subject === null) {

@@ -6,18 +6,20 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
-use App\Models\Role;
 use App\Models\User;
 use App\Services\AvatarService;
+use App\Services\RoleService;
+use App\Services\UserService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class UserController extends Controller
 {
     public function __construct(
+        private readonly UserService $userService,
+        private readonly RoleService $roleService,
         private readonly AvatarService $avatarService,
     ) {}
 
@@ -28,30 +30,9 @@ class UserController extends Controller
     {
         $filters = $request->only(['search', 'role_id', 'per_page']);
 
-        $query = User::with('role')->withCount(['posts', 'pages']);
-
-        if (isset($filters['search']) && $filters['search'] !== '') {
-            $search = $filters['search'];
-            $query->where(function ($q) use ($search): void {
-                $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%");
-            });
-        }
-
-        if (isset($filters['role_id']) && $filters['role_id'] !== '') {
-            $query->where('role_id', (int) $filters['role_id']);
-        }
-
-        $query->orderBy('name', 'asc');
-
-        $perPage = (int) ($filters['per_page'] ?? 15);
-        $users = $query->paginate($perPage)->withQueryString();
-
-        $roles = Role::orderBy('name')->get(['id', 'name', 'slug']);
-
         return Inertia::render('Admin/Users/Index', [
-            'users' => $users,
-            'roles' => $roles,
+            'users' => $this->userService->all($filters),
+            'roles' => $this->roleService->getOptions(),
             'filters' => $filters,
         ]);
     }
@@ -61,10 +42,8 @@ class UserController extends Controller
      */
     public function create(): Response
     {
-        $roles = Role::orderBy('name')->get(['id', 'name', 'slug']);
-
         return Inertia::render('Admin/Users/Create', [
-            'roles' => $roles,
+            'roles' => $this->roleService->getOptions(),
         ]);
     }
 
@@ -73,17 +52,7 @@ class UserController extends Controller
      */
     public function store(UserRequest $request): RedirectResponse
     {
-        $validated = $request->validated();
-
-        User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
-            'role_id' => $validated['role_id'],
-            'bio' => $validated['bio'] ?? null,
-            'profile_visibility' => $validated['profile_visibility'] ?? 'public',
-            'social_links' => $validated['social_links'] ?? null,
-        ]);
+        $this->userService->create($request->validated());
 
         return redirect()
             ->route('admin.users.index')
@@ -97,11 +66,9 @@ class UserController extends Controller
     {
         $user->load('role')->loadCount(['posts', 'pages']);
 
-        $roles = Role::orderBy('name')->get(['id', 'name', 'slug']);
-
         return Inertia::render('Admin/Users/Edit', [
             'user' => $user,
-            'roles' => $roles,
+            'roles' => $this->roleService->getOptions(),
         ]);
     }
 
@@ -110,22 +77,7 @@ class UserController extends Controller
      */
     public function update(UserRequest $request, User $user): RedirectResponse
     {
-        $validated = $request->validated();
-
-        $data = [
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'role_id' => $validated['role_id'],
-            'bio' => $validated['bio'] ?? null,
-            'profile_visibility' => $validated['profile_visibility'] ?? $user->profile_visibility,
-            'social_links' => $validated['social_links'] ?? $user->social_links,
-        ];
-
-        if (!empty($validated['password'])) {
-            $data['password'] = Hash::make($validated['password']);
-        }
-
-        $user->update($data);
+        $this->userService->update($user, $request->validated());
 
         return redirect()
             ->back()
@@ -163,7 +115,7 @@ class UserController extends Controller
     {
         $this->authorize('delete', $user);
 
-        $user->delete();
+        $this->userService->delete($user);
 
         return redirect()
             ->route('admin.users.index')

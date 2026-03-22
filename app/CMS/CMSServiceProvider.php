@@ -66,5 +66,15 @@ class CMSServiceProvider extends ServiceProvider
         } catch (\Throwable) {
             // Silently fail if DB is not yet set up (e.g., during installation)
         }
+
+        // Register webhook listeners on CMS hook events.
+        // This runs after plugins are loaded so plugin-registered hooks
+        // (e.g., custom webhook events via filters) are already available.
+        try {
+            $webhookListener = new WebhookHookListener();
+            $webhookListener->register();
+        } catch (\Throwable) {
+            // Silently fail if webhook infrastructure is not ready
+        }
     }
 }

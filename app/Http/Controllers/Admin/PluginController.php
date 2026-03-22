@@ -17,6 +17,7 @@ class PluginController extends Controller
 
     public function index(): Response
     {
+        $this->authorize('viewAny', CmsPlugin::class);
         // Discover filesystem plugins and ensure they are all registered in DB
         $discovered = $this->pluginManager->discover();
         foreach ($discovered as $slug => $manifest) {
@@ -48,20 +49,32 @@ class PluginController extends Controller
 
     public function enable(string $slug): RedirectResponse
     {
-        $this->pluginManager->enable($slug);
+        $this->authorize('manage', CmsPlugin::class);
 
         $plugin = CmsPlugin::where('slug', $slug)->first();
         $name = $plugin?->name ?? $slug;
+
+        $success = $this->pluginManager->enable($slug);
+
+        if (!$success) {
+            return redirect()->back()->with('error', "Le plugin « {$name} » n'a pas pu être activé.");
+        }
 
         return redirect()->back()->with('success', "Le plugin « {$name} » a été activé avec succès.");
     }
 
     public function disable(string $slug): RedirectResponse
     {
-        $this->pluginManager->disable($slug);
+        $this->authorize('manage', CmsPlugin::class);
 
         $plugin = CmsPlugin::where('slug', $slug)->first();
         $name = $plugin?->name ?? $slug;
+
+        $success = $this->pluginManager->disable($slug);
+
+        if (!$success) {
+            return redirect()->back()->with('error', "Le plugin « {$name} » n'a pas pu être désactivé.");
+        }
 
         return redirect()->back()->with('success', "Le plugin « {$name} » a été désactivé avec succès.");
     }

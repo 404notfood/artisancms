@@ -153,6 +153,26 @@ class MenuService
     }
 
     /**
+     * Update a single menu item.
+     *
+     * @param array<string, mixed> $data
+     */
+    public function updateItem(MenuItem $item, array $data): MenuItem
+    {
+        $item->update($data);
+
+        return $item->fresh() ?? $item;
+    }
+
+    /**
+     * Delete a single menu item.
+     */
+    public function deleteItem(MenuItem $item): bool
+    {
+        return (bool) $item->delete();
+    }
+
+    /**
      * Reorder menu items.
      *
      * @param array<int, array{id: int, order: int}> $items

@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PopupRequest;
 use App\Models\Popup;
 use App\Services\PopupService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -39,9 +39,9 @@ class PopupController extends Controller
     /**
      * Store a newly created popup.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(PopupRequest $request): RedirectResponse
     {
-        $validated = $request->validate($this->rules());
+        $validated = $request->validated();
 
         $this->popupService->create($validated);
 
@@ -63,9 +63,9 @@ class PopupController extends Controller
     /**
      * Update the specified popup.
      */
-    public function update(Request $request, Popup $popup): RedirectResponse
+    public function update(PopupRequest $request, Popup $popup): RedirectResponse
     {
-        $validated = $request->validate($this->rules());
+        $validated = $request->validated();
 
         $this->popupService->update($popup, $validated);
 
@@ -86,32 +86,4 @@ class PopupController extends Controller
             ->with('success', __('cms.popups.deleted'));
     }
 
-    /**
-     * Validation rules for popup.
-     *
-     * @return array<string, mixed>
-     */
-    private function rules(): array
-    {
-        return [
-            'name' => 'required|string|max:255',
-            'title' => 'nullable|string|max:255',
-            'content' => 'nullable|string|max:65535',
-            'type' => 'required|in:modal,banner,slide-in',
-            'trigger' => 'required|in:page_load,exit_intent,scroll,delay',
-            'trigger_value' => 'nullable|string|max:50',
-            'display_frequency' => 'required|in:always,once,once_per_session',
-            'pages' => 'nullable|array',
-            'pages.*' => 'string|max:255',
-            'cta_text' => 'nullable|string|max:255',
-            'cta_url' => 'nullable|string|max:2048',
-            'style' => 'nullable|array',
-            'style.backgroundColor' => 'nullable|string|max:50',
-            'style.textColor' => 'nullable|string|max:50',
-            'style.position' => 'nullable|string|max:50',
-            'active' => 'boolean',
-            'starts_at' => 'nullable|date',
-            'ends_at' => 'nullable|date|after_or_equal:starts_at',
-        ];
-    }
 }

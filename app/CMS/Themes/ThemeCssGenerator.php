@@ -137,7 +137,7 @@ class ThemeCssGenerator
         $dotKey = "{$section}.{$key}";
 
         return $overrides[$dotKey]
-            ?? $overrides[$section][$key]
+            ?? (isset($overrides[$section]) && is_array($overrides[$section]) ? ($overrides[$section][$key] ?? null) : null)
             ?? $definition['default']
             ?? null;
     }

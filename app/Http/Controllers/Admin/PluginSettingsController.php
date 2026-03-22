@@ -46,6 +46,6 @@ class PluginSettingsController extends Controller
 
         return redirect()
             ->route('admin.plugins.settings', $slug)
-            ->with('success', 'Parametres du plugin sauvegardes.');
+            ->with('success', __('cms.plugins.settings_saved'));
     }
 }

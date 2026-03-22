@@ -21,9 +21,7 @@ class NotificationController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $notifications = Notification::where('user_id', $request->user()->id)
-            ->latest()
-            ->paginate(20);
+        $notifications = $this->notificationService->paginateForUser($request->user());
 
         return response()->json($notifications);
     }

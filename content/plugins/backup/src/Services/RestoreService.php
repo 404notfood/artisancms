@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use RuntimeException;
+use Symfony\Component\Process\ExecutableFinder;
+use Symfony\Component\Process\Process;
 use ZipArchive;
 
 class RestoreService
@@ -107,7 +109,9 @@ class RestoreService
     /**
      * Restore the database from an SQL dump file.
      *
-     * Uses the mysql command-line tool with proper escaping.
+     * Uses the mysql command-line tool via Symfony Process.
+     * The password is passed through the MYSQL_PWD environment variable
+     * to avoid exposing it in process listings.
      *
      * @throws RuntimeException When the import command fails
      */
@@ -116,27 +120,32 @@ class RestoreService
         $connection = config('database.default');
         $dbConfig = config("database.connections.{$connection}");
 
-        $host = escapeshellarg($dbConfig['host'] ?? '127.0.0.1');
-        $port = escapeshellarg((string) ($dbConfig['port'] ?? '3306'));
-        $username = escapeshellarg($dbConfig['username'] ?? 'root');
+        $mysql = $this->findMysqlBinary();
+
+        $args = [
+            $mysql,
+            '--host=' . ($dbConfig['host'] ?? '127.0.0.1'),
+            '--port=' . ($dbConfig['port'] ?? '3306'),
+            '--user=' . ($dbConfig['username'] ?? 'root'),
+            $dbConfig['database'],
+        ];
+
+        // Pass password via environment variable to avoid exposing it in process list
+        $env = null;
         $password = $dbConfig['password'] ?? '';
-        $database = escapeshellarg($dbConfig['database']);
-        $inputPath = escapeshellarg($dumpPath);
-
-        // Disable foreign key checks during import
-        $command = "mysql --host={$host} --port={$port} --user={$username}";
-
         if ($password !== '') {
-            $command .= ' --password=' . escapeshellarg($password);
+            $env = array_merge(getenv() ?: [], ['MYSQL_PWD' => $password]);
         }
 
-        $command .= " {$database} < {$inputPath} 2>&1";
+        $process = new Process($args, null, $env);
+        $process->setTimeout(300);
+        $process->setInput(File::get($dumpPath));
+        $process->run();
 
-        $output = shell_exec($command);
-
-        if ($output !== null && str_contains(strtolower($output), 'error')) {
+        if (!$process->isSuccessful()) {
+            $stderr = mb_convert_encoding($process->getErrorOutput(), 'UTF-8', 'UTF-8');
             throw new RuntimeException(
-                "Database restore failed: {$output}"
+                "Database restore failed (exit {$process->getExitCode()}): {$stderr}"
             );
         }
 
@@ -167,6 +176,50 @@ class RestoreService
     // -------------------------------------------------------------------------
     // Private helpers
     // -------------------------------------------------------------------------
+
+    /**
+     * Locate the mysql binary, checking PATH first then common local dev paths.
+     *
+     * @throws RuntimeException When not found
+     */
+    private function findMysqlBinary(): string
+    {
+        $finder = new ExecutableFinder();
+        $found = $finder->find('mysql');
+
+        if ($found !== null) {
+            return $found;
+        }
+
+        // Common local dev paths on Windows
+        $patterns = [
+            'C:/laragon/bin/mysql/*/bin/mysql.exe',
+            'C:/xampp/mysql/bin/mysql.exe',
+            'C:/wamp64/bin/mysql/*/bin/mysql.exe',
+        ];
+
+        // Try to detect Laragon from the project path
+        $basePath = base_path();
+        if (preg_match('#([A-Za-z]:[/\\\\].*?[/\\\\]laragon)[/\\\\]#i', $basePath, $m)) {
+            array_unshift($patterns, str_replace('\\', '/', $m[1]) . '/bin/mysql/*/bin/mysql.exe');
+        }
+
+        foreach ($patterns as $pattern) {
+            $matches = glob($pattern);
+            if (!$matches) {
+                continue;
+            }
+            foreach ($matches as $candidate) {
+                if (file_exists($candidate)) {
+                    return $candidate;
+                }
+            }
+        }
+
+        throw new RuntimeException(
+            'mysql client not found. Install MySQL client tools or add them to your PATH.'
+        );
+    }
 
     /**
      * Extract a ZIP archive into a temporary directory.

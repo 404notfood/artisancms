@@ -33,7 +33,7 @@ export default function SidebarNavItem({ item, active, collapsed, badge }: Props
                         className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full ring-2 animate-pulse"
                         style={{
                             backgroundColor: 'var(--admin-accent, #818cf8)',
-                            ringColor: 'var(--admin-sidebar-bg, #0f172a)',
+                            outline: '2px solid var(--admin-sidebar-bg, #0f172a)',
                         }}
                     />
                 )}

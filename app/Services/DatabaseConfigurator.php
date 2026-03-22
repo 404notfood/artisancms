@@ -27,6 +27,13 @@ class DatabaseConfigurator
 
             if (!$dbExists) {
                 if ($config['create_database'] ?? false) {
+                    if (!preg_match('/^[a-zA-Z0-9_]+$/', $dbName)) {
+                        return [
+                            'success' => false,
+                            'message' => "Nom de base de données invalide. Utilisez uniquement des lettres, chiffres et underscores.",
+                            'version' => $version,
+                        ];
+                    }
                     $pdo->exec("CREATE DATABASE `{$dbName}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
                     return [
                         'success' => true,

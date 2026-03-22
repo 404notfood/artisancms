@@ -16,6 +16,19 @@ use Illuminate\Support\Str;
 class CustomFieldService
 {
     /**
+     * Get all custom field groups with field count, paginated.
+     *
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function allGroups(int $perPage = 20): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    {
+        return CustomFieldGroup::withCount('fields')
+            ->orderBy('order')
+            ->orderBy('name')
+            ->paginate($perPage);
+    }
+
+    /**
      * Get field groups that apply to a given entity type.
      *
      * @return Collection<int, CustomFieldGroup>

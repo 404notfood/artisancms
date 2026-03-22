@@ -42,7 +42,11 @@ class HookManager
 
         foreach ($callbacks as $priorityCallbacks) {
             foreach ($priorityCallbacks as $callback) {
-                $callback(...$args);
+                try {
+                    $callback(...$args);
+                } catch (\Throwable $e) {
+                    report($e);
+                }
             }
         }
     }

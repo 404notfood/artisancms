@@ -44,12 +44,16 @@ class MediaUploadRequest extends FormRequest
                 'file',
                 'max:' . $maxSize,
                 function (string $attribute, mixed $value, \Closure $fail) use ($allowedMimes): void {
-                    if ($value && method_exists($value, 'getMimeType')) {
-                        $mime = $value->getMimeType();
-                        if (!in_array($mime, $allowedMimes, true)) {
+                    if ($value && method_exists($value, 'getRealPath')) {
+                        // Use finfo for strict content-based MIME detection (not client-provided header)
+                        $realPath = $value->getRealPath() ?: $value->getPathname();
+                        $finfo = new \finfo(FILEINFO_MIME_TYPE);
+                        $mime = $finfo->file($realPath);
+
+                        if ($mime === false || !in_array($mime, $allowedMimes, true)) {
                             $fail(__('The :attribute has an invalid MIME type: :mime.', [
                                 'attribute' => $attribute,
-                                'mime' => $mime,
+                                'mime' => $mime ?: 'unknown',
                             ]));
                         }
                     }

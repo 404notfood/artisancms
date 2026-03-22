@@ -85,7 +85,7 @@ function PopupModal({ popup, onClose }: { popup: PopupData; onClose: () => void 
                 <div className="px-6 py-4">
                     {blocks.length > 0 ? (
                         blocks.map((block) => (
-                            <BlockRenderer key={(block as any).id} block={block as any} />
+                            <BlockRenderer key={block.id} block={block} />
                         ))
                     ) : typeof popup.content === 'string' ? (
                         <div dangerouslySetInnerHTML={{ __html: popup.content }} />

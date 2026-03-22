@@ -6,6 +6,7 @@ namespace App\CMS\Blocks;
 
 use App\Models\Block;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 
 class BlockRegistry
 {
@@ -16,7 +17,7 @@ class BlockRegistry
      */
     public function register(array $blockData): Block
     {
-        return Block::updateOrCreate(
+        $block = Block::updateOrCreate(
             ['slug' => $blockData['slug']],
             [
                 'name' => $blockData['name'] ?? $blockData['slug'],
@@ -28,6 +29,10 @@ class BlockRegistry
                 'source' => $blockData['source'] ?? 'core',
             ],
         );
+
+        Cache::forget('cms.blocks.registry');
+
+        return $block;
     }
 
     /**
@@ -45,7 +50,7 @@ class BlockRegistry
      */
     public function getAll(): Collection
     {
-        return Block::orderBy('category')->orderBy('name')->get();
+        return Cache::remember('cms.blocks.registry', 3600, fn () => Block::orderBy('category')->orderBy('name')->get());
     }
 
     /**
@@ -55,7 +60,7 @@ class BlockRegistry
      */
     public function getByCategory(string $category): Collection
     {
-        return Block::where('category', $category)->orderBy('name')->get();
+        return Cache::remember('cms.blocks.category.' . $category, 3600, fn () => Block::where('category', $category)->orderBy('name')->get());
     }
 
     /**
@@ -64,6 +69,8 @@ class BlockRegistry
     public function unregister(string $slug): bool
     {
         $deleted = Block::where('slug', $slug)->delete();
+
+        Cache::forget('cms.blocks.registry');
 
         return $deleted > 0;
     }

@@ -24,19 +24,30 @@ class ContentSanitizer
 
     public function sanitizeHtml(string $html): string
     {
-        // Remove script tags and their content
+        // Remove script tags and their content (including inside SVG/foreignObject)
         $html = preg_replace('/<script\b[^>]*>.*?<\/script>/is', '', $html);
 
-        // Remove event handlers (onclick, onerror, etc.)
+        // Remove SVG elements and all their content (SVGs can embed scripts in many ways)
+        $html = preg_replace('/<svg\b[^>]*>.*?<\/svg>/is', '', $html);
+
+        // Remove standalone SVG-specific elements that can carry event handlers
+        // (animate, set, animateTransform, animateMotion, foreignObject, use, etc.)
+        $html = preg_replace('/<\/?(?:animate|animateMotion|animateTransform|set|foreignObject|use)\b[^>]*>/i', '', $html);
+
+        // Remove event handlers (onclick, onerror, onload, onbegin, onend, onrepeat, etc.)
         $html = preg_replace('/\bon\w+\s*=\s*["\'][^"\']*["\']/i', '', $html);
         $html = preg_replace('/\bon\w+\s*=\s*\S+/i', '', $html);
 
-        // Remove javascript: URLs
+        // Remove javascript: URLs (href, src, xlink:href, action, formaction)
         $html = preg_replace('/href\s*=\s*["\']javascript:[^"\']*["\']/i', 'href="#"', $html);
         $html = preg_replace('/src\s*=\s*["\']javascript:[^"\']*["\']/i', 'src=""', $html);
+        $html = preg_replace('/xlink:href\s*=\s*["\']javascript:[^"\']*["\']/i', '', $html);
 
-        // Remove data: URLs in src (except images)
-        $html = preg_replace('/src\s*=\s*["\']data:(?!image\/)[^"\']*["\']/i', 'src=""', $html);
+        // Remove data: URLs in src (except raster images — block SVG data URIs which can embed scripts)
+        $html = preg_replace('/src\s*=\s*["\']data:(?!image\/(?:png|jpe?g|gif|webp|avif|bmp|ico)\b)[^"\']*["\']/i', 'src=""', $html);
+
+        // Also block data:image/svg+xml in href/xlink:href (SVG data URIs can contain scripts)
+        $html = preg_replace('/(?:xlink:)?href\s*=\s*["\']data:image\/svg\+xml[^"\']*["\']/i', 'href="#"', $html);
 
         // Strip disallowed tags
         $allowedTagsStr = implode('', array_map(fn ($tag) => "<{$tag}>", $this->allowedTags));

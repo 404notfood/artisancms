@@ -56,7 +56,7 @@ class WebhookController extends Controller
             $data['secret'] = $this->webhookService->generateSecret();
         }
 
-        Webhook::create($data);
+        $this->webhookService->createWebhook($data);
 
         return redirect()
             ->route('admin.webhooks.index')
@@ -86,7 +86,7 @@ class WebhookController extends Controller
             $data['secret'] = $this->webhookService->generateSecret();
         }
 
-        $webhook->update($data);
+        $this->webhookService->updateWebhook($webhook, $data);
 
         return redirect()
             ->back()
@@ -98,7 +98,7 @@ class WebhookController extends Controller
      */
     public function destroy(Webhook $webhook): RedirectResponse
     {
-        $webhook->delete();
+        $this->webhookService->deleteWebhook($webhook);
 
         return redirect()
             ->route('admin.webhooks.index')

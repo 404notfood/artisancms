@@ -23,13 +23,11 @@ class EmailTemplateController extends Controller
      */
     public function index(): Response
     {
-        $templates = EmailTemplate::orderBy('category')
-            ->orderBy('name')
-            ->get();
+        $templates = $this->emailTemplateService->all();
 
         $grouped = $templates->groupBy('category');
 
-        $categories = EmailTemplate::categories();
+        $categories = $templates->pluck('category')->unique()->values()->all();
 
         return Inertia::render('Admin/EmailTemplates/Index', [
             'templatesByCategory' => $grouped,
@@ -63,7 +61,7 @@ class EmailTemplateController extends Controller
             'enabled' => ['sometimes', 'boolean'],
         ]);
 
-        $emailTemplate->update($validated);
+        $this->emailTemplateService->update($emailTemplate, $validated);
 
         return redirect()
             ->back()

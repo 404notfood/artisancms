@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\CMS\Traits\HasSiteScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class DesignToken extends Model
 {
+    use HasSiteScope;
     protected $table = 'cms_design_tokens';
 
     /**

@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\BlockPatternStoreRequest;
+use App\Http\Requests\BlockPatternUpdateRequest;
 use App\Models\BlockPattern;
 use App\Services\BlockPatternService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 
 class BlockPatternController extends Controller
 {
@@ -31,15 +32,9 @@ class BlockPatternController extends Controller
     /**
      * Store a new pattern.
      */
-    public function store(Request $request): JsonResponse
+    public function store(BlockPatternStoreRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:100',
-            'slug' => 'nullable|string|max:100|unique:cms_block_patterns,slug',
-            'content' => 'required|array',
-            'category' => 'nullable|string|max:50',
-            'is_synced' => 'nullable|boolean',
-        ]);
+        $validated = $request->validated();
 
         $validated['created_by'] = $request->user()?->id;
 
@@ -51,14 +46,9 @@ class BlockPatternController extends Controller
     /**
      * Update a pattern.
      */
-    public function update(Request $request, BlockPattern $blockPattern): JsonResponse
+    public function update(BlockPatternUpdateRequest $request, BlockPattern $blockPattern): JsonResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:100',
-            'content' => 'nullable|array',
-            'category' => 'nullable|string|max:50',
-            'is_synced' => 'nullable|boolean',
-        ]);
+        $validated = $request->validated();
 
         $pattern = $this->blockPatternService->update($blockPattern, $validated);
 
@@ -72,6 +62,6 @@ class BlockPatternController extends Controller
     {
         $this->blockPatternService->delete($blockPattern);
 
-        return response()->json(['message' => 'Pattern supprime.']);
+        return response()->json(['message' => __('cms.block_patterns.deleted')]);
     }
 }

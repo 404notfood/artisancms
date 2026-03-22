@@ -1,7 +1,7 @@
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, Link , usePage } from '@inertiajs/react';
 import { ArrowLeft } from 'lucide-react';
-import { ProductData, StockMovementData, PaginatedResponse } from '@/types/cms';
+import { ProductData, StockMovementData, PaginatedResponse, SharedProps } from '@/types/cms';
 
 interface StockMovementsProps {
     product: ProductData & { variants?: { id: number; name: string; sku: string; stock: number }[] };

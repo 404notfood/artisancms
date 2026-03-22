@@ -323,6 +323,18 @@ class PageController extends Controller
     }
 
     /**
+     * Move a page to the trash (soft delete via explicit action).
+     */
+    public function trash(Page $page): RedirectResponse
+    {
+        $this->pageService->delete($page);
+
+        return redirect()
+            ->route('admin.pages.index')
+            ->with('success', __('cms.pages.deleted'));
+    }
+
+    /**
      * Generate a shareable preview link for a page.
      */
     public function generatePreview(Page $page): JsonResponse

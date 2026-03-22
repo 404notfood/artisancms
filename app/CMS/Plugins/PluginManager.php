@@ -10,6 +10,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
+use RuntimeException;
 
 class PluginManager
 {
@@ -270,13 +271,21 @@ class PluginManager
             str_replace('\\', '/', $migrationsPath),
         ));
 
-        Artisan::call('migrate', [
+        $exitCode = Artisan::call('migrate', [
             '--path' => $relativePath,
             '--force' => true,
         ]);
 
+        $output = trim(Artisan::output());
+
+        if ($exitCode !== 0) {
+            throw new RuntimeException(
+                "Plugin '{$slug}' migration failed (exit code {$exitCode}): {$output}"
+            );
+        }
+
         Log::info("Plugin '{$slug}': migrations executed.", [
-            'output' => trim(Artisan::output()),
+            'output' => $output,
         ]);
     }
 
@@ -372,6 +381,11 @@ class PluginManager
 
         if (empty($providers) && isset($manifest['provider'])) {
             return [$manifest['provider']];
+        }
+
+        if (empty($providers)) {
+            $pluginName = $manifest['name'] ?? 'unknown';
+            Log::warning("Plugin '{$pluginName}' has no service providers defined.");
         }
 
         return $providers;

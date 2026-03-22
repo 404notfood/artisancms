@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AiAssistantSettingsRequest;
 use App\Models\Setting;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -35,13 +35,9 @@ class AiAssistantController extends Controller
      * Save AI assistant settings.
      * POST /admin/ai-assistant/settings
      */
-    public function saveSettings(Request $request): RedirectResponse
+    public function saveSettings(AiAssistantSettingsRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'provider'         => ['required', 'in:openai,anthropic'],
-            'openai_api_key'   => ['nullable', 'string', 'max:255'],
-            'anthropic_api_key' => ['nullable', 'string', 'max:255'],
-        ]);
+        $validated = $request->validated();
 
         Setting::set('ai.provider', $validated['provider']);
 
@@ -53,6 +49,6 @@ class AiAssistantController extends Controller
             Setting::set('ai.anthropic_api_key', encrypt($validated['anthropic_api_key']));
         }
 
-        return back()->with('success', 'Configuration IA enregistrée.');
+        return back()->with('success', __('cms.ai_assistant.settings_saved'));
     }
 }

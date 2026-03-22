@@ -2,7 +2,7 @@ import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { useRef, useState } from 'react';
 import { Upload, Trash2, X, FileArchive, Loader2, Paintbrush } from 'lucide-react';
-import type { FlashMessages } from '@/types/cms';
+import type { FlashMessages, SharedProps } from '@/types/cms';
 
 interface ThemeItem {
     slug: string;

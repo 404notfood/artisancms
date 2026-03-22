@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use Laravel\Scout\Searchable;
@@ -114,6 +115,38 @@ class Page extends Model
     public function children(): HasMany
     {
         return $this->hasMany(Page::class, 'parent_id');
+    }
+
+    /**
+     * @return MorphMany<PageView, $this>
+     */
+    public function pageViews(): MorphMany
+    {
+        return $this->morphMany(PageView::class, 'viewable');
+    }
+
+    /**
+     * @return MorphMany<ActivityLog, $this>
+     */
+    public function activityLogs(): MorphMany
+    {
+        return $this->morphMany(ActivityLog::class, 'subject');
+    }
+
+    /**
+     * @return MorphMany<PreviewToken, $this>
+     */
+    public function previewTokens(): MorphMany
+    {
+        return $this->morphMany(PreviewToken::class, 'previewable');
+    }
+
+    /**
+     * @return MorphMany<MediaUsage, $this>
+     */
+    public function mediaUsages(): MorphMany
+    {
+        return $this->morphMany(MediaUsage::class, 'usable');
     }
 
     // ---- Scopes ----

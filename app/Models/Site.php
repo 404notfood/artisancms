@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Site extends Model
 {
@@ -71,6 +72,36 @@ class Site extends Model
         return $this->belongsToMany(User::class, 'cms_site_users')
             ->withPivot(['role_id', 'is_owner'])
             ->withTimestamps();
+    }
+
+    /**
+     * Design tokens belonging to this site.
+     *
+     * @return HasMany<DesignToken, $this>
+     */
+    public function designTokens(): HasMany
+    {
+        return $this->hasMany(DesignToken::class);
+    }
+
+    /**
+     * Widget areas belonging to this site.
+     *
+     * @return HasMany<WidgetArea, $this>
+     */
+    public function widgetAreas(): HasMany
+    {
+        return $this->hasMany(WidgetArea::class);
+    }
+
+    /**
+     * Global sections belonging to this site.
+     *
+     * @return HasMany<GlobalSection, $this>
+     */
+    public function globalSections(): HasMany
+    {
+        return $this->hasMany(GlobalSection::class);
     }
 
     /**

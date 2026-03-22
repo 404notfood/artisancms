@@ -1,7 +1,7 @@
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
-import type { PageData, PaginatedResponse, FlashMessages } from '@/types/cms';
+import type { PageData, PaginatedResponse, FlashMessages, SharedProps } from '@/types/cms';
 import { formatDate } from '@/lib/format';
 import StatusBadge from '@/Components/admin/status-badge';
 import { Plus, Pencil, Copy, Trash2 } from 'lucide-react';

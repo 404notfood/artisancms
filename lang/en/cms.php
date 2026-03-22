@@ -121,6 +121,10 @@ return [
         'widget_updated' => 'Widget updated.',
         'widget_deleted' => 'Widget deleted.',
         'widgets_reordered' => 'Widgets reordered.',
+        'created' => 'Widget created.',
+        'updated' => 'Widget updated.',
+        'deleted' => 'Widget deleted.',
+        'reordered' => 'Widgets reordered.',
     ],
 
     // Settings
@@ -150,6 +154,7 @@ return [
         'uninstall' => 'Uninstall',
         'activated' => 'Plugin activated.',
         'deactivated' => 'Plugin deactivated.',
+        'settings_saved' => 'Plugin settings saved.',
     ],
 
     // Themes
@@ -201,4 +206,158 @@ return [
         'not_found' => 'Resource not found.',
         'validation' => 'The submitted data is invalid.',
     ],
+
+    // Roles
+    'roles' => [
+        'created' => 'Role created.',
+        'updated' => 'Role updated.',
+        'deleted' => 'Role deleted.',
+        'system_cannot_delete' => 'Cannot delete a system role.',
+    ],
+
+    // Comments
+    'comments' => [
+        'approved' => 'Comment approved.',
+        'rejected' => 'Comment rejected.',
+        'spam' => 'Comment marked as spam.',
+        'deleted' => 'Comment deleted.',
+    ],
+
+    // Branding
+    'branding' => [
+        'updated' => 'Branding updated.',
+        'reset' => 'Branding reset.',
+        'imported' => 'Branding configuration imported.',
+        'invalid_json' => 'The JSON file is invalid.',
+        'export_error' => 'Error exporting branding.',
+    ],
+
+    // Design Tokens
+    'design_tokens' => [
+        'created' => 'Design token created.',
+        'updated' => 'Design token updated.',
+        'deleted' => 'Design token deleted.',
+        'seeded' => 'Default tokens generated.',
+        'categories' => [
+            'color' => 'Colors',
+            'typography' => 'Typography',
+            'button' => 'Buttons',
+            'spacing' => 'Spacing',
+            'shadow' => 'Shadows',
+            'border' => 'Borders',
+        ],
+    ],
+
+    // Webhooks
+    'webhooks' => [
+        'created' => 'Webhook created.',
+        'updated' => 'Webhook updated.',
+        'deleted' => 'Webhook deleted.',
+        'tested' => 'Webhook tested successfully.',
+    ],
+
+    // Custom Fields
+    'custom_fields' => [
+        'created' => 'Custom field created.',
+        'updated' => 'Custom field updated.',
+        'deleted' => 'Custom field deleted.',
+    ],
+
+    // Popups
+    'popups' => [
+        'created' => 'Popup created.',
+        'updated' => 'Popup updated.',
+        'deleted' => 'Popup deleted.',
+    ],
+
+    // Global Sections
+    'global_sections' => [
+        'created' => 'Global section created.',
+        'updated' => 'Global section updated.',
+        'deleted' => 'Global section deleted.',
+        'activated' => 'Global section activated.',
+    ],
+
+    // Newsletter
+    'newsletter' => [
+        'deleted' => 'Subscriber deleted.',
+        'exported' => 'Subscriber list exported.',
+    ],
+
+    // Content Types
+    'content_types' => [
+        'created' => 'Content type created.',
+        'updated' => 'Content type updated.',
+        'deleted' => 'Content type deleted.',
+    ],
+
+    // Content Entries
+    'content_entries' => [
+        'created' => 'Content entry created.',
+        'updated' => 'Content entry updated.',
+        'deleted' => 'Content entry deleted.',
+    ],
+
+    // Redirects
+    'redirects' => [
+        'created' => 'Redirect created.',
+        'updated' => 'Redirect updated.',
+        'deleted' => 'Redirect deleted.',
+    ],
+
+    // Sites (Multi-site)
+    'sites' => [
+        'created' => 'Site created.',
+        'updated' => 'Site updated.',
+        'deleted' => 'Site deleted.',
+        'switched' => 'Site switched successfully.',
+    ],
+
+    // Updates
+    'updates' => [
+        'safe_mode_enabled' => 'Safe mode enabled.',
+        'safe_mode_disabled' => 'Safe mode disabled.',
+        'recovery_token_generated' => 'Recovery token generated.',
+    ],
+
+    // Notifications
+    'notifications' => [
+        'marked_read' => 'Notification marked as read.',
+        'all_marked_read' => 'All notifications marked as read.',
+    ],
+
+    // Import / Export
+    'import_export' => [
+        'exported' => 'Data exported successfully.',
+        'imported' => 'Data imported successfully.',
+    ],
+
+    // Bulk actions
+    // AI Assistant
+    'ai_assistant' => [
+        'settings_saved' => 'AI configuration saved.',
+    ],
+
+    // System
+    'system' => [
+        'session_terminated' => 'Session terminated.',
+        'all_sessions_terminated' => 'All other sessions have been logged out.',
+    ],
+
+    // Account
+    'account' => [
+        'updated' => 'Profile updated.',
+        'password_updated' => 'Password updated.',
+        'avatar_updated' => 'Avatar updated.',
+        'avatar_removed' => 'Avatar removed.',
+    ],
+
+    // Block patterns
+    'block_patterns' => [
+        'created' => 'Pattern created.',
+        'updated' => 'Pattern updated.',
+        'deleted' => 'Pattern deleted.',
+    ],
+
+    'bulk_action_success' => ':count items processed successfully.',
 ];

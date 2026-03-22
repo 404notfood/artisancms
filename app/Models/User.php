@@ -8,7 +8,9 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\CMS\Traits\LogsActivity;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
@@ -16,7 +18,13 @@ use Illuminate\Support\Facades\Storage;
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, LogsActivity, Notifiable;
+
+    /** @var array<int, string> */
+    protected array $activityExcluded = ['password', 'remember_token', 'two_factor_secret', 'updated_at', 'created_at'];
+
+    /** @var array<int, string> */
+    protected array $activityContext = ['name', 'email'];
 
     /**
      * The attributes that are mass assignable.
@@ -93,6 +101,28 @@ class User extends Authenticatable
     public function media(): HasMany
     {
         return $this->hasMany(Media::class, 'uploaded_by');
+    }
+
+    /**
+     * Sites owned by this user.
+     *
+     * @return HasMany<Site, $this>
+     */
+    public function ownedSites(): HasMany
+    {
+        return $this->hasMany(Site::class, 'owner_id');
+    }
+
+    /**
+     * Sites this user is assigned to (via pivot table).
+     *
+     * @return BelongsToMany<Site, $this>
+     */
+    public function sites(): BelongsToMany
+    {
+        return $this->belongsToMany(Site::class, 'cms_site_users')
+            ->withPivot(['role_id', 'is_owner'])
+            ->withTimestamps();
     }
 
     /**

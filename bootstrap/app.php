@@ -15,19 +15,24 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->alias([
-            'cms.admin' => \App\Http\Middleware\EnsureAdmin::class,
-        ]);
-
         $middleware->web(append: [
             \App\Http\Middleware\EnsureInstalled::class,
             \App\Http\Middleware\CheckMaintenanceMode::class,
             \App\Http\Middleware\HandleRedirects::class,
+            \App\Http\Middleware\ResolveSite::class,
             \App\Http\Middleware\SetLocale::class,
             \App\Http\Middleware\SecurityHeaders::class,
+            \App\Http\Middleware\ErrorRecoveryMiddleware::class,
             \App\Http\Middleware\InjectBranding::class,
             \App\Http\Middleware\HandleInertiaRequests::class,
+            \App\Http\Middleware\TrackPageView::class,
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
+        ]);
+
+        $middleware->alias([
+            'cms.admin' => \App\Http\Middleware\EnsureAdmin::class,
+            'cms.content.access' => \App\Http\Middleware\CheckContentAccess::class,
+            'cms.content.lock' => \App\Http\Middleware\CheckContentLock::class,
         ]);
 
         $middleware->validateCsrfTokens(except: [

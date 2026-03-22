@@ -143,7 +143,7 @@ class MenuController extends Controller
             'order' => ['nullable', 'integer'],
         ]);
 
-        $item->update($validated);
+        $this->menuService->updateItem($item, $validated);
 
         return redirect()
             ->back()
@@ -155,7 +155,7 @@ class MenuController extends Controller
      */
     public function destroyItem(Menu $menu, MenuItem $item): RedirectResponse
     {
-        $item->delete();
+        $this->menuService->deleteItem($item);
 
         return redirect()
             ->back()

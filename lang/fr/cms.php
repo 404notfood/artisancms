@@ -111,6 +111,7 @@ return [
         'uninstall' => 'Désinstaller',
         'activated' => 'Plugin activé.',
         'deactivated' => 'Plugin désactivé.',
+        'settings_saved' => 'Paramètres du plugin sauvegardés.',
     ],
 
     // Themes
@@ -167,6 +168,10 @@ return [
         'widget_updated' => 'Widget mis à jour.',
         'widget_deleted' => 'Widget supprimé.',
         'widgets_reordered' => 'Widgets réordonnés.',
+        'created' => 'Widget créé.',
+        'updated' => 'Widget mis à jour.',
+        'deleted' => 'Widget supprimé.',
+        'reordered' => 'Widgets réordonnés.',
     ],
 
     // Settings updated
@@ -201,4 +206,158 @@ return [
         'not_found' => 'Ressource introuvable.',
         'validation' => 'Les données soumises sont invalides.',
     ],
+
+    // Roles
+    'roles' => [
+        'created' => 'Rôle créé.',
+        'updated' => 'Rôle mis à jour.',
+        'deleted' => 'Rôle supprimé.',
+        'system_cannot_delete' => 'Impossible de supprimer un rôle système.',
+    ],
+
+    // Comments
+    'comments' => [
+        'approved' => 'Commentaire approuvé.',
+        'rejected' => 'Commentaire rejeté.',
+        'spam' => 'Commentaire marqué comme spam.',
+        'deleted' => 'Commentaire supprimé.',
+    ],
+
+    // Branding
+    'branding' => [
+        'updated' => 'Branding mis à jour.',
+        'reset' => 'Branding réinitialisé.',
+        'imported' => 'Configuration de branding importée.',
+        'invalid_json' => 'Le fichier JSON est invalide.',
+        'export_error' => 'Erreur lors de l\'export du branding.',
+    ],
+
+    // Design Tokens
+    'design_tokens' => [
+        'created' => 'Design token créé.',
+        'updated' => 'Design token mis à jour.',
+        'deleted' => 'Design token supprimé.',
+        'seeded' => 'Tokens par défaut générés.',
+        'categories' => [
+            'color' => 'Couleurs',
+            'typography' => 'Typographie',
+            'button' => 'Boutons',
+            'spacing' => 'Espacements',
+            'shadow' => 'Ombres',
+            'border' => 'Bordures',
+        ],
+    ],
+
+    // Webhooks
+    'webhooks' => [
+        'created' => 'Webhook créé.',
+        'updated' => 'Webhook mis à jour.',
+        'deleted' => 'Webhook supprimé.',
+        'tested' => 'Webhook testé avec succès.',
+    ],
+
+    // Custom Fields
+    'custom_fields' => [
+        'created' => 'Champ personnalisé créé.',
+        'updated' => 'Champ personnalisé mis à jour.',
+        'deleted' => 'Champ personnalisé supprimé.',
+    ],
+
+    // Popups
+    'popups' => [
+        'created' => 'Popup créée.',
+        'updated' => 'Popup mise à jour.',
+        'deleted' => 'Popup supprimée.',
+    ],
+
+    // Global Sections
+    'global_sections' => [
+        'created' => 'Section globale créée.',
+        'updated' => 'Section globale mise à jour.',
+        'deleted' => 'Section globale supprimée.',
+        'activated' => 'Section globale activée.',
+    ],
+
+    // Newsletter
+    'newsletter' => [
+        'deleted' => 'Abonné supprimé.',
+        'exported' => 'Liste des abonnés exportée.',
+    ],
+
+    // Content Types
+    'content_types' => [
+        'created' => 'Type de contenu créé.',
+        'updated' => 'Type de contenu mis à jour.',
+        'deleted' => 'Type de contenu supprimé.',
+    ],
+
+    // Content Entries
+    'content_entries' => [
+        'created' => 'Entrée de contenu créée.',
+        'updated' => 'Entrée de contenu mise à jour.',
+        'deleted' => 'Entrée de contenu supprimée.',
+    ],
+
+    // Redirects
+    'redirects' => [
+        'created' => 'Redirection créée.',
+        'updated' => 'Redirection mise à jour.',
+        'deleted' => 'Redirection supprimée.',
+    ],
+
+    // Sites (Multi-site)
+    'sites' => [
+        'created' => 'Site créé.',
+        'updated' => 'Site mis à jour.',
+        'deleted' => 'Site supprimé.',
+        'switched' => 'Site changé avec succès.',
+    ],
+
+    // Updates
+    'updates' => [
+        'safe_mode_enabled' => 'Mode sans échec activé.',
+        'safe_mode_disabled' => 'Mode sans échec désactivé.',
+        'recovery_token_generated' => 'Token de récupération généré.',
+    ],
+
+    // Notifications
+    'notifications' => [
+        'marked_read' => 'Notification marquée comme lue.',
+        'all_marked_read' => 'Toutes les notifications marquées comme lues.',
+    ],
+
+    // Import / Export
+    'import_export' => [
+        'exported' => 'Données exportées avec succès.',
+        'imported' => 'Données importées avec succès.',
+    ],
+
+    // Bulk actions
+    // AI Assistant
+    'ai_assistant' => [
+        'settings_saved' => 'Configuration IA enregistrée.',
+    ],
+
+    // System
+    'system' => [
+        'session_terminated' => 'Session terminée.',
+        'all_sessions_terminated' => 'Toutes les autres sessions ont été déconnectées.',
+    ],
+
+    // Account
+    'account' => [
+        'updated' => 'Profil mis à jour.',
+        'password_updated' => 'Mot de passe mis à jour.',
+        'avatar_updated' => 'Avatar mis à jour.',
+        'avatar_removed' => 'Avatar supprimé.',
+    ],
+
+    // Block patterns
+    'block_patterns' => [
+        'created' => 'Pattern créé.',
+        'updated' => 'Pattern mis à jour.',
+        'deleted' => 'Pattern supprimé.',
+    ],
+
+    'bulk_action_success' => ':count éléments traités avec succès.',
 ];

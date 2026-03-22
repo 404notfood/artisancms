@@ -222,8 +222,15 @@ class ThemeManager
             }
 
             File::makeDirectory($tmpDir, 0755, true);
+
+            // Validate ZIP entries for path traversal before extracting
+            $this->validateZipEntries($zip);
+
             $zip->extractTo($tmpDir);
             $zip->close();
+
+            // Post-extraction safety check: verify all files are within the temp directory
+            $this->validateExtractedPaths($tmpDir);
 
             // Detect root folder: either files at root or single subdirectory
             $manifestPath = $this->findManifest($tmpDir);
@@ -302,6 +309,69 @@ class ThemeManager
         unset($this->manifests[$slug]);
 
         CMS::fire('theme.uninstalled', ['slug' => $slug]);
+    }
+
+    /**
+     * Validate all entries in a ZIP archive for path traversal attacks
+     * before extraction. Rejects entries containing ".." or starting with "/".
+     *
+     * @throws RuntimeException if any entry has an unsafe path
+     */
+    private function validateZipEntries(ZipArchive $zip): void
+    {
+        for ($i = 0; $i < $zip->numFiles; $i++) {
+            $entryName = $zip->getNameIndex($i);
+
+            if ($entryName === false) {
+                continue;
+            }
+
+            // Normalize backslashes to forward slashes for consistent checking
+            $normalized = str_replace('\\', '/', $entryName);
+
+            if (
+                str_contains($normalized, '..')
+                || str_starts_with($normalized, '/')
+                || str_starts_with($normalized, '~')
+            ) {
+                $zip->close();
+                throw new RuntimeException(
+                    "Unsafe path detected in ZIP archive: '{$entryName}'. The archive may be malicious."
+                );
+            }
+        }
+    }
+
+    /**
+     * Verify that all extracted files reside within the expected directory.
+     * This is a post-extraction safety net against path traversal.
+     *
+     * @throws RuntimeException if any file escapes the target directory
+     */
+    private function validateExtractedPaths(string $extractDir): void
+    {
+        $realExtractDir = realpath($extractDir);
+
+        if ($realExtractDir === false) {
+            throw new RuntimeException('Extraction directory does not exist.');
+        }
+
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($realExtractDir, \FilesystemIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::SELF_FIRST,
+        );
+
+        foreach ($iterator as $fileInfo) {
+            $realPath = realpath($fileInfo->getPathname());
+
+            if ($realPath === false || !str_starts_with($realPath, $realExtractDir)) {
+                // Clean up the extraction directory before throwing
+                File::deleteDirectory($extractDir);
+                throw new RuntimeException(
+                    "Extracted file escapes target directory: '{$fileInfo->getPathname()}'. The archive may be malicious."
+                );
+            }
+        }
     }
 
     /**

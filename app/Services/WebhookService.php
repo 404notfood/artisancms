@@ -100,6 +100,36 @@ class WebhookService
     }
 
     /**
+     * Create a new webhook.
+     *
+     * @param array<string, mixed> $data
+     */
+    public function createWebhook(array $data): Webhook
+    {
+        return Webhook::create($data);
+    }
+
+    /**
+     * Update a webhook.
+     *
+     * @param array<string, mixed> $data
+     */
+    public function updateWebhook(Webhook $webhook, array $data): Webhook
+    {
+        $webhook->update($data);
+
+        return $webhook->fresh() ?? $webhook;
+    }
+
+    /**
+     * Delete a webhook and all its deliveries.
+     */
+    public function deleteWebhook(Webhook $webhook): bool
+    {
+        return (bool) $webhook->delete();
+    }
+
+    /**
      * Send a test ping event synchronously.
      */
     public function test(Webhook $webhook): WebhookDelivery

@@ -6,8 +6,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AccountUpdateRequest;
-use App\Models\Role;
 use App\Services\AvatarService;
+use App\Services\RoleService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,12 +20,13 @@ class AccountController extends Controller
 {
     public function __construct(
         private readonly AvatarService $avatarService,
+        private readonly RoleService $roleService,
     ) {}
 
     public function edit(): Response
     {
         $user = Auth::user();
-        $roles = Role::orderBy('name')->get(['id', 'name', 'slug']);
+        $roles = $this->roleService->getOptions();
 
         return Inertia::render('Admin/Account/Edit', [
             'user' => $user,

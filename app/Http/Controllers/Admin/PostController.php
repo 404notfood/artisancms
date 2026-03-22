@@ -292,6 +292,18 @@ class PostController extends Controller
     }
 
     /**
+     * Move a post to the trash (soft delete via explicit action).
+     */
+    public function trash(Post $post): RedirectResponse
+    {
+        $this->postService->delete($post);
+
+        return redirect()
+            ->route('admin.posts.index')
+            ->with('success', __('cms.posts.deleted'));
+    }
+
+    /**
      * Generate a shareable preview link for a post.
      */
     public function generatePreview(Post $post): JsonResponse

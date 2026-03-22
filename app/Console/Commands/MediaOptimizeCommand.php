@@ -71,6 +71,67 @@ class MediaOptimizeCommand extends Command
             return;
         }
 
-        $this->line(" Processing: {$media->original_filename}");
+        try {
+            $fullPath = $disk->path($media->path);
+            $basePath = preg_replace('/\.[^.]+$/', '', $media->path);
+
+            $sourceImage = match ($media->mime_type) {
+                'image/jpeg' => imagecreatefromjpeg($fullPath),
+                'image/png' => imagecreatefrompng($fullPath),
+                'image/webp' => function_exists('imagecreatefromwebp') ? imagecreatefromwebp($fullPath) : false,
+                default => false,
+            };
+
+            if ($sourceImage === false) {
+                $this->warn("  Cannot process: {$media->original_filename} (unsupported format)");
+
+                return;
+            }
+
+            $config = config('cms.media.image', []);
+            $quality = $config['quality'] ?? 80;
+            $width = imagesx($sourceImage);
+            $height = imagesy($sourceImage);
+
+            // Generate responsive sizes
+            $responsiveSizes = $config['responsive_sizes'] ?? ['sm' => 320, 'md' => 640, 'lg' => 1024, 'xl' => 1920];
+            $responsive = [];
+            foreach ($responsiveSizes as $suffix => $targetWidth) {
+                if ($width > $targetWidth) {
+                    $ratio = $targetWidth / $width;
+                    $newHeight = (int) round($height * $ratio);
+                    $resized = imagecreatetruecolor($targetWidth, $newHeight);
+                    imagecopyresampled($resized, $sourceImage, 0, 0, 0, 0, $targetWidth, $newHeight, $width, $height);
+
+                    $responsivePath = "{$basePath}_{$suffix}.jpg";
+                    ob_start();
+                    imagejpeg($resized, null, $quality);
+                    $disk->put($responsivePath, ob_get_clean());
+                    imagedestroy($resized);
+                    $responsive[$suffix] = $responsivePath;
+                }
+            }
+
+            // Generate WebP
+            if (($config['webp'] ?? true) && function_exists('imagewebp')) {
+                $webpPath = "{$basePath}.webp";
+                ob_start();
+                imagewebp($sourceImage, null, $quality);
+                $disk->put($webpPath, ob_get_clean());
+            }
+
+            // Update metadata
+            $metadata = $media->metadata ?? [];
+            $metadata['width'] = $width;
+            $metadata['height'] = $height;
+            $metadata['responsive'] = $responsive;
+            $media->update(['metadata' => $metadata]);
+
+            imagedestroy($sourceImage);
+
+            $this->line("  Optimized: {$media->original_filename} ({$width}x{$height})");
+        } catch (\Throwable $e) {
+            $this->error("  Error processing {$media->original_filename}: {$e->getMessage()}");
+        }
     }
 }

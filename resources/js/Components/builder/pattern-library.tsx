@@ -9,14 +9,14 @@ interface PatternData {
     id: number;
     name: string;
     slug: string;
-    content: unknown[];
+    content: BlockNode[];
     category: string;
     is_synced: boolean;
     creator?: { name: string };
 }
 
-function reassignIds(blocks: unknown[]): unknown[] {
-    return blocks.map((block: any) => ({
+function reassignIds(blocks: BlockNode[]): BlockNode[] {
+    return blocks.map((block) => ({
         ...block,
         id: nanoid(),
         children: block.children?.length ? reassignIds(block.children) : [],
@@ -47,7 +47,7 @@ export default function PatternLibrary() {
     }, []);
 
     const insertPattern = (pattern: PatternData) => {
-        const freshBlocks = reassignIds(pattern.content) as BlockNode[];
+        const freshBlocks = reassignIds(pattern.content);
         const store = useBuilderStore.getState();
 
         store.pushHistory();

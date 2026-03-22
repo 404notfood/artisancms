@@ -26,10 +26,7 @@ class CustomFieldController extends Controller
      */
     public function index(): Response
     {
-        $groups = CustomFieldGroup::withCount('fields')
-            ->orderBy('order')
-            ->orderBy('name')
-            ->paginate(20);
+        $groups = $this->customFieldService->allGroups();
 
         return Inertia::render('Admin/CustomFields/Index', [
             'groups' => $groups,

@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DesignTokenRequest;
 use App\Models\DesignToken;
 use App\Services\DesignTokenService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -26,12 +26,12 @@ class DesignTokenController extends Controller
         return Inertia::render('Admin/StyleBook/Index', [
             'tokens' => $this->designTokenService->getAllGrouped(),
             'categories' => [
-                ['key' => 'color', 'label' => 'Couleurs'],
-                ['key' => 'typography', 'label' => 'Typographie'],
-                ['key' => 'button', 'label' => 'Boutons'],
-                ['key' => 'spacing', 'label' => 'Espacements'],
-                ['key' => 'shadow', 'label' => 'Ombres'],
-                ['key' => 'border', 'label' => 'Bordures'],
+                ['key' => 'color', 'label' => __('cms.design_tokens.categories.color')],
+                ['key' => 'typography', 'label' => __('cms.design_tokens.categories.typography')],
+                ['key' => 'button', 'label' => __('cms.design_tokens.categories.button')],
+                ['key' => 'spacing', 'label' => __('cms.design_tokens.categories.spacing')],
+                ['key' => 'shadow', 'label' => __('cms.design_tokens.categories.shadow')],
+                ['key' => 'border', 'label' => __('cms.design_tokens.categories.border')],
             ],
         ]);
     }
@@ -39,41 +39,29 @@ class DesignTokenController extends Controller
     /**
      * Create a new design token.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(DesignTokenRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:100',
-            'slug' => 'nullable|string|max:100|unique:cms_design_tokens,slug',
-            'category' => 'required|in:color,typography,button,spacing,shadow,border',
-            'value' => 'required|array',
-            'order' => 'nullable|integer|min:0',
-        ]);
+        $validated = $request->validated();
 
         $this->designTokenService->create($validated);
 
         return redirect()
             ->route('admin.design-tokens.index')
-            ->with('success', 'Design token cree avec succes.');
+            ->with('success', __('cms.design_tokens.created'));
     }
 
     /**
      * Update an existing design token.
      */
-    public function update(Request $request, DesignToken $designToken): RedirectResponse
+    public function update(DesignTokenRequest $request, DesignToken $designToken): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:100',
-            'slug' => 'nullable|string|max:100|unique:cms_design_tokens,slug,' . $designToken->id,
-            'category' => 'required|in:color,typography,button,spacing,shadow,border',
-            'value' => 'required|array',
-            'order' => 'nullable|integer|min:0',
-        ]);
+        $validated = $request->validated();
 
         $this->designTokenService->update($designToken, $validated);
 
         return redirect()
             ->route('admin.design-tokens.index')
-            ->with('success', 'Design token mis a jour.');
+            ->with('success', __('cms.design_tokens.updated'));
     }
 
     /**
@@ -85,7 +73,7 @@ class DesignTokenController extends Controller
 
         return redirect()
             ->route('admin.design-tokens.index')
-            ->with('success', 'Design token supprime.');
+            ->with('success', __('cms.design_tokens.deleted'));
     }
 
     /**
@@ -97,7 +85,7 @@ class DesignTokenController extends Controller
 
         return redirect()
             ->route('admin.design-tokens.index')
-            ->with('success', 'Tokens par defaut generes.');
+            ->with('success', __('cms.design_tokens.seeded'));
     }
 
     /**
