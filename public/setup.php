@@ -328,6 +328,82 @@ if (file_exists(INSTALLED_FILE)) {
     exit;
 }
 
+// ─── Async task helpers for long-running commands ───
+define('SETUP_TEMP_DIR', BASE_PATH . '/storage/framework/cache');
+
+/**
+ * Get the path for an async task's status/log file.
+ */
+function getAsyncFile(string $step, string $type): string {
+    return SETUP_TEMP_DIR . "/setup_{$step}.{$type}";
+}
+
+/**
+ * Launch a shell command in the background and track it via lock/log files.
+ * Returns immediately. Use checkAsyncStatus() to poll for completion.
+ */
+function launchAsync(string $step, string $cmd, callable $successCheck): array {
+    $lockFile = getAsyncFile($step, 'lock');
+    $logFile = getAsyncFile($step, 'log');
+
+    // Already running?
+    if (file_exists($lockFile)) {
+        return checkAsyncStatus($step, $successCheck);
+    }
+
+    // Create lock file
+    file_put_contents($lockFile, date('Y-m-d H:i:s'));
+
+    // Clean previous log
+    if (file_exists($logFile)) {
+        @unlink($logFile);
+    }
+
+    // Launch in background
+    if (DIRECTORY_SEPARATOR === '\\') {
+        // Windows: use start /B and redirect output to log file
+        $bgCmd = "start /B cmd /c \"{$cmd} > " . escapeshellarg($logFile) . " 2>&1 && del " . escapeshellarg($lockFile) . " || del " . escapeshellarg($lockFile) . "\"";
+        pclose(popen($bgCmd, 'r'));
+    } else {
+        // Unix: nohup + &
+        $bgCmd = "({$cmd}) > " . escapeshellarg($logFile) . " 2>&1; rm -f " . escapeshellarg($lockFile) . " &";
+        shell_exec($bgCmd);
+    }
+
+    return ['success' => true, 'status' => 'running', 'message' => 'Opération lancée en arrière-plan...'];
+}
+
+/**
+ * Check the status of an async task.
+ */
+function checkAsyncStatus(string $step, callable $successCheck): array {
+    $lockFile = getAsyncFile($step, 'lock');
+    $logFile = getAsyncFile($step, 'log');
+
+    // Still running
+    if (file_exists($lockFile)) {
+        // Check if the lock file is stale (older than 10 minutes)
+        $lockAge = time() - filemtime($lockFile);
+        if ($lockAge > 600) {
+            @unlink($lockFile);
+            $output = file_exists($logFile) ? substr(file_get_contents($logFile), -500) : '';
+            return ['success' => false, 'message' => "Timeout (>10min). Vérifiez votre terminal.\n" . $output];
+        }
+        return ['success' => true, 'status' => 'running', 'message' => 'En cours d\'exécution...'];
+    }
+
+    // Finished — check if it succeeded
+    if ($successCheck()) {
+        @unlink($logFile);
+        return ['success' => true, 'status' => 'done', 'message' => 'Installation terminée.'];
+    }
+
+    // Failed
+    $output = file_exists($logFile) ? substr(file_get_contents($logFile), -500) : 'Aucune sortie disponible.';
+    @unlink($logFile);
+    return ['success' => false, 'message' => "Échec.\n" . $output];
+}
+
 // ─── Handle AJAX step execution ───
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     // Extend timeout for long operations (composer install, npm install, build)
@@ -364,6 +440,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                 break;
             case 'permissions':
                 $result = fixPermissions();
+                break;
+            case 'status':
+                // Poll async task status
+                $step = $_POST['step'] ?? '';
+                $checks = [
+                    'composer' => fn() => file_exists(VENDOR_PATH . '/autoload.php'),
+                    'npm' => fn() => is_dir(BASE_PATH . '/node_modules'),
+                    'build' => fn() => file_exists(BASE_PATH . '/public/build/.vite/manifest.json') || file_exists(BASE_PATH . '/public/build/manifest.json'),
+                ];
+                if (isset($checks[$step])) {
+                    $result = checkAsyncStatus($step, $checks[$step]);
+                } else {
+                    $result = ['success' => false, 'message' => "Étape inconnue: {$step}"];
+                }
                 break;
         }
     } catch (Throwable $e) {
@@ -501,7 +591,7 @@ function getComposerCommand(string $composerPath, string $args): string {
 
 function runComposer(): array {
     if (is_dir(VENDOR_PATH) && file_exists(VENDOR_PATH . '/autoload.php')) {
-        return ['success' => true, 'message' => 'Les dépendances Composer sont déjà installées.'];
+        return ['success' => true, 'status' => 'done', 'message' => 'Les dépendances Composer sont déjà installées.'];
     }
 
     $manualCmd = "cd " . BASE_PATH . "\ncomposer install --no-dev --optimize-autoloader";
@@ -513,22 +603,24 @@ function runComposer(): array {
     $composer = findComposer();
     if (!$composer || $composer === 'already-installed') {
         if ($composer === 'already-installed') {
-            return ['success' => true, 'message' => 'Les dépendances Composer sont déjà installées.'];
+            return ['success' => true, 'status' => 'done', 'message' => 'Les dépendances Composer sont déjà installées.'];
         }
         return ['success' => false, 'message' => "Composer non trouvé.\nExécutez dans votre terminal :\n{$manualCmd}\nPuis rafraîchissez cette page."];
     }
 
-    // Try running composer install directly (works if web server timeout is long enough)
+    // Launch async to avoid HTTP timeout
     $cmd = getComposerCommand($composer, 'install --no-dev --optimize-autoloader --no-interaction');
-    $output = @shell_exec($cmd);
+    $successCheck = fn() => file_exists(VENDOR_PATH . '/autoload.php');
 
-    if (file_exists(VENDOR_PATH . '/autoload.php')) {
-        return ['success' => true, 'message' => 'Dépendances Composer installées.'];
+    $result = launchAsync('composer', $cmd, $successCheck);
+
+    // If async launch failed, provide manual instructions
+    if (!$result['success'] && ($result['status'] ?? '') !== 'running') {
+        $hint = DIRECTORY_SEPARATOR === '\\' ? 'Ouvrez le Terminal Laragon (ou CMD/PowerShell)' : 'Connectez-vous en SSH';
+        $result['message'] .= "\n\n{$hint} et exécutez :\n{$manualCmd}\nPuis cliquez sur Réessayer.";
     }
 
-    // If it failed (likely timeout), provide manual instructions
-    $hint = DIRECTORY_SEPARATOR === '\\' ? 'Ouvrez le Terminal Laragon (ou CMD/PowerShell)' : 'Connectez-vous en SSH';
-    return ['success' => false, 'message' => "{$hint} et exécutez :\n{$manualCmd}\nPuis cliquez sur Réessayer.\n\n" . ($output ? "Sortie:\n" . substr($output, -300) : 'Le serveur web a interrompu la commande (timeout).')];
+    return $result;
 }
 
 function setupEnv(): array {
