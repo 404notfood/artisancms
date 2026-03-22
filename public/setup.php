@@ -330,6 +330,10 @@ if (file_exists(INSTALLED_FILE)) {
 
 // ─── Handle AJAX step execution ───
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
+    // Extend timeout for long operations (composer install, npm install, build)
+    set_time_limit(600);
+    ini_set('max_execution_time', '600');
+
     header('Content-Type: application/json');
 
     $action = $_POST['action'];
@@ -394,13 +398,20 @@ function checkRequirements(): array {
     $checks[] = ['name' => 'GD ou Imagick', 'value' => $hasGd ? 'GD' : ($hasImagick ? 'Imagick' : 'Manquant'), 'ok' => $hasGd || $hasImagick, 'required' => true];
     if (!$hasGd && !$hasImagick) $allPassed = false;
 
-    // Composer
+    // Composer — not a hard requirement for the check step
+    // It will be verified and used in the 'composer' step
     $composerPath = findComposer();
-    $checks[] = ['name' => 'Composer', 'value' => $composerPath ?: 'Non trouvé', 'ok' => (bool) $composerPath, 'required' => true];
-    if (!$composerPath) $allPassed = false;
+    $vendorExists = is_dir(VENDOR_PATH) && file_exists(VENDOR_PATH . '/autoload.php');
+    $composerOk = (bool) $composerPath || $vendorExists;
+    $composerValue = $vendorExists ? 'vendor/ présent' : ($composerPath ?: 'Non trouvé (sera cherché à l\'étape suivante)');
+    $checks[] = ['name' => 'Composer', 'value' => $composerValue, 'ok' => $composerOk, 'required' => false];
 
-    // Node.js & npm — detect via findBinary or shell, check if deps are already installed
+    // Node.js & npm — not a hard requirement for the check step
+    // They will be verified and used in the 'npm' and 'build' steps
     $nullRedirect = DIRECTORY_SEPARATOR === '\\' ? '2>NUL' : '2>/dev/null';
+    $nodeModulesExist = is_dir(BASE_PATH . '/node_modules');
+    $buildExists = file_exists(BASE_PATH . '/public/build/.vite/manifest.json') || file_exists(BASE_PATH . '/public/build/manifest.json');
+
     if (canExecShell()) {
         $nodeBin = findBinary('node');
         $nodeVersion = '';
@@ -408,17 +419,15 @@ function checkRequirements(): array {
             $nodeVersion = trim(@shell_exec(escapeshellarg($nodeBin) . " --version {$nullRedirect}") ?? '');
         }
         if (empty($nodeVersion)) {
-            // Fallback: try bare command (may work if system PATH is set)
             $nodeVersion = trim(@shell_exec("node --version {$nullRedirect}") ?? '');
         }
-        $nodeOk = !empty($nodeVersion);
-        $checks[] = ['name' => 'Node.js 20+', 'value' => $nodeVersion ?: 'Non trouvé', 'ok' => $nodeOk, 'required' => true];
-        if (!$nodeOk) $allPassed = false;
+        $nodeOk = !empty($nodeVersion) || $nodeModulesExist || $buildExists;
+        $nodeValue = $nodeVersion ?: ($nodeModulesExist ? 'node_modules présent' : 'Non trouvé');
+        $checks[] = ['name' => 'Node.js 20+', 'value' => $nodeValue, 'ok' => $nodeOk, 'required' => false];
 
         $npmBin = findBinary('npm');
         $npmVersion = '';
         if ($npmBin) {
-            // npm on Windows may be a .cmd file — must use cmd /c
             if (DIRECTORY_SEPARATOR === '\\') {
                 $npmVersion = trim(@shell_exec("cmd /c " . escapeshellarg($npmBin) . " --version {$nullRedirect}") ?? '');
             } else {
@@ -428,14 +437,11 @@ function checkRequirements(): array {
         if (empty($npmVersion)) {
             $npmVersion = trim(@shell_exec("npm --version {$nullRedirect}") ?? '');
         }
-        $npmOk = !empty($npmVersion);
-        $checks[] = ['name' => 'npm', 'value' => $npmVersion ? "v{$npmVersion}" : 'Non trouvé', 'ok' => $npmOk, 'required' => true];
-        if (!$npmOk) $allPassed = false;
+        $npmOk = !empty($npmVersion) || $nodeModulesExist || $buildExists;
+        $npmValue = $npmVersion ? "v{$npmVersion}" : ($nodeModulesExist ? 'node_modules présent' : 'Non trouvé');
+        $checks[] = ['name' => 'npm', 'value' => $npmValue, 'ok' => $npmOk, 'required' => false];
     } else {
-        $nodeModulesExist = is_dir(BASE_PATH . '/node_modules');
-        $buildExists = file_exists(BASE_PATH . '/public/build/.vite/manifest.json') || file_exists(BASE_PATH . '/public/build/manifest.json');
-        $checks[] = ['name' => 'Node.js / npm', 'value' => $nodeModulesExist ? 'node_modules présent' : 'shell_exec désactivé — lancez npm install en SSH', 'ok' => $nodeModulesExist, 'required' => true];
-        if (!$nodeModulesExist) $allPassed = false;
+        $checks[] = ['name' => 'Node.js / npm', 'value' => $nodeModulesExist ? 'node_modules présent' : ($buildExists ? 'Build présent' : 'shell_exec désactivé'), 'ok' => $nodeModulesExist || $buildExists, 'required' => false];
     }
 
     // Writable directories
@@ -459,35 +465,38 @@ function findComposer(): ?string {
         return null;
     }
 
-    $nullRedirect = DIRECTORY_SEPARATOR === '\\' ? '2>NUL' : '2>/dev/null';
-
-    // Use findBinary to locate composer
+    // Use findBinary to locate composer — if the file exists, trust it
     $composerBin = findBinary('composer');
     if ($composerBin) {
-        // On Windows, .bat files need cmd /c
-        if (DIRECTORY_SEPARATOR === '\\' && preg_match('/\.(bat|cmd)$/i', $composerBin)) {
-            $testCmd = "cmd /c " . escapeshellarg($composerBin) . " --version {$nullRedirect}";
-        } else {
-            $testCmd = escapeshellarg($composerBin) . " --version {$nullRedirect}";
-        }
-        $output = @shell_exec($testCmd);
-        if ($output && str_contains($output, 'Composer')) {
-            return $composerBin;
-        }
-    }
-
-    // Fallback: try bare command
-    $output = @shell_exec("composer --version {$nullRedirect}");
-    if ($output && str_contains($output, 'Composer')) {
-        return 'composer';
+        return $composerBin;
     }
 
     // Check if composer.phar exists in project root
     if (file_exists(BASE_PATH . '/composer.phar')) {
-        return escapeshellarg(PHP_BINARY) . ' ' . escapeshellarg(BASE_PATH . '/composer.phar');
+        return 'phar';
     }
 
     return null;
+}
+
+/**
+ * Build the shell command to run composer with the given arguments.
+ */
+function getComposerCommand(string $composerPath, string $args): string {
+    $basePath = escapeshellarg(BASE_PATH);
+
+    if ($composerPath === 'phar') {
+        $phpBin = escapeshellarg(PHP_BINARY);
+        $pharPath = escapeshellarg(BASE_PATH . '/composer.phar');
+        return "cd {$basePath} && {$phpBin} {$pharPath} {$args} 2>&1";
+    }
+
+    if (DIRECTORY_SEPARATOR === '\\' && preg_match('/\.(bat|cmd)$/i', $composerPath)) {
+        // Windows .bat/.cmd files need cmd /c
+        return "cd {$basePath} && cmd /c " . escapeshellarg($composerPath) . " {$args} 2>&1";
+    }
+
+    return "cd {$basePath} && " . escapeshellarg($composerPath) . " {$args} 2>&1";
 }
 
 function runComposer(): array {
@@ -496,7 +505,7 @@ function runComposer(): array {
     }
 
     if (!canExecShell()) {
-        return ['success' => false, 'message' => "shell_exec est désactivé sur ce serveur.\nExécutez manuellement en SSH :\ncd " . BASE_PATH . " && composer install --no-dev --optimize-autoloader"];
+        return ['success' => false, 'message' => "shell_exec est désactivé.\nExécutez en SSH :\ncd " . BASE_PATH . "\ncomposer install --no-dev --optimize-autoloader\nPuis rafraîchissez cette page."];
     }
 
     $composer = findComposer();
@@ -504,26 +513,19 @@ function runComposer(): array {
         if ($composer === 'already-installed') {
             return ['success' => true, 'message' => 'Les dépendances Composer sont déjà installées.'];
         }
-        return ['success' => false, 'message' => 'Composer non trouvé sur le serveur.'];
+        return ['success' => false, 'message' => "Composer non trouvé.\nExécutez manuellement :\ncd " . BASE_PATH . "\ncomposer install --no-dev --optimize-autoloader\nPuis rafraîchissez cette page."];
     }
 
-    $basePath = escapeshellarg(BASE_PATH);
-    // On Windows, .bat/.cmd files need cmd /c prefix
-    $composerCmd = $composer;
-    if (DIRECTORY_SEPARATOR === '\\' && preg_match('/\.(bat|cmd)$/i', $composer)) {
-        $composerCmd = "cmd /c " . escapeshellarg($composer);
-    } elseif ($composer !== 'composer' && !str_starts_with($composer, '"')) {
-        $composerCmd = escapeshellarg($composer);
+    // Run composer install in background to avoid web server timeout (mod_fcgid, etc.)
+    $cmd = getComposerCommand($composer, 'install --no-dev --optimize-autoloader --no-interaction');
+    $isDone = fn() => file_exists(VENDOR_PATH . '/autoload.php');
+    $result = runLongCommand($cmd, 'composer-install', $isDone, 180);
+
+    if ($result['success']) {
+        return ['success' => true, 'message' => "Dépendances Composer installées ({$result['waited']}s)."];
     }
 
-    $cmd = "cd {$basePath} && {$composerCmd} install --no-dev --optimize-autoloader --no-interaction 2>&1";
-    $output = shell_exec($cmd);
-
-    if (!file_exists(VENDOR_PATH . '/autoload.php')) {
-        return ['success' => false, 'message' => "Composer install a échoué.\n" . ($output ?? '')];
-    }
-
-    return ['success' => true, 'message' => 'Dépendances Composer installées.', 'output' => $output];
+    return ['success' => false, 'message' => "Composer install timeout après {$result['waited']}s.\nSi le processus est encore en cours, attendez et rafraîchissez.\nSinon, exécutez manuellement :\ncd " . BASE_PATH . "\ncomposer install --no-dev\n\n" . ($result['log'] ?? '')];
 }
 
 function setupEnv(): array {
@@ -615,23 +617,59 @@ function getNpmCommand(string $args): string {
     return "cd {$basePath} && npm {$args} 2>&1";
 }
 
+/**
+ * Run a long shell command in background and poll for a success marker.
+ */
+function runLongCommand(string $cmd, string $logName, callable $isDone, int $maxWait = 120): array {
+    $logFile = BASE_PATH . "/storage/{$logName}.log";
+
+    if (DIRECTORY_SEPARATOR === '\\') {
+        // Windows: use start /B to run in background
+        $bgCmd = "start /B cmd /c \"" . str_replace('"', '\"', $cmd) . " > " . escapeshellarg($logFile) . " 2>&1\"";
+        @shell_exec($bgCmd);
+    } else {
+        @shell_exec("nohup {$cmd} > " . escapeshellarg($logFile) . " 2>&1 &");
+    }
+
+    $waited = 0;
+    $pollInterval = 3;
+
+    while ($waited < $maxWait) {
+        sleep($pollInterval);
+        $waited += $pollInterval;
+
+        if ($isDone()) {
+            return ['success' => true, 'waited' => $waited];
+        }
+    }
+
+    // Final check
+    if ($isDone()) {
+        return ['success' => true, 'waited' => $waited];
+    }
+
+    $logContent = file_exists($logFile) ? substr(file_get_contents($logFile), -500) : '';
+    return ['success' => false, 'waited' => $waited, 'log' => $logContent];
+}
+
 function runNpm(): array {
     if (is_dir(BASE_PATH . '/node_modules') && file_exists(BASE_PATH . '/node_modules/.package-lock.json')) {
         return ['success' => true, 'message' => 'Les dépendances npm sont déjà installées.'];
     }
 
     if (!canExecShell()) {
-        return ['success' => false, 'message' => "shell_exec est désactivé sur ce serveur.\nExécutez manuellement en SSH :\ncd " . BASE_PATH . " && npm install"];
+        return ['success' => false, 'message' => "shell_exec est désactivé.\nExécutez en SSH :\ncd " . BASE_PATH . "\nnpm install\nPuis rafraîchissez cette page."];
     }
 
     $cmd = getNpmCommand('install');
-    $output = shell_exec($cmd);
+    $isDone = fn() => is_dir(BASE_PATH . '/node_modules');
+    $result = runLongCommand($cmd, 'npm-install', $isDone, 180);
 
-    if (!is_dir(BASE_PATH . '/node_modules')) {
-        return ['success' => false, 'message' => "npm install a échoué.\n" . ($output ?? '')];
+    if ($result['success']) {
+        return ['success' => true, 'message' => "Dépendances npm installées ({$result['waited']}s)."];
     }
 
-    return ['success' => true, 'message' => 'Dépendances npm installées.', 'output' => $output];
+    return ['success' => false, 'message' => "npm install timeout après {$result['waited']}s.\nExécutez manuellement :\ncd " . BASE_PATH . "\nnpm install\n\n" . ($result['log'] ?? '')];
 }
 
 function runBuild(): array {
@@ -642,17 +680,18 @@ function runBuild(): array {
     }
 
     if (!canExecShell()) {
-        return ['success' => false, 'message' => "shell_exec est désactivé sur ce serveur.\nExécutez manuellement en SSH :\ncd " . BASE_PATH . " && npm run build"];
+        return ['success' => false, 'message' => "shell_exec est désactivé.\nExécutez en SSH :\ncd " . BASE_PATH . "\nnpm run build\nPuis rafraîchissez cette page."];
     }
 
     $cmd = getNpmCommand('run build');
-    $output = shell_exec($cmd);
+    $isDone = fn() => file_exists($manifestPath) || file_exists($altManifestPath);
+    $result = runLongCommand($cmd, 'npm-build', $isDone, 120);
 
-    if (!file_exists($manifestPath) && !file_exists($altManifestPath)) {
-        return ['success' => false, 'message' => "npm run build a échoué.\n" . ($output ?? '')];
+    if ($result['success']) {
+        return ['success' => true, 'message' => "Build frontend terminé ({$result['waited']}s)."];
     }
 
-    return ['success' => true, 'message' => 'Build frontend terminé.', 'output' => $output];
+    return ['success' => false, 'message' => "npm run build timeout après {$result['waited']}s.\nExécutez manuellement :\ncd " . BASE_PATH . "\nnpm run build\n\n" . ($result['log'] ?? '')];
 }
 
 function createDirectories(): array {
