@@ -16,10 +16,22 @@ class ResolveSite
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $site = $this->resolveSite($request);
+        // Skip if not installed yet — database tables don't exist
+        if (!file_exists(storage_path('.installed'))) {
+            return $next($request);
+        }
+
+        try {
+            $site = $this->resolveSite($request);
+        } catch (\Throwable) {
+            // Database table may not exist yet or query failed
+            return $next($request);
+        }
 
         if ($site === null) {
-            abort(404, __('cms.sites.not_found'));
+            // No site found — continue without multi-site context
+            // Multi-site is optional; single-site installs won't have sites table populated
+            return $next($request);
         }
 
         if (!$site->is_active) {

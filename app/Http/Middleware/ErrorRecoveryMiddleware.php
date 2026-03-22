@@ -17,6 +17,11 @@ class ErrorRecoveryMiddleware
 
     public function handle(Request $request, Closure $next): Response
     {
+        // Skip if not installed yet — database tables don't exist
+        if (!file_exists(storage_path('.installed'))) {
+            return $next($request);
+        }
+
         // Check recovery token in query string
         $recoveryToken = $request->query('recovery_token');
         if ($recoveryToken && $this->recoveryService->validateRecoveryToken($recoveryToken)) {

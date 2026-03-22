@@ -219,7 +219,7 @@ class InstallerTest extends TestCase
 
     public function test_installer_service_steps_constant_has_all_steps(): void
     {
-        $expectedSteps = ['env', 'migrations', 'roles', 'admin', 'settings', 'theme', 'blocks', 'homepage', 'directories', 'finalize'];
+        $expectedSteps = ['env', 'migrations', 'roles', 'admin', 'settings', 'theme', 'blocks', 'homepage', 'site', 'directories', 'finalize'];
 
         foreach ($expectedSteps as $step) {
             $this->assertArrayHasKey($step, InstallerService::STEPS);

@@ -29,6 +29,299 @@ function canExecShell(): bool {
     return function_exists('shell_exec') && !in_array('shell_exec', $disabled);
 }
 
+/**
+ * Enrich PATH with common dev environment paths (Laragon, XAMPP, MAMP, WAMP, nvm, etc.)
+ * This is needed because web servers (Apache/Nginx) often don't inherit the user's PATH.
+ */
+function enrichPath(): void {
+    static $enriched = false;
+    if ($enriched) return;
+    $enriched = true;
+
+    $currentPath = getenv('PATH') ?: '';
+    $extraPaths = [];
+
+    if (DIRECTORY_SEPARATOR === '\\') {
+        // ─── Windows ───
+        // Auto-detect Laragon base from current PHP binary or project path
+        $phpDir = dirname(PHP_BINARY);
+        // Laragon: PHP is in laragon/bin/php/phpX.Y.Z/
+        $laragonBase = null;
+        if (preg_match('#^(.+[/\\\\]laragon)[/\\\\]bin[/\\\\]#i', $phpDir, $m)) {
+            $laragonBase = $m[1];
+        } elseif (preg_match('#^(.+[/\\\\]laragon)[/\\\\]www[/\\\\]#i', BASE_PATH, $m)) {
+            $laragonBase = $m[1];
+        }
+
+        if ($laragonBase) {
+            // Scan Laragon bin directories dynamically
+            $binDir = $laragonBase . '\\bin';
+            // Composer
+            if (is_dir($binDir . '\\composer')) {
+                $extraPaths[] = $binDir . '\\composer';
+            }
+            // Node.js — find the latest version directory
+            $nodeDir = $binDir . '\\nodejs';
+            if (is_dir($nodeDir)) {
+                $nodeDirs = glob($nodeDir . '\\node-v*', GLOB_ONLYDIR);
+                if ($nodeDirs) {
+                    // Sort descending to get latest version first
+                    usort($nodeDirs, fn($a, $b) => version_compare(
+                        preg_replace('/.*node-v?/i', '', $b),
+                        preg_replace('/.*node-v?/i', '', $a)
+                    ));
+                    $extraPaths[] = $nodeDirs[0];
+                }
+            }
+            // Git
+            if (is_dir($binDir . '\\git\\bin')) {
+                $extraPaths[] = $binDir . '\\git\\bin';
+            }
+        }
+
+        // Common Windows paths for composer/node
+        $programFiles = getenv('ProgramFiles') ?: 'C:\\Program Files';
+        $programFilesX86 = getenv('ProgramFiles(x86)') ?: 'C:\\Program Files (x86)';
+        $appData = getenv('APPDATA') ?: '';
+        $localAppData = getenv('LOCALAPPDATA') ?: '';
+        $userProfile = getenv('USERPROFILE') ?: '';
+
+        $windowsPaths = [
+            // Node.js standard installs
+            $programFiles . '\\nodejs',
+            $programFilesX86 . '\\nodejs',
+            // nvm-windows
+            $appData . '\\nvm',
+            // Composer global
+            $appData . '\\Composer\\vendor\\bin',
+            // npm global
+            $appData . '\\npm',
+            // XAMPP
+            'C:\\xampp\\php',
+            // WAMP
+            'C:\\wamp64\\bin\\php\\php8.2',
+            'C:\\wamp64\\bin\\php\\php8.3',
+            'C:\\wamp64\\bin\\php\\php8.4',
+            // fnm
+            $localAppData . '\\fnm_multishells',
+            // Volta
+            $userProfile . '\\.volta\\bin',
+        ];
+
+        foreach ($windowsPaths as $p) {
+            if ($p && is_dir($p)) {
+                $extraPaths[] = $p;
+            }
+        }
+
+        // nvm-windows: find active node version
+        $nvmDir = getenv('NVM_HOME') ?: ($appData . '\\nvm');
+        if (is_dir($nvmDir)) {
+            $nvmNodeDirs = glob($nvmDir . '\\v*', GLOB_ONLYDIR);
+            if ($nvmNodeDirs) {
+                usort($nvmNodeDirs, fn($a, $b) => version_compare(
+                    preg_replace('/.*v/i', '', $b),
+                    preg_replace('/.*v/i', '', $a)
+                ));
+                $extraPaths[] = $nvmNodeDirs[0];
+            }
+        }
+    } else {
+        // ─── Linux / macOS ───
+        $home = getenv('HOME') ?: ('/home/' . (getenv('USER') ?: 'www-data'));
+
+        $unixPaths = [
+            '/usr/local/bin',
+            '/usr/bin',
+            '/usr/local/sbin',
+            '/opt/homebrew/bin',          // macOS Homebrew ARM
+            '/usr/local/opt/node/bin',    // macOS Homebrew Intel
+            $home . '/.nvm/current/bin',  // nvm
+            $home . '/.volta/bin',        // Volta
+            $home . '/.fnm/aliases/default/bin', // fnm
+            $home . '/.composer/vendor/bin',
+            $home . '/.config/composer/vendor/bin',
+            '/opt/plesk/node/20/bin',     // Plesk
+            '/opt/cpanel/ea-nodejs20/bin', // cPanel
+        ];
+
+        // nvm: try to find the default node
+        $nvmDir = getenv('NVM_DIR') ?: ($home . '/.nvm');
+        $nvmDefault = $nvmDir . '/alias/default';
+        if (file_exists($nvmDefault)) {
+            $defaultVersion = trim(file_get_contents($nvmDefault));
+            $nvmNodePath = $nvmDir . '/versions/node/v' . ltrim($defaultVersion, 'v') . '/bin';
+            if (is_dir($nvmNodePath)) {
+                $unixPaths[] = $nvmNodePath;
+            }
+        }
+
+        // MAMP
+        if (is_dir('/Applications/MAMP/bin')) {
+            $unixPaths[] = '/Applications/MAMP/bin/php/php8.2/bin';
+            $unixPaths[] = '/Applications/MAMP/bin/php/php8.3/bin';
+        }
+
+        foreach ($unixPaths as $p) {
+            if (is_dir($p)) {
+                $extraPaths[] = $p;
+            }
+        }
+    }
+
+    if (!empty($extraPaths)) {
+        $separator = DIRECTORY_SEPARATOR === '\\' ? ';' : ':';
+        $newPath = implode($separator, $extraPaths) . $separator . $currentPath;
+        putenv("PATH={$newPath}");
+        // Also set for proc_open if used later
+        $_ENV['PATH'] = $newPath;
+    }
+}
+
+/**
+ * Find the full path to a binary by searching the enriched PATH and common locations.
+ * Caches results to avoid repeated filesystem scans.
+ */
+function findBinary(string $name): ?string {
+    static $cache = [];
+    if (isset($cache[$name])) return $cache[$name];
+
+    $extraPaths = getExtraPaths();
+    $isWin = DIRECTORY_SEPARATOR === '\\';
+    $extensions = $isWin ? ['.bat', '.cmd', '.exe', ''] : [''];
+
+    foreach ($extraPaths as $dir) {
+        foreach ($extensions as $ext) {
+            $fullPath = rtrim($dir, '/\\') . DIRECTORY_SEPARATOR . $name . $ext;
+            if (file_exists($fullPath) && is_file($fullPath)) {
+                $cache[$name] = $fullPath;
+                return $fullPath;
+            }
+        }
+    }
+
+    // Fallback: try bare command (might be in system PATH)
+    if (canExecShell()) {
+        $nullRedirect = $isWin ? '2>NUL' : '2>/dev/null';
+        $whereCmd = $isWin ? "where {$name} {$nullRedirect}" : "which {$name} {$nullRedirect}";
+        $result = trim(@shell_exec($whereCmd) ?? '');
+        if ($result) {
+            // On Windows, 'where' may return multiple lines — take the first
+            $firstLine = explode("\n", $result)[0];
+            $firstLine = trim($firstLine);
+            if (file_exists($firstLine)) {
+                $cache[$name] = $firstLine;
+                return $firstLine;
+            }
+        }
+    }
+
+    $cache[$name] = null;
+    return null;
+}
+
+/**
+ * Get extra PATH directories (cached).
+ */
+function getExtraPaths(): array {
+    static $paths = null;
+    if ($paths !== null) return $paths;
+
+    $paths = [];
+
+    if (DIRECTORY_SEPARATOR === '\\') {
+        // ─── Windows ───
+        $phpDir = dirname(PHP_BINARY);
+        $laragonBase = null;
+        if (preg_match('#^(.+[/\\\\]laragon)[/\\\\]bin[/\\\\]#i', $phpDir, $m)) {
+            $laragonBase = $m[1];
+        } elseif (preg_match('#^(.+[/\\\\]laragon)[/\\\\]www[/\\\\]#i', BASE_PATH, $m)) {
+            $laragonBase = $m[1];
+        }
+
+        if ($laragonBase) {
+            $binDir = $laragonBase . '\\bin';
+            if (is_dir($binDir . '\\composer')) {
+                $paths[] = $binDir . '\\composer';
+            }
+            $nodeDir = $binDir . '\\nodejs';
+            if (is_dir($nodeDir)) {
+                $nodeDirs = glob($nodeDir . '\\node-v*', GLOB_ONLYDIR);
+                if ($nodeDirs) {
+                    usort($nodeDirs, fn($a, $b) => version_compare(
+                        preg_replace('/.*node-v?/i', '', $b),
+                        preg_replace('/.*node-v?/i', '', $a)
+                    ));
+                    $paths[] = $nodeDirs[0];
+                }
+            }
+        }
+
+        $programFiles = getenv('ProgramFiles') ?: 'C:\\Program Files';
+        $appData = getenv('APPDATA') ?: '';
+
+        $windowsPaths = [
+            $programFiles . '\\nodejs',
+            $appData . '\\Composer\\vendor\\bin',
+            $appData . '\\npm',
+            'C:\\xampp\\php',
+            'C:\\wamp64\\bin\\php\\php8.2',
+            'C:\\wamp64\\bin\\php\\php8.3',
+            'C:\\wamp64\\bin\\php\\php8.4',
+        ];
+
+        foreach ($windowsPaths as $p) {
+            if ($p && is_dir($p)) $paths[] = $p;
+        }
+    } else {
+        // ─── Linux / macOS ───
+        $home = getenv('HOME') ?: '/root';
+        $unixPaths = [
+            '/usr/local/bin', '/usr/bin', '/usr/local/sbin',
+            '/opt/homebrew/bin',
+            $home . '/.nvm/current/bin',
+            $home . '/.volta/bin',
+            $home . '/.composer/vendor/bin',
+            $home . '/.config/composer/vendor/bin',
+            '/opt/plesk/node/20/bin',
+            '/opt/cpanel/ea-nodejs20/bin',
+        ];
+
+        // nvm: find default version
+        $nvmDir = getenv('NVM_DIR') ?: ($home . '/.nvm');
+        if (is_dir($nvmDir . '/versions/node')) {
+            $nvmVersions = glob($nvmDir . '/versions/node/v*', GLOB_ONLYDIR);
+            if ($nvmVersions) {
+                usort($nvmVersions, fn($a, $b) => version_compare(
+                    preg_replace('/.*v/i', '', $b),
+                    preg_replace('/.*v/i', '', $a)
+                ));
+                $unixPaths[] = $nvmVersions[0] . '/bin';
+            }
+        }
+
+        foreach ($unixPaths as $p) {
+            if (is_dir($p)) $paths[] = $p;
+        }
+    }
+
+    // Also add current system PATH directories
+    $systemPath = getenv('PATH') ?: '';
+    $separator = DIRECTORY_SEPARATOR === '\\' ? ';' : ':';
+    foreach (explode($separator, $systemPath) as $p) {
+        $p = trim($p);
+        if ($p && is_dir($p)) $paths[] = $p;
+    }
+
+    $paths = array_unique($paths);
+    return $paths;
+}
+
+// Enrich PATH early so shell_exec commands can also find binaries
+if (canExecShell()) {
+    enrichPath();
+}
+
 // ─── Already installed? Redirect to site ───
 if (file_exists(INSTALLED_FILE)) {
     header('Location: /');
@@ -106,14 +399,35 @@ function checkRequirements(): array {
     $checks[] = ['name' => 'Composer', 'value' => $composerPath ?: 'Non trouvé', 'ok' => (bool) $composerPath, 'required' => true];
     if (!$composerPath) $allPassed = false;
 
-    // Node.js & npm
+    // Node.js & npm — detect via findBinary or shell, check if deps are already installed
+    $nullRedirect = DIRECTORY_SEPARATOR === '\\' ? '2>NUL' : '2>/dev/null';
     if (canExecShell()) {
-        $nodeVersion = trim(shell_exec('node --version 2>/dev/null 2>NUL') ?? '');
+        $nodeBin = findBinary('node');
+        $nodeVersion = '';
+        if ($nodeBin) {
+            $nodeVersion = trim(@shell_exec(escapeshellarg($nodeBin) . " --version {$nullRedirect}") ?? '');
+        }
+        if (empty($nodeVersion)) {
+            // Fallback: try bare command (may work if system PATH is set)
+            $nodeVersion = trim(@shell_exec("node --version {$nullRedirect}") ?? '');
+        }
         $nodeOk = !empty($nodeVersion);
         $checks[] = ['name' => 'Node.js 20+', 'value' => $nodeVersion ?: 'Non trouvé', 'ok' => $nodeOk, 'required' => true];
         if (!$nodeOk) $allPassed = false;
 
-        $npmVersion = trim(shell_exec('npm --version 2>/dev/null 2>NUL') ?? '');
+        $npmBin = findBinary('npm');
+        $npmVersion = '';
+        if ($npmBin) {
+            // npm on Windows may be a .cmd file — must use cmd /c
+            if (DIRECTORY_SEPARATOR === '\\') {
+                $npmVersion = trim(@shell_exec("cmd /c " . escapeshellarg($npmBin) . " --version {$nullRedirect}") ?? '');
+            } else {
+                $npmVersion = trim(@shell_exec(escapeshellarg($npmBin) . " --version {$nullRedirect}") ?? '');
+            }
+        }
+        if (empty($npmVersion)) {
+            $npmVersion = trim(@shell_exec("npm --version {$nullRedirect}") ?? '');
+        }
         $npmOk = !empty($npmVersion);
         $checks[] = ['name' => 'npm', 'value' => $npmVersion ? "v{$npmVersion}" : 'Non trouvé', 'ok' => $npmOk, 'required' => true];
         if (!$npmOk) $allPassed = false;
@@ -145,16 +459,34 @@ function findComposer(): ?string {
         return null;
     }
 
-    $paths = ['composer', 'composer.phar', '/usr/local/bin/composer', '/usr/bin/composer'];
-    foreach ($paths as $path) {
-        $output = shell_exec("{$path} --version 2>/dev/null 2>NUL");
+    $nullRedirect = DIRECTORY_SEPARATOR === '\\' ? '2>NUL' : '2>/dev/null';
+
+    // Use findBinary to locate composer
+    $composerBin = findBinary('composer');
+    if ($composerBin) {
+        // On Windows, .bat files need cmd /c
+        if (DIRECTORY_SEPARATOR === '\\' && preg_match('/\.(bat|cmd)$/i', $composerBin)) {
+            $testCmd = "cmd /c " . escapeshellarg($composerBin) . " --version {$nullRedirect}";
+        } else {
+            $testCmd = escapeshellarg($composerBin) . " --version {$nullRedirect}";
+        }
+        $output = @shell_exec($testCmd);
         if ($output && str_contains($output, 'Composer')) {
-            return $path;
+            return $composerBin;
         }
     }
-    if (file_exists(BASE_PATH . '/composer.phar')) {
-        return 'php ' . BASE_PATH . '/composer.phar';
+
+    // Fallback: try bare command
+    $output = @shell_exec("composer --version {$nullRedirect}");
+    if ($output && str_contains($output, 'Composer')) {
+        return 'composer';
     }
+
+    // Check if composer.phar exists in project root
+    if (file_exists(BASE_PATH . '/composer.phar')) {
+        return escapeshellarg(PHP_BINARY) . ' ' . escapeshellarg(BASE_PATH . '/composer.phar');
+    }
+
     return null;
 }
 
@@ -168,11 +500,23 @@ function runComposer(): array {
     }
 
     $composer = findComposer();
-    if (!$composer) {
+    if (!$composer || $composer === 'already-installed') {
+        if ($composer === 'already-installed') {
+            return ['success' => true, 'message' => 'Les dépendances Composer sont déjà installées.'];
+        }
         return ['success' => false, 'message' => 'Composer non trouvé sur le serveur.'];
     }
 
-    $cmd = "cd " . escapeshellarg(BASE_PATH) . " && {$composer} install --no-dev --optimize-autoloader --no-interaction 2>&1";
+    $basePath = escapeshellarg(BASE_PATH);
+    // On Windows, .bat/.cmd files need cmd /c prefix
+    $composerCmd = $composer;
+    if (DIRECTORY_SEPARATOR === '\\' && preg_match('/\.(bat|cmd)$/i', $composer)) {
+        $composerCmd = "cmd /c " . escapeshellarg($composer);
+    } elseif ($composer !== 'composer' && !str_starts_with($composer, '"')) {
+        $composerCmd = escapeshellarg($composer);
+    }
+
+    $cmd = "cd {$basePath} && {$composerCmd} install --no-dev --optimize-autoloader --no-interaction 2>&1";
     $output = shell_exec($cmd);
 
     if (!file_exists(VENDOR_PATH . '/autoload.php')) {
@@ -237,7 +581,9 @@ function generateKey(): array {
         return ['success' => false, 'message' => 'Fichier .env introuvable.'];
     }
 
-    $cmd = "cd " . escapeshellarg(BASE_PATH) . " && php artisan key:generate --force 2>&1";
+    $phpBin = escapeshellarg(PHP_BINARY);
+    $basePath = escapeshellarg(BASE_PATH);
+    $cmd = "cd {$basePath} && {$phpBin} artisan key:generate --force 2>&1";
     $output = shell_exec($cmd);
 
     $env = file_get_contents(ENV_FILE);
@@ -246,6 +592,27 @@ function generateKey(): array {
     }
 
     return ['success' => true, 'message' => 'Clé APP_KEY générée.'];
+}
+
+/**
+ * Build a shell command for npm (handles .cmd on Windows).
+ */
+function getNpmCommand(string $args): string {
+    $basePath = escapeshellarg(BASE_PATH);
+    $npmBin = findBinary('npm');
+
+    if (DIRECTORY_SEPARATOR === '\\') {
+        // On Windows, npm is a .cmd file — must use cmd /c
+        if ($npmBin) {
+            return "cd {$basePath} && cmd /c " . escapeshellarg($npmBin) . " {$args} 2>&1";
+        }
+        return "cd {$basePath} && cmd /c npm {$args} 2>&1";
+    }
+
+    if ($npmBin) {
+        return "cd {$basePath} && " . escapeshellarg($npmBin) . " {$args} 2>&1";
+    }
+    return "cd {$basePath} && npm {$args} 2>&1";
 }
 
 function runNpm(): array {
@@ -257,7 +624,7 @@ function runNpm(): array {
         return ['success' => false, 'message' => "shell_exec est désactivé sur ce serveur.\nExécutez manuellement en SSH :\ncd " . BASE_PATH . " && npm install"];
     }
 
-    $cmd = "cd " . escapeshellarg(BASE_PATH) . " && npm install 2>&1";
+    $cmd = getNpmCommand('install');
     $output = shell_exec($cmd);
 
     if (!is_dir(BASE_PATH . '/node_modules')) {
@@ -278,7 +645,7 @@ function runBuild(): array {
         return ['success' => false, 'message' => "shell_exec est désactivé sur ce serveur.\nExécutez manuellement en SSH :\ncd " . BASE_PATH . " && npm run build"];
     }
 
-    $cmd = "cd " . escapeshellarg(BASE_PATH) . " && npm run build 2>&1";
+    $cmd = getNpmCommand('run build');
     $output = shell_exec($cmd);
 
     if (!file_exists($manifestPath) && !file_exists($altManifestPath)) {

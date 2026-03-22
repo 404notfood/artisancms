@@ -67,11 +67,14 @@ class RequirementsChecker
                 'content' => 'Dossier content/',
             };
 
+            // For files/dirs that don't exist yet, check if parent is writable
+            $writable = file_exists($path) ? is_writable($path) : is_writable(dirname($path));
+
             $requirements["writable_{$key}"] = [
                 'label' => "{$label} accessible en écriture",
                 'required' => true,
-                'passed' => is_writable($path),
-                'current' => is_writable($path) ? 'OK' : 'Non accessible',
+                'passed' => $writable,
+                'current' => $writable ? 'OK' : 'Non accessible',
                 'message' => "{$label} doit être accessible en écriture.",
             ];
         }

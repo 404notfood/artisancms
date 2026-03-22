@@ -19,6 +19,11 @@ class TrackPageView
     {
         $response = $next($request);
 
+        // Skip if not installed yet — database tables don't exist
+        if (!file_exists(storage_path('.installed'))) {
+            return $response;
+        }
+
         // Ne tracker que les requetes GET reussies (pages rendues)
         if ($request->method() !== 'GET') {
             return $response;

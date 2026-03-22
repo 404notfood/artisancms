@@ -9,6 +9,7 @@ use App\Models\CmsTheme;
 use App\Models\Page;
 use App\Models\Role;
 use App\Models\Setting;
+use App\Models\Site;
 use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
@@ -26,6 +27,7 @@ class InstallerService
         'theme'       => ['label' => 'Thème par défaut', 'weight' => 15],
         'blocks'      => ['label' => 'Blocs core', 'weight' => 15],
         'homepage'    => ['label' => "Page d'accueil", 'weight' => 10],
+        'site'        => ['label' => 'Site principal', 'weight' => 5],
         'directories' => ['label' => 'Création des dossiers', 'weight' => 5],
         'finalize'    => ['label' => 'Finalisation', 'weight' => 10],
     ];
@@ -46,6 +48,7 @@ class InstallerService
                 'theme' => $this->installDefaultTheme(),
                 'blocks' => $this->seedCoreBlocks(),
                 'homepage' => $this->createHomepage(),
+                'site' => $this->createPrimarySite($config),
                 'directories' => $this->createDirectories(),
                 'finalize' => $this->stepFinalize($config),
             };
@@ -375,6 +378,27 @@ class InstallerService
         Setting::updateOrCreate(
             ['group' => 'content', 'key' => 'homepage_id'],
             ['value' => (string) $homepage->id, 'type' => 'number', 'is_public' => false]
+        );
+    }
+
+    private function createPrimarySite(array $config): void
+    {
+        $admin = User::whereHas('role', fn ($q) => $q->where('slug', 'admin'))->first();
+
+        Site::updateOrCreate(
+            ['is_primary' => true],
+            [
+                'name' => $config['site_name'] ?? 'ArtisanCMS',
+                'slug' => 'primary',
+                'domain' => parse_url($config['site_url'] ?? 'http://localhost', PHP_URL_HOST) ?: 'localhost',
+                'is_primary' => true,
+                'is_active' => true,
+                'locale' => $config['locale'] ?? 'fr',
+                'timezone' => $config['timezone'] ?? 'Europe/Paris',
+                'owner_id' => $admin?->id,
+                'settings' => [],
+                'branding' => [],
+            ]
         );
     }
 
