@@ -45,9 +45,9 @@ class InstallerTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_install_language_route_accessible_when_not_installed(): void
+    public function test_install_license_route_accessible_when_not_installed(): void
     {
-        $response = $this->get('/install/language');
+        $response = $this->get('/install/license');
 
         $response->assertStatus(200);
     }
@@ -71,14 +71,14 @@ class InstallerTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_install_language_route_blocked_when_already_installed(): void
+    public function test_install_license_route_blocked_when_already_installed(): void
     {
         file_put_contents(storage_path('.installed'), json_encode([
             'version' => '1.0.0',
             'installed_at' => now()->toIso8601String(),
         ]));
 
-        $response = $this->get('/install/language');
+        $response = $this->get('/install/license');
 
         $response->assertStatus(404);
     }
@@ -98,7 +98,7 @@ class InstallerTest extends TestCase
     public function test_requirements_checker_returns_expected_structure(): void
     {
         $checker = new RequirementsChecker();
-        $results = $checker->check('laravel');
+        $results = $checker->check();
 
         $this->assertArrayHasKey('passed', $results);
         $this->assertArrayHasKey('requirements', $results);
@@ -123,24 +123,10 @@ class InstallerTest extends TestCase
     public function test_requirements_checker_php_version_passes(): void
     {
         $checker = new RequirementsChecker();
-        $results = $checker->check('laravel');
+        $results = $checker->check();
 
         // Since we are running tests with PHP 8.2+, this must pass
         $this->assertTrue($results['requirements']['php_version']['passed']);
-    }
-
-    public function test_requirements_checker_nextjs_stack_has_different_requirements(): void
-    {
-        $checker = new RequirementsChecker();
-        $results = $checker->check('nextjs');
-
-        // PHP extensions should not be required for nextjs stack
-        $this->assertFalse($results['requirements']['php_version']['required']);
-        $this->assertFalse($results['requirements']['ext_pdo']['required']);
-
-        // Node.js should be required for nextjs stack
-        $this->assertTrue($results['requirements']['node']['required']);
-        $this->assertTrue($results['requirements']['npm']['required']);
     }
 
     public function test_installer_service_creates_roles(): void
@@ -250,40 +236,81 @@ class InstallerTest extends TestCase
         $response->assertRedirect('/install');
     }
 
-    public function test_stack_store_rejects_nextjs(): void
+    public function test_welcome_store_sets_locale_in_session(): void
     {
-        $response = $this->post('/install/stack', [
-            'stack' => 'nextjs',
-        ]);
-
-        $response->assertSessionHasErrors('stack');
-    }
-
-    public function test_stack_store_accepts_laravel(): void
-    {
-        $response = $this->post('/install/stack', [
-            'stack' => 'laravel',
-        ]);
-
-        $response->assertRedirect(route('install.language'));
-    }
-
-    public function test_language_store_sets_locale_in_session(): void
-    {
-        $response = $this->post('/install/language', [
+        $response = $this->post('/install/welcome', [
             'locale' => 'en',
         ]);
 
-        $response->assertRedirect(route('install.requirements'));
+        $response->assertRedirect(route('install.license'));
         $response->assertSessionHas('install.locale', 'en');
     }
 
-    public function test_language_store_rejects_invalid_locale(): void
+    public function test_welcome_store_accepts_valid_locales(): void
     {
-        $response = $this->post('/install/language', [
-            'locale' => 'de',
+        foreach (['fr', 'en', 'es', 'de'] as $locale) {
+            $response = $this->post('/install/welcome', [
+                'locale' => $locale,
+            ]);
+
+            $response->assertRedirect(route('install.license'));
+        }
+    }
+
+    public function test_welcome_store_rejects_invalid_locale(): void
+    {
+        $response = $this->post('/install/welcome', [
+            'locale' => 'xx',
         ]);
 
         $response->assertSessionHasErrors('locale');
+    }
+
+    public function test_configuration_store_validates_site_and_admin(): void
+    {
+        $response = $this->post('/install/configuration', [
+            'site_name' => 'My Test Site',
+            'site_description' => 'A test description',
+            'site_url' => 'http://localhost',
+            'timezone' => 'Europe/Paris',
+            'admin_name' => 'Admin',
+            'admin_email' => 'admin@test.com',
+            'admin_password' => 'Password123',
+            'admin_password_confirmation' => 'Password123',
+        ]);
+
+        $response->assertRedirect(route('install.execute'));
+        $response->assertSessionHas('install.site_name', 'My Test Site');
+        $response->assertSessionHas('install.admin_email', 'admin@test.com');
+    }
+
+    public function test_configuration_store_rejects_short_password(): void
+    {
+        $response = $this->post('/install/configuration', [
+            'site_name' => 'My Site',
+            'site_url' => 'http://localhost',
+            'timezone' => 'Europe/Paris',
+            'admin_name' => 'Admin',
+            'admin_email' => 'admin@test.com',
+            'admin_password' => 'short',
+            'admin_password_confirmation' => 'short',
+        ]);
+
+        $response->assertSessionHasErrors('admin_password');
+    }
+
+    public function test_configuration_store_rejects_mismatched_passwords(): void
+    {
+        $response = $this->post('/install/configuration', [
+            'site_name' => 'My Site',
+            'site_url' => 'http://localhost',
+            'timezone' => 'Europe/Paris',
+            'admin_name' => 'Admin',
+            'admin_email' => 'admin@test.com',
+            'admin_password' => 'Password123',
+            'admin_password_confirmation' => 'DifferentPassword123',
+        ]);
+
+        $response->assertSessionHasErrors('admin_password');
     }
 }

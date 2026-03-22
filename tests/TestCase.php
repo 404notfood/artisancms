@@ -16,7 +16,6 @@ abstract class TestCase extends BaseTestCase
         if (!file_exists($path)) {
             file_put_contents($path, json_encode([
                 'version' => '1.0.0',
-                'stack' => 'laravel',
                 'installed_at' => now()->toISOString(),
             ]));
         }

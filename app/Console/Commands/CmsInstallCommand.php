@@ -44,7 +44,7 @@ class CmsInstallCommand extends Command
 
         // Check requirements
         $this->components->info('Vérification des prérequis...');
-        $results = $this->requirementsChecker->check('laravel');
+        $results = $this->requirementsChecker->check();
 
         foreach ($results['requirements'] as $req) {
             if ($req['passed']) {
@@ -106,7 +106,6 @@ class CmsInstallCommand extends Command
     private function getQuickConfig(): array
     {
         return [
-            'stack' => 'laravel',
             'locale' => 'fr',
             'db_host' => env('DB_HOST', '127.0.0.1'),
             'db_port' => env('DB_PORT', '3306'),
@@ -177,7 +176,6 @@ class CmsInstallCommand extends Command
         }
 
         return [
-            'stack' => 'laravel',
             'locale' => $locale,
             'db_host' => $dbHost,
             'db_port' => $dbPort,

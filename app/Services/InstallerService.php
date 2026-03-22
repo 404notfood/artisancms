@@ -141,7 +141,6 @@ class InstallerService
     {
         file_put_contents(storage_path('.installed'), json_encode([
             'version' => config('cms.version', '1.0.0'),
-            'stack' => $config['stack'] ?? 'laravel',
             'installed_at' => now()->toIso8601String(),
             'php_version' => PHP_VERSION,
         ]));

@@ -21,83 +21,58 @@ class InstallController
         private InstallerService $installer,
     ) {}
 
-    public function showStack(): Response
+    /**
+     * Step 1: Welcome + Language selection
+     */
+    public function showWelcome(): Response
     {
-        return Inertia::render('Install/Stack', [
-            'stacks' => [
-                [
-                    'id' => 'laravel',
-                    'name' => 'Laravel + React',
-                    'description' => 'Stack complète et stable pour la production.',
-                    'features' => ['Laravel 12 (PHP 8.2+)', 'React 19 + Inertia 2', 'shadcn/ui + Tailwind CSS v4', 'MySQL / MariaDB', 'Auth intégrée'],
-                    'available' => true,
-                    'recommended' => true,
-                    'badge' => 'Recommandé',
-                ],
-                [
-                    'id' => 'nextjs',
-                    'name' => 'Next.js',
-                    'description' => 'Stack moderne basée sur Next.js App Router.',
-                    'features' => ['Next.js App Router', 'React 19', 'better-auth', 'Prisma + MySQL', 'shadcn/ui + Tailwind CSS v4'],
-                    'available' => false,
-                    'recommended' => false,
-                    'badge' => 'Bientôt disponible',
-                ],
-            ],
-            'currentStack' => session('install.stack', 'laravel'),
-        ]);
-    }
-
-    public function storeStack(Request $request): RedirectResponse
-    {
-        $validated = $request->validate([
-            'stack' => ['required', 'string', 'in:laravel,nextjs'],
-        ]);
-
-        if ($validated['stack'] === 'nextjs') {
-            return back()->withErrors(['stack' => "Le stack Next.js n'est pas encore disponible."]);
-        }
-
-        session(['install.stack' => $validated['stack']]);
-
-        return redirect()->route('install.language');
-    }
-
-    public function showLanguage(): Response
-    {
-        return Inertia::render('Install/Language', [
+        return Inertia::render('Install/Welcome', [
             'languages' => [
                 ['code' => 'fr', 'name' => 'Français', 'flag' => '🇫🇷'],
                 ['code' => 'en', 'name' => 'English', 'flag' => '🇬🇧'],
+                ['code' => 'es', 'name' => 'Español', 'flag' => '🇪🇸'],
+                ['code' => 'de', 'name' => 'Deutsch', 'flag' => '🇩🇪'],
             ],
             'currentLocale' => session('install.locale', 'fr'),
         ]);
     }
 
-    public function storeLanguage(Request $request): RedirectResponse
+    public function storeWelcome(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'locale' => ['required', 'string', 'in:fr,en'],
+            'locale' => ['required', 'string', 'in:fr,en,es,de'],
         ]);
 
         session(['install.locale' => $validated['locale']]);
         app()->setLocale($validated['locale']);
 
-        return redirect()->route('install.requirements');
+        return redirect()->route('install.license');
     }
 
+    /**
+     * Step 2: License agreement
+     */
+    public function showLicense(): Response
+    {
+        return Inertia::render('Install/License');
+    }
+
+    /**
+     * Step 3: System requirements
+     */
     public function showRequirements(): Response
     {
-        $stack = session('install.stack', 'laravel');
-        $results = $this->requirementsChecker->check($stack);
+        $results = $this->requirementsChecker->check();
 
         return Inertia::render('Install/Requirements', [
             'requirements' => $results['requirements'],
             'allPassed' => $results['passed'],
-            'stack' => $stack,
         ]);
     }
 
+    /**
+     * Step 4: Database configuration
+     */
     public function showDatabase(): Response
     {
         return Inertia::render('Install/Database', [
@@ -155,29 +130,37 @@ class InstallController
             'install.db_prefix' => $validated['db_prefix'] ?? '',
         ]);
 
-        return redirect()->route('install.site');
+        return redirect()->route('install.configuration');
     }
 
-    public function showSite(): Response
+    /**
+     * Step 5: Site + Admin configuration (combined)
+     */
+    public function showConfiguration(): Response
     {
-        return Inertia::render('Install/Site', [
+        return Inertia::render('Install/Configuration', [
             'defaults' => [
                 'site_name' => session('install.site_name', 'Mon site ArtisanCMS'),
                 'site_description' => session('install.site_description', ''),
                 'site_url' => session('install.site_url', request()->getSchemeAndHttpHost()),
                 'timezone' => session('install.timezone', 'Europe/Paris'),
+                'admin_name' => session('install.admin_name', ''),
+                'admin_email' => session('install.admin_email', ''),
             ],
             'timezones' => \DateTimeZone::listIdentifiers(),
         ]);
     }
 
-    public function storeSite(Request $request): RedirectResponse
+    public function storeConfiguration(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'site_name' => ['required', 'string', 'max:255'],
             'site_description' => ['nullable', 'string', 'max:500'],
             'site_url' => ['required', 'url'],
             'timezone' => ['required', 'string', 'timezone'],
+            'admin_name' => ['required', 'string', 'min:2', 'max:255'],
+            'admin_email' => ['required', 'email', 'max:255'],
+            'admin_password' => ['required', 'string', 'min:8', 'confirmed', Password::defaults()],
         ]);
 
         session([
@@ -185,30 +168,6 @@ class InstallController
             'install.site_description' => $validated['site_description'] ?? '',
             'install.site_url' => $validated['site_url'],
             'install.timezone' => $validated['timezone'],
-        ]);
-
-        return redirect()->route('install.admin');
-    }
-
-    public function showAdmin(): Response
-    {
-        return Inertia::render('Install/Admin', [
-            'defaults' => [
-                'admin_name' => session('install.admin_name', ''),
-                'admin_email' => session('install.admin_email', ''),
-            ],
-        ]);
-    }
-
-    public function storeAdmin(Request $request): RedirectResponse
-    {
-        $validated = $request->validate([
-            'admin_name' => ['required', 'string', 'min:2', 'max:255'],
-            'admin_email' => ['required', 'email', 'max:255'],
-            'admin_password' => ['required', 'string', 'min:8', 'confirmed', Password::defaults()],
-        ]);
-
-        session([
             'install.admin_name' => $validated['admin_name'],
             'install.admin_email' => $validated['admin_email'],
             'install.admin_password' => $validated['admin_password'],
@@ -217,10 +176,17 @@ class InstallController
         return redirect()->route('install.execute');
     }
 
+    /**
+     * Step 6: Execute installation
+     */
     public function showExecute(): Response
     {
         return Inertia::render('Install/Execute', [
             'steps' => InstallerService::STEPS,
+            'siteName' => session('install.site_name', 'ArtisanCMS'),
+            'siteUrl' => session('install.site_url', request()->getSchemeAndHttpHost()),
+            'adminEmail' => session('install.admin_email', ''),
+            'version' => config('cms.version', '1.0.0'),
         ]);
     }
 
@@ -237,7 +203,6 @@ class InstallController
         }
 
         $config = [
-            'stack' => session('install.stack', 'laravel'),
             'locale' => session('install.locale', 'fr'),
             'db_host' => session('install.db_host', '127.0.0.1'),
             'db_port' => session('install.db_port', '3306'),
@@ -266,15 +231,5 @@ class InstallController
         }
 
         return response()->json($result);
-    }
-
-    public function complete(): Response
-    {
-        return Inertia::render('Install/Complete', [
-            'siteName' => session('install.site_name', 'ArtisanCMS'),
-            'siteUrl' => session('install.site_url', request()->getSchemeAndHttpHost()),
-            'adminEmail' => session('install.admin_email', ''),
-            'version' => config('cms.version', '1.0.0'),
-        ]);
     }
 }

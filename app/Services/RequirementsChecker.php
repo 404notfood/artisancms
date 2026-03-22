@@ -6,14 +6,13 @@ namespace App\Services;
 
 class RequirementsChecker
 {
-    public function check(string $stack = 'laravel'): array
+    public function check(): array
     {
         $requirements = [];
-        $isLaravel = $stack === 'laravel';
 
         $requirements['php_version'] = [
             'label' => 'PHP >= 8.2',
-            'required' => $isLaravel,
+            'required' => true,
             'passed' => PHP_VERSION_ID >= 80200,
             'current' => PHP_VERSION,
             'message' => 'PHP 8.2 ou supérieur est requis.',
@@ -36,7 +35,7 @@ class RequirementsChecker
         foreach ($requiredExtensions as $ext => $label) {
             $requirements["ext_{$ext}"] = [
                 'label' => "Extension {$label}",
-                'required' => $isLaravel,
+                'required' => true,
                 'passed' => extension_loaded($ext),
                 'current' => extension_loaded($ext) ? 'Installée' : 'Manquante',
                 'message' => "L'extension PHP {$label} est requise.",
@@ -47,7 +46,7 @@ class RequirementsChecker
         $hasImagick = extension_loaded('imagick');
         $requirements['ext_image'] = [
             'label' => 'Extension GD ou Imagick',
-            'required' => $isLaravel,
+            'required' => true,
             'passed' => $hasGd || $hasImagick,
             'current' => $hasGd ? 'GD' : ($hasImagick ? 'Imagick' : 'Manquante'),
             'message' => 'GD ou Imagick est requis pour le traitement des images.',
@@ -80,23 +79,19 @@ class RequirementsChecker
         $nodeVersion = $this->getCommandVersion('node -v');
         $requirements['node'] = [
             'label' => 'Node.js >= 20',
-            'required' => !$isLaravel,
+            'required' => false,
             'passed' => $nodeVersion !== null && version_compare($nodeVersion, '20.0.0', '>='),
             'current' => $nodeVersion ?? 'Non installé',
-            'message' => $isLaravel
-                ? 'Node.js 20+ est recommandé pour le build des assets.'
-                : 'Node.js 20+ est requis pour Next.js.',
+            'message' => 'Node.js 20+ est recommandé pour le build des assets.',
         ];
 
         $npmVersion = $this->getCommandVersion('npm -v');
         $requirements['npm'] = [
             'label' => 'npm >= 9',
-            'required' => !$isLaravel,
+            'required' => false,
             'passed' => $npmVersion !== null && version_compare($npmVersion, '9.0.0', '>='),
             'current' => $npmVersion ?? 'Non installé',
-            'message' => $isLaravel
-                ? 'npm 9+ est recommandé pour la gestion des dépendances.'
-                : 'npm 9+ est requis pour Next.js.',
+            'message' => 'npm 9+ est recommandé pour la gestion des dépendances.',
         ];
 
         $allRequiredPassed = collect($requirements)
