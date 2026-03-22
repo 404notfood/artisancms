@@ -504,8 +504,10 @@ function runComposer(): array {
         return ['success' => true, 'message' => 'Les dépendances Composer sont déjà installées.'];
     }
 
+    $manualCmd = "cd " . BASE_PATH . "\ncomposer install --no-dev --optimize-autoloader";
+
     if (!canExecShell()) {
-        return ['success' => false, 'message' => "shell_exec est désactivé.\nExécutez en SSH :\ncd " . BASE_PATH . "\ncomposer install --no-dev --optimize-autoloader\nPuis rafraîchissez cette page."];
+        return ['success' => false, 'message' => "shell_exec est désactivé.\nExécutez en terminal/SSH :\n{$manualCmd}\nPuis rafraîchissez cette page."];
     }
 
     $composer = findComposer();
@@ -513,19 +515,20 @@ function runComposer(): array {
         if ($composer === 'already-installed') {
             return ['success' => true, 'message' => 'Les dépendances Composer sont déjà installées.'];
         }
-        return ['success' => false, 'message' => "Composer non trouvé.\nExécutez manuellement :\ncd " . BASE_PATH . "\ncomposer install --no-dev --optimize-autoloader\nPuis rafraîchissez cette page."];
+        return ['success' => false, 'message' => "Composer non trouvé.\nExécutez dans votre terminal :\n{$manualCmd}\nPuis rafraîchissez cette page."];
     }
 
-    // Run composer install in background to avoid web server timeout (mod_fcgid, etc.)
+    // Try running composer install directly (works if web server timeout is long enough)
     $cmd = getComposerCommand($composer, 'install --no-dev --optimize-autoloader --no-interaction');
-    $isDone = fn() => file_exists(VENDOR_PATH . '/autoload.php');
-    $result = runLongCommand($cmd, 'composer-install', $isDone, 180);
+    $output = @shell_exec($cmd);
 
-    if ($result['success']) {
-        return ['success' => true, 'message' => "Dépendances Composer installées ({$result['waited']}s)."];
+    if (file_exists(VENDOR_PATH . '/autoload.php')) {
+        return ['success' => true, 'message' => 'Dépendances Composer installées.'];
     }
 
-    return ['success' => false, 'message' => "Composer install timeout après {$result['waited']}s.\nSi le processus est encore en cours, attendez et rafraîchissez.\nSinon, exécutez manuellement :\ncd " . BASE_PATH . "\ncomposer install --no-dev\n\n" . ($result['log'] ?? '')];
+    // If it failed (likely timeout), provide manual instructions
+    $hint = DIRECTORY_SEPARATOR === '\\' ? 'Ouvrez le Terminal Laragon (ou CMD/PowerShell)' : 'Connectez-vous en SSH';
+    return ['success' => false, 'message' => "{$hint} et exécutez :\n{$manualCmd}\nPuis cliquez sur Réessayer.\n\n" . ($output ? "Sortie:\n" . substr($output, -300) : 'Le serveur web a interrompu la commande (timeout).')];
 }
 
 function setupEnv(): array {
@@ -617,59 +620,26 @@ function getNpmCommand(string $args): string {
     return "cd {$basePath} && npm {$args} 2>&1";
 }
 
-/**
- * Run a long shell command in background and poll for a success marker.
- */
-function runLongCommand(string $cmd, string $logName, callable $isDone, int $maxWait = 120): array {
-    $logFile = BASE_PATH . "/storage/{$logName}.log";
-
-    if (DIRECTORY_SEPARATOR === '\\') {
-        // Windows: use start /B to run in background
-        $bgCmd = "start /B cmd /c \"" . str_replace('"', '\"', $cmd) . " > " . escapeshellarg($logFile) . " 2>&1\"";
-        @shell_exec($bgCmd);
-    } else {
-        @shell_exec("nohup {$cmd} > " . escapeshellarg($logFile) . " 2>&1 &");
-    }
-
-    $waited = 0;
-    $pollInterval = 3;
-
-    while ($waited < $maxWait) {
-        sleep($pollInterval);
-        $waited += $pollInterval;
-
-        if ($isDone()) {
-            return ['success' => true, 'waited' => $waited];
-        }
-    }
-
-    // Final check
-    if ($isDone()) {
-        return ['success' => true, 'waited' => $waited];
-    }
-
-    $logContent = file_exists($logFile) ? substr(file_get_contents($logFile), -500) : '';
-    return ['success' => false, 'waited' => $waited, 'log' => $logContent];
-}
-
 function runNpm(): array {
     if (is_dir(BASE_PATH . '/node_modules') && file_exists(BASE_PATH . '/node_modules/.package-lock.json')) {
         return ['success' => true, 'message' => 'Les dépendances npm sont déjà installées.'];
     }
 
+    $manualCmd = "cd " . BASE_PATH . "\nnpm install";
+
     if (!canExecShell()) {
-        return ['success' => false, 'message' => "shell_exec est désactivé.\nExécutez en SSH :\ncd " . BASE_PATH . "\nnpm install\nPuis rafraîchissez cette page."];
+        return ['success' => false, 'message' => "shell_exec est désactivé.\nExécutez en terminal/SSH :\n{$manualCmd}\nPuis rafraîchissez cette page."];
     }
 
     $cmd = getNpmCommand('install');
-    $isDone = fn() => is_dir(BASE_PATH . '/node_modules');
-    $result = runLongCommand($cmd, 'npm-install', $isDone, 180);
+    $output = @shell_exec($cmd);
 
-    if ($result['success']) {
-        return ['success' => true, 'message' => "Dépendances npm installées ({$result['waited']}s)."];
+    if (is_dir(BASE_PATH . '/node_modules')) {
+        return ['success' => true, 'message' => 'Dépendances npm installées.'];
     }
 
-    return ['success' => false, 'message' => "npm install timeout après {$result['waited']}s.\nExécutez manuellement :\ncd " . BASE_PATH . "\nnpm install\n\n" . ($result['log'] ?? '')];
+    $hint = DIRECTORY_SEPARATOR === '\\' ? 'Ouvrez le Terminal Laragon (ou CMD/PowerShell)' : 'Connectez-vous en SSH';
+    return ['success' => false, 'message' => "{$hint} et exécutez :\n{$manualCmd}\nPuis cliquez sur Réessayer.\n\n" . ($output ? "Sortie:\n" . substr($output, -300) : 'Le serveur web a interrompu la commande (timeout).')];
 }
 
 function runBuild(): array {
@@ -679,19 +649,21 @@ function runBuild(): array {
         return ['success' => true, 'message' => 'Le build frontend existe déjà.'];
     }
 
+    $manualCmd = "cd " . BASE_PATH . "\nnpm run build";
+
     if (!canExecShell()) {
-        return ['success' => false, 'message' => "shell_exec est désactivé.\nExécutez en SSH :\ncd " . BASE_PATH . "\nnpm run build\nPuis rafraîchissez cette page."];
+        return ['success' => false, 'message' => "shell_exec est désactivé.\nExécutez en terminal/SSH :\n{$manualCmd}\nPuis rafraîchissez cette page."];
     }
 
     $cmd = getNpmCommand('run build');
-    $isDone = fn() => file_exists($manifestPath) || file_exists($altManifestPath);
-    $result = runLongCommand($cmd, 'npm-build', $isDone, 120);
+    $output = @shell_exec($cmd);
 
-    if ($result['success']) {
-        return ['success' => true, 'message' => "Build frontend terminé ({$result['waited']}s)."];
+    if (file_exists($manifestPath) || file_exists($altManifestPath)) {
+        return ['success' => true, 'message' => 'Build frontend terminé.'];
     }
 
-    return ['success' => false, 'message' => "npm run build timeout après {$result['waited']}s.\nExécutez manuellement :\ncd " . BASE_PATH . "\nnpm run build\n\n" . ($result['log'] ?? '')];
+    $hint = DIRECTORY_SEPARATOR === '\\' ? 'Ouvrez le Terminal Laragon (ou CMD/PowerShell)' : 'Connectez-vous en SSH';
+    return ['success' => false, 'message' => "{$hint} et exécutez :\n{$manualCmd}\nPuis cliquez sur Réessayer.\n\n" . ($output ? "Sortie:\n" . substr($output, -300) : 'Le serveur web a interrompu la commande (timeout).')];
 }
 
 function createDirectories(): array {
