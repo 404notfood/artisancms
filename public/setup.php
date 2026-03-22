@@ -346,6 +346,11 @@ function launchAsync(string $step, string $cmd, callable $successCheck): array {
     $lockFile = getAsyncFile($step, 'lock');
     $logFile = getAsyncFile($step, 'log');
 
+    // Ensure temp directory exists
+    if (!is_dir(SETUP_TEMP_DIR)) {
+        @mkdir(SETUP_TEMP_DIR, 0755, true);
+    }
+
     // Already running?
     if (file_exists($lockFile)) {
         return checkAsyncStatus($step, $successCheck);
@@ -361,9 +366,20 @@ function launchAsync(string $step, string $cmd, callable $successCheck): array {
 
     // Launch in background
     if (DIRECTORY_SEPARATOR === '\\') {
-        // Windows: use start /B and redirect output to log file
-        $bgCmd = "start /B cmd /c \"{$cmd} > " . escapeshellarg($logFile) . " 2>&1 && del " . escapeshellarg($lockFile) . " || del " . escapeshellarg($lockFile) . "\"";
-        pclose(popen($bgCmd, 'r'));
+        // Windows: write a temporary .bat script that runs the command,
+        // captures output, then deletes the lock file and itself
+        $batFile = SETUP_TEMP_DIR . "/setup_{$step}.bat";
+        $logWin = str_replace('/', '\\', $logFile);
+        $lockWin = str_replace('/', '\\', $lockFile);
+        $batWin = str_replace('/', '\\', $batFile);
+
+        $batContent = "@echo off\r\n";
+        $batContent .= "{$cmd} > \"{$logWin}\" 2>&1\r\n";
+        $batContent .= "del \"{$lockWin}\" 2>nul\r\n";
+        $batContent .= "del \"{$batWin}\" 2>nul\r\n";
+
+        file_put_contents($batFile, $batContent);
+        pclose(popen("start /B cmd /c \"{$batWin}\"", 'r'));
     } else {
         // Unix: nohup + &
         $bgCmd = "({$cmd}) > " . escapeshellarg($logFile) . " 2>&1; rm -f " . escapeshellarg($lockFile) . " &";
@@ -571,22 +587,24 @@ function findComposer(): ?string {
 
 /**
  * Build the shell command to run composer with the given arguments.
+ * If $noRedirect is true, omit the trailing 2>&1 (used when the caller handles redirection).
  */
-function getComposerCommand(string $composerPath, string $args): string {
+function getComposerCommand(string $composerPath, string $args, bool $noRedirect = false): string {
     $basePath = escapeshellarg(BASE_PATH);
+    $suffix = $noRedirect ? '' : ' 2>&1';
 
     if ($composerPath === 'phar') {
         $phpBin = escapeshellarg(PHP_BINARY);
         $pharPath = escapeshellarg(BASE_PATH . '/composer.phar');
-        return "cd {$basePath} && {$phpBin} {$pharPath} {$args} 2>&1";
+        return "cd {$basePath} && {$phpBin} {$pharPath} {$args}{$suffix}";
     }
 
     if (DIRECTORY_SEPARATOR === '\\' && preg_match('/\.(bat|cmd)$/i', $composerPath)) {
         // Windows .bat/.cmd files need cmd /c
-        return "cd {$basePath} && cmd /c " . escapeshellarg($composerPath) . " {$args} 2>&1";
+        return "cd {$basePath} && cmd /c " . escapeshellarg($composerPath) . " {$args}{$suffix}";
     }
 
-    return "cd {$basePath} && " . escapeshellarg($composerPath) . " {$args} 2>&1";
+    return "cd {$basePath} && " . escapeshellarg($composerPath) . " {$args}{$suffix}";
 }
 
 function runComposer(): array {
@@ -608,8 +626,8 @@ function runComposer(): array {
         return ['success' => false, 'message' => "Composer non trouvé.\nExécutez dans votre terminal :\n{$manualCmd}\nPuis rafraîchissez cette page."];
     }
 
-    // Launch async to avoid HTTP timeout
-    $cmd = getComposerCommand($composer, 'install --no-dev --optimize-autoloader --no-interaction');
+    // Launch async to avoid HTTP timeout (noRedirect: .bat handles output redirection)
+    $cmd = getComposerCommand($composer, 'install --no-dev --optimize-autoloader --no-interaction', true);
     $successCheck = fn() => file_exists(VENDOR_PATH . '/autoload.php');
 
     $result = launchAsync('composer', $cmd, $successCheck);
@@ -693,28 +711,30 @@ function generateKey(): array {
 
 /**
  * Build a shell command for npm (handles .cmd on Windows).
+ * If $noRedirect is true, omit the trailing 2>&1 (used when the caller handles redirection).
  */
-function getNpmCommand(string $args): string {
+function getNpmCommand(string $args, bool $noRedirect = false): string {
     $basePath = escapeshellarg(BASE_PATH);
     $npmBin = findBinary('npm');
+    $suffix = $noRedirect ? '' : ' 2>&1';
 
     if (DIRECTORY_SEPARATOR === '\\') {
         // On Windows, npm is a .cmd file — must use cmd /c
         if ($npmBin) {
-            return "cd {$basePath} && cmd /c " . escapeshellarg($npmBin) . " {$args} 2>&1";
+            return "cd {$basePath} && cmd /c " . escapeshellarg($npmBin) . " {$args}{$suffix}";
         }
-        return "cd {$basePath} && cmd /c npm {$args} 2>&1";
+        return "cd {$basePath} && cmd /c npm {$args}{$suffix}";
     }
 
     if ($npmBin) {
-        return "cd {$basePath} && " . escapeshellarg($npmBin) . " {$args} 2>&1";
+        return "cd {$basePath} && " . escapeshellarg($npmBin) . " {$args}{$suffix}";
     }
-    return "cd {$basePath} && npm {$args} 2>&1";
+    return "cd {$basePath} && npm {$args}{$suffix}";
 }
 
 function runNpm(): array {
     if (is_dir(BASE_PATH . '/node_modules') && file_exists(BASE_PATH . '/node_modules/.package-lock.json')) {
-        return ['success' => true, 'message' => 'Les dépendances npm sont déjà installées.'];
+        return ['success' => true, 'status' => 'done', 'message' => 'Les dépendances npm sont déjà installées.'];
     }
 
     $manualCmd = "cd " . BASE_PATH . "\nnpm install";
@@ -723,22 +743,25 @@ function runNpm(): array {
         return ['success' => false, 'message' => "shell_exec est désactivé.\nExécutez en terminal/SSH :\n{$manualCmd}\nPuis rafraîchissez cette page."];
     }
 
-    $cmd = getNpmCommand('install');
-    $output = @shell_exec($cmd);
+    // Launch async to avoid HTTP timeout (noRedirect: .bat handles output redirection)
+    $cmd = getNpmCommand('install', true);
+    $successCheck = fn() => is_dir(BASE_PATH . '/node_modules');
 
-    if (is_dir(BASE_PATH . '/node_modules')) {
-        return ['success' => true, 'message' => 'Dépendances npm installées.'];
+    $result = launchAsync('npm', $cmd, $successCheck);
+
+    if (!$result['success'] && ($result['status'] ?? '') !== 'running') {
+        $hint = DIRECTORY_SEPARATOR === '\\' ? 'Ouvrez le Terminal Laragon (ou CMD/PowerShell)' : 'Connectez-vous en SSH';
+        $result['message'] .= "\n\n{$hint} et exécutez :\n{$manualCmd}\nPuis cliquez sur Réessayer.";
     }
 
-    $hint = DIRECTORY_SEPARATOR === '\\' ? 'Ouvrez le Terminal Laragon (ou CMD/PowerShell)' : 'Connectez-vous en SSH';
-    return ['success' => false, 'message' => "{$hint} et exécutez :\n{$manualCmd}\nPuis cliquez sur Réessayer.\n\n" . ($output ? "Sortie:\n" . substr($output, -300) : 'Le serveur web a interrompu la commande (timeout).')];
+    return $result;
 }
 
 function runBuild(): array {
     $manifestPath = BASE_PATH . '/public/build/.vite/manifest.json';
     $altManifestPath = BASE_PATH . '/public/build/manifest.json';
     if (file_exists($manifestPath) || file_exists($altManifestPath)) {
-        return ['success' => true, 'message' => 'Le build frontend existe déjà.'];
+        return ['success' => true, 'status' => 'done', 'message' => 'Le build frontend existe déjà.'];
     }
 
     $manualCmd = "cd " . BASE_PATH . "\nnpm run build";
@@ -747,15 +770,18 @@ function runBuild(): array {
         return ['success' => false, 'message' => "shell_exec est désactivé.\nExécutez en terminal/SSH :\n{$manualCmd}\nPuis rafraîchissez cette page."];
     }
 
-    $cmd = getNpmCommand('run build');
-    $output = @shell_exec($cmd);
+    // Launch async to avoid HTTP timeout (noRedirect: .bat handles output redirection)
+    $cmd = getNpmCommand('run build', true);
+    $successCheck = fn() => file_exists($manifestPath) || file_exists($altManifestPath);
 
-    if (file_exists($manifestPath) || file_exists($altManifestPath)) {
-        return ['success' => true, 'message' => 'Build frontend terminé.'];
+    $result = launchAsync('build', $cmd, $successCheck);
+
+    if (!$result['success'] && ($result['status'] ?? '') !== 'running') {
+        $hint = DIRECTORY_SEPARATOR === '\\' ? 'Ouvrez le Terminal Laragon (ou CMD/PowerShell)' : 'Connectez-vous en SSH';
+        $result['message'] .= "\n\n{$hint} et exécutez :\n{$manualCmd}\nPuis cliquez sur Réessayer.";
     }
 
-    $hint = DIRECTORY_SEPARATOR === '\\' ? 'Ouvrez le Terminal Laragon (ou CMD/PowerShell)' : 'Connectez-vous en SSH';
-    return ['success' => false, 'message' => "{$hint} et exécutez :\n{$manualCmd}\nPuis cliquez sur Réessayer.\n\n" . ($output ? "Sortie:\n" . substr($output, -300) : 'Le serveur web a interrompu la commande (timeout).')];
+    return $result;
 }
 
 function createDirectories(): array {
@@ -1299,6 +1325,9 @@ if ($vendorReady && $envReady && $buildReady && !file_exists(INSTALLED_FILE)) {
             document.getElementById('progressText').textContent = pct + '%';
         }
 
+        // Steps that run asynchronously (long operations)
+        const asyncSteps = ['composer', 'npm', 'build'];
+
         async function runStep(stepName) {
             const formData = new FormData();
             formData.append('action', stepName);
@@ -1315,6 +1344,46 @@ if ($vendorReady && $envReady && $buildReady && !file_exists(INSTALLED_FILE)) {
             return await response.json();
         }
 
+        async function pollStatus(stepName) {
+            const formData = new FormData();
+            formData.append('action', 'status');
+            formData.append('step', stepName);
+
+            const response = await fetch('setup.php', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+
+            return await response.json();
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        /**
+         * Run a step. For async steps (composer/npm/build), poll until done.
+         */
+        async function executeStep(stepName) {
+            const result = await runStep(stepName);
+
+            // If this is an async step and it's running, poll until done
+            if (asyncSteps.includes(stepName) && result.success && result.status === 'running') {
+                let pollResult = result;
+                while (pollResult.success && pollResult.status === 'running') {
+                    await sleep(3000); // Poll every 3 seconds
+                    pollResult = await pollStatus(stepName);
+                }
+                return pollResult;
+            }
+
+            return result;
+        }
+
         async function startSetup() {
             const startBtn = document.getElementById('startBtn');
             startBtn.disabled = true;
@@ -1327,7 +1396,7 @@ if ($vendorReady && $envReady && $buildReady && !file_exists(INSTALLED_FILE)) {
                 updateProgress(i, steps.length);
 
                 try {
-                    const result = await runStep(step);
+                    const result = await executeStep(step);
 
                     if (result.success) {
                         setStepStatus(step, 'done', result.message);
