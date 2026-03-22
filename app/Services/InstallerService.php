@@ -90,9 +90,8 @@ class InstallerService
             'APP_LOCALE' => $config['locale'] ?? 'fr',
         ];
 
-        if (!empty($config['db_prefix'])) {
-            $replacements['DB_PREFIX'] = $config['db_prefix'];
-        }
+        // Note: DB_PREFIX is not used — migration table names already include 'cms_' where needed.
+        // Writing DB_PREFIX to .env would have no effect (config/database.php uses prefix: '').
 
         foreach ($replacements as $key => $value) {
             if (preg_match("/^{$key}=.*/m", $envContent)) {
@@ -119,6 +118,7 @@ class InstallerService
     private function stepMigrations(array $config): void
     {
         // Reload DB config from the .env we just wrote
+        // Note: prefix is always empty — table names already include 'cms_' where needed
         $dbConfig = [
             'driver' => 'mysql',
             'host' => $config['db_host'],
@@ -126,7 +126,7 @@ class InstallerService
             'database' => $config['db_database'],
             'username' => $config['db_username'],
             'password' => $config['db_password'],
-            'prefix' => $config['db_prefix'] ?? '',
+            'prefix' => '',
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
         ];
