@@ -328,6 +328,26 @@ if (file_exists(INSTALLED_FILE)) {
     exit;
 }
 
+// ─── Synchronous command execution ───
+
+/**
+ * Run a shell command synchronously and return its output.
+ * Used as primary execution method — faster and more reliable than async on local dev.
+ */
+function runSyncCommand(string $cmd): array {
+    $output = [];
+    $exitCode = -1;
+
+    exec($cmd, $output, $exitCode);
+
+    $outputStr = implode("\n", $output);
+    return [
+        'success' => $exitCode === 0,
+        'exit_code' => $exitCode,
+        'output' => substr($outputStr, -1000),
+    ];
+}
+
 // ─── Async task helpers for long-running commands ───
 define('SETUP_TEMP_DIR', BASE_PATH . '/storage/framework/cache');
 
@@ -367,19 +387,39 @@ function launchAsync(string $step, string $cmd, callable $successCheck): array {
     // Launch in background
     if (DIRECTORY_SEPARATOR === '\\') {
         // Windows: write a temporary .bat script that runs the command,
-        // captures output, then deletes the lock file and itself
+        // captures output, then deletes the lock file and itself.
+        // Include enriched PATH so the background process can find composer/node/npm/git.
         $batFile = SETUP_TEMP_DIR . "/setup_{$step}.bat";
         $logWin = str_replace('/', '\\', $logFile);
         $lockWin = str_replace('/', '\\', $lockFile);
         $batWin = str_replace('/', '\\', $batFile);
 
         $batContent = "@echo off\r\n";
+        // Inject the enriched PATH into the .bat environment
+        $enrichedPath = getenv('PATH') ?: '';
+        if ($enrichedPath) {
+            $batContent .= "set \"PATH={$enrichedPath}\"\r\n";
+        }
         $batContent .= "{$cmd} > \"{$logWin}\" 2>&1\r\n";
         $batContent .= "del \"{$lockWin}\" 2>nul\r\n";
         $batContent .= "del \"{$batWin}\" 2>nul\r\n";
 
         file_put_contents($batFile, $batContent);
-        pclose(popen("start /B cmd /c \"{$batWin}\"", 'r'));
+
+        // Use WScript.Shell via a .vbs to truly detach the process.
+        // popen("start /B ...") inherits PHP's stdout/stderr handles, causing
+        // empty HTTP responses on subsequent requests (race condition).
+        // WScript.Shell.Run with vbHide (0) and async (False) avoids this.
+        $wshScript = SETUP_TEMP_DIR . "/setup_{$step}.vbs";
+        $batWinEsc = str_replace('"', '""', $batWin);
+        $wshContent = "Set oShell = CreateObject(\"WScript.Shell\")\r\n";
+        $wshContent .= "oShell.Run \"cmd /c \"\"\" & \"{$batWinEsc}\" & \"\"\"\", 0, False\r\n";
+        file_put_contents($wshScript, $wshContent);
+
+        $vbsWin = str_replace('/', '\\', $wshScript);
+        // Launch the VBS via wscript — detached from PHP process.
+        // Use shell_exec with output redirected to NUL to avoid inheriting handles.
+        @shell_exec("start \"\" /B wscript //nologo \"{$vbsWin}\" > NUL 2>&1");
     } else {
         // Unix: nohup + &
         $bgCmd = "({$cmd}) > " . escapeshellarg($logFile) . " 2>&1; rm -f " . escapeshellarg($lockFile) . " &";
@@ -571,18 +611,42 @@ function findComposer(): ?string {
         return null;
     }
 
-    // Use findBinary to locate composer — if the file exists, trust it
-    $composerBin = findBinary('composer');
-    if ($composerBin) {
-        return $composerBin;
-    }
-
     // Check if composer.phar exists in project root
     if (file_exists(BASE_PATH . '/composer.phar')) {
         return 'phar';
     }
 
+    // Try to find a composer.phar next to a composer.bat/.cmd (Laragon, etc.)
+    $composerBin = findBinary('composer');
+    if ($composerBin) {
+        // If it's a .bat/.cmd, look for the .phar in the same directory
+        if (DIRECTORY_SEPARATOR === '\\' && preg_match('/\.(bat|cmd)$/i', $composerBin)) {
+            $pharPath = dirname($composerBin) . '\\composer.phar';
+            if (file_exists($pharPath)) {
+                return $pharPath; // Return the .phar directly — more reliable under web server
+            }
+        }
+        return $composerBin;
+    }
+
     return null;
+}
+
+/**
+ * Build a PATH prefix for shell commands, including all extra paths for binaries.
+ * This is critical for web server PHP (php-cgi) which has a minimal PATH.
+ */
+function buildPathPrefix(): string {
+    $paths = getExtraPaths();
+    if (empty($paths)) return '';
+
+    if (DIRECTORY_SEPARATOR === '\\') {
+        $pathStr = implode(';', $paths);
+        return "set \"PATH={$pathStr};%PATH%\" && ";
+    }
+
+    $pathStr = implode(':', $paths);
+    return "PATH=\"{$pathStr}:\$PATH\" ";
 }
 
 /**
@@ -592,19 +656,37 @@ function findComposer(): ?string {
 function getComposerCommand(string $composerPath, string $args, bool $noRedirect = false): string {
     $basePath = escapeshellarg(BASE_PATH);
     $suffix = $noRedirect ? '' : ' 2>&1';
+    $pathPrefix = buildPathPrefix();
 
+    // Resolve PHP binary — prefer php.exe over php-cgi.exe for CLI commands
+    $phpBin = PHP_BINARY;
+    if (DIRECTORY_SEPARATOR === '\\') {
+        // If running under php-cgi, find the corresponding php.exe
+        $phpDir = dirname($phpBin);
+        $phpExe = $phpDir . '\\php.exe';
+        if (str_contains(strtolower($phpBin), 'php-cgi') && file_exists($phpExe)) {
+            $phpBin = $phpExe;
+        }
+    }
+    $phpBinEsc = escapeshellarg($phpBin);
+
+    // If the composer path is a .phar file, use PHP to execute it directly
     if ($composerPath === 'phar') {
-        $phpBin = escapeshellarg(PHP_BINARY);
         $pharPath = escapeshellarg(BASE_PATH . '/composer.phar');
-        return "cd {$basePath} && {$phpBin} {$pharPath} {$args}{$suffix}";
+        return "cd {$basePath} && {$pathPrefix}{$phpBinEsc} {$pharPath} {$args}{$suffix}";
+    }
+
+    if (preg_match('/\.phar$/i', $composerPath)) {
+        $pharPath = escapeshellarg($composerPath);
+        return "cd {$basePath} && {$pathPrefix}{$phpBinEsc} {$pharPath} {$args}{$suffix}";
     }
 
     if (DIRECTORY_SEPARATOR === '\\' && preg_match('/\.(bat|cmd)$/i', $composerPath)) {
-        // Windows .bat/.cmd files need cmd /c
-        return "cd {$basePath} && cmd /c " . escapeshellarg($composerPath) . " {$args}{$suffix}";
+        // Windows .bat/.cmd files need cmd /c — but also need PATH enrichment
+        return "cd {$basePath} && {$pathPrefix}cmd /c " . escapeshellarg($composerPath) . " {$args}{$suffix}";
     }
 
-    return "cd {$basePath} && " . escapeshellarg($composerPath) . " {$args}{$suffix}";
+    return "cd {$basePath} && {$pathPrefix}" . escapeshellarg($composerPath) . " {$args}{$suffix}";
 }
 
 function runComposer(): array {
@@ -626,13 +708,11 @@ function runComposer(): array {
         return ['success' => false, 'message' => "Composer non trouvé.\nExécutez dans votre terminal :\n{$manualCmd}\nPuis rafraîchissez cette page."];
     }
 
-    // Launch async to avoid HTTP timeout (noRedirect: .bat handles output redirection)
+    // Launch async — composer install can take several minutes
     $cmd = getComposerCommand($composer, 'install --no-dev --optimize-autoloader --no-interaction', true);
     $successCheck = fn() => file_exists(VENDOR_PATH . '/autoload.php');
-
     $result = launchAsync('composer', $cmd, $successCheck);
 
-    // If async launch failed, provide manual instructions
     if (!$result['success'] && ($result['status'] ?? '') !== 'running') {
         $hint = DIRECTORY_SEPARATOR === '\\' ? 'Ouvrez le Terminal Laragon (ou CMD/PowerShell)' : 'Connectez-vous en SSH';
         $result['message'] .= "\n\n{$hint} et exécutez :\n{$manualCmd}\nPuis cliquez sur Réessayer.";
@@ -670,10 +750,6 @@ function setupEnv(): array {
 }
 
 function generateKey(): array {
-    if (!file_exists(VENDOR_PATH . '/autoload.php')) {
-        return ['success' => false, 'message' => 'Installez Composer d\'abord.'];
-    }
-
     if (file_exists(ENV_FILE)) {
         $env = file_get_contents(ENV_FILE);
         if (preg_match('/^APP_KEY=base64:.{30,}/m', $env)) {
@@ -681,29 +757,24 @@ function generateKey(): array {
         }
     }
 
-    if (!canExecShell()) {
-        $key = 'base64:' . base64_encode(random_bytes(32));
-        if (file_exists(ENV_FILE)) {
-            $env = file_get_contents(ENV_FILE);
-            if (str_contains($env, 'APP_KEY=')) {
-                $env = preg_replace('/^APP_KEY=.*$/m', "APP_KEY={$key}", $env);
-            } else {
-                $env .= "\nAPP_KEY={$key}\n";
-            }
-            file_put_contents(ENV_FILE, $env);
-            return ['success' => true, 'message' => 'Clé APP_KEY générée (PHP natif).'];
-        }
+    if (!file_exists(ENV_FILE)) {
         return ['success' => false, 'message' => 'Fichier .env introuvable.'];
     }
 
-    $phpBin = escapeshellarg(PHP_BINARY);
-    $basePath = escapeshellarg(BASE_PATH);
-    $cmd = "cd {$basePath} && {$phpBin} artisan key:generate --force 2>&1";
-    $output = shell_exec($cmd);
+    // Generate APP_KEY natively in PHP — more reliable than exec (php-fpm/php-cgi can't run artisan)
+    $key = 'base64:' . base64_encode(random_bytes(32));
+    $env = file_get_contents(ENV_FILE);
+    if (str_contains($env, 'APP_KEY=')) {
+        $env = preg_replace('/^APP_KEY=.*$/m', "APP_KEY={$key}", $env);
+    } else {
+        $env .= "\nAPP_KEY={$key}\n";
+    }
+    file_put_contents(ENV_FILE, $env);
 
+    // Verify
     $env = file_get_contents(ENV_FILE);
     if (!preg_match('/^APP_KEY=base64:.{30,}/m', $env)) {
-        return ['success' => false, 'message' => "Génération de clé échouée.\n" . ($output ?? '')];
+        return ['success' => false, 'message' => 'Échec de l\'écriture de APP_KEY dans .env.'];
     }
 
     return ['success' => true, 'message' => 'Clé APP_KEY générée.'];
@@ -717,19 +788,20 @@ function getNpmCommand(string $args, bool $noRedirect = false): string {
     $basePath = escapeshellarg(BASE_PATH);
     $npmBin = findBinary('npm');
     $suffix = $noRedirect ? '' : ' 2>&1';
+    $pathPrefix = buildPathPrefix();
 
     if (DIRECTORY_SEPARATOR === '\\') {
         // On Windows, npm is a .cmd file — must use cmd /c
         if ($npmBin) {
-            return "cd {$basePath} && cmd /c " . escapeshellarg($npmBin) . " {$args}{$suffix}";
+            return "cd {$basePath} && {$pathPrefix}cmd /c " . escapeshellarg($npmBin) . " {$args}{$suffix}";
         }
-        return "cd {$basePath} && cmd /c npm {$args}{$suffix}";
+        return "cd {$basePath} && {$pathPrefix}cmd /c npm {$args}{$suffix}";
     }
 
     if ($npmBin) {
-        return "cd {$basePath} && " . escapeshellarg($npmBin) . " {$args}{$suffix}";
+        return "cd {$basePath} && {$pathPrefix}" . escapeshellarg($npmBin) . " {$args}{$suffix}";
     }
-    return "cd {$basePath} && npm {$args}{$suffix}";
+    return "cd {$basePath} && {$pathPrefix}npm {$args}{$suffix}";
 }
 
 function runNpm(): array {
@@ -743,10 +815,9 @@ function runNpm(): array {
         return ['success' => false, 'message' => "shell_exec est désactivé.\nExécutez en terminal/SSH :\n{$manualCmd}\nPuis rafraîchissez cette page."];
     }
 
-    // Launch async to avoid HTTP timeout (noRedirect: .bat handles output redirection)
+    // Launch async — npm install can take several minutes
     $cmd = getNpmCommand('install', true);
     $successCheck = fn() => is_dir(BASE_PATH . '/node_modules');
-
     $result = launchAsync('npm', $cmd, $successCheck);
 
     if (!$result['success'] && ($result['status'] ?? '') !== 'running') {
@@ -770,10 +841,9 @@ function runBuild(): array {
         return ['success' => false, 'message' => "shell_exec est désactivé.\nExécutez en terminal/SSH :\n{$manualCmd}\nPuis rafraîchissez cette page."];
     }
 
-    // Launch async to avoid HTTP timeout (noRedirect: .bat handles output redirection)
+    // Launch async — build can take a while
     $cmd = getNpmCommand('run build', true);
     $successCheck = fn() => file_exists($manifestPath) || file_exists($altManifestPath);
-
     $result = launchAsync('build', $cmd, $successCheck);
 
     if (!$result['success'] && ($result['status'] ?? '') !== 'running') {
@@ -1328,6 +1398,18 @@ if ($vendorReady && $envReady && $buildReady && !file_exists(INSTALLED_FILE)) {
         // Steps that run asynchronously (long operations)
         const asyncSteps = ['composer', 'npm', 'build'];
 
+        async function safeJsonParse(response) {
+            const text = await response.text();
+            if (!text || !text.trim()) {
+                return null; // Empty response — will trigger retry
+            }
+            try {
+                return JSON.parse(text);
+            } catch (e) {
+                return null;
+            }
+        }
+
         async function runStep(stepName) {
             const formData = new FormData();
             formData.append('action', stepName);
@@ -1341,7 +1423,18 @@ if ($vendorReady && $envReady && $buildReady && !file_exists(INSTALLED_FILE)) {
                 throw new Error(`HTTP ${response.status}: ${response.statusText}`);
             }
 
-            return await response.json();
+            const data = await safeJsonParse(response);
+            if (data === null) {
+                // Empty response — retry once after a short delay
+                await sleep(1000);
+                const retry = await fetch('setup.php', { method: 'POST', body: formData });
+                const retryData = await safeJsonParse(retry);
+                if (retryData === null) {
+                    throw new Error('Le serveur a renvoyé une réponse vide. Réessayez.');
+                }
+                return retryData;
+            }
+            return data;
         }
 
         async function pollStatus(stepName) {
@@ -1358,7 +1451,12 @@ if ($vendorReady && $envReady && $buildReady && !file_exists(INSTALLED_FILE)) {
                 throw new Error(`HTTP ${response.status}: ${response.statusText}`);
             }
 
-            return await response.json();
+            const data = await safeJsonParse(response);
+            if (data === null) {
+                // Empty response during polling — treat as still running
+                return { success: true, status: 'running', message: 'En attente de réponse...' };
+            }
+            return data;
         }
 
         function sleep(ms) {
