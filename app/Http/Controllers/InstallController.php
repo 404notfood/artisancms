@@ -130,6 +130,9 @@ class InstallController
             'install.db_prefix' => $validated['db_prefix'] ?? '',
         ]);
 
+        // Persist config so far (DB step done, will be updated again after Configuration step)
+        $this->persistInstallConfig();
+
         return redirect()->route('install.configuration');
     }
 
@@ -173,6 +176,10 @@ class InstallController
             'install.admin_password' => $validated['admin_password'],
         ]);
 
+        // Persist all install config to a temp file so the execute step
+        // doesn't depend on session survival across AJAX requests.
+        $this->persistInstallConfig();
+
         return redirect()->route('install.execute');
     }
 
@@ -202,6 +209,49 @@ class InstallController
             ], 422);
         }
 
+        // Load config from persisted file first, then session as fallback
+        $persisted = $this->loadInstallConfig();
+
+        $config = [
+            'locale' => $persisted['locale'] ?? session('install.locale', 'fr'),
+            'db_host' => $persisted['db_host'] ?? session('install.db_host', '127.0.0.1'),
+            'db_port' => $persisted['db_port'] ?? session('install.db_port', '3306'),
+            'db_database' => $persisted['db_database'] ?? session('install.db_database', 'artisan_cms'),
+            'db_username' => $persisted['db_username'] ?? session('install.db_username', 'root'),
+            'db_password' => $persisted['db_password'] ?? session('install.db_password', ''),
+            'db_prefix' => $persisted['db_prefix'] ?? session('install.db_prefix', ''),
+            'site_name' => $persisted['site_name'] ?? session('install.site_name', 'ArtisanCMS'),
+            'site_description' => $persisted['site_description'] ?? session('install.site_description', ''),
+            'site_url' => $persisted['site_url'] ?? session('install.site_url', request()->getSchemeAndHttpHost()),
+            'timezone' => $persisted['timezone'] ?? session('install.timezone', 'Europe/Paris'),
+            'admin_name' => $persisted['admin_name'] ?? session('install.admin_name', 'Admin'),
+            'admin_email' => $persisted['admin_email'] ?? session('install.admin_email', 'admin@artisancms.dev'),
+            'admin_password' => $persisted['admin_password'] ?? session('install.admin_password', 'password'),
+        ];
+
+        $result = $this->installer->runStep($step, $config);
+
+        if ($result['success'] && $step === 'finalize') {
+            $request->session()->forget(
+                collect(session()->all())
+                    ->keys()
+                    ->filter(fn ($key) => str_starts_with($key, 'install.'))
+                    ->toArray()
+            );
+            // Clean up persisted config file
+            $this->cleanupInstallConfig();
+        }
+
+        return response()->json($result);
+    }
+
+    /**
+     * Persist all install config to an encrypted temp file.
+     * This ensures execute() has access to all values even if
+     * the session is lost between sequential AJAX requests.
+     */
+    private function persistInstallConfig(): void
+    {
         $config = [
             'locale' => session('install.locale', 'fr'),
             'db_host' => session('install.db_host', '127.0.0.1'),
@@ -215,21 +265,42 @@ class InstallController
             'site_url' => session('install.site_url', request()->getSchemeAndHttpHost()),
             'timezone' => session('install.timezone', 'Europe/Paris'),
             'admin_name' => session('install.admin_name', 'Admin'),
-            'admin_email' => session('install.admin_email', 'admin@artisancms.dev'),
-            'admin_password' => session('install.admin_password', 'password'),
+            'admin_email' => session('install.admin_email', ''),
+            'admin_password' => session('install.admin_password', ''),
         ];
 
-        $result = $this->installer->runStep($step, $config);
+        $path = storage_path('.install_config');
+        $encrypted = encrypt(json_encode($config));
+        file_put_contents($path, $encrypted);
+    }
 
-        if ($result['success'] && $step === 'finalize') {
-            $request->session()->forget(
-                collect(session()->all())
-                    ->keys()
-                    ->filter(fn ($key) => str_starts_with($key, 'install.'))
-                    ->toArray()
-            );
+    /**
+     * Load persisted install config from the encrypted temp file.
+     */
+    private function loadInstallConfig(): array
+    {
+        $path = storage_path('.install_config');
+
+        if (!file_exists($path)) {
+            return [];
         }
 
-        return response()->json($result);
+        try {
+            $encrypted = file_get_contents($path);
+            return json_decode(decrypt($encrypted), true) ?: [];
+        } catch (\Throwable) {
+            return [];
+        }
+    }
+
+    /**
+     * Remove the persisted install config file.
+     */
+    private function cleanupInstallConfig(): void
+    {
+        $path = storage_path('.install_config');
+        if (file_exists($path)) {
+            @unlink($path);
+        }
     }
 }
