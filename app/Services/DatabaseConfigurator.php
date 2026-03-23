@@ -82,14 +82,12 @@ class DatabaseConfigurator
         }
 
         foreach ($replacements as $key => $value) {
+            $line = "{$key}={$value}";
             if (preg_match("/^{$key}=.*/m", $envContent)) {
-                $envContent = preg_replace(
-                    "/^{$key}=.*/m",
-                    "{$key}={$value}",
-                    $envContent
-                );
+                // Use callback to avoid backreference issues with $ and \ in replacement values
+                $envContent = preg_replace_callback("/^{$key}=.*/m", fn () => $line, $envContent);
             } else {
-                $envContent .= "\n{$key}={$value}";
+                $envContent .= "\n{$line}";
             }
         }
 

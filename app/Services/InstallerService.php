@@ -81,10 +81,8 @@ class InstallerService
             'DB_PORT' => (string) $config['db_port'],
             'DB_DATABASE' => $config['db_database'],
             'DB_USERNAME' => $config['db_username'],
-            'DB_PASSWORD' => $config['db_password'],
-            'APP_NAME' => str_contains($config['site_name'] ?? 'ArtisanCMS', ' ')
-                ? '"' . ($config['site_name'] ?? 'ArtisanCMS') . '"'
-                : ($config['site_name'] ?? 'ArtisanCMS'),
+            'DB_PASSWORD' => $this->quoteEnvValue($config['db_password'] ?? ''),
+            'APP_NAME' => $this->quoteEnvValue($config['site_name'] ?? 'ArtisanCMS'),
             'APP_URL' => $config['site_url'] ?? 'http://localhost',
             'APP_TIMEZONE' => $config['timezone'] ?? 'UTC',
             'APP_LOCALE' => $config['locale'] ?? 'fr',
@@ -94,10 +92,12 @@ class InstallerService
         // Writing DB_PREFIX to .env would have no effect (config/database.php uses prefix: '').
 
         foreach ($replacements as $key => $value) {
+            $line = "{$key}={$value}";
             if (preg_match("/^{$key}=.*/m", $envContent)) {
-                $envContent = preg_replace("/^{$key}=.*/m", "{$key}={$value}", $envContent);
+                // Use callback to avoid backreference issues with $ and \ in replacement values
+                $envContent = preg_replace_callback("/^{$key}=.*/m", fn () => $line, $envContent);
             } else {
-                $envContent .= "\n{$key}={$value}";
+                $envContent .= "\n{$line}";
             }
         }
 
@@ -117,15 +117,18 @@ class InstallerService
 
     private function stepMigrations(array $config): void
     {
-        // Reload DB config from the .env we just wrote
-        // Note: prefix is always empty — table names already include 'cms_' where needed
+        // Re-read DB credentials from the .env file written by stepEnv()
+        // as the primary source of truth. Session values may be lost between
+        // sequential AJAX requests (cookie/session issues on some servers).
+        $envCredentials = $this->readDbCredentialsFromEnv();
+
         $dbConfig = [
             'driver' => 'mysql',
-            'host' => $config['db_host'],
-            'port' => $config['db_port'],
-            'database' => $config['db_database'],
-            'username' => $config['db_username'],
-            'password' => $config['db_password'],
+            'host' => $envCredentials['host'] ?: $config['db_host'],
+            'port' => $envCredentials['port'] ?: $config['db_port'],
+            'database' => $envCredentials['database'] ?: $config['db_database'],
+            'username' => $envCredentials['username'] ?: $config['db_username'],
+            'password' => $envCredentials['password'] !== '' ? $envCredentials['password'] : $config['db_password'],
             'prefix' => '',
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
@@ -138,6 +141,43 @@ class InstallerService
         DB::reconnect('mysql');
 
         Artisan::call('migrate', ['--force' => true]);
+    }
+
+    /**
+     * Parse DB credentials directly from the .env file on disk.
+     */
+    private function readDbCredentialsFromEnv(): array
+    {
+        $defaults = ['host' => '', 'port' => '', 'database' => '', 'username' => '', 'password' => ''];
+        $envPath = base_path('.env');
+
+        if (!file_exists($envPath)) {
+            return $defaults;
+        }
+
+        $content = file_get_contents($envPath);
+        $map = [
+            'DB_HOST' => 'host',
+            'DB_PORT' => 'port',
+            'DB_DATABASE' => 'database',
+            'DB_USERNAME' => 'username',
+            'DB_PASSWORD' => 'password',
+        ];
+
+        foreach ($map as $envKey => $resultKey) {
+            if (preg_match("/^{$envKey}=(.*)$/m", $content, $m)) {
+                $value = trim($m[1]);
+                // Strip surrounding quotes if present
+                if (preg_match('/^"(.*)"$/', $value, $q)) {
+                    $value = $q[1];
+                } elseif (preg_match("/^'(.*)'$/", $value, $q)) {
+                    $value = $q[1];
+                }
+                $defaults[$resultKey] = $value;
+            }
+        }
+
+        return $defaults;
     }
 
     private function stepFinalize(array $config): void
@@ -400,6 +440,25 @@ class InstallerService
                 'branding' => [],
             ]
         );
+    }
+
+    /**
+     * Quote a value for .env if it contains spaces, #, or special chars.
+     */
+    private function quoteEnvValue(string $value): string
+    {
+        if ($value === '') {
+            return '';
+        }
+
+        // Wrap in double quotes if the value contains spaces, #, $, quotes, or other .env-sensitive chars
+        if (preg_match('/[\s#"\'\\\\$]/', $value) || str_contains($value, '=')) {
+            // Escape backslashes and double quotes inside
+            $escaped = str_replace(['\\', '"'], ['\\\\', '\\"'], $value);
+            return '"' . $escaped . '"';
+        }
+
+        return $value;
     }
 
     private function createDirectories(): void
