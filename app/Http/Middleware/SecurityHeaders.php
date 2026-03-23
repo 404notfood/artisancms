@@ -25,6 +25,16 @@ class SecurityHeaders
             $response->headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
         }
 
+        // Prevent FastCGI/proxy caching on pages that contain CSRF tokens
+        // or are behind auth, to avoid 419 errors from stale cached tokens.
+        if ($request->isMethod('GET') && (
+            $request->is('login', 'register', 'forgot-password', 'reset-password/*', 'admin', 'admin/*', 'install', 'install/*')
+            || $request->user()
+        )) {
+            $response->headers->set('Cache-Control', 'no-cache, no-store, must-revalidate, private');
+            $response->headers->set('Pragma', 'no-cache');
+        }
+
         // Content Security Policy
         $cspDirectives = [
             "default-src 'self'",
