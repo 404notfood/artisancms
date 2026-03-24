@@ -1,0 +1,99 @@
+[
+  {
+    "name": "Menu principal",
+    "location": "header",
+    "items": [
+      {
+        "label": "Fonctionnalites",
+        "url": "/fonctionnalites",
+        "order": 0
+      },
+      {
+        "label": "Blog",
+        "url": "/blog",
+        "order": 1
+      },
+      {
+        "label": "Changelog",
+        "url": "/changelog",
+        "order": 2
+      },
+      {
+        "label": "Documentation",
+        "url": "https://docs.artisancms.dev",
+        "order": 3,
+        "target": "_blank"
+      }
+    ]
+  },
+  {
+    "name": "Menu footer",
+    "location": "footer",
+    "items": [
+      {
+        "label": "Fonctionnalites",
+        "url": "/fonctionnalites",
+        "order": 0
+      },
+      {
+        "label": "Plugins",
+        "url": "/plugins",
+        "order": 1
+      },
+      {
+        "label": "Templates",
+        "url": "/templates",
+        "order": 2
+      },
+      {
+        "label": "Tarifs",
+        "url": "/tarifs",
+        "order": 3
+      },
+      {
+        "label": "Documentation",
+        "url": "https://docs.artisancms.dev",
+        "order": 4,
+        "target": "_blank"
+      },
+      {
+        "label": "Getting Started",
+        "url": "https://docs.artisancms.dev/getting-started",
+        "order": 5,
+        "target": "_blank"
+      },
+      {
+        "label": "API Reference",
+        "url": "https://docs.artisancms.dev/api",
+        "order": 6,
+        "target": "_blank"
+      },
+      {
+        "label": "Blog",
+        "url": "/blog",
+        "order": 7
+      },
+      {
+        "label": "Changelog",
+        "url": "/changelog",
+        "order": 8
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/artisancms/artisancms",
+        "order": 9,
+        "target": "_blank"
+      },
+      {
+        "label": "Mentions legales",
+        "url": "/mentions-legales",
+        "order": 10
+      },
+      {
+        "label": "Confidentialite",
+        "url": "/confidentialite",
+        "order": 11
+      }
+    ]
+  }
+]

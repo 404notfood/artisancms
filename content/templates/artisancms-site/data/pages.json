@@ -1,0 +1,1049 @@
+[
+  {
+    "id": "home",
+    "title": "Accueil",
+    "slug": "accueil",
+    "template": "full-width",
+    "is_homepage": true,
+    "status": "published",
+    "meta_title": "ArtisanCMS — Le CMS Laravel moderne, open source et extensible",
+    "meta_description": "ArtisanCMS est un CMS open source construit avec Laravel 12, React 19 et Inertia 2. Page builder visuel, systeme de themes et plugins, API REST complete.",
+    "content": {
+      "blocks": [
+        {
+          "type": "section",
+          "id": "acms-hero",
+          "props": {
+            "backgroundColor": "#0f172a",
+            "paddingTop": 140,
+            "paddingBottom": 120,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 900,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "text",
+              "id": "acms-hero-badge",
+              "props": {
+                "content": "<p style='text-align:center;'><span style='display:inline-flex;align-items:center;gap:0.375rem;padding:0.375rem 0.875rem;border-radius:9999px;font-size:0.8125rem;font-weight:500;background:rgba(59,130,246,0.1);color:#60a5fa;border:1px solid rgba(59,130,246,0.2);'>v1.0 — Open Source &amp; Gratuit</span></p>"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "acms-hero-sp1",
+              "props": { "height": 24 },
+              "children": []
+            },
+            {
+              "type": "heading",
+              "id": "acms-hero-title",
+              "props": {
+                "text": "Le CMS construit pour les artisans du web",
+                "level": 1,
+                "alignment": "center",
+                "color": "#ffffff"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "acms-hero-sp2",
+              "props": { "height": 20 },
+              "children": []
+            },
+            {
+              "type": "text",
+              "id": "acms-hero-desc",
+              "props": {
+                "content": "<p style='text-align:center;color:#94a3b8;font-size:1.2rem;line-height:1.8;max-width:640px;margin:0 auto;'>Laravel 12 + React 19 + Inertia 2. Un page builder visuel, un systeme de themes et plugins, des performances de pointe. Open source, extensible, moderne.</p>"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "acms-hero-sp3",
+              "props": { "height": 40 },
+              "children": []
+            },
+            {
+              "type": "grid",
+              "id": "acms-hero-ctas",
+              "props": { "columns": 2, "gap": 16, "maxWidth": 420, "centered": true },
+              "children": [
+                {
+                  "type": "button",
+                  "id": "acms-hero-cta1",
+                  "props": {
+                    "text": "Demarrer gratuitement",
+                    "url": "https://docs.artisancms.dev/getting-started",
+                    "style": "primary",
+                    "size": "lg",
+                    "alignment": "center"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "button",
+                  "id": "acms-hero-cta2",
+                  "props": {
+                    "text": "Voir sur GitHub",
+                    "url": "https://github.com/artisancms/artisancms",
+                    "style": "outline",
+                    "size": "lg",
+                    "alignment": "center"
+                  },
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+
+        {
+          "type": "section",
+          "id": "acms-built-with",
+          "props": {
+            "backgroundColor": "#f8fafc",
+            "paddingTop": 48,
+            "paddingBottom": 48,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 900,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "text",
+              "id": "acms-built-with-text",
+              "props": {
+                "content": "<p style='text-align:center;color:#94a3b8;font-size:0.875rem;font-weight:500;letter-spacing:0.05em;text-transform:uppercase;'>Construit avec les meilleures technologies</p>"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "acms-built-with-sp",
+              "props": { "height": 24 },
+              "children": []
+            },
+            {
+              "type": "grid",
+              "id": "acms-built-with-logos",
+              "props": { "columns": 4, "gap": 32 },
+              "children": [
+                {
+                  "type": "text",
+                  "id": "acms-tech-1",
+                  "props": { "content": "<p style='text-align:center;font-size:1.125rem;font-weight:600;color:#475569;'>Laravel 12</p>" },
+                  "children": []
+                },
+                {
+                  "type": "text",
+                  "id": "acms-tech-2",
+                  "props": { "content": "<p style='text-align:center;font-size:1.125rem;font-weight:600;color:#475569;'>React 19</p>" },
+                  "children": []
+                },
+                {
+                  "type": "text",
+                  "id": "acms-tech-3",
+                  "props": { "content": "<p style='text-align:center;font-size:1.125rem;font-weight:600;color:#475569;'>Inertia 2</p>" },
+                  "children": []
+                },
+                {
+                  "type": "text",
+                  "id": "acms-tech-4",
+                  "props": { "content": "<p style='text-align:center;font-size:1.125rem;font-weight:600;color:#475569;'>TailwindCSS</p>" },
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+
+        {
+          "type": "section",
+          "id": "acms-features",
+          "props": {
+            "backgroundColor": "#ffffff",
+            "paddingTop": 96,
+            "paddingBottom": 96,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 1100,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "text",
+              "id": "acms-feat-label",
+              "props": {
+                "content": "<p style='text-align:center;color:#3b82f6;font-size:0.8125rem;text-transform:uppercase;letter-spacing:0.15em;font-weight:600;'>Fonctionnalites</p>"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "acms-feat-sp1",
+              "props": { "height": 12 },
+              "children": []
+            },
+            {
+              "type": "heading",
+              "id": "acms-feat-title",
+              "props": {
+                "text": "Tout ce dont vous avez besoin",
+                "level": 2,
+                "alignment": "center",
+                "color": "#0f172a"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "acms-feat-sp2",
+              "props": { "height": 12 },
+              "children": []
+            },
+            {
+              "type": "text",
+              "id": "acms-feat-desc",
+              "props": {
+                "content": "<p style='text-align:center;color:#64748b;font-size:1.1rem;line-height:1.7;max-width:600px;margin:0 auto;'>Un CMS complet et moderne qui combine la puissance de Laravel avec une experience utilisateur fluide et intuitive.</p>"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "acms-feat-sp3",
+              "props": { "height": 48 },
+              "children": []
+            },
+            {
+              "type": "grid",
+              "id": "acms-feat-grid",
+              "props": { "columns": 3, "gap": 24 },
+              "children": [
+                {
+                  "type": "text",
+                  "id": "acms-feat-card1",
+                  "props": {
+                    "content": "<div style='padding:2rem;border:1px solid #e2e8f0;border-radius:0.75rem;height:100%;'><div style='width:48px;height:48px;border-radius:0.625rem;background:rgba(59,130,246,0.1);display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;font-size:1.5rem;'>&#x1F3A8;</div><h3 style='font-size:1.125rem;font-weight:600;color:#0f172a;margin-bottom:0.5rem;'>Page Builder Visuel</h3><p style='color:#64748b;font-size:0.9375rem;line-height:1.6;margin:0;'>Glissez-deposez vos blocs, previsualisation en temps reel, 30+ types de blocs disponibles.</p></div>"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "text",
+                  "id": "acms-feat-card2",
+                  "props": {
+                    "content": "<div style='padding:2rem;border:1px solid #e2e8f0;border-radius:0.75rem;height:100%;'><div style='width:48px;height:48px;border-radius:0.625rem;background:rgba(139,92,246,0.1);display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;font-size:1.5rem;'>&#x1F3AD;</div><h3 style='font-size:1.125rem;font-weight:600;color:#0f172a;margin-bottom:0.5rem;'>Themes & Templates</h3><p style='color:#64748b;font-size:0.9375rem;line-height:1.6;margin:0;'>Changez l'apparence en un clic. Personnalisez couleurs, polices, layouts. Creez vos propres themes.</p></div>"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "text",
+                  "id": "acms-feat-card3",
+                  "props": {
+                    "content": "<div style='padding:2rem;border:1px solid #e2e8f0;border-radius:0.75rem;height:100%;'><div style='width:48px;height:48px;border-radius:0.625rem;background:rgba(236,72,153,0.1);display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;font-size:1.5rem;'>&#x1F9E9;</div><h3 style='font-size:1.125rem;font-weight:600;color:#0f172a;margin-bottom:0.5rem;'>Systeme de Plugins</h3><p style='color:#64748b;font-size:0.9375rem;line-height:1.6;margin:0;'>Etendez les fonctionnalites avec des plugins. SEO, e-commerce, analytics, formulaires et plus encore.</p></div>"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "text",
+                  "id": "acms-feat-card4",
+                  "props": {
+                    "content": "<div style='padding:2rem;border:1px solid #e2e8f0;border-radius:0.75rem;height:100%;'><div style='width:48px;height:48px;border-radius:0.625rem;background:rgba(34,197,94,0.1);display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;font-size:1.5rem;'>&#x26A1;</div><h3 style='font-size:1.125rem;font-weight:600;color:#0f172a;margin-bottom:0.5rem;'>Performances</h3><p style='color:#64748b;font-size:0.9375rem;line-height:1.6;margin:0;'>Cache intelligent, lazy loading, optimisation des images. Objectif Lighthouse 90+ sur chaque page.</p></div>"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "text",
+                  "id": "acms-feat-card5",
+                  "props": {
+                    "content": "<div style='padding:2rem;border:1px solid #e2e8f0;border-radius:0.75rem;height:100%;'><div style='width:48px;height:48px;border-radius:0.625rem;background:rgba(245,158,11,0.1);display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;font-size:1.5rem;'>&#x1F512;</div><h3 style='font-size:1.125rem;font-weight:600;color:#0f172a;margin-bottom:0.5rem;'>Securite</h3><p style='color:#64748b;font-size:0.9375rem;line-height:1.6;margin:0;'>CSRF, XSS protection, rate limiting, Content Security Policy, permissions granulaires, audit log.</p></div>"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "text",
+                  "id": "acms-feat-card6",
+                  "props": {
+                    "content": "<div style='padding:2rem;border:1px solid #e2e8f0;border-radius:0.75rem;height:100%;'><div style='width:48px;height:48px;border-radius:0.625rem;background:rgba(99,102,241,0.1);display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;font-size:1.5rem;'>&#x1F4E1;</div><h3 style='font-size:1.125rem;font-weight:600;color:#0f172a;margin-bottom:0.5rem;'>API REST Complete</h3><p style='color:#64748b;font-size:0.9375rem;line-height:1.6;margin:0;'>API RESTful documentee pour toutes les ressources. Authentification Bearer, pagination, filtres avances.</p></div>"
+                  },
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+
+        {
+          "type": "section",
+          "id": "acms-comparison",
+          "props": {
+            "backgroundColor": "#f8fafc",
+            "paddingTop": 96,
+            "paddingBottom": 96,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 900,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "text",
+              "id": "acms-comp-label",
+              "props": {
+                "content": "<p style='text-align:center;color:#8b5cf6;font-size:0.8125rem;text-transform:uppercase;letter-spacing:0.15em;font-weight:600;'>Comparaison</p>"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "acms-comp-sp1",
+              "props": { "height": 12 },
+              "children": []
+            },
+            {
+              "type": "heading",
+              "id": "acms-comp-title",
+              "props": {
+                "text": "Pourquoi ArtisanCMS ?",
+                "level": 2,
+                "alignment": "center",
+                "color": "#0f172a"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "acms-comp-sp2",
+              "props": { "height": 12 },
+              "children": []
+            },
+            {
+              "type": "text",
+              "id": "acms-comp-desc",
+              "props": {
+                "content": "<p style='text-align:center;color:#64748b;font-size:1.1rem;line-height:1.7;max-width:600px;margin:0 auto;'>Une alternative moderne aux CMS traditionnels, pensee pour les developpeurs Laravel.</p>"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "acms-comp-sp3",
+              "props": { "height": 40 },
+              "children": []
+            },
+            {
+              "type": "table",
+              "id": "acms-comp-table",
+              "props": {
+                "headers": ["", "ArtisanCMS", "WordPress", "Statamic"],
+                "rows": [
+                  ["Stack", "Laravel + React + Inertia", "PHP monolithique", "Laravel + Antlers/Blade"],
+                  ["Page Builder", "Visuel drag & drop", "Gutenberg / Elementor", "Bard (texte riche)"],
+                  ["API", "REST native + webhooks", "REST + GraphQL (plugin)", "REST + GraphQL natif"],
+                  ["Themes", "React TSX + CSS variables", "PHP + CSS", "Blade/Antlers + CSS"],
+                  ["Plugins", "Service Providers Laravel", "Hooks PHP", "Addons Composer"],
+                  ["Licence", "Open source (MIT)", "Open source (GPL)", "Commercial (~259$)"],
+                  ["Performance", "Lighthouse 90+", "Variable", "Bonne"]
+                ],
+                "highlightColumn": 1
+              },
+              "children": []
+            }
+          ]
+        },
+
+        {
+          "type": "section",
+          "id": "acms-stats",
+          "props": {
+            "backgroundColor": "#0f172a",
+            "paddingTop": 80,
+            "paddingBottom": 80,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 1000,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "grid",
+              "id": "acms-stats-grid",
+              "props": { "columns": 4, "gap": 32 },
+              "children": [
+                {
+                  "type": "text",
+                  "id": "acms-stat-1",
+                  "props": {
+                    "content": "<div style='text-align:center;'><div style='font-size:2.5rem;font-weight:800;letter-spacing:-0.03em;background:linear-gradient(135deg,#3b82f6,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;'>30+</div><div style='font-size:0.875rem;color:#94a3b8;margin-top:0.25rem;'>Types de blocs</div></div>"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "text",
+                  "id": "acms-stat-2",
+                  "props": {
+                    "content": "<div style='text-align:center;'><div style='font-size:2.5rem;font-weight:800;letter-spacing:-0.03em;background:linear-gradient(135deg,#3b82f6,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;'>10+</div><div style='font-size:0.875rem;color:#94a3b8;margin-top:0.25rem;'>Themes inclus</div></div>"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "text",
+                  "id": "acms-stat-3",
+                  "props": {
+                    "content": "<div style='text-align:center;'><div style='font-size:2.5rem;font-weight:800;letter-spacing:-0.03em;background:linear-gradient(135deg,#3b82f6,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;'>90+</div><div style='font-size:0.875rem;color:#94a3b8;margin-top:0.25rem;'>Score Lighthouse</div></div>"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "text",
+                  "id": "acms-stat-4",
+                  "props": {
+                    "content": "<div style='text-align:center;'><div style='font-size:2.5rem;font-weight:800;letter-spacing:-0.03em;background:linear-gradient(135deg,#3b82f6,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;'>100%</div><div style='font-size:0.875rem;color:#94a3b8;margin-top:0.25rem;'>Open Source</div></div>"
+                  },
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+
+        {
+          "type": "section",
+          "id": "acms-cta",
+          "props": {
+            "backgroundColor": "#ffffff",
+            "paddingTop": 96,
+            "paddingBottom": 96,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 700,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "acms-cta-title",
+              "props": {
+                "text": "Pret a creer votre prochain site ?",
+                "level": 2,
+                "alignment": "center",
+                "color": "#0f172a"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "acms-cta-sp1",
+              "props": { "height": 16 },
+              "children": []
+            },
+            {
+              "type": "text",
+              "id": "acms-cta-desc",
+              "props": {
+                "content": "<p style='text-align:center;color:#64748b;font-size:1.1rem;line-height:1.7;'>Installez ArtisanCMS en quelques minutes. Gratuit, open source, et pret pour la production.</p>"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "acms-cta-sp2",
+              "props": { "height": 32 },
+              "children": []
+            },
+            {
+              "type": "text",
+              "id": "acms-cta-code",
+              "props": {
+                "content": "<pre style='background:#0f172a;color:#e2e8f0;padding:1.25rem 1.5rem;border-radius:0.75rem;font-family:JetBrains Mono,Fira Code,monospace;font-size:0.9375rem;text-align:left;border:1px solid #1e293b;overflow-x:auto;'><code>composer create-project artisancms/artisancms my-site\ncd my-site\nphp artisan cms:install</code></pre>"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "acms-cta-sp3",
+              "props": { "height": 32 },
+              "children": []
+            },
+            {
+              "type": "button",
+              "id": "acms-cta-btn",
+              "props": {
+                "text": "Lire la documentation",
+                "url": "https://docs.artisancms.dev/getting-started",
+                "style": "primary",
+                "size": "lg",
+                "alignment": "center"
+              },
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  },
+
+  {
+    "id": "features",
+    "title": "Fonctionnalites",
+    "slug": "fonctionnalites",
+    "template": "full-width",
+    "is_homepage": false,
+    "status": "published",
+    "meta_title": "Fonctionnalites — ArtisanCMS",
+    "meta_description": "Decouvrez toutes les fonctionnalites d'ArtisanCMS : page builder visuel, themes, plugins, API REST, SEO, securite et plus encore.",
+    "content": {
+      "blocks": [
+        {
+          "type": "section",
+          "id": "acms-feat-hero",
+          "props": {
+            "backgroundColor": "#0f172a",
+            "paddingTop": 120,
+            "paddingBottom": 80,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 800,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "acms-feat-hero-title",
+              "props": {
+                "text": "Des fonctionnalites pensees pour les developpeurs et les createurs",
+                "level": 1,
+                "alignment": "center",
+                "color": "#ffffff"
+              },
+              "children": []
+            },
+            {
+              "type": "spacer",
+              "id": "acms-feat-hero-sp",
+              "props": { "height": 16 },
+              "children": []
+            },
+            {
+              "type": "text",
+              "id": "acms-feat-hero-desc",
+              "props": {
+                "content": "<p style='text-align:center;color:#94a3b8;font-size:1.125rem;line-height:1.8;'>ArtisanCMS combine le meilleur de Laravel avec une interface utilisateur moderne pour offrir une experience de creation web sans compromis.</p>"
+              },
+              "children": []
+            }
+          ]
+        },
+        {
+          "type": "section",
+          "id": "acms-feat-builder",
+          "props": {
+            "backgroundColor": "#ffffff",
+            "paddingTop": 80,
+            "paddingBottom": 80,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 1000,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "acms-feat-builder-title",
+              "props": {
+                "text": "Page Builder Visuel",
+                "level": 2,
+                "alignment": "left",
+                "color": "#0f172a"
+              },
+              "children": []
+            },
+            {
+              "type": "text",
+              "id": "acms-feat-builder-desc",
+              "props": {
+                "content": "<p style='color:#64748b;font-size:1.0625rem;line-height:1.7;'>Construisez vos pages visuellement avec plus de 30 types de blocs : sections, grilles, texte, images, videos, accordeons, onglets, formulaires, et bien plus. Chaque bloc est personnalisable avec des proprietes avancees — espacement, couleurs, animations, responsive.</p>"
+              },
+              "children": []
+            }
+          ]
+        },
+        {
+          "type": "section",
+          "id": "acms-feat-themes",
+          "props": {
+            "backgroundColor": "#f8fafc",
+            "paddingTop": 80,
+            "paddingBottom": 80,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 1000,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "acms-feat-themes-title",
+              "props": {
+                "text": "Themes & Personnalisation",
+                "level": 2,
+                "alignment": "left",
+                "color": "#0f172a"
+              },
+              "children": []
+            },
+            {
+              "type": "text",
+              "id": "acms-feat-themes-desc",
+              "props": {
+                "content": "<p style='color:#64748b;font-size:1.0625rem;line-height:1.7;'>Changez l'identite visuelle de votre site en un clic. Les themes ArtisanCMS utilisent React TSX et des CSS variables pour une personnalisation infinie — couleurs, polices, header, footer, layouts. Creez vos propres themes avec le SDK de developpement.</p>"
+              },
+              "children": []
+            }
+          ]
+        },
+        {
+          "type": "section",
+          "id": "acms-feat-plugins",
+          "props": {
+            "backgroundColor": "#ffffff",
+            "paddingTop": 80,
+            "paddingBottom": 80,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 1000,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "acms-feat-plugins-title",
+              "props": {
+                "text": "Plugins & Extensibilite",
+                "level": 2,
+                "alignment": "left",
+                "color": "#0f172a"
+              },
+              "children": []
+            },
+            {
+              "type": "text",
+              "id": "acms-feat-plugins-desc",
+              "props": {
+                "content": "<p style='color:#64748b;font-size:1.0625rem;line-height:1.7;'>Les plugins utilisent les Service Providers Laravel natifs — pas de systeme proprietaire. Ajoutez du SEO avance, de l'e-commerce, des analytics, des formulaires de contact, ou creez vos propres plugins. Hooks, filtres, routes personnalisees, blocs custom — tout est possible.</p>"
+              },
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  },
+
+  {
+    "id": "changelog",
+    "title": "Changelog",
+    "slug": "changelog",
+    "template": "default",
+    "is_homepage": false,
+    "status": "published",
+    "meta_title": "Changelog — ArtisanCMS",
+    "meta_description": "Historique des versions d'ArtisanCMS. Decouvrez les nouvelles fonctionnalites, corrections et ameliorations a chaque release.",
+    "content": {
+      "blocks": [
+        {
+          "type": "section",
+          "id": "acms-cl-hero",
+          "props": {
+            "backgroundColor": "#0f172a",
+            "paddingTop": 100,
+            "paddingBottom": 60,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 800,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "acms-cl-title",
+              "props": {
+                "text": "Changelog",
+                "level": 1,
+                "alignment": "center",
+                "color": "#ffffff"
+              },
+              "children": []
+            },
+            {
+              "type": "text",
+              "id": "acms-cl-desc",
+              "props": {
+                "content": "<p style='text-align:center;color:#94a3b8;font-size:1.0625rem;'>Toutes les mises a jour, fonctionnalites et corrections d'ArtisanCMS.</p>"
+              },
+              "children": []
+            }
+          ]
+        },
+        {
+          "type": "section",
+          "id": "acms-cl-content",
+          "props": {
+            "backgroundColor": "#ffffff",
+            "paddingTop": 60,
+            "paddingBottom": 60,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 800,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "text",
+              "id": "acms-cl-v1",
+              "props": {
+                "content": "<div style='border-left:3px solid #3b82f6;padding-left:1.5rem;margin-bottom:3rem;'><div style='display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;'><span style='display:inline-flex;padding:0.25rem 0.75rem;border-radius:9999px;background:rgba(59,130,246,0.1);color:#3b82f6;font-size:0.875rem;font-weight:600;'>v1.0.0</span><span style='color:#94a3b8;font-size:0.875rem;'>Mars 2026</span></div><h3 style='font-size:1.25rem;font-weight:600;color:#0f172a;margin-bottom:0.75rem;'>Release initiale</h3><ul style='color:#64748b;line-height:1.8;padding-left:1.25rem;'><li>Page builder visuel avec 30+ types de blocs</li><li>Systeme de themes avec personnalisation complete</li><li>Architecture de plugins basee sur les Service Providers</li><li>API REST complete pour toutes les ressources</li><li>Gestion des medias avec optimisation automatique</li><li>SEO integre : meta tags, Open Graph, JSON-LD, sitemap</li><li>Systeme de menus drag & drop</li><li>Taxonomies personnalisables (categories, tags)</li><li>Multi-utilisateurs avec roles et permissions</li><li>Dashboard admin moderne avec statistiques</li></ul></div>"
+              },
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  },
+
+  {
+    "id": "about",
+    "title": "A propos",
+    "slug": "a-propos",
+    "template": "default",
+    "is_homepage": false,
+    "status": "published",
+    "meta_title": "A propos — ArtisanCMS",
+    "meta_description": "L'histoire d'ArtisanCMS : pourquoi nous avons cree un CMS moderne avec Laravel, React et Inertia.",
+    "content": {
+      "blocks": [
+        {
+          "type": "section",
+          "id": "acms-about-hero",
+          "props": {
+            "backgroundColor": "#0f172a",
+            "paddingTop": 100,
+            "paddingBottom": 60,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 800,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "acms-about-title",
+              "props": {
+                "text": "A propos d'ArtisanCMS",
+                "level": 1,
+                "alignment": "center",
+                "color": "#ffffff"
+              },
+              "children": []
+            }
+          ]
+        },
+        {
+          "type": "section",
+          "id": "acms-about-content",
+          "props": {
+            "backgroundColor": "#ffffff",
+            "paddingTop": 60,
+            "paddingBottom": 60,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 750,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "text",
+              "id": "acms-about-text",
+              "props": {
+                "content": "<p style='color:#334155;font-size:1.0625rem;line-height:1.8;'>ArtisanCMS est ne d'une frustration : les CMS existants ne repondent pas aux besoins des developpeurs modernes. WordPress est puissant mais vieillissant. Les CMS headless sont flexibles mais complexes. Les solutions commerciales sont couteuses.</p><p style='color:#334155;font-size:1.0625rem;line-height:1.8;'>Nous avons voulu creer un CMS qui combine le meilleur des deux mondes : la puissance de Laravel pour le backend, la fluidite de React pour le frontend, et la simplicite d'Inertia pour lier le tout — sans sacrifier la facilite d'utilisation pour les non-developpeurs.</p><p style='color:#334155;font-size:1.0625rem;line-height:1.8;'>ArtisanCMS est open source, gratuit, et construit par et pour la communaute Laravel. Chaque fonctionnalite est pensee pour etre extensible, performante et agreable a utiliser.</p>"
+              },
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  },
+
+  {
+    "id": "pricing",
+    "title": "Tarifs",
+    "slug": "tarifs",
+    "template": "full-width",
+    "is_homepage": false,
+    "status": "published",
+    "meta_title": "Tarifs — ArtisanCMS",
+    "meta_description": "ArtisanCMS est gratuit et open source. Decouvrez nos offres Community, Pro et Enterprise.",
+    "content": {
+      "blocks": [
+        {
+          "type": "section",
+          "id": "acms-pricing-hero",
+          "props": {
+            "backgroundColor": "#0f172a",
+            "paddingTop": 100,
+            "paddingBottom": 60,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 800,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "acms-pricing-title",
+              "props": {
+                "text": "Simple et transparent",
+                "level": 1,
+                "alignment": "center",
+                "color": "#ffffff"
+              },
+              "children": []
+            },
+            {
+              "type": "text",
+              "id": "acms-pricing-desc",
+              "props": {
+                "content": "<p style='text-align:center;color:#94a3b8;font-size:1.0625rem;'>ArtisanCMS est gratuit et open source. Pas de frais caches.</p>"
+              },
+              "children": []
+            }
+          ]
+        },
+        {
+          "type": "section",
+          "id": "acms-pricing-cards",
+          "props": {
+            "backgroundColor": "#ffffff",
+            "paddingTop": 80,
+            "paddingBottom": 80,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 1000,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "grid",
+              "id": "acms-pricing-grid",
+              "props": { "columns": 3, "gap": 24 },
+              "children": [
+                {
+                  "type": "text",
+                  "id": "acms-pricing-community",
+                  "props": {
+                    "content": "<div style='padding:2.5rem;border:1px solid #e2e8f0;border-radius:0.75rem;text-align:center;height:100%;'><h3 style='font-size:1.25rem;font-weight:600;color:#0f172a;margin-bottom:0.5rem;'>Community</h3><p style='color:#64748b;font-size:0.875rem;margin-bottom:1.5rem;'>Pour les projets personnels et petites equipes</p><div style='font-size:3rem;font-weight:800;color:#0f172a;margin-bottom:0.25rem;'>Gratuit</div><p style='color:#64748b;font-size:0.875rem;margin-bottom:2rem;'>pour toujours</p><ul style='text-align:left;color:#475569;line-height:2;padding-left:0;list-style:none;'><li>&#x2713; Toutes les fonctionnalites</li><li>&#x2713; Themes & plugins</li><li>&#x2713; Support communautaire</li><li>&#x2713; Mises a jour gratuites</li><li>&#x2713; Usage commercial autorise</li></ul></div>"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "text",
+                  "id": "acms-pricing-pro",
+                  "props": {
+                    "content": "<div style='padding:2.5rem;border:2px solid #3b82f6;border-radius:0.75rem;text-align:center;height:100%;position:relative;'><div style='position:absolute;top:-12px;left:50%;transform:translateX(-50%);padding:0.25rem 1rem;border-radius:9999px;background:linear-gradient(135deg,#3b82f6,#8b5cf6);color:white;font-size:0.75rem;font-weight:600;'>BIENTOT</div><h3 style='font-size:1.25rem;font-weight:600;color:#0f172a;margin-bottom:0.5rem;'>Pro</h3><p style='color:#64748b;font-size:0.875rem;margin-bottom:1.5rem;'>Pour les agences et freelances</p><div style='font-size:3rem;font-weight:800;color:#0f172a;margin-bottom:0.25rem;'>A venir</div><p style='color:#64748b;font-size:0.875rem;margin-bottom:2rem;'>&nbsp;</p><ul style='text-align:left;color:#475569;line-height:2;padding-left:0;list-style:none;'><li>&#x2713; Tout de Community</li><li>&#x2713; Support prioritaire</li><li>&#x2713; Themes Pro exclusifs</li><li>&#x2713; Marketplace priorite</li><li>&#x2713; White labeling</li></ul></div>"
+                  },
+                  "children": []
+                },
+                {
+                  "type": "text",
+                  "id": "acms-pricing-enterprise",
+                  "props": {
+                    "content": "<div style='padding:2.5rem;border:1px solid #e2e8f0;border-radius:0.75rem;text-align:center;height:100%;'><h3 style='font-size:1.25rem;font-weight:600;color:#0f172a;margin-bottom:0.5rem;'>Enterprise</h3><p style='color:#64748b;font-size:0.875rem;margin-bottom:1.5rem;'>Pour les grandes organisations</p><div style='font-size:3rem;font-weight:800;color:#0f172a;margin-bottom:0.25rem;'>Sur devis</div><p style='color:#64748b;font-size:0.875rem;margin-bottom:2rem;'>contactez-nous</p><ul style='text-align:left;color:#475569;line-height:2;padding-left:0;list-style:none;'><li>&#x2713; Tout de Pro</li><li>&#x2713; SLA garanti</li><li>&#x2713; Support dedie</li><li>&#x2713; Multi-site</li><li>&#x2713; Deploiement assiste</li></ul></div>"
+                  },
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+
+  {
+    "id": "legal",
+    "title": "Mentions legales",
+    "slug": "mentions-legales",
+    "template": "default",
+    "is_homepage": false,
+    "status": "published",
+    "meta_title": "Mentions legales — ArtisanCMS",
+    "meta_description": "Mentions legales du site artisancms.dev.",
+    "content": {
+      "blocks": [
+        {
+          "type": "section",
+          "id": "acms-legal-content",
+          "props": {
+            "backgroundColor": "#ffffff",
+            "paddingTop": 60,
+            "paddingBottom": 60,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 750,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "acms-legal-title",
+              "props": {
+                "text": "Mentions legales",
+                "level": 1,
+                "alignment": "left",
+                "color": "#0f172a"
+              },
+              "children": []
+            },
+            {
+              "type": "text",
+              "id": "acms-legal-text",
+              "props": {
+                "content": "<p style='color:#64748b;line-height:1.8;'>Cette page sera completee avec les informations legales necessaires avant la mise en production du site.</p><h2 style='color:#0f172a;margin-top:2rem;'>Editeur du site</h2><p style='color:#64748b;line-height:1.8;'>ArtisanCMS — Projet open source</p><h2 style='color:#0f172a;margin-top:2rem;'>Hebergement</h2><p style='color:#64748b;line-height:1.8;'>o2switch — 222 Boulevard Gustave Flaubert, 63000 Clermont-Ferrand, France</p>"
+              },
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  },
+
+  {
+    "id": "privacy",
+    "title": "Politique de confidentialite",
+    "slug": "confidentialite",
+    "template": "default",
+    "is_homepage": false,
+    "status": "published",
+    "meta_title": "Politique de confidentialite — ArtisanCMS",
+    "meta_description": "Politique de confidentialite du site artisancms.dev.",
+    "content": {
+      "blocks": [
+        {
+          "type": "section",
+          "id": "acms-privacy-content",
+          "props": {
+            "backgroundColor": "#ffffff",
+            "paddingTop": 60,
+            "paddingBottom": 60,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 750,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "acms-privacy-title",
+              "props": {
+                "text": "Politique de confidentialite",
+                "level": 1,
+                "alignment": "left",
+                "color": "#0f172a"
+              },
+              "children": []
+            },
+            {
+              "type": "text",
+              "id": "acms-privacy-text",
+              "props": {
+                "content": "<p style='color:#64748b;line-height:1.8;'>ArtisanCMS respecte votre vie privee. Cette politique sera completee avec les details complets avant la mise en production.</p><h2 style='color:#0f172a;margin-top:2rem;'>Donnees collectees</h2><p style='color:#64748b;line-height:1.8;'>Ce site utilise un minimum de cookies techniques necessaires au fonctionnement. Aucune donnee personnelle n'est partagee avec des tiers a des fins publicitaires.</p><h2 style='color:#0f172a;margin-top:2rem;'>Contact</h2><p style='color:#64748b;line-height:1.8;'>Pour toute question relative a la confidentialite, contactez-nous via GitHub.</p>"
+              },
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  },
+
+  {
+    "id": "marketplace",
+    "title": "Marketplace",
+    "slug": "marketplace",
+    "template": "full-width",
+    "is_homepage": false,
+    "status": "published",
+    "meta_title": "Marketplace — ArtisanCMS",
+    "meta_description": "Decouvrez les themes et plugins disponibles pour ArtisanCMS.",
+    "content": {
+      "blocks": [
+        {
+          "type": "section",
+          "id": "acms-mp-hero",
+          "props": {
+            "backgroundColor": "#0f172a",
+            "paddingTop": 100,
+            "paddingBottom": 60,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 800,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "heading",
+              "id": "acms-mp-title",
+              "props": {
+                "text": "Marketplace",
+                "level": 1,
+                "alignment": "center",
+                "color": "#ffffff"
+              },
+              "children": []
+            },
+            {
+              "type": "text",
+              "id": "acms-mp-desc",
+              "props": {
+                "content": "<p style='text-align:center;color:#94a3b8;font-size:1.0625rem;'>Themes et plugins pour etendre votre site ArtisanCMS.</p>"
+              },
+              "children": []
+            }
+          ]
+        },
+        {
+          "type": "section",
+          "id": "acms-mp-content",
+          "props": {
+            "backgroundColor": "#ffffff",
+            "paddingTop": 80,
+            "paddingBottom": 80,
+            "paddingLeft": 24,
+            "paddingRight": 24,
+            "maxWidth": 800,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "text",
+              "id": "acms-mp-coming",
+              "props": {
+                "content": "<div style='text-align:center;padding:4rem 2rem;'><div style='font-size:3rem;margin-bottom:1rem;'>&#x1F6A7;</div><h2 style='color:#0f172a;font-size:1.5rem;margin-bottom:0.75rem;'>Bientot disponible</h2><p style='color:#64748b;font-size:1.0625rem;line-height:1.7;max-width:500px;margin:0 auto;'>Le marketplace ArtisanCMS est en cours de developpement. En attendant, decouvrez les themes et plugins inclus dans le CMS.</p></div>"
+              },
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

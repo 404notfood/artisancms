@@ -1,0 +1,17 @@
+{
+  "general": {
+    "site_name": "ArtisanCMS",
+    "site_description": "Le CMS Laravel moderne, open source et extensible. Page builder visuel, themes, plugins — construit pour les artisans du web.",
+    "site_tagline": "Le CMS des artisans du web"
+  },
+  "seo": {
+    "meta_title_suffix": " | ArtisanCMS",
+    "default_meta_description": "ArtisanCMS est un CMS open source construit avec Laravel, React et Inertia. Page builder visuel, systeme de themes et plugins, performances optimisees.",
+    "robots_index": true
+  },
+  "social": {
+    "twitter": "",
+    "github": "https://github.com/artisancms/artisancms",
+    "discord": ""
+  }
+}
