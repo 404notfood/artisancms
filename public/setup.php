@@ -927,621 +927,556 @@ if ($vendorReady && $envReady && $buildReady && !file_exists(INSTALLED_FILE)) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ArtisanCMS - Preparation de votre site</title>
+    <title>ArtisanCMS - On construit votre site !</title>
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-            background: #f8fafc;
-            color: #1e293b;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            color: #e2e8f0;
             min-height: 100vh;
             display: flex;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            width: 280px;
-            background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            padding: 2rem 1.5rem;
-        }
-
-        @media (max-width: 768px) {
-            .sidebar { display: none; }
-            body { flex-direction: column; }
-        }
-
-        .sidebar-logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 2rem;
-        }
-
-        .sidebar-logo-icon {
-            width: 40px;
-            height: 40px;
-            background: #6366f1;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-
-        .sidebar-logo-text h1 {
-            font-size: 1.1rem;
-            font-weight: 700;
-        }
-
-        .sidebar-logo-text h1 span { color: #818cf8; }
-
-        .sidebar-logo-text p {
-            font-size: 0.75rem;
-            color: #64748b;
-        }
-
-        .sidebar-info {
-            margin-top: auto;
-            background: rgba(255,255,255,0.05);
-            border-radius: 8px;
-            padding: 12px 16px;
-        }
-
-        .sidebar-info p {
-            font-size: 0.75rem;
-            color: #64748b;
-        }
-
-        .sidebar-desc {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .sidebar-desc h2 {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-            color: #e2e8f0;
-        }
-
-        .sidebar-desc p {
-            font-size: 0.85rem;
-            color: #94a3b8;
-            line-height: 1.6;
-        }
-
-        /* Main content */
-        .main {
-            flex: 1;
-            display: flex;
             align-items: center;
             justify-content: center;
             padding: 2rem;
         }
 
-        .container {
-            background: #fff;
-            border-radius: 16px;
-            box-shadow: 0 1px 3px rgba(0,0,0,.08), 0 8px 30px rgba(0,0,0,.04);
-            border: 1px solid #e2e8f0;
-            max-width: 640px;
+        .card {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 24px;
+            max-width: 560px;
             width: 100%;
             overflow: hidden;
+            box-shadow: 0 0 80px rgba(99, 102, 241, 0.1);
         }
 
-        .container-header {
-            background: #f8fafc;
-            border-bottom: 1px solid #e2e8f0;
-            padding: 1.5rem 2rem;
-            display: flex;
-            align-items: center;
-            gap: 16px;
+        .card-header {
+            text-align: center;
+            padding: 2.5rem 2rem 1.5rem;
         }
 
-        .container-header-icon {
-            width: 48px;
-            height: 48px;
-            background: #e0e7ff;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.25rem;
+        .mascot {
+            font-size: 4rem;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+            animation: bounce 2s infinite;
         }
 
-        .container-header h2 {
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: #1e293b;
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
-        .container-header p {
-            font-size: 0.85rem;
-            color: #64748b;
-            margin-top: 2px;
+        .card-header h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.25rem;
         }
 
-        .container-body {
-            padding: 2rem;
+        .card-header p {
+            color: #94a3b8;
+            font-size: 0.9rem;
         }
 
-        /* Mobile header */
-        .mobile-header {
-            display: none;
-            background: #fff;
-            border-bottom: 1px solid #e2e8f0;
-            padding: 1rem 1.5rem;
-            align-items: center;
-            gap: 8px;
-        }
+        #subtitle { transition: opacity 0.3s; }
 
-        @media (max-width: 768px) {
-            .mobile-header { display: flex; }
-        }
+        .card-body { padding: 0 2rem 2rem; }
 
-        .mobile-header-icon {
-            width: 32px;
-            height: 32px;
-            background: #6366f1;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 0.85rem;
-            color: #fff;
-        }
-
-        .mobile-header span {
-            font-weight: 700;
-            color: #1e293b;
-        }
-
-        .mobile-header span em {
-            color: #6366f1;
-            font-style: normal;
-        }
-
-        /* Steps */
-        .steps {
-            list-style: none;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            overflow: hidden;
-            margin-bottom: 1.5rem;
-        }
+        .steps { list-style: none; margin-bottom: 1.5rem; }
 
         .step {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 14px 18px;
-            border-bottom: 1px solid #f1f5f9;
-            font-size: 0.9rem;
-            transition: background 0.3s;
+            gap: 14px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 6px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
         }
 
-        .step:last-child { border-bottom: none; }
-        .step.running { background: #eef2ff; }
-        .step.done { background: #f0fdf4; }
-        .step.error { background: #fef2f2; }
+        .step::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 12px;
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
 
-        .step-icon {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            flex-shrink: 0;
+        .step.running::before {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+            opacity: 1;
+        }
+
+        .step.done::before {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.05));
+            opacity: 1;
+        }
+
+        .step.error::before {
+            background: rgba(239, 68, 68, 0.1);
+            opacity: 1;
+        }
+
+        .step-emoji {
+            font-size: 1.4rem;
+            width: 36px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s;
+        }
+
+        .step.running .step-emoji { animation: wiggle 0.6s infinite; }
+        .step.done .step-emoji { transform: scale(1.1); }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-8deg); }
+            75% { transform: rotate(8deg); }
+        }
+
+        .step-text { flex: 1; position: relative; z-index: 1; }
+
+        .step-label {
             font-weight: 600;
-            transition: all 0.3s;
+            font-size: 0.88rem;
+            transition: color 0.3s;
         }
 
-        .step.pending .step-icon { background: #f1f5f9; color: #94a3b8; }
-        .step.running .step-icon { background: #6366f1; color: #fff; animation: pulse 1.5s infinite; }
-        .step.done .step-icon { background: #22c55e; color: #fff; }
-        .step.error .step-icon { background: #ef4444; color: #fff; }
+        .step.pending .step-label { color: #475569; }
+        .step.running .step-label { color: #a5b4fc; }
+        .step.done .step-label { color: #86efac; }
+        .step.error .step-label { color: #fca5a5; }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+        .step-quip {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-top: 1px;
+            font-style: italic;
         }
 
-        .step-label { flex: 1; font-weight: 500; }
-        .step.pending .step-label { color: #94a3b8; }
-        .step.running .step-label { color: #4338ca; }
-        .step.done .step-label { color: #15803d; }
-        .step.error .step-label { color: #dc2626; }
+        .step.running .step-quip { color: #818cf8; }
+        .step.done .step-quip { color: #4ade80; }
 
-        .step-detail {
-            font-size: 0.78rem;
-            color: #94a3b8;
+        .step-badge {
+            position: relative;
+            z-index: 1;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 20px;
         }
 
-        /* Progress */
+        .step.pending .step-badge { color: #475569; }
+        .step.running .step-badge { color: #818cf8; }
+        .step.done .step-badge { background: rgba(34, 197, 94, 0.2); color: #4ade80; }
+        .step.error .step-badge { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+
+        .progress-wrap { margin-bottom: 1.5rem; }
+
         .progress-bar {
             width: 100%;
-            height: 8px;
-            background: #e2e8f0;
-            border-radius: 4px;
+            height: 6px;
+            background: rgba(71, 85, 105, 0.5);
+            border-radius: 3px;
             overflow: hidden;
-            margin-bottom: 0.5rem;
+            margin-bottom: 8px;
         }
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #6366f1, #818cf8);
-            border-radius: 4px;
-            transition: width 0.5s ease;
+            background: linear-gradient(90deg, #6366f1, #a78bfa, #c084fc);
+            border-radius: 3px;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             width: 0%;
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
         }
 
-        .progress-text {
-            text-align: right;
-            font-size: 0.8rem;
-            color: #6366f1;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
         }
 
-        /* Buttons */
+        .progress-msg {
+            text-align: center;
+            font-size: 0.82rem;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
         .btn {
-            display: inline-flex;
+            display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            padding: 12px 28px;
-            border: none;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
+            gap: 10px;
             width: 100%;
+            padding: 14px 28px;
+            border: none;
+            border-radius: 14px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             text-decoration: none;
+            color: #fff;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #6366f1, #4f46e5);
-            color: #fff;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
         }
 
-        .btn-primary:hover { background: linear-gradient(135deg, #4f46e5, #4338ca); }
-        .btn-primary:disabled { background: #a5b4fc; cursor: not-allowed; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 30px rgba(99, 102, 241, 0.5); }
+        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
 
         .btn-success {
-            background: linear-gradient(135deg, #22c55e, #16a34a);
-            color: #fff;
+            background: linear-gradient(135deg, #22c55e, #10b981);
+            box-shadow: 0 4px 20px rgba(34, 197, 94, 0.4);
         }
 
-        .btn-success:hover { background: linear-gradient(135deg, #16a34a, #15803d); }
+        .btn-success:hover { transform: translateY(-2px); box-shadow: 0 6px 30px rgba(34, 197, 94, 0.5); }
 
-        /* Messages */
         .error-box {
-            background: #fef2f2;
-            border: 1px solid #fecaca;
-            border-radius: 8px;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 12px;
             padding: 14px 16px;
             margin-bottom: 1rem;
             font-size: 0.85rem;
-            color: #991b1b;
+            color: #fca5a5;
         }
 
         .error-box pre {
             margin-top: 8px;
-            background: #fff;
+            background: rgba(0,0,0,0.3);
             padding: 8px;
-            border-radius: 4px;
-            font-size: 0.75rem;
+            border-radius: 6px;
+            font-size: 0.7rem;
             overflow-x: auto;
             white-space: pre-wrap;
-            max-height: 150px;
+            max-height: 120px;
             overflow-y: auto;
+            color: #94a3b8;
         }
 
         .success-box {
-            background: #f0fdf4;
-            border: 1px solid #bbf7d0;
-            border-radius: 8px;
-            padding: 14px 16px;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 12px;
+            padding: 20px;
             margin-bottom: 1rem;
-            font-size: 0.9rem;
-            color: #166534;
             text-align: center;
-            font-weight: 500;
         }
 
-        .actions { display: flex; gap: 10px; }
+        .success-box .big { font-size: 3rem; display: block; margin-bottom: 8px; }
+        .success-box .msg { font-size: 1.05rem; font-weight: 700; color: #86efac; }
+        .success-box .sub { font-size: 0.85rem; color: #4ade80; margin-top: 6px; }
+
+        .footer {
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.7rem;
+            color: #475569;
+        }
     </style>
 </head>
 <body>
-    <!-- Mobile header -->
-    <div class="mobile-header">
-        <div class="mobile-header-icon">A</div>
-        <span>Artisan<em>CMS</em></span>
-    </div>
-
-    <!-- Sidebar -->
-    <aside class="sidebar">
-        <div class="sidebar-logo">
-            <div class="sidebar-logo-icon">A</div>
-            <div class="sidebar-logo-text">
-                <h1>Artisan<span>CMS</span></h1>
-                <p>Preparation</p>
-            </div>
+    <div class="card">
+        <div class="card-header">
+            <div class="mascot" id="mascot">&#127959;</div>
+            <h1>ArtisanCMS</h1>
+            <p id="subtitle">Nos artisans preparent votre nouveau chez-vous !</p>
         </div>
 
-        <div class="sidebar-desc">
-            <h2>Construction en cours !</h2>
-            <p>
-                Votre site web, c'est comme une maison : il faut d'abord couler les fondations, monter les murs et installer les fenetres.
-            </p>
-            <p style="margin-top: 1rem;">
-                Detendez-vous, nos ouvriers numeriques s'occupent de tout. Ensuite, vous pourrez choisir la deco !
-            </p>
-        </div>
+        <div class="card-body">
+            <ul class="steps" id="stepsList">
+                <li class="step pending" data-step="check">
+                    <div class="step-emoji">&#128269;</div>
+                    <div class="step-text">
+                        <div class="step-label">Inspection du terrain</div>
+                        <div class="step-quip">Le geometre sort son metre...</div>
+                    </div>
+                    <span class="step-badge"></span>
+                </li>
+                <li class="step pending" data-step="directories">
+                    <div class="step-emoji">&#128451;</div>
+                    <div class="step-text">
+                        <div class="step-label">Rangement du chantier</div>
+                        <div class="step-quip">Chaque chose a sa place !</div>
+                    </div>
+                    <span class="step-badge"></span>
+                </li>
+                <li class="step pending" data-step="composer">
+                    <div class="step-emoji">&#128666;</div>
+                    <div class="step-text">
+                        <div class="step-label">Livraison des materiaux</div>
+                        <div class="step-quip">Le camion fait bip bip bip en reculant...</div>
+                    </div>
+                    <span class="step-badge"></span>
+                </li>
+                <li class="step pending" data-step="env">
+                    <div class="step-emoji">&#128295;</div>
+                    <div class="step-text">
+                        <div class="step-label">Branchement de la plomberie</div>
+                        <div class="step-quip">Gauche c'est le chaud, droite le froid</div>
+                    </div>
+                    <span class="step-badge"></span>
+                </li>
+                <li class="step pending" data-step="key">
+                    <div class="step-emoji">&#128272;</div>
+                    <div class="step-text">
+                        <div class="step-label">Fabrication des cles</div>
+                        <div class="step-quip">Un double pour la belle-mere ? Non.</div>
+                    </div>
+                    <span class="step-badge"></span>
+                </li>
+                <li class="step pending" data-step="npm">
+                    <div class="step-emoji">&#127912;</div>
+                    <div class="step-text">
+                        <div class="step-label">Commande de la peinture</div>
+                        <div class="step-quip">37 nuances de blanc au choix</div>
+                    </div>
+                    <span class="step-badge"></span>
+                </li>
+                <li class="step pending" data-step="build">
+                    <div class="step-emoji">&#128296;</div>
+                    <div class="step-text">
+                        <div class="step-label">Montage des murs</div>
+                        <div class="step-quip">Attention, peinture fraiche !</div>
+                    </div>
+                    <span class="step-badge"></span>
+                </li>
+                <li class="step pending" data-step="permissions">
+                    <div class="step-emoji">&#129529;</div>
+                    <div class="step-text">
+                        <div class="step-label">Coup de balai final</div>
+                        <div class="step-quip">On enleve les derniers cartons</div>
+                    </div>
+                    <span class="step-badge"></span>
+                </li>
+            </ul>
 
-        <div class="sidebar-info">
-            <p>&copy; <?= date('Y') ?> ArtisanCMS</p>
-        </div>
-    </aside>
-
-    <!-- Main -->
-    <div class="main">
-        <div class="container">
-            <div class="container-header">
-                <div class="container-header-icon">&#9881;</div>
-                <div>
-                    <h2>Construction de votre site</h2>
-                    <p>Enfilez votre casque, on pose la premiere pierre !</p>
-                </div>
-            </div>
-
-            <div class="container-body">
-                <ul class="steps" id="stepsList">
-                    <li class="step pending" data-step="check">
-                        <div class="step-icon">&#128269;</div>
-                        <span class="step-label">Inspection du terrain</span>
-                        <span class="step-detail"></span>
-                    </li>
-                    <li class="step pending" data-step="directories">
-                        <div class="step-icon">&#128451;</div>
-                        <span class="step-label">On range le chantier</span>
-                        <span class="step-detail"></span>
-                    </li>
-                    <li class="step pending" data-step="composer">
-                        <div class="step-icon">&#128679;</div>
-                        <span class="step-label">Livraison des materiaux</span>
-                        <span class="step-detail"></span>
-                    </li>
-                    <li class="step pending" data-step="env">
-                        <div class="step-icon">&#128295;</div>
-                        <span class="step-label">Branchement de la plomberie</span>
-                        <span class="step-detail"></span>
-                    </li>
-                    <li class="step pending" data-step="key">
-                        <div class="step-icon">&#128272;</div>
-                        <span class="step-label">Fabrication des cles</span>
-                        <span class="step-detail"></span>
-                    </li>
-                    <li class="step pending" data-step="npm">
-                        <div class="step-icon">&#127912;</div>
-                        <span class="step-label">Commande de la peinture</span>
-                        <span class="step-detail"></span>
-                    </li>
-                    <li class="step pending" data-step="build">
-                        <div class="step-icon">&#128296;</div>
-                        <span class="step-label">Montage des murs et fenetres</span>
-                        <span class="step-detail"></span>
-                    </li>
-                    <li class="step pending" data-step="permissions">
-                        <div class="step-icon">&#127881;</div>
-                        <span class="step-label">Coup de balai final</span>
-                        <span class="step-detail"></span>
-                    </li>
-                </ul>
-
+            <div class="progress-wrap">
                 <div class="progress-bar">
                     <div class="progress-fill" id="progressFill"></div>
                 </div>
-                <div class="progress-text" id="progressText">0%</div>
-
-                <div id="errorBox" class="error-box" style="display:none;"></div>
-                <div id="successBox" class="success-box" style="display:none;"></div>
-
-                <div class="actions">
-                    <button class="btn btn-primary" id="startBtn" onclick="startSetup()">
-                        &#128679; Lancer la construction !
-                    </button>
-                    <a href="/install" class="btn btn-success" id="continueBtn" style="display:none;">
-                        &#127968; Emmenager dans mon site &rarr;
-                    </a>
-                </div>
+                <div class="progress-msg" id="progressMsg">Pret a construire ?</div>
             </div>
+
+            <div id="errorBox" class="error-box" style="display:none;"></div>
+            <div id="successBox" class="success-box" style="display:none;"></div>
+
+            <button class="btn btn-primary" id="startBtn" onclick="startSetup()">
+                &#128679; Lancer la construction !
+            </button>
+            <a href="/install" class="btn btn-success" id="continueBtn" style="display:none;">
+                &#127968; Emmenager dans mon site &rarr;
+            </a>
         </div>
+
+        <div class="footer">&copy; <?= date('Y') ?> ArtisanCMS &mdash; Construit avec amour</div>
     </div>
 
     <script>
         const steps = ['check', 'directories', 'composer', 'env', 'key', 'npm', 'build', 'permissions'];
-        let currentStep = 0;
 
-        function setStepStatus(stepName, status, detail) {
-            const el = document.querySelector(`[data-step="${stepName}"]`);
+        const runningQuips = {
+            check: 'Le geometre mesure, verifie, remesure...',
+            directories: 'On scotche des etiquettes partout...',
+            composer: 'Le camion decharge les briques et le ciment...',
+            env: 'Le plombier cherche sa cle de 12...',
+            key: 'Top secret, meme le serrurier ne sait pas...',
+            npm: 'Le decorateur hesite entre 37 nuances...',
+            build: 'Toc toc toc... les ouvriers sont au boulot !',
+            permissions: 'Aspirateur, serpilliere, et voila !'
+        };
+
+        const doneQuips = {
+            check: 'Terrain constructible, feu vert !',
+            directories: 'Marie Kondo serait fiere',
+            composer: 'Tout est decharge, rien de casse !',
+            env: 'Zero fuite, bravo le plombier !',
+            key: 'Coffre-fort ultra-securise',
+            npm: 'Les pots de peinture sont la !',
+            build: 'Solide comme un roc',
+            permissions: 'Nickel chrome !'
+        };
+
+        const progressMsgs = [
+            'On creuse les fondations...',
+            'Les murs commencent a monter...',
+            'On apercoit la forme de la maison !',
+            'Le toit est presque pose...',
+            'On installe la cuisine...',
+            'Les rideaux sont accroches...',
+            'On plante les fleurs dehors...',
+            'Le facteur trouve la boite aux lettres !',
+            'Les cles sont sur la porte !'
+        ];
+
+        const mascots = ['\u{1F3D7}', '\u{1F3D7}', '\u{1F69A}', '\u{1F527}', '\u{1F510}', '\u{1F3A8}', '\u{1F528}', '\u{1F9F9}', '\u{1F3E0}'];
+
+        function setStepStatus(stepName, status) {
+            const el = document.querySelector('[data-step="' + stepName + '"]');
             if (!el) return;
-            el.className = `step ${status}`;
-            if (detail) {
-                el.querySelector('.step-detail').textContent = detail;
+            el.className = 'step ' + status;
+            const badge = el.querySelector('.step-badge');
+            const quip = el.querySelector('.step-quip');
+
+            if (status === 'running') {
+                badge.textContent = '...';
+                quip.textContent = runningQuips[stepName] || '';
+            } else if (status === 'done') {
+                badge.innerHTML = '&#10003;';
+                quip.textContent = doneQuips[stepName] || 'OK !';
+            } else if (status === 'error') {
+                badge.innerHTML = '&#10005;';
             }
-            const iconEl = el.querySelector('.step-icon');
-            if (status === 'done') iconEl.innerHTML = '&#10003;';
-            else if (status === 'error') iconEl.innerHTML = '&#10005;';
-            else if (status === 'running') iconEl.innerHTML = '&#8987;';
         }
 
         function updateProgress(step, total) {
-            const pct = Math.round((step / total) * 100);
+            var pct = Math.round((step / total) * 100);
             document.getElementById('progressFill').style.width = pct + '%';
-            const msgs = ['On creuse les fondations...', 'Les murs montent !', 'On pose le toit...', 'On installe la cuisine...', 'Les cles sont sur la porte !'];
-            const msgIdx = pct >= 100 ? 4 : pct >= 75 ? 3 : pct >= 50 ? 2 : pct >= 25 ? 1 : 0;
-            document.getElementById('progressText').textContent = pct + '% — ' + msgs[msgIdx];
+            var idx = Math.min(Math.floor((step / total) * progressMsgs.length), progressMsgs.length - 1);
+            document.getElementById('progressMsg').textContent = pct + '% \u2014 ' + progressMsgs[idx];
+            document.getElementById('mascot').textContent = mascots[Math.min(step, mascots.length - 1)];
         }
 
-        // Steps that run asynchronously (long operations)
-        const asyncSteps = ['composer', 'npm', 'build'];
+        var asyncSteps = ['composer', 'npm', 'build'];
 
-        async function safeJsonParse(response) {
-            const text = await response.text();
-            if (!text || !text.trim()) {
-                return null; // Empty response — will trigger retry
-            }
-            try {
-                return JSON.parse(text);
-            } catch (e) {
-                return null;
-            }
-        }
-
-        async function runStep(stepName) {
-            const formData = new FormData();
-            formData.append('action', stepName);
-
-            const response = await fetch('setup.php', {
-                method: 'POST',
-                body: formData
+        function safeJsonParse(response) {
+            return response.text().then(function(text) {
+                if (!text || !text.trim()) return null;
+                try { return JSON.parse(text); } catch (e) { return null; }
             });
-
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-            }
-
-            const data = await safeJsonParse(response);
-            if (data === null) {
-                // Empty response — retry once after a short delay
-                await sleep(1000);
-                const retry = await fetch('setup.php', { method: 'POST', body: formData });
-                const retryData = await safeJsonParse(retry);
-                if (retryData === null) {
-                    throw new Error('Le serveur a renvoyé une réponse vide. Réessayez.');
-                }
-                return retryData;
-            }
-            return data;
         }
 
-        async function pollStatus(stepName) {
-            const formData = new FormData();
+        function runStep(stepName) {
+            var formData = new FormData();
+            formData.append('action', stepName);
+            return fetch('setup.php', { method: 'POST', body: formData }).then(function(response) {
+                if (!response.ok) throw new Error('HTTP ' + response.status + ': ' + response.statusText);
+                return safeJsonParse(response);
+            }).then(function(data) {
+                if (data === null) {
+                    return sleep(1000).then(function() {
+                        var formData2 = new FormData();
+                        formData2.append('action', stepName);
+                        return fetch('setup.php', { method: 'POST', body: formData2 });
+                    }).then(function(retry) {
+                        return safeJsonParse(retry);
+                    }).then(function(retryData) {
+                        if (retryData === null) throw new Error('Reponse vide du serveur. Reessayez.');
+                        return retryData;
+                    });
+                }
+                return data;
+            });
+        }
+
+        function pollStatus(stepName) {
+            var formData = new FormData();
             formData.append('action', 'status');
             formData.append('step', stepName);
-
-            const response = await fetch('setup.php', {
-                method: 'POST',
-                body: formData
+            return fetch('setup.php', { method: 'POST', body: formData }).then(function(response) {
+                if (!response.ok) throw new Error('HTTP ' + response.status);
+                return safeJsonParse(response);
+            }).then(function(data) {
+                if (data === null) return { success: true, status: 'running', message: 'Patience...' };
+                return data;
             });
-
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-            }
-
-            const data = await safeJsonParse(response);
-            if (data === null) {
-                // Empty response during polling — treat as still running
-                return { success: true, status: 'running', message: 'En attente de réponse...' };
-            }
-            return data;
         }
 
-        function sleep(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
-        }
+        function sleep(ms) { return new Promise(function(r) { setTimeout(r, ms); }); }
 
-        /**
-         * Run a step. For async steps (composer/npm/build), poll until done.
-         */
-        async function executeStep(stepName) {
-            const result = await runStep(stepName);
-
-            // If this is an async step and it's running, poll until done
-            if (asyncSteps.includes(stepName) && result.success && result.status === 'running') {
-                let pollResult = result;
-                while (pollResult.success && pollResult.status === 'running') {
-                    await sleep(3000); // Poll every 3 seconds
-                    pollResult = await pollStatus(stepName);
+        function executeStep(stepName) {
+            return runStep(stepName).then(function(result) {
+                if (asyncSteps.indexOf(stepName) !== -1 && result.success && result.status === 'running') {
+                    function poll() {
+                        return sleep(3000).then(function() {
+                            return pollStatus(stepName);
+                        }).then(function(pollResult) {
+                            if (pollResult.success && pollResult.status === 'running') return poll();
+                            return pollResult;
+                        });
+                    }
+                    return poll();
                 }
-                return pollResult;
-            }
-
-            return result;
+                return result;
+            });
         }
 
-        async function startSetup() {
-            const startBtn = document.getElementById('startBtn');
+        function startSetup() {
+            var startBtn = document.getElementById('startBtn');
             startBtn.disabled = true;
-            startBtn.textContent = 'Les ouvriers sont au travail...';
+            startBtn.innerHTML = '&#9203; Les artisans sont au boulot...';
+            document.getElementById('subtitle').textContent = 'Chut... concentration !';
             document.getElementById('errorBox').style.display = 'none';
 
-            for (let i = 0; i < steps.length; i++) {
-                const step = steps[i];
-                setStepStatus(step, 'running');
-                updateProgress(i, steps.length);
-
-                try {
-                    const result = await executeStep(step);
-
+            var chain = Promise.resolve();
+            steps.forEach(function(step, i) {
+                chain = chain.then(function() {
+                    setStepStatus(step, 'running');
+                    updateProgress(i, steps.length);
+                    return executeStep(step);
+                }).then(function(result) {
                     if (result.success) {
-                        setStepStatus(step, 'done', result.message);
+                        setStepStatus(step, 'done');
                     } else {
-                        setStepStatus(step, 'error', result.message);
-
-                        let errorHtml = `<strong>${escapeHtml(result.message)}</strong>`;
-                        if (result.output) {
-                            errorHtml += `<pre>${escapeHtml(result.output)}</pre>`;
-                        }
-
+                        setStepStatus(step, 'error');
+                        var errorHtml = '<strong>&#128167; ' + escapeHtml(result.message) + '</strong>';
+                        if (result.output) errorHtml += '<pre>' + escapeHtml(result.output) + '</pre>';
                         if (step === 'check' && result.checks) {
-                            const failed = result.checks.filter(c => !c.ok);
-                            if (failed.length > 0) {
-                                errorHtml += '<pre>' + failed.map(c => `\u2715 ${c.name}: ${c.value}`).join('\n') + '</pre>';
-                            }
+                            var failed = result.checks.filter(function(c) { return !c.ok; });
+                            if (failed.length) errorHtml += '<pre>' + failed.map(function(c) { return '\u2715 ' + c.name + ': ' + c.value; }).join('\n') + '</pre>';
                         }
-
                         document.getElementById('errorBox').innerHTML = errorHtml;
                         document.getElementById('errorBox').style.display = 'block';
-                        startBtn.textContent = 'Reessayer';
+                        startBtn.innerHTML = '&#128679; On rappelle les ouvriers !';
                         startBtn.disabled = false;
-                        startBtn.onclick = () => { location.reload(); };
-                        return;
+                        startBtn.onclick = function() { location.reload(); };
+                        document.getElementById('subtitle').textContent = 'Petit souci sur le chantier...';
+                        return Promise.reject('stop');
                     }
-                } catch (err) {
-                    setStepStatus(step, 'error', err.message);
-                    document.getElementById('errorBox').innerHTML = `<strong>Erreur réseau :</strong> ${escapeHtml(err.message)}`;
-                    document.getElementById('errorBox').style.display = 'block';
-                    startBtn.textContent = 'Réessayer';
-                    startBtn.disabled = false;
-                    startBtn.onclick = () => { location.reload(); };
-                    return;
-                }
-            }
+                });
+            });
 
-            updateProgress(steps.length, steps.length);
-            document.getElementById('successBox').textContent = '\u2713 La maison est construite ! Il ne reste plus qu\'a choisir la deco et accrocher votre nom sur la boite aux lettres.';
-            document.getElementById('successBox').style.display = 'block';
-            startBtn.style.display = 'none';
-            document.getElementById('continueBtn').style.display = 'flex';
+            chain.then(function() {
+                updateProgress(steps.length, steps.length);
+                document.getElementById('mascot').textContent = '\u{1F389}';
+                document.getElementById('mascot').style.fontSize = '5rem';
+                document.getElementById('subtitle').textContent = '';
+                document.getElementById('successBox').innerHTML = '<span class="big">&#127968;</span><div class="msg">Bienvenue chez vous !</div><div class="sub">La maison est prete. Il ne reste plus qu\'a choisir la deco et poser vos valises.</div>';
+                document.getElementById('successBox').style.display = 'block';
+                document.getElementById('progressMsg').textContent = '100% \u2014 Les cles sont sur la porte !';
+                startBtn.style.display = 'none';
+                document.getElementById('continueBtn').style.display = 'flex';
+            }).catch(function(e) {
+                if (e !== 'stop') {
+                    document.getElementById('errorBox').innerHTML = '<strong>&#128167; Erreur : ' + escapeHtml(e.message || String(e)) + '</strong>';
+                    document.getElementById('errorBox').style.display = 'block';
+                    startBtn.innerHTML = '&#128679; Reessayer';
+                    startBtn.disabled = false;
+                    startBtn.onclick = function() { location.reload(); };
+                }
+            });
         }
 
         function escapeHtml(str) {
-            const div = document.createElement('div');
-            div.textContent = str;
-            return div.innerHTML;
+            var d = document.createElement('div');
+            d.textContent = str;
+            return d.innerHTML;
         }
     </script>
 </body>
