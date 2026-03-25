@@ -11,10 +11,10 @@ interface InstallLayoutProps {
 const steps = [
     { number: 1, label: 'Bienvenue', icon: Globe },
     { number: 2, label: 'Licence', icon: ScrollText },
-    { number: 3, label: 'Compatibilité', icon: ShieldCheck },
-    { number: 4, label: 'Base de données', icon: Database },
-    { number: 5, label: 'Configuration', icon: Settings },
-    { number: 6, label: 'Installation', icon: Rocket },
+    { number: 3, label: 'Votre serveur', icon: ShieldCheck },
+    { number: 4, label: 'Connexion DB', icon: Database },
+    { number: 5, label: 'Votre site', icon: Settings },
+    { number: 6, label: 'C\'est parti !', icon: Rocket },
 ];
 
 export default function InstallLayout({

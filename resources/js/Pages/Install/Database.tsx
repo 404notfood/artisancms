@@ -104,10 +104,10 @@ export default function Database({ defaults }: Props) {
                         </div>
                         <div>
                             <h1 className="text-xl font-bold text-slate-900">
-                                Base de données
+                                Connexion a la base de donnees
                             </h1>
                             <p className="text-sm text-slate-500">
-                                Configurez votre connexion MySQL / MariaDB
+                                C'est la ou votre site stockera tout son contenu
                             </p>
                         </div>
                     </div>
@@ -119,7 +119,7 @@ export default function Database({ defaults }: Props) {
                     <div className="flex items-start gap-3 rounded-lg bg-blue-50 border border-blue-200 p-4">
                         <Info className="h-5 w-5 text-blue-600 shrink-0 mt-0.5" />
                         <p className="text-sm text-blue-700">
-                            Ces informations sont fournies par votre hébergeur. Si vous utilisez Laragon, WAMP ou XAMPP, les valeurs par défaut devraient fonctionner.
+                            Vous trouverez ces informations dans l'espace client de votre hebergeur (o2switch, OVH, LWS, Infomaniak...). En cas de doute, contactez leur support.
                         </p>
                     </div>
 

@@ -19,17 +19,17 @@ use Illuminate\Support\Str;
 class InstallerService
 {
     public const STEPS = [
-        'env'         => ['label' => 'Configuration .env', 'weight' => 5],
-        'migrations'  => ['label' => 'Création des tables', 'weight' => 20],
-        'roles'       => ['label' => 'Création des rôles', 'weight' => 5],
-        'admin'       => ['label' => 'Compte administrateur', 'weight' => 5],
-        'settings'    => ['label' => 'Paramètres du site', 'weight' => 10],
-        'theme'       => ['label' => 'Thème par défaut', 'weight' => 15],
-        'blocks'      => ['label' => 'Blocs core', 'weight' => 15],
-        'homepage'    => ['label' => "Page d'accueil", 'weight' => 10],
-        'site'        => ['label' => 'Site principal', 'weight' => 5],
-        'directories' => ['label' => 'Création des dossiers', 'weight' => 5],
-        'finalize'    => ['label' => 'Finalisation', 'weight' => 10],
+        'env'         => ['label' => 'Connexion au serveur', 'weight' => 5],
+        'migrations'  => ['label' => 'Preparation de la base de donnees', 'weight' => 20],
+        'roles'       => ['label' => 'Configuration des permissions', 'weight' => 5],
+        'admin'       => ['label' => 'Creation de votre compte', 'weight' => 5],
+        'settings'    => ['label' => 'Personnalisation du site', 'weight' => 10],
+        'theme'       => ['label' => 'Installation du design', 'weight' => 15],
+        'blocks'      => ['label' => 'Chargement des composants', 'weight' => 15],
+        'homepage'    => ['label' => "Creation de la page d'accueil", 'weight' => 10],
+        'site'        => ['label' => 'Mise en ligne', 'weight' => 5],
+        'directories' => ['label' => 'Organisation des fichiers', 'weight' => 5],
+        'finalize'    => ['label' => 'Touches finales', 'weight' => 10],
     ];
 
     public function runStep(string $stepName, array $config): array

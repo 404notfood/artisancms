@@ -67,10 +67,10 @@ export default function Requirements({ requirements, allPassed }: Props) {
                             </div>
                             <div>
                                 <h1 className="text-xl font-bold text-slate-900">
-                                    Compatibilité du système
+                                    Verification du serveur
                                 </h1>
                                 <p className="text-sm text-slate-500">
-                                    {passedCount}/{totalCount} vérifications réussies
+                                    {passedCount}/{totalCount} — {allPassed ? 'Tout est bon !' : 'Quelques points a regler'}
                                 </p>
                             </div>
                         </div>
@@ -100,10 +100,10 @@ export default function Requirements({ requirements, allPassed }: Props) {
                             </div>
                             <div>
                                 <p className="text-sm font-semibold text-green-800">
-                                    Votre serveur est compatible
+                                    Parfait, votre serveur est pret !
                                 </p>
                                 <p className="text-xs text-green-600">
-                                    Tous les prérequis obligatoires sont satisfaits.
+                                    Tout est en ordre pour installer ArtisanCMS.
                                 </p>
                             </div>
                         </div>
@@ -114,10 +114,10 @@ export default function Requirements({ requirements, allPassed }: Props) {
                             </div>
                             <div>
                                 <p className="text-sm font-semibold text-red-800">
-                                    Certains prérequis ne sont pas satisfaits
+                                    Votre serveur a besoin de petits ajustements
                                 </p>
                                 <p className="text-xs text-red-600">
-                                    Corrigez les éléments en rouge avant de continuer.
+                                    Contactez votre hebergeur pour activer les elements en rouge.
                                 </p>
                             </div>
                         </div>

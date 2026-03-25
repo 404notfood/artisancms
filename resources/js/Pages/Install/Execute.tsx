@@ -223,10 +223,10 @@ export default function Execute({ steps, siteName, siteUrl, adminEmail, version 
                             <PartyPopper className="h-10 w-10 text-white" />
                         </div>
                         <h1 className="text-3xl font-bold tracking-tight">
-                            Félicitations !
+                            Votre site est pret !
                         </h1>
                         <p className="mt-2 text-green-100 text-lg">
-                            ArtisanCMS a été installé avec succès.
+                            Tout est installe. Il ne reste plus qu'a creer quelque chose de genial.
                         </p>
                     </div>
 
@@ -292,10 +292,10 @@ export default function Execute({ steps, siteName, siteUrl, adminEmail, version 
                             <AlertTriangle className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
                             <div>
                                 <p className="text-sm font-semibold text-amber-800">
-                                    Notez votre mot de passe administrateur !
+                                    Pensez a noter votre mot de passe !
                                 </p>
                                 <p className="text-xs text-amber-600 mt-0.5">
-                                    Il ne sera plus affiché après cette page. Conservez-le en lieu sûr.
+                                    C'est le mot de passe que vous avez choisi a l'etape precedente. Gardez-le precieusement.
                                 </p>
                             </div>
                         </div>
@@ -304,17 +304,17 @@ export default function Execute({ steps, siteName, siteUrl, adminEmail, version 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
                             <a
                                 href="/admin"
-                                className="flex items-center gap-3 rounded-lg border-2 border-indigo-200 bg-indigo-50 px-4 py-4 transition-all hover:border-indigo-300 hover:bg-indigo-100 group"
+                                className="flex items-center gap-3 rounded-lg border-2 border-indigo-200 bg-indigo-50 px-4 py-4 transition-all hover:border-indigo-300 hover:bg-indigo-100 hover:shadow-md group"
                             >
                                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-500 text-white group-hover:bg-indigo-600 transition-colors">
                                     <LayoutDashboard className="h-5 w-5" />
                                 </div>
                                 <div>
                                     <p className="text-sm font-semibold text-indigo-700">
-                                        Tableau de bord
+                                        Commencer a creer
                                     </p>
                                     <p className="text-xs text-indigo-500">
-                                        Gérer votre site
+                                        Acceder a votre espace d'administration
                                     </p>
                                 </div>
                             </a>
@@ -322,17 +322,17 @@ export default function Execute({ steps, siteName, siteUrl, adminEmail, version 
                                 href="/"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex items-center gap-3 rounded-lg border-2 border-slate-200 bg-slate-50 px-4 py-4 transition-all hover:border-slate-300 hover:bg-slate-100 group"
+                                className="flex items-center gap-3 rounded-lg border-2 border-slate-200 bg-slate-50 px-4 py-4 transition-all hover:border-slate-300 hover:bg-slate-100 hover:shadow-md group"
                             >
                                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-500 text-white group-hover:bg-slate-600 transition-colors">
                                     <Globe className="h-5 w-5" />
                                 </div>
                                 <div>
                                     <p className="text-sm font-semibold text-slate-700">
-                                        Voir le site
+                                        Voir mon site
                                     </p>
                                     <p className="text-xs text-slate-500">
-                                        Visiter votre site
+                                        Decouvrir votre site en ligne
                                     </p>
                                 </div>
                             </a>
@@ -341,14 +341,14 @@ export default function Execute({ steps, siteName, siteUrl, adminEmail, version 
                         {/* Next steps */}
                         <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
                             <h3 className="text-sm font-semibold text-slate-700 mb-3">
-                                Prochaines étapes
+                                Et maintenant ?
                             </h3>
                             <ol className="space-y-2">
                                 {[
-                                    'Personnalisez votre thème dans Apparence',
-                                    'Créez vos premières pages avec le Page Builder',
-                                    'Configurez vos menus de navigation',
-                                    'Installez des plugins pour étendre les fonctionnalités',
+                                    'Choisissez les couleurs et le style de votre site',
+                                    'Creez vos premieres pages en glissant-deposant des blocs',
+                                    'Ajoutez un menu pour que vos visiteurs naviguent facilement',
+                                    'Explorez les plugins pour ajouter des super-pouvoirs a votre site',
                                 ].map((step, i) => (
                                     <li key={i} className="flex items-start gap-2 text-sm text-slate-600">
                                         <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-xs font-bold text-indigo-600 mt-0.5">
@@ -398,19 +398,19 @@ export default function Execute({ steps, siteName, siteUrl, adminEmail, version 
                             {overallError ? (
                                 <AlertTriangle className="h-6 w-6 text-red-600" />
                             ) : (
-                                <Rocket className="h-6 w-6 text-indigo-600" />
+                                <Rocket className="h-6 w-6 text-indigo-600 animate-bounce" />
                             )}
                         </div>
                         <div>
                             <h1 className="text-xl font-bold text-slate-900">
                                 {overallError
-                                    ? "Erreur d'installation"
-                                    : 'Installation en cours...'}
+                                    ? 'Oups, petit souci !'
+                                    : 'On prepare tout pour vous...'}
                             </h1>
                             <p className="text-sm text-slate-500">
                                 {overallError
-                                    ? 'Un problème est survenu.'
-                                    : 'Veuillez patienter, cela ne prendra que quelques instants.'}
+                                    ? 'Pas de panique, on va arranger ca.'
+                                    : 'Votre site sera pret dans quelques secondes.'}
                             </p>
                         </div>
                     </div>
@@ -421,7 +421,7 @@ export default function Execute({ steps, siteName, siteUrl, adminEmail, version 
                     <div className="mb-6">
                         <div className="flex items-center justify-between mb-2">
                             <span className="text-sm font-medium text-slate-700">
-                                Progression
+                                {progressValue < 30 ? 'Demarrage...' : progressValue < 70 ? 'Ca avance bien !' : progressValue < 100 ? 'Presque fini...' : 'Termine !'}
                             </span>
                             <span className="text-sm font-bold text-indigo-600">
                                 {progressValue}%
@@ -486,7 +486,7 @@ export default function Execute({ steps, siteName, siteUrl, adminEmail, version 
                                     {overallError}
                                 </p>
                                 <p className="text-xs text-red-600 mt-1">
-                                    Corrigez le problème puis réessayez.
+                                    Cliquez sur "Reessayer" ci-dessous. Si le probleme persiste, contactez votre hebergeur.
                                 </p>
                             </div>
                         </div>
@@ -501,7 +501,7 @@ export default function Execute({ steps, siteName, siteUrl, adminEmail, version 
                                 variant="outline"
                                 onClick={() => window.location.reload()}
                             >
-                                Réessayer l'installation
+                                Reessayer
                             </Button>
                         </div>
                     </div>

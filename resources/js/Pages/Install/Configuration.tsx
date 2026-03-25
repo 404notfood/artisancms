@@ -100,10 +100,10 @@ export default function Configuration({ defaults, timezones }: Props) {
                         </div>
                         <div>
                             <h1 className="text-xl font-bold text-slate-900">
-                                Configuration
+                                Derniere ligne droite !
                             </h1>
                             <p className="text-sm text-slate-500">
-                                Configurez votre site et créez votre compte administrateur
+                                Donnez un nom a votre site et creez votre compte
                             </p>
                         </div>
                     </div>

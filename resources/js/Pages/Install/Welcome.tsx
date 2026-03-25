@@ -40,7 +40,7 @@ export default function Welcome({ languages, currentLocale }: Props) {
                         Bienvenue sur ArtisanCMS
                     </h1>
                     <p className="mt-3 text-indigo-100 max-w-md mx-auto">
-                        L'assistant d'installation va configurer votre CMS en quelques étapes simples.
+                        Creez votre site web en quelques minutes, sans aucune connaissance technique.
                     </p>
                 </div>
 
@@ -49,16 +49,16 @@ export default function Welcome({ languages, currentLocale }: Props) {
                     {/* Features preview */}
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
                         <div className="text-center p-4 rounded-lg bg-slate-50 border border-slate-100">
-                            <div className="text-2xl font-bold text-indigo-600 mb-1">5 min</div>
-                            <p className="text-xs text-slate-500">Installation rapide</p>
+                            <div className="text-2xl font-bold text-indigo-600 mb-1">2 min</div>
+                            <p className="text-xs text-slate-500">Et votre site est en ligne</p>
                         </div>
                         <div className="text-center p-4 rounded-lg bg-slate-50 border border-slate-100">
-                            <div className="text-2xl font-bold text-indigo-600 mb-1">No-code</div>
-                            <p className="text-xs text-slate-500">Page builder intégré</p>
+                            <div className="text-2xl font-bold text-indigo-600 mb-1">Glisser</div>
+                            <p className="text-xs text-slate-500">Deposer, c'est tout</p>
                         </div>
                         <div className="text-center p-4 rounded-lg bg-slate-50 border border-slate-100">
-                            <div className="text-2xl font-bold text-indigo-600 mb-1">100%</div>
-                            <p className="text-xs text-slate-500">Personnalisable</p>
+                            <div className="text-2xl font-bold text-indigo-600 mb-1">Votre</div>
+                            <p className="text-xs text-slate-500">Style, vos couleurs</p>
                         </div>
                     </div>
 
