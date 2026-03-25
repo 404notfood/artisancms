@@ -328,8 +328,12 @@ if (file_exists(INSTALLED_FILE)) {
     exit;
 }
 
-// ─── Setup already completed? Redirect to install wizard ───
+// ─── Setup already completed? Rename self and redirect to install wizard ───
 if (file_exists(BASE_PATH . '/storage/.setup_done')) {
+    // Rename setup.php so it no longer intercepts requests
+    $self = __FILE__;
+    $renamed = dirname($self) . '/setup.php.done';
+    @rename($self, $renamed);
     header('Location: /install');
     exit;
 }
@@ -502,6 +506,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                 break;
             case 'permissions':
                 $result = fixPermissions();
+                break;
+            case 'selfremove':
+                // Rename setup.php so it stops intercepting requests
+                $self = __FILE__;
+                $renamed = dirname($self) . '/setup.php.done';
+                $ok = @rename($self, $renamed);
+                $result = ['success' => $ok, 'message' => $ok ? 'setup.php desactive.' : 'Impossible de renommer setup.php'];
                 break;
             case 'status':
                 // Poll async task status
@@ -925,6 +936,10 @@ $envReady = file_exists(ENV_FILE);
 $buildReady = file_exists(BASE_PATH . '/public/build/.vite/manifest.json') || file_exists(BASE_PATH . '/public/build/manifest.json');
 
 if ($vendorReady && $envReady && $buildReady && !file_exists(INSTALLED_FILE)) {
+    // Rename setup.php so it no longer intercepts requests
+    $self = __FILE__;
+    $renamed = dirname($self) . '/setup.php.done';
+    @rename($self, $renamed);
     header('Location: /install');
     exit;
 }
@@ -1359,9 +1374,9 @@ if ($vendorReady && $envReady && $buildReady && !file_exists(INSTALLED_FILE)) {
             <button class="btn btn-primary" id="startBtn" onclick="startSetup()">
                 &#128679; Lancer la construction !
             </button>
-            <a href="/install" class="btn btn-success" id="continueBtn" style="display:none;">
+            <button class="btn btn-success" id="continueBtn" style="display:none;" onclick="goToInstall()">
                 &#127968; Emmenager dans mon site &rarr;
-            </a>
+            </button>
         </div>
 
         <div class="footer">&copy; <?= date('Y') ?> ArtisanCMS &mdash; Construit avec amour</div>
@@ -1556,6 +1571,18 @@ if ($vendorReady && $envReady && $buildReady && !file_exists(INSTALLED_FILE)) {
             var d = document.createElement('div');
             d.textContent = str;
             return d.innerHTML;
+        }
+
+        function goToInstall() {
+            var btn = document.getElementById('continueBtn');
+            btn.disabled = true;
+            btn.textContent = 'Ouverture de la porte...';
+            // Ask setup.php to rename itself, then redirect to /install
+            var formData = new FormData();
+            formData.append('action', 'selfremove');
+            fetch('setup.php', { method: 'POST', body: formData }).finally(function() {
+                window.location.href = '/install';
+            });
         }
     </script>
 </body>
