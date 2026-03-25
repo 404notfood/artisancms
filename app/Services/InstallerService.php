@@ -202,6 +202,12 @@ class InstallerService
         } catch (\Throwable) {
             // Link may already exist
         }
+
+        // Clean up setup marker
+        $setupDone = storage_path('.setup_done');
+        if (file_exists($setupDone)) {
+            @unlink($setupDone);
+        }
     }
 
     public function install(array $config): array

@@ -328,6 +328,12 @@ if (file_exists(INSTALLED_FILE)) {
     exit;
 }
 
+// ─── Setup already completed? Redirect to install wizard ───
+if (file_exists(BASE_PATH . '/storage/.setup_done')) {
+    header('Location: /install');
+    exit;
+}
+
 // ─── Synchronous command execution ───
 
 /**
@@ -907,6 +913,9 @@ function fixPermissions(): array {
         chmod(ENV_FILE, 0664);
     }
 
+    // Mark setup as completed so setup.php redirects to /install on next visit
+    @file_put_contents(BASE_PATH . '/storage/.setup_done', date('Y-m-d H:i:s'));
+
     return ['success' => true, 'message' => 'Permissions configurées.'];
 }
 
@@ -931,10 +940,80 @@ if ($vendorReady && $envReady && $buildReady && !file_exists(INSTALLED_FILE)) {
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+        :root {
+            --bg: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --card-border: rgba(99, 102, 241, 0.15);
+            --card-shadow: 0 0 80px rgba(99, 102, 241, 0.08);
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --text-subtle: #94a3b8;
+            --step-pending-label: #94a3b8;
+            --step-running-label: #6366f1;
+            --step-running-quip: #6366f1;
+            --step-running-bg: rgba(99, 102, 241, 0.08);
+            --step-done-label: #16a34a;
+            --step-done-quip: #16a34a;
+            --step-done-bg: rgba(34, 197, 94, 0.08);
+            --step-done-badge-bg: rgba(34, 197, 94, 0.15);
+            --step-done-badge: #16a34a;
+            --step-error-label: #dc2626;
+            --step-error-bg: rgba(239, 68, 68, 0.08);
+            --step-error-badge-bg: rgba(239, 68, 68, 0.15);
+            --step-error-badge: #dc2626;
+            --progress-bg: rgba(148, 163, 184, 0.2);
+            --error-bg: rgba(239, 68, 68, 0.08);
+            --error-border: rgba(239, 68, 68, 0.2);
+            --error-text: #dc2626;
+            --error-pre-bg: rgba(0,0,0,0.04);
+            --error-pre-text: #64748b;
+            --success-bg: rgba(34, 197, 94, 0.08);
+            --success-border: rgba(34, 197, 94, 0.2);
+            --success-msg: #16a34a;
+            --success-sub: #22c55e;
+            --footer: #94a3b8;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+                --card-bg: rgba(30, 41, 59, 0.8);
+                --card-border: rgba(99, 102, 241, 0.2);
+                --card-shadow: 0 0 80px rgba(99, 102, 241, 0.1);
+                --text: #e2e8f0;
+                --text-muted: #94a3b8;
+                --text-subtle: #64748b;
+                --step-pending-label: #475569;
+                --step-running-label: #a5b4fc;
+                --step-running-quip: #818cf8;
+                --step-running-bg: rgba(99, 102, 241, 0.1);
+                --step-done-label: #86efac;
+                --step-done-quip: #4ade80;
+                --step-done-bg: rgba(34, 197, 94, 0.1);
+                --step-done-badge-bg: rgba(34, 197, 94, 0.2);
+                --step-done-badge: #4ade80;
+                --step-error-label: #fca5a5;
+                --step-error-bg: rgba(239, 68, 68, 0.1);
+                --step-error-badge-bg: rgba(239, 68, 68, 0.2);
+                --step-error-badge: #f87171;
+                --progress-bg: rgba(71, 85, 105, 0.5);
+                --error-bg: rgba(239, 68, 68, 0.1);
+                --error-border: rgba(239, 68, 68, 0.3);
+                --error-text: #fca5a5;
+                --error-pre-bg: rgba(0,0,0,0.3);
+                --error-pre-text: #94a3b8;
+                --success-bg: rgba(34, 197, 94, 0.1);
+                --success-border: rgba(34, 197, 94, 0.3);
+                --success-msg: #86efac;
+                --success-sub: #4ade80;
+                --footer: #475569;
+            }
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
-            color: #e2e8f0;
+            background: var(--bg);
+            color: var(--text);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -943,14 +1022,14 @@ if ($vendorReady && $envReady && $buildReady && !file_exists(INSTALLED_FILE)) {
         }
 
         .card {
-            background: rgba(30, 41, 59, 0.8);
+            background: var(--card-bg);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(99, 102, 241, 0.2);
+            border: 1px solid var(--card-border);
             border-radius: 24px;
             max-width: 560px;
             width: 100%;
             overflow: hidden;
-            box-shadow: 0 0 80px rgba(99, 102, 241, 0.1);
+            box-shadow: var(--card-shadow);
         }
 
         .card-header {
@@ -981,7 +1060,7 @@ if ($vendorReady && $envReady && $buildReady && !file_exists(INSTALLED_FILE)) {
         }
 
         .card-header p {
-            color: #94a3b8;
+            color: var(--text-muted);
             font-size: 0.9rem;
         }
 
@@ -1013,17 +1092,17 @@ if ($vendorReady && $envReady && $buildReady && !file_exists(INSTALLED_FILE)) {
         }
 
         .step.running::before {
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+            background: var(--step-running-bg);
             opacity: 1;
         }
 
         .step.done::before {
-            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.05));
+            background: var(--step-done-bg);
             opacity: 1;
         }
 
         .step.error::before {
-            background: rgba(239, 68, 68, 0.1);
+            background: var(--step-error-bg);
             opacity: 1;
         }
 
@@ -1053,20 +1132,20 @@ if ($vendorReady && $envReady && $buildReady && !file_exists(INSTALLED_FILE)) {
             transition: color 0.3s;
         }
 
-        .step.pending .step-label { color: #475569; }
-        .step.running .step-label { color: #a5b4fc; }
-        .step.done .step-label { color: #86efac; }
-        .step.error .step-label { color: #fca5a5; }
+        .step.pending .step-label { color: var(--step-pending-label); }
+        .step.running .step-label { color: var(--step-running-label); }
+        .step.done .step-label { color: var(--step-done-label); }
+        .step.error .step-label { color: var(--step-error-label); }
 
         .step-quip {
             font-size: 0.75rem;
-            color: #64748b;
+            color: var(--text-subtle);
             margin-top: 1px;
             font-style: italic;
         }
 
-        .step.running .step-quip { color: #818cf8; }
-        .step.done .step-quip { color: #4ade80; }
+        .step.running .step-quip { color: var(--step-running-quip); }
+        .step.done .step-quip { color: var(--step-done-quip); }
 
         .step-badge {
             position: relative;
@@ -1077,17 +1156,17 @@ if ($vendorReady && $envReady && $buildReady && !file_exists(INSTALLED_FILE)) {
             border-radius: 20px;
         }
 
-        .step.pending .step-badge { color: #475569; }
-        .step.running .step-badge { color: #818cf8; }
-        .step.done .step-badge { background: rgba(34, 197, 94, 0.2); color: #4ade80; }
-        .step.error .step-badge { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+        .step.pending .step-badge { color: var(--step-pending-label); }
+        .step.running .step-badge { color: var(--step-running-label); }
+        .step.done .step-badge { background: var(--step-done-badge-bg); color: var(--step-done-badge); }
+        .step.error .step-badge { background: var(--step-error-badge-bg); color: var(--step-error-badge); }
 
         .progress-wrap { margin-bottom: 1.5rem; }
 
         .progress-bar {
             width: 100%;
             height: 6px;
-            background: rgba(71, 85, 105, 0.5);
+            background: var(--progress-bg);
             border-radius: 3px;
             overflow: hidden;
             margin-bottom: 8px;
@@ -1111,7 +1190,7 @@ if ($vendorReady && $envReady && $buildReady && !file_exists(INSTALLED_FILE)) {
         .progress-msg {
             text-align: center;
             font-size: 0.82rem;
-            color: #94a3b8;
+            color: var(--text-muted);
             font-weight: 500;
         }
 
@@ -1148,18 +1227,18 @@ if ($vendorReady && $envReady && $buildReady && !file_exists(INSTALLED_FILE)) {
         .btn-success:hover { transform: translateY(-2px); box-shadow: 0 6px 30px rgba(34, 197, 94, 0.5); }
 
         .error-box {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.3);
+            background: var(--error-bg);
+            border: 1px solid var(--error-border);
             border-radius: 12px;
             padding: 14px 16px;
             margin-bottom: 1rem;
             font-size: 0.85rem;
-            color: #fca5a5;
+            color: var(--error-text);
         }
 
         .error-box pre {
             margin-top: 8px;
-            background: rgba(0,0,0,0.3);
+            background: var(--error-pre-bg);
             padding: 8px;
             border-radius: 6px;
             font-size: 0.7rem;
@@ -1167,12 +1246,12 @@ if ($vendorReady && $envReady && $buildReady && !file_exists(INSTALLED_FILE)) {
             white-space: pre-wrap;
             max-height: 120px;
             overflow-y: auto;
-            color: #94a3b8;
+            color: var(--error-pre-text);
         }
 
         .success-box {
-            background: rgba(34, 197, 94, 0.1);
-            border: 1px solid rgba(34, 197, 94, 0.3);
+            background: var(--success-bg);
+            border: 1px solid var(--success-border);
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 1rem;
@@ -1180,14 +1259,14 @@ if ($vendorReady && $envReady && $buildReady && !file_exists(INSTALLED_FILE)) {
         }
 
         .success-box .big { font-size: 3rem; display: block; margin-bottom: 8px; }
-        .success-box .msg { font-size: 1.05rem; font-weight: 700; color: #86efac; }
-        .success-box .sub { font-size: 0.85rem; color: #4ade80; margin-top: 6px; }
+        .success-box .msg { font-size: 1.05rem; font-weight: 700; color: var(--success-msg); }
+        .success-box .sub { font-size: 0.85rem; color: var(--success-sub); margin-top: 6px; }
 
         .footer {
             text-align: center;
             padding: 1rem;
             font-size: 0.7rem;
-            color: #475569;
+            color: var(--footer);
         }
     </style>
 </head>
