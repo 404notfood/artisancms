@@ -54,7 +54,7 @@ Route::prefix($adminPrefix)
 Route::get('/dashboard', function () {
     $prefix = config('cms.admin.resolved_prefix', 'admin');
     return redirect("/{$prefix}");
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     $prefix = config('cms.admin.resolved_prefix', 'admin');
