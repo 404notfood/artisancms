@@ -124,12 +124,12 @@ Construit avec **Laravel 13 + React 19 + Inertia 2** pour une experience no-code
 
 ```bash
 # Cloner le projet
-git clone https://github.com/votre-repo/artisan-cms.git
-cd artisan-cms
+git clone https://github.com/404notfood/artisancms.git artisan-cms
 
-# Installer les dependances
+# Installer les dependances 
 composer install
 npm install
+# ou via le wizard web : http://localhost/public/setup.php ou http://localhost/setup.php si la config root document est sur le public
 
 # Configurer l'environnement
 cp .env.example .env
@@ -290,4 +290,4 @@ Les contributions sont les bienvenues. Consultez les fichiers `blueprints/` pour
 3. Committez vos changements (`git commit -m 'Ajout de ma feature'`)
 4. Pushez (`git push origin feature/ma-feature`)
 5. Ouvrez une Pull Request
-"# articms" 
+"# articms"
