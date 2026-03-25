@@ -173,4 +173,4 @@ Route::get('/members/{user}', [MemberController::class, 'show'])->name('members.
 $escapedAdminPrefix = preg_quote($adminPrefix, '/');
 Route::get('/{slug}', [FrontController::class, 'show'])
     ->name('front.page')
-    ->where('slug', "(?!{$escapedAdminPrefix}(?:/|$))(?!api(?:/|$))(?!shop(?:/|$))(?!cart(?:/|$))(?!checkout(?:/|$))(?!payment(?:/|$))(?!account(?:/|$))(?!wishlist(?:/|$))(?!members(?:/|$))[a-zA-Z0-9\\-\\/]+");
+    ->where('slug', "(?!{$escapedAdminPrefix}(?:/|$))(?!api(?:/|$))(?!install(?:/|$))(?!login$)(?!register$)(?!forgot-password$)(?!reset-password(?:/|$))(?!password(?:/|$))(?!blog(?:/|$))(?!feed(?:/|$))(?!search$)(?!newsletter(?:/|$))(?!comments$)(?!preview(?:/|$))(?!maintenance$)(?!members(?:/|$))(?!shop(?:/|$))(?!cart(?:/|$))(?!checkout(?:/|$))(?!payment(?:/|$))(?!account(?:/|$))(?!wishlist(?:/|$))(?!up$)(?!dashboard$)(?!profile$)(?!_debugbar(?:/|$))(?!sanctum(?:/|$))[a-zA-Z0-9\\-\\/]+");
