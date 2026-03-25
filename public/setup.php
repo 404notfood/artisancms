@@ -328,12 +328,9 @@ if (file_exists(INSTALLED_FILE)) {
     exit;
 }
 
-// ─── Setup already completed? Rename self and redirect to install wizard ───
+// ─── Setup already completed? Replace self with redirect and go to install ───
 if (file_exists(BASE_PATH . '/storage/.setup_done')) {
-    // Rename setup.php so it no longer intercepts requests
-    $self = __FILE__;
-    $renamed = dirname($self) . '/setup.php.done';
-    @rename($self, $renamed);
+    @file_put_contents(__FILE__, "<?php\nheader('Location: /install');\nexit;\n");
     header('Location: /install');
     exit;
 }
@@ -508,11 +505,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                 $result = fixPermissions();
                 break;
             case 'selfremove':
-                // Rename setup.php so it stops intercepting requests
+                // Replace setup.php content with a simple redirect to /install
                 $self = __FILE__;
-                $renamed = dirname($self) . '/setup.php.done';
-                $ok = @rename($self, $renamed);
-                $result = ['success' => $ok, 'message' => $ok ? 'setup.php desactive.' : 'Impossible de renommer setup.php'];
+                $redirect = "<?php\nheader('Location: /install');\nexit;\n";
+                $ok = @file_put_contents($self, $redirect);
+                $result = ['success' => (bool)$ok, 'message' => $ok ? 'setup.php desactive.' : 'Impossible de modifier setup.php'];
                 break;
             case 'status':
                 // Poll async task status
@@ -936,10 +933,7 @@ $envReady = file_exists(ENV_FILE);
 $buildReady = file_exists(BASE_PATH . '/public/build/.vite/manifest.json') || file_exists(BASE_PATH . '/public/build/manifest.json');
 
 if ($vendorReady && $envReady && $buildReady && !file_exists(INSTALLED_FILE)) {
-    // Rename setup.php so it no longer intercepts requests
-    $self = __FILE__;
-    $renamed = dirname($self) . '/setup.php.done';
-    @rename($self, $renamed);
+    @file_put_contents(__FILE__, "<?php\nheader('Location: /install');\nexit;\n");
     header('Location: /install');
     exit;
 }
