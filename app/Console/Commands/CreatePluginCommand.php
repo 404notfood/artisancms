@@ -61,7 +61,7 @@ class CreatePluginCommand extends Command
             'license' => 'MIT',
             'requires' => [
                 'cms' => '>=1.0.0',
-                'php' => '>=8.2',
+                'php' => '>=8.3',
             ],
             'providers' => [
                 "{$namespace}\\{$pascalName}ServiceProvider",

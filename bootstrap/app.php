@@ -35,7 +35,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'cms.content.lock' => \App\Http\Middleware\CheckContentLock::class,
         ]);
 
-        $middleware->validateCsrfTokens(except: [
+        $middleware->preventRequestForgery(except: [
             'install/execute',
             'install/database/test',
         ]);

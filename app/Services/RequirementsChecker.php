@@ -11,11 +11,11 @@ class RequirementsChecker
         $requirements = [];
 
         $requirements['php_version'] = [
-            'label' => 'PHP >= 8.2',
+            'label' => 'PHP >= 8.3',
             'required' => true,
-            'passed' => PHP_VERSION_ID >= 80200,
+            'passed' => PHP_VERSION_ID >= 80300,
             'current' => PHP_VERSION,
-            'message' => 'PHP 8.2 ou supérieur est requis.',
+            'message' => 'PHP 8.3 ou supérieur est requis.',
         ];
 
         $requiredExtensions = [

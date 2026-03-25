@@ -7,7 +7,7 @@
     "is_homepage": true,
     "status": "published",
     "meta_title": "ArtisanCMS — Le CMS Laravel moderne, open source et extensible",
-    "meta_description": "ArtisanCMS est un CMS open source construit avec Laravel 12, React 19 et Inertia 2. Page builder visuel, systeme de themes et plugins, API REST complete.",
+    "meta_description": "ArtisanCMS est un CMS open source construit avec Laravel 13, React 19 et Inertia 2. Page builder visuel, systeme de themes et plugins, API REST complete.",
     "content": {
       "blocks": [
         {
@@ -58,7 +58,7 @@
               "type": "text",
               "id": "acms-hero-desc",
               "props": {
-                "content": "<p style='text-align:center;color:#94a3b8;font-size:1.2rem;line-height:1.8;max-width:640px;margin:0 auto;'>Laravel 12 + React 19 + Inertia 2. Un page builder visuel, un systeme de themes et plugins, des performances de pointe. Open source, extensible, moderne.</p>"
+                "content": "<p style='text-align:center;color:#94a3b8;font-size:1.2rem;line-height:1.8;max-width:640px;margin:0 auto;'>Laravel 13 + React 19 + Inertia 2. Un page builder visuel, un systeme de themes et plugins, des performances de pointe. Open source, extensible, moderne.</p>"
               },
               "children": []
             },
@@ -137,7 +137,7 @@
                 {
                   "type": "text",
                   "id": "acms-tech-1",
-                  "props": { "content": "<p style='text-align:center;font-size:1.125rem;font-weight:600;color:#475569;'>Laravel 12</p>" },
+                  "props": { "content": "<p style='text-align:center;font-size:1.125rem;font-weight:600;color:#475569;'>Laravel 13</p>" },
                   "children": []
                 },
                 {

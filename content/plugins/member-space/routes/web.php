@@ -113,7 +113,7 @@ Route::middleware(['web'])->prefix('members')->group(function () {
 
 // ---- Webhooks (no CSRF) ----
 Route::middleware(['web'])
-    ->withoutMiddleware([\Illuminate\Http\Middleware\ValidateCsrfToken::class])
+    ->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\PreventRequestForgery::class])
     ->group(function () {
         Route::post('members/webhook/stripe', [MembershipController::class, 'webhook'])
             ->name('members.webhook.stripe');

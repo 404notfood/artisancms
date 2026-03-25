@@ -125,7 +125,7 @@ class InstallerTest extends TestCase
         $checker = new RequirementsChecker();
         $results = $checker->check();
 
-        // Since we are running tests with PHP 8.2+, this must pass
+        // Since we are running tests with PHP 8.3+, this must pass
         $this->assertTrue($results['requirements']['php_version']['passed']);
     }
 

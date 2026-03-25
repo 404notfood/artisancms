@@ -2,7 +2,7 @@
 
 CMS moderne, performant et extensible. Alternative open-source a WordPress, Joomla, Drupal et PrestaShop.
 
-Construit avec **Laravel 12 + React 19 + Inertia 2** pour une experience no-code complete.
+Construit avec **Laravel 13 + React 19 + Inertia 2** pour une experience no-code complete.
 
 ---
 
@@ -98,7 +98,7 @@ Construit avec **Laravel 12 + React 19 + Inertia 2** pour une experience no-code
 
 | Couche | Technologie |
 |--------|------------|
-| Backend | Laravel 12 (PHP 8.2+) |
+| Backend | Laravel 13 (PHP 8.3+) |
 | Frontend | React 19 + TypeScript |
 | Bridge | Inertia.js 2 |
 | UI | shadcn/ui + Tailwind CSS v4 |
@@ -115,7 +115,7 @@ Construit avec **Laravel 12 + React 19 + Inertia 2** pour une experience no-code
 
 ### Prerequis
 
-- PHP 8.2+
+- PHP 8.3+
 - Composer
 - Node.js 18+
 - MySQL 8.0+ / MariaDB 10.6+

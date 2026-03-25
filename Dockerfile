@@ -14,7 +14,7 @@ COPY vite.config.ts tsconfig.json tailwind.config.ts ./
 RUN npm run build
 
 # ─── Stage 2: PHP / Laravel ───────────────────────────────────────────────────
-FROM php:8.2-fpm-alpine AS php-base
+FROM php:8.3-fpm-alpine AS php-base
 
 # System deps
 RUN apk add --no-cache \

@@ -540,8 +540,8 @@ function checkRequirements(): array {
     $allPassed = true;
 
     // PHP version
-    $phpOk = version_compare(PHP_VERSION, '8.2.0', '>=');
-    $checks[] = ['name' => 'PHP 8.2+', 'value' => PHP_VERSION, 'ok' => $phpOk, 'required' => true];
+    $phpOk = version_compare(PHP_VERSION, '8.3.0', '>=');
+    $checks[] = ['name' => 'PHP 8.3+', 'value' => PHP_VERSION, 'ok' => $phpOk, 'required' => true];
     if (!$phpOk) $allPassed = false;
 
     // Extensions
