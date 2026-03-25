@@ -46,14 +46,15 @@ interface FooterProps {
 const SOCIAL_PLATFORMS = ['facebook', 'twitter', 'instagram', 'linkedin', 'github', 'youtube', 'tiktok', 'dribbble'];
 
 export default function FrontFooter({ menu, customizations, themeStyle }: FooterProps) {
-    const { cms } = usePage().props as { cms?: { name: string }; [key: string]: unknown };
+    const { cms } = usePage().props as { cms?: { name: string; description?: string }; [key: string]: unknown };
     const siteName = cms?.name || 'ArtisanCMS';
+    const siteDescription = cms?.description || '';
     const year = new Date().getFullYear();
 
     const bgColor = c(customizations, 'footer.background_color', '#f8fafc');
     const textColor = c(customizations, 'footer.text_color', '#64748b');
     const accentColor = c(customizations, 'footer.accent_color', c(customizations, 'colors.primary', '#6366f1'));
-    const tagline = c(customizations, 'footer.tagline', '');
+    const tagline = c(customizations, 'footer.tagline', '') || siteDescription;
     const showPoweredBy = b(customizations, 'footer.show_powered_by', true);
     const showSocialLinks = b(customizations, 'footer.show_social_links', false);
     const footerLayout = c(customizations, 'footer.layout', '') as FooterLayout;
@@ -168,9 +169,9 @@ export default function FrontFooter({ menu, customizations, themeStyle }: Footer
     // ─── Layout: Columns (dark style with multi-columns) ────────────────
 
     if (resolvedLayout === 'columns') {
-        // Group menu items for columns display
+        // Group menu items for columns display (+1 for branding column)
         const columnItems = menuTree.length > 0 ? menuTree : [];
-        const gridCols = Math.min(columnItems.length || 1, footerColumns);
+        const gridCols = Math.min((columnItems.length + 1) || 1, footerColumns);
 
         return (
             <footer style={{ backgroundColor: bgColor, color: textColor, borderTop: borderStyle }}>

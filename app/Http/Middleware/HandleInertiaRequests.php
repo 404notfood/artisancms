@@ -50,6 +50,7 @@ class HandleInertiaRequests extends Middleware
                 'cms' => [
                     'name' => config('cms.name', 'ArtisanCMS'),
                     'version' => config('cms.version', '1.0.0'),
+                    'description' => '',
                     'enabledPlugins' => [],
                     'dashboardTheme' => 'indigo',
                     'adminPrefix' => config('cms.admin.resolved_prefix', config('cms.admin.prefix', 'admin')),
@@ -77,6 +78,10 @@ class HandleInertiaRequests extends Middleware
             'cms' => [
                 'name' => config('cms.name', 'ArtisanCMS'),
                 'version' => config('cms.version', '1.0.0'),
+                'description' => fn () => $this->safeQuery(
+                    fn () => (string) (Setting::get('general.site_description') ?? ''),
+                    '',
+                ),
                 'enabledPlugins' => fn () => $this->safeQuery(
                     fn () => CmsPlugin::where('enabled', true)->pluck('slug')->toArray(),
                     [],
