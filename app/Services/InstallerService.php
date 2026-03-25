@@ -12,6 +12,7 @@ use App\Models\Setting;
 use App\Models\Site;
 use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -425,6 +426,9 @@ class InstallerService
             ['group' => 'content', 'key' => 'homepage_id'],
             ['value' => (string) $homepage->id, 'type' => 'number', 'is_public' => false]
         );
+
+        // Clear settings cache so homepage_id is immediately available
+        Cache::forget('cms.settings');
     }
 
     private function createPrimarySite(array $config): void
