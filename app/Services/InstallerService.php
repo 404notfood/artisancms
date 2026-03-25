@@ -19,17 +19,17 @@ use Illuminate\Support\Str;
 class InstallerService
 {
     public const STEPS = [
-        'env'         => ['label' => 'Connexion au serveur', 'weight' => 5],
-        'migrations'  => ['label' => 'Preparation de la base de donnees', 'weight' => 20],
-        'roles'       => ['label' => 'Configuration des permissions', 'weight' => 5],
-        'admin'       => ['label' => 'Creation de votre compte', 'weight' => 5],
-        'settings'    => ['label' => 'Personnalisation du site', 'weight' => 10],
-        'theme'       => ['label' => 'Installation du design', 'weight' => 15],
-        'blocks'      => ['label' => 'Chargement des composants', 'weight' => 15],
-        'homepage'    => ['label' => "Creation de la page d'accueil", 'weight' => 10],
-        'site'        => ['label' => 'Mise en ligne', 'weight' => 5],
-        'directories' => ['label' => 'Organisation des fichiers', 'weight' => 5],
-        'finalize'    => ['label' => 'Touches finales', 'weight' => 10],
+        'env'         => ['label' => 'Branchement de la plomberie', 'weight' => 5],
+        'migrations'  => ['label' => 'Coulage des fondations', 'weight' => 20],
+        'roles'       => ['label' => 'Distribution des badges d\'acces', 'weight' => 5],
+        'admin'       => ['label' => 'Gravure de votre nom sur la porte', 'weight' => 5],
+        'settings'    => ['label' => 'Choix du papier peint', 'weight' => 10],
+        'theme'       => ['label' => 'Livraison des meubles', 'weight' => 15],
+        'blocks'      => ['label' => 'Installation de la cuisine equipee', 'weight' => 15],
+        'homepage'    => ['label' => "Decoration de l'entree", 'weight' => 10],
+        'site'        => ['label' => 'Branchement d\'internet', 'weight' => 5],
+        'directories' => ['label' => 'Rangement du garage', 'weight' => 5],
+        'finalize'    => ['label' => 'Remise des cles !', 'weight' => 10],
     ];
 
     public function runStep(string $stepName, array $config): array

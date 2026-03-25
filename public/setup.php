@@ -927,7 +927,7 @@ if ($vendorReady && $envReady && $buildReady && !file_exists(INSTALLED_FILE)) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ArtisanCMS - Configuration initiale</title>
+    <title>ArtisanCMS - Preparation de votre site</title>
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -1276,19 +1276,17 @@ if ($vendorReady && $envReady && $buildReady && !file_exists(INSTALLED_FILE)) {
             <div class="sidebar-logo-icon">A</div>
             <div class="sidebar-logo-text">
                 <h1>Artisan<span>CMS</span></h1>
-                <p>Configuration serveur</p>
+                <p>Preparation</p>
             </div>
         </div>
 
         <div class="sidebar-desc">
-            <h2>Préparation du serveur</h2>
+            <h2>Construction en cours !</h2>
             <p>
-                Cette étape installe les dépendances nécessaires au fonctionnement d'ArtisanCMS
-                (Composer, npm, build des assets).
+                Votre site web, c'est comme une maison : il faut d'abord couler les fondations, monter les murs et installer les fenetres.
             </p>
             <p style="margin-top: 1rem;">
-                Une fois terminé, vous serez redirigé vers l'assistant d'installation pour configurer
-                votre base de données et créer votre compte administrateur.
+                Detendez-vous, nos ouvriers numeriques s'occupent de tout. Ensuite, vous pourrez choisir la deco !
             </p>
         </div>
 
@@ -1303,51 +1301,51 @@ if ($vendorReady && $envReady && $buildReady && !file_exists(INSTALLED_FILE)) {
             <div class="container-header">
                 <div class="container-header-icon">&#9881;</div>
                 <div>
-                    <h2>Configuration initiale</h2>
-                    <p>Installation des dépendances et préparation de l'environnement</p>
+                    <h2>Construction de votre site</h2>
+                    <p>Enfilez votre casque, on pose la premiere pierre !</p>
                 </div>
             </div>
 
             <div class="container-body">
                 <ul class="steps" id="stepsList">
                     <li class="step pending" data-step="check">
-                        <div class="step-icon">1</div>
-                        <span class="step-label">Vérification des prérequis</span>
+                        <div class="step-icon">&#128269;</div>
+                        <span class="step-label">Inspection du terrain</span>
                         <span class="step-detail"></span>
                     </li>
                     <li class="step pending" data-step="directories">
-                        <div class="step-icon">2</div>
-                        <span class="step-label">Création des dossiers</span>
+                        <div class="step-icon">&#128451;</div>
+                        <span class="step-label">On range le chantier</span>
                         <span class="step-detail"></span>
                     </li>
                     <li class="step pending" data-step="composer">
-                        <div class="step-icon">3</div>
-                        <span class="step-label">Installation Composer</span>
+                        <div class="step-icon">&#128679;</div>
+                        <span class="step-label">Livraison des materiaux</span>
                         <span class="step-detail"></span>
                     </li>
                     <li class="step pending" data-step="env">
-                        <div class="step-icon">4</div>
-                        <span class="step-label">Configuration .env</span>
+                        <div class="step-icon">&#128295;</div>
+                        <span class="step-label">Branchement de la plomberie</span>
                         <span class="step-detail"></span>
                     </li>
                     <li class="step pending" data-step="key">
-                        <div class="step-icon">5</div>
-                        <span class="step-label">Génération APP_KEY</span>
+                        <div class="step-icon">&#128272;</div>
+                        <span class="step-label">Fabrication des cles</span>
                         <span class="step-detail"></span>
                     </li>
                     <li class="step pending" data-step="npm">
-                        <div class="step-icon">6</div>
-                        <span class="step-label">Installation npm</span>
+                        <div class="step-icon">&#127912;</div>
+                        <span class="step-label">Commande de la peinture</span>
                         <span class="step-detail"></span>
                     </li>
                     <li class="step pending" data-step="build">
-                        <div class="step-icon">7</div>
-                        <span class="step-label">Build frontend (Vite)</span>
+                        <div class="step-icon">&#128296;</div>
+                        <span class="step-label">Montage des murs et fenetres</span>
                         <span class="step-detail"></span>
                     </li>
                     <li class="step pending" data-step="permissions">
-                        <div class="step-icon">8</div>
-                        <span class="step-label">Permissions fichiers</span>
+                        <div class="step-icon">&#127881;</div>
+                        <span class="step-label">Coup de balai final</span>
                         <span class="step-detail"></span>
                     </li>
                 </ul>
@@ -1362,10 +1360,10 @@ if ($vendorReady && $envReady && $buildReady && !file_exists(INSTALLED_FILE)) {
 
                 <div class="actions">
                     <button class="btn btn-primary" id="startBtn" onclick="startSetup()">
-                        Lancer la configuration
+                        &#128679; Lancer la construction !
                     </button>
                     <a href="/install" class="btn btn-success" id="continueBtn" style="display:none;">
-                        Continuer l'installation &rarr;
+                        &#127968; Emmenager dans mon site &rarr;
                     </a>
                 </div>
             </div>
@@ -1392,7 +1390,9 @@ if ($vendorReady && $envReady && $buildReady && !file_exists(INSTALLED_FILE)) {
         function updateProgress(step, total) {
             const pct = Math.round((step / total) * 100);
             document.getElementById('progressFill').style.width = pct + '%';
-            document.getElementById('progressText').textContent = pct + '%';
+            const msgs = ['On creuse les fondations...', 'Les murs montent !', 'On pose le toit...', 'On installe la cuisine...', 'Les cles sont sur la porte !'];
+            const msgIdx = pct >= 100 ? 4 : pct >= 75 ? 3 : pct >= 50 ? 2 : pct >= 25 ? 1 : 0;
+            document.getElementById('progressText').textContent = pct + '% — ' + msgs[msgIdx];
         }
 
         // Steps that run asynchronously (long operations)
@@ -1485,7 +1485,7 @@ if ($vendorReady && $envReady && $buildReady && !file_exists(INSTALLED_FILE)) {
         async function startSetup() {
             const startBtn = document.getElementById('startBtn');
             startBtn.disabled = true;
-            startBtn.textContent = 'Configuration en cours...';
+            startBtn.textContent = 'Les ouvriers sont au travail...';
             document.getElementById('errorBox').style.display = 'none';
 
             for (let i = 0; i < steps.length; i++) {
@@ -1515,7 +1515,7 @@ if ($vendorReady && $envReady && $buildReady && !file_exists(INSTALLED_FILE)) {
 
                         document.getElementById('errorBox').innerHTML = errorHtml;
                         document.getElementById('errorBox').style.display = 'block';
-                        startBtn.textContent = 'Réessayer';
+                        startBtn.textContent = 'Reessayer';
                         startBtn.disabled = false;
                         startBtn.onclick = () => { location.reload(); };
                         return;
@@ -1532,7 +1532,7 @@ if ($vendorReady && $envReady && $buildReady && !file_exists(INSTALLED_FILE)) {
             }
 
             updateProgress(steps.length, steps.length);
-            document.getElementById('successBox').textContent = '\u2713 Configuration terminée ! Le serveur est prêt.';
+            document.getElementById('successBox').textContent = '\u2713 La maison est construite ! Il ne reste plus qu\'a choisir la deco et accrocher votre nom sur la boite aux lettres.';
             document.getElementById('successBox').style.display = 'block';
             startBtn.style.display = 'none';
             document.getElementById('continueBtn').style.display = 'flex';

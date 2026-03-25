@@ -223,10 +223,10 @@ export default function Execute({ steps, siteName, siteUrl, adminEmail, version 
                             <PartyPopper className="h-10 w-10 text-white" />
                         </div>
                         <h1 className="text-3xl font-bold tracking-tight">
-                            Votre site est pret !
+                            Bienvenue chez vous !
                         </h1>
                         <p className="mt-2 text-green-100 text-lg">
-                            Tout est installe. Il ne reste plus qu'a creer quelque chose de genial.
+                            La maison est construite, les meubles sont en place. Il ne reste plus qu'a accrocher vos tableaux !
                         </p>
                     </div>
 
@@ -311,10 +311,10 @@ export default function Execute({ steps, siteName, siteUrl, adminEmail, version 
                                 </div>
                                 <div>
                                     <p className="text-sm font-semibold text-indigo-700">
-                                        Commencer a creer
+                                        Entrer dans mon atelier
                                     </p>
                                     <p className="text-xs text-indigo-500">
-                                        Acceder a votre espace d'administration
+                                        C'est ici que la magie opere
                                     </p>
                                 </div>
                             </a>
@@ -329,10 +329,10 @@ export default function Execute({ steps, siteName, siteUrl, adminEmail, version 
                                 </div>
                                 <div>
                                     <p className="text-sm font-semibold text-slate-700">
-                                        Voir mon site
+                                        Admirer la facade
                                     </p>
                                     <p className="text-xs text-slate-500">
-                                        Decouvrir votre site en ligne
+                                        Voir ce que vos visiteurs verront
                                     </p>
                                 </div>
                             </a>
@@ -341,14 +341,14 @@ export default function Execute({ steps, siteName, siteUrl, adminEmail, version 
                         {/* Next steps */}
                         <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
                             <h3 className="text-sm font-semibold text-slate-700 mb-3">
-                                Et maintenant ?
+                                La pendaison de cremaillere
                             </h3>
                             <ol className="space-y-2">
                                 {[
-                                    'Choisissez les couleurs et le style de votre site',
-                                    'Creez vos premieres pages en glissant-deposant des blocs',
-                                    'Ajoutez un menu pour que vos visiteurs naviguent facilement',
-                                    'Explorez les plugins pour ajouter des super-pouvoirs a votre site',
+                                    'Choisissez la couleur des murs (Apparence > Theme)',
+                                    'Meublez vos pieces (creez des pages avec le Page Builder)',
+                                    'Installez les panneaux indicateurs (configurez vos menus)',
+                                    'Ajoutez des gadgets (explorez les plugins)',
                                 ].map((step, i) => (
                                     <li key={i} className="flex items-start gap-2 text-sm text-slate-600">
                                         <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-xs font-bold text-indigo-600 mt-0.5">
@@ -404,13 +404,13 @@ export default function Execute({ steps, siteName, siteUrl, adminEmail, version 
                         <div>
                             <h1 className="text-xl font-bold text-slate-900">
                                 {overallError
-                                    ? 'Oups, petit souci !'
-                                    : 'On prepare tout pour vous...'}
+                                    ? 'Oups, un mur s\'est ecroule !'
+                                    : 'Chantier en cours, casque obligatoire !'}
                             </h1>
                             <p className="text-sm text-slate-500">
                                 {overallError
-                                    ? 'Pas de panique, on va arranger ca.'
-                                    : 'Votre site sera pret dans quelques secondes.'}
+                                    ? 'Pas de panique, nos ouvriers vont reparer ca.'
+                                    : 'Nos meilleurs artisans construisent votre site...'}
                             </p>
                         </div>
                     </div>
@@ -421,7 +421,7 @@ export default function Execute({ steps, siteName, siteUrl, adminEmail, version 
                     <div className="mb-6">
                         <div className="flex items-center justify-between mb-2">
                             <span className="text-sm font-medium text-slate-700">
-                                {progressValue < 30 ? 'Demarrage...' : progressValue < 70 ? 'Ca avance bien !' : progressValue < 100 ? 'Presque fini...' : 'Termine !'}
+                                {progressValue < 20 ? 'Les ouvriers enfilent leurs gants...' : progressValue < 40 ? 'Les murs montent !' : progressValue < 60 ? 'On pose le carrelage...' : progressValue < 80 ? 'La peinture seche...' : progressValue < 100 ? 'On plante les fleurs dans le jardin...' : 'Les cles sont sur la porte !'}
                             </span>
                             <span className="text-sm font-bold text-indigo-600">
                                 {progressValue}%
@@ -486,7 +486,7 @@ export default function Execute({ steps, siteName, siteUrl, adminEmail, version 
                                     {overallError}
                                 </p>
                                 <p className="text-xs text-red-600 mt-1">
-                                    Cliquez sur "Reessayer" ci-dessous. Si le probleme persiste, contactez votre hebergeur.
+                                    On rappelle les ouvriers. Si ca persiste, appelez le chef de chantier (votre hebergeur).
                                 </p>
                             </div>
                         </div>
