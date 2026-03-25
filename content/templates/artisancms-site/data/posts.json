@@ -1,0 +1,113 @@
+[
+  {
+    "title": "Bienvenue sur ArtisanCMS",
+    "slug": "bienvenue-sur-artisancms",
+    "status": "published",
+    "excerpt": "Decouvrez ArtisanCMS, le CMS open source moderne construit avec Laravel, React et Inertia. Premier article de notre blog officiel.",
+    "category": "Community",
+    "tags": ["open-source", "laravel", "react"],
+    "author": "admin",
+    "published_at": "2026-03-24",
+    "content": {
+      "blocks": [
+        {
+          "type": "section",
+          "id": "post-welcome-content",
+          "props": {
+            "backgroundColor": "#ffffff",
+            "paddingTop": 40,
+            "paddingBottom": 40,
+            "paddingLeft": 0,
+            "paddingRight": 0,
+            "maxWidth": 750,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "text",
+              "id": "post-welcome-text",
+              "props": {
+                "content": "<p style='color:#334155;font-size:1.0625rem;line-height:1.85;'>Nous sommes ravis de vous accueillir sur le blog officiel d'ArtisanCMS ! Ce site est lui-meme construit avec ArtisanCMS — la meilleure preuve que notre CMS est pret pour la production.</p><h2 style='color:#0f172a;margin-top:2rem;'>Qu'est-ce qu'ArtisanCMS ?</h2><p style='color:#334155;font-size:1.0625rem;line-height:1.85;'>ArtisanCMS est un systeme de gestion de contenu open source construit sur des technologies modernes :</p><ul style='color:#334155;font-size:1.0625rem;line-height:2;'><li><strong>Laravel 12</strong> pour un backend robuste et extensible</li><li><strong>React 19</strong> pour une interface utilisateur fluide et reactive</li><li><strong>Inertia 2</strong> pour connecter le tout sans API intermediaire</li><li><strong>TailwindCSS</strong> pour un design moderne et personnalisable</li></ul><h2 style='color:#0f172a;margin-top:2rem;'>Pourquoi un nouveau CMS ?</h2><p style='color:#334155;font-size:1.0625rem;line-height:1.85;'>Les CMS existants ne correspondent plus aux attentes des developpeurs modernes. WordPress est formidable mais sa base de code monolithique en PHP pur montre ses limites. Les CMS headless offrent de la flexibilite mais ajoutent une complexite inutile pour la plupart des projets.</p><p style='color:#334155;font-size:1.0625rem;line-height:1.85;'>ArtisanCMS offre le meilleur des deux mondes : un CMS complet avec page builder visuel, et une architecture moderne extensible via plugins et themes.</p><h2 style='color:#0f172a;margin-top:2rem;'>Ce qui arrive ensuite</h2><p style='color:#334155;font-size:1.0625rem;line-height:1.85;'>Dans les prochaines semaines, nous publierons des tutoriels, des guides de developpement et des mises a jour sur l'evolution du projet. Restez connectes !</p>"
+              },
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "title": "Pourquoi nous avons cree ArtisanCMS",
+    "slug": "pourquoi-artisancms",
+    "status": "published",
+    "excerpt": "L'histoire derriere la creation d'ArtisanCMS : nos motivations, nos choix techniques et notre vision pour l'avenir.",
+    "category": "Development",
+    "tags": ["open-source", "laravel", "performance"],
+    "author": "admin",
+    "published_at": "2026-03-20",
+    "content": {
+      "blocks": [
+        {
+          "type": "section",
+          "id": "post-why-content",
+          "props": {
+            "backgroundColor": "#ffffff",
+            "paddingTop": 40,
+            "paddingBottom": 40,
+            "paddingLeft": 0,
+            "paddingRight": 0,
+            "maxWidth": 750,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "text",
+              "id": "post-why-text",
+              "props": {
+                "content": "<p style='color:#334155;font-size:1.0625rem;line-height:1.85;'>Chaque projet commence par une frustration. La notre etait simple : en tant que developpeurs Laravel, nous voulions un CMS qui parle notre langage.</p><h2 style='color:#0f172a;margin-top:2rem;'>Le probleme</h2><p style='color:#334155;font-size:1.0625rem;line-height:1.85;'>Quand un client demande un site vitrine avec un blog et une zone d'administration, les options sont limitees :</p><ul style='color:#334155;font-size:1.0625rem;line-height:2;'><li><strong>WordPress</strong> : rapide a deployer mais penible a maintenir et a faire evoluer</li><li><strong>CMS headless</strong> : flexible mais necessite deux projets (backend + frontend)</li><li><strong>Statamic</strong> : excellent mais licence commerciale a ~259$ par site</li><li><strong>Partir de zero</strong> : controle total mais temps de developpement enorme</li></ul><h2 style='color:#0f172a;margin-top:2rem;'>Notre approche</h2><p style='color:#334155;font-size:1.0625rem;line-height:1.85;'>ArtisanCMS prend le meilleur de chaque approche : la facilite d'utilisation de WordPress, la proprete architecturale de Statamic, et la flexibilite d'un framework custom — le tout en open source.</p><p style='color:#334155;font-size:1.0625rem;line-height:1.85;'>Le resultat : un CMS que les developpeurs Laravel adorent utiliser et que les clients trouvent intuitif.</p>"
+              },
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "title": "ArtisanCMS v1.0 est disponible",
+    "slug": "v1-release",
+    "status": "published",
+    "excerpt": "La version 1.0 d'ArtisanCMS est officiellement disponible ! Decouvrez tout ce qui est inclus dans cette premiere release.",
+    "category": "Releases",
+    "tags": ["open-source", "page-builder", "themes", "plugins"],
+    "author": "admin",
+    "published_at": "2026-03-15",
+    "content": {
+      "blocks": [
+        {
+          "type": "section",
+          "id": "post-v1-content",
+          "props": {
+            "backgroundColor": "#ffffff",
+            "paddingTop": 40,
+            "paddingBottom": 40,
+            "paddingLeft": 0,
+            "paddingRight": 0,
+            "maxWidth": 750,
+            "centered": true
+          },
+          "children": [
+            {
+              "type": "text",
+              "id": "post-v1-text",
+              "props": {
+                "content": "<p style='color:#334155;font-size:1.0625rem;line-height:1.85;'>Apres des mois de developpement, nous sommes fiers d'annoncer la disponibilite de la version 1.0 d'ArtisanCMS !</p><h2 style='color:#0f172a;margin-top:2rem;'>Ce qui est inclus</h2><h3 style='color:#0f172a;margin-top:1.5rem;'>Page Builder</h3><p style='color:#334155;font-size:1.0625rem;line-height:1.85;'>Plus de 30 types de blocs, drag & drop, previsualisation en temps reel, responsive design integre.</p><h3 style='color:#0f172a;margin-top:1.5rem;'>Themes</h3><p style='color:#334155;font-size:1.0625rem;line-height:1.85;'>10+ themes inclus, personnalisation complete via l'admin (couleurs, polices, header, footer), et un SDK pour creer vos propres themes.</p><h3 style='color:#0f172a;margin-top:1.5rem;'>Plugins</h3><p style='color:#334155;font-size:1.0625rem;line-height:1.85;'>Architecture basee sur les Service Providers Laravel. Plugins officiels pour SEO, formulaires, analytics, et e-commerce.</p><h3 style='color:#0f172a;margin-top:1.5rem;'>API REST</h3><p style='color:#334155;font-size:1.0625rem;line-height:1.85;'>API RESTful complete pour toutes les ressources : pages, posts, medias, menus, taxonomies, settings.</p><h2 style='color:#0f172a;margin-top:2rem;'>Comment demarrer</h2><pre style='background:#0f172a;color:#e2e8f0;padding:1.25rem;border-radius:0.75rem;font-family:JetBrains Mono,Fira Code,monospace;font-size:0.875rem;border:1px solid #1e293b;overflow-x:auto;margin:1rem 0;'><code>composer create-project artisancms/artisancms my-site\ncd my-site\nphp artisan cms:install</code></pre><p style='color:#334155;font-size:1.0625rem;line-height:1.85;'>Consultez la <a href='https://docs.artisancms.dev/getting-started' style='color:#3b82f6;text-decoration:underline;'>documentation</a> pour un guide d'installation detaille.</p>"
+              },
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

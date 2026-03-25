@@ -1,0 +1,27 @@
+[
+  {
+    "name": "Categories",
+    "slug": "categories",
+    "type": "category",
+    "terms": [
+      { "name": "Releases", "slug": "releases" },
+      { "name": "Tutorials", "slug": "tutorials" },
+      { "name": "Development", "slug": "development" },
+      { "name": "Community", "slug": "community" }
+    ]
+  },
+  {
+    "name": "Tags",
+    "slug": "tags",
+    "type": "tag",
+    "terms": [
+      { "name": "page-builder", "slug": "page-builder" },
+      { "name": "themes", "slug": "themes" },
+      { "name": "plugins", "slug": "plugins" },
+      { "name": "performance", "slug": "performance" },
+      { "name": "open-source", "slug": "open-source" },
+      { "name": "laravel", "slug": "laravel" },
+      { "name": "react", "slug": "react" }
+    ]
+  }
+]

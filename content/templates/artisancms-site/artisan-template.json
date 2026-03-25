@@ -1,0 +1,25 @@
+{
+  "name": "ArtisanCMS Site Officiel",
+  "slug": "artisancms-site",
+  "version": "1.0.0",
+  "category": "business",
+  "description": "Template officiel du site artisancms.dev. Landing page produit avec hero anime, sections fonctionnalites, comparaison CMS, statistiques, blog et changelog. Optimise pour presenter un CMS open source.",
+  "author": "ArtisanCMS",
+  "preview": "assets/images/preview.png",
+  "tags": ["official", "saas", "product", "landing", "blog", "changelog", "open-source"],
+  "requires": {
+    "cms": ">=1.0.0",
+    "theme": "artisancms-official"
+  },
+  "compatible_themes": ["artisancms-official", "default"],
+  "suggested_theme": "artisancms-official",
+  "pages_count": 8,
+  "posts_count": 3,
+  "data_files": {
+    "pages": "data/pages.json",
+    "posts": "data/posts.json",
+    "menus": "data/menus.json",
+    "settings": "data/settings.json",
+    "taxonomies": "data/taxonomies.json"
+  }
+}
