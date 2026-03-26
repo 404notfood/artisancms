@@ -8,8 +8,10 @@ use App\Http\Controllers\Controller;
 use App\CMS\Plugins\PluginManager;
 use App\Models\CmsPlugin;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use RuntimeException;
 
 class PluginController extends Controller
 {
@@ -77,5 +79,43 @@ class PluginController extends Controller
         }
 
         return redirect()->back()->with('success', "Le plugin « {$name} » a été désactivé avec succès.");
+    }
+
+    public function upload(Request $request): RedirectResponse
+    {
+        $this->authorize('manage', CmsPlugin::class);
+
+        $request->validate([
+            'plugin_zip' => ['required', 'file', 'mimes:zip', 'max:51200'],
+        ]);
+
+        try {
+            $slug = $this->pluginManager->installFromZip($request->file('plugin_zip'));
+
+            return redirect()
+                ->route('admin.plugins.index')
+                ->with('success', "Le plugin « {$slug} » a été installé avec succès.");
+        } catch (RuntimeException $e) {
+            return redirect()
+                ->route('admin.plugins.index')
+                ->with('error', "Erreur d'installation : " . $e->getMessage());
+        }
+    }
+
+    public function destroy(string $slug): RedirectResponse
+    {
+        $this->authorize('manage', CmsPlugin::class);
+
+        try {
+            $this->pluginManager->deletePlugin($slug);
+
+            return redirect()
+                ->route('admin.plugins.index')
+                ->with('success', "Le plugin « {$slug} » a été supprimé.");
+        } catch (RuntimeException $e) {
+            return redirect()
+                ->route('admin.plugins.index')
+                ->with('error', $e->getMessage());
+        }
     }
 }

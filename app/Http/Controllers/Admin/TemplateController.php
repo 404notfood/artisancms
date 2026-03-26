@@ -12,6 +12,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use RuntimeException;
 
 class TemplateController extends Controller
 {
@@ -145,6 +146,48 @@ class TemplateController extends Controller
                 ->with('error', __('cms.templates.export_failed', [
                     'error' => $e->getMessage(),
                 ]));
+        }
+    }
+
+    /**
+     * Upload a template ZIP file.
+     * POST /admin/templates/upload
+     */
+    public function upload(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'template_zip' => ['required', 'file', 'mimes:zip', 'max:51200'],
+        ]);
+
+        try {
+            $slug = $this->templateService->installFromZip($request->file('template_zip'));
+
+            return redirect()
+                ->route('admin.templates.index')
+                ->with('success', "Le template « {$slug} » a été importé avec succès.");
+        } catch (RuntimeException $e) {
+            return redirect()
+                ->route('admin.templates.index')
+                ->with('error', "Erreur d'import : " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Delete a template.
+     * DELETE /admin/templates/{slug}
+     */
+    public function destroy(string $slug): RedirectResponse
+    {
+        try {
+            $this->templateService->deleteTemplate($slug);
+
+            return redirect()
+                ->route('admin.templates.index')
+                ->with('success', "Le template « {$slug} » a été supprimé.");
+        } catch (RuntimeException $e) {
+            return redirect()
+                ->route('admin.templates.index')
+                ->with('error', $e->getMessage());
         }
     }
 }

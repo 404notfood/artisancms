@@ -6,11 +6,13 @@ namespace App\CMS\Plugins;
 
 use App\CMS\Facades\CMS;
 use App\Models\CmsPlugin;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use RuntimeException;
+use ZipArchive;
 
 class PluginManager
 {
@@ -389,5 +391,170 @@ class PluginManager
         }
 
         return $providers;
+    }
+
+    // ─── ZIP upload & delete ─────────────────────────────
+
+    /**
+     * Install a plugin from an uploaded ZIP file.
+     * Returns the slug of the installed plugin.
+     *
+     * @throws RuntimeException
+     */
+    public function installFromZip(UploadedFile $file): string
+    {
+        $pluginsPath = config('cms.paths.plugins');
+        $tmpDir = sys_get_temp_dir() . '/artisan_plugin_' . uniqid('', true);
+
+        try {
+            $zip = new ZipArchive();
+
+            if ($zip->open($file->getRealPath()) !== true) {
+                throw new RuntimeException('Impossible d\'ouvrir le fichier ZIP.');
+            }
+
+            File::makeDirectory($tmpDir, 0755, true);
+
+            $this->validateZipEntries($zip);
+            $zip->extractTo($tmpDir);
+            $zip->close();
+
+            $this->validateExtractedPaths($tmpDir);
+
+            $manifestPath = $this->findPluginManifest($tmpDir);
+
+            if ($manifestPath === null) {
+                throw new RuntimeException('Manifeste artisan-plugin.json introuvable dans l\'archive.');
+            }
+
+            $manifest = json_decode(File::get($manifestPath), true, 512, JSON_THROW_ON_ERROR);
+
+            foreach (['name', 'slug', 'version'] as $required) {
+                if (empty($manifest[$required])) {
+                    throw new RuntimeException("Champ obligatoire manquant dans le manifeste : {$required}");
+                }
+            }
+
+            $slug = $manifest['slug'];
+            $pluginSourceDir = dirname($manifestPath);
+            $pluginDestDir = $pluginsPath . '/' . $slug;
+
+            if (File::isDirectory($pluginDestDir)) {
+                File::deleteDirectory($pluginDestDir);
+            }
+            File::copyDirectory($pluginSourceDir, $pluginDestDir);
+
+            $attributes = $this->buildAttributesFromManifest($manifest, $slug);
+            CmsPlugin::updateOrCreate(
+                ['slug' => $slug],
+                array_merge($attributes, [
+                    'settings' => $this->extractDefaultSettings($manifest['settings'] ?? []),
+                    'installed_at' => now(),
+                ]),
+            );
+
+            unset($this->manifests[$slug]);
+
+            // Run migrations if present
+            $migrationsDir = $pluginDestDir . '/database/migrations';
+            if (File::isDirectory($migrationsDir)) {
+                $relative = str_replace('\\', '/', str_replace(
+                    str_replace('\\', '/', base_path()) . '/',
+                    '',
+                    str_replace('\\', '/', $migrationsDir),
+                ));
+                Artisan::call('migrate', ['--path' => $relative, '--force' => true]);
+            }
+
+            CMS::fire('plugin.installed', ['slug' => $slug, 'manifest' => $manifest]);
+
+            return $slug;
+        } catch (\JsonException $e) {
+            throw new RuntimeException('Erreur de parsing du manifeste : ' . $e->getMessage());
+        } finally {
+            if (File::isDirectory($tmpDir)) {
+                File::deleteDirectory($tmpDir);
+            }
+        }
+    }
+
+    /**
+     * Delete a plugin completely (files + DB).
+     *
+     * @throws RuntimeException if the plugin is currently enabled
+     */
+    public function deletePlugin(string $slug): void
+    {
+        $plugin = CmsPlugin::where('slug', $slug)->first();
+
+        if ($plugin?->enabled) {
+            throw new RuntimeException('Impossible de supprimer un plugin activé. Désactivez-le d\'abord.');
+        }
+
+        $pluginDir = config('cms.paths.plugins') . '/' . $slug;
+
+        if (File::isDirectory($pluginDir)) {
+            File::deleteDirectory($pluginDir);
+        }
+
+        $plugin?->delete();
+        unset($this->manifests[$slug]);
+
+        CMS::fire('plugin.uninstalled', ['slug' => $slug]);
+    }
+
+    private function validateZipEntries(ZipArchive $zip): void
+    {
+        for ($i = 0; $i < $zip->numFiles; $i++) {
+            $entryName = $zip->getNameIndex($i);
+            if ($entryName === false) {
+                continue;
+            }
+
+            $normalized = str_replace('\\', '/', $entryName);
+            if (str_contains($normalized, '..') || str_starts_with($normalized, '/') || str_starts_with($normalized, '~')) {
+                $zip->close();
+                throw new RuntimeException("Chemin dangereux détecté dans l'archive ZIP : '{$entryName}'.");
+            }
+        }
+    }
+
+    private function validateExtractedPaths(string $extractDir): void
+    {
+        $realExtractDir = realpath($extractDir);
+        if ($realExtractDir === false) {
+            throw new RuntimeException('Le répertoire d\'extraction n\'existe pas.');
+        }
+
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($realExtractDir, \FilesystemIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::SELF_FIRST,
+        );
+
+        foreach ($iterator as $fileInfo) {
+            $realPath = realpath($fileInfo->getPathname());
+            if ($realPath === false || !str_starts_with($realPath, $realExtractDir)) {
+                File::deleteDirectory($extractDir);
+                throw new RuntimeException('Fichier extrait en dehors du répertoire cible — archive potentiellement malveillante.');
+            }
+        }
+    }
+
+    private function findPluginManifest(string $extractDir): ?string
+    {
+        $direct = $extractDir . '/artisan-plugin.json';
+        if (File::exists($direct)) {
+            return $direct;
+        }
+
+        $subdirs = File::directories($extractDir);
+        if (count($subdirs) === 1) {
+            $nested = $subdirs[0] . '/artisan-plugin.json';
+            if (File::exists($nested)) {
+                return $nested;
+            }
+        }
+
+        return null;
     }
 }

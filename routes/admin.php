@@ -152,6 +152,8 @@ Route::post('plugins/{slug}/enable', [PluginController::class, 'enable'])->name(
 Route::post('plugins/{slug}/disable', [PluginController::class, 'disable'])->name('admin.plugins.disable');
 Route::get('plugins/{slug}/settings', [PluginSettingsController::class, 'show'])->name('admin.plugins.settings');
 Route::put('plugins/{slug}/settings', [PluginSettingsController::class, 'update'])->name('admin.plugins.settings.update');
+Route::post('plugins/upload', [PluginController::class, 'upload'])->name('admin.plugins.upload');
+Route::delete('plugins/{slug}', [PluginController::class, 'destroy'])->name('admin.plugins.destroy');
 
 // Email Templates
 Route::get('email-templates', [EmailTemplateController::class, 'index'])->name('admin.email-templates.index');
@@ -181,6 +183,8 @@ Route::post('templates/export', [TemplateController::class, 'export'])->name('ad
 Route::get('templates/{slug}/preview', [TemplateController::class, 'preview'])->name('admin.templates.preview');
 Route::get('templates/{slug}/pages', [TemplateController::class, 'pages'])->name('admin.templates.pages');
 Route::post('templates/{slug}/install', [TemplateController::class, 'install'])->name('admin.templates.install');
+Route::post('templates/upload', [TemplateController::class, 'upload'])->name('admin.templates.upload');
+Route::delete('templates/{slug}', [TemplateController::class, 'destroy'])->name('admin.templates.destroy');
 
 // AI Assistant
 Route::get('ai-assistant/settings', [AiAssistantController::class, 'settings'])->name('admin.ai-assistant.settings');
@@ -268,6 +272,12 @@ Route::get('system/health', [SystemController::class, 'healthCheck'])->name('adm
 // Updates & Error Recovery
 Route::get('updates', [UpdateController::class, 'index'])->name('admin.updates.index');
 Route::get('updates/check', [UpdateController::class, 'check'])->name('admin.updates.check');
+Route::post('updates/plugin/{slug}', [UpdateController::class, 'updatePlugin'])->name('admin.updates.plugin');
+Route::post('updates/theme/{slug}', [UpdateController::class, 'updateTheme'])->name('admin.updates.theme');
+Route::post('updates/all', [UpdateController::class, 'updateAll'])->name('admin.updates.all');
+Route::post('updates/{updateLog}/rollback', [UpdateController::class, 'rollback'])->name('admin.updates.rollback');
+Route::get('updates/settings', [UpdateController::class, 'settings'])->name('admin.updates.settings');
+Route::post('updates/settings', [UpdateController::class, 'updateSettings'])->name('admin.updates.settings.save');
 Route::post('updates/safe-mode', [UpdateController::class, 'toggleSafeMode'])->name('admin.updates.safe-mode');
 Route::post('updates/recovery-token', [UpdateController::class, 'generateRecoveryToken'])->name('admin.updates.recovery-token');
 

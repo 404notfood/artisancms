@@ -17,9 +17,12 @@ use App\Models\TaxonomyTerm;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use RuntimeException;
+use ZipArchive;
 
 class TemplateService
 {
@@ -1345,5 +1348,127 @@ class TemplateService
             $path,
             json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
         );
+    }
+
+    // ─── ZIP upload & delete ─────────────────────────────
+
+    /**
+     * Install a template from an uploaded ZIP file.
+     * Returns the slug of the installed template.
+     *
+     * @throws RuntimeException
+     */
+    public function installFromZip(UploadedFile $file): string
+    {
+        $templatesPath = base_path('content/templates');
+        $tmpDir = sys_get_temp_dir() . '/artisan_template_' . uniqid('', true);
+
+        try {
+            $zip = new ZipArchive();
+
+            if ($zip->open($file->getRealPath()) !== true) {
+                throw new RuntimeException('Impossible d\'ouvrir le fichier ZIP.');
+            }
+
+            File::makeDirectory($tmpDir, 0755, true);
+
+            // Validate ZIP entries for path traversal
+            for ($i = 0; $i < $zip->numFiles; $i++) {
+                $entryName = $zip->getNameIndex($i);
+                if ($entryName === false) {
+                    continue;
+                }
+                $normalized = str_replace('\\', '/', $entryName);
+                if (str_contains($normalized, '..') || str_starts_with($normalized, '/') || str_starts_with($normalized, '~')) {
+                    $zip->close();
+                    throw new RuntimeException("Chemin dangereux détecté dans l'archive ZIP : '{$entryName}'.");
+                }
+            }
+
+            $zip->extractTo($tmpDir);
+            $zip->close();
+
+            // Post-extraction safety check
+            $realTmpDir = realpath($tmpDir);
+            if ($realTmpDir !== false) {
+                $iterator = new \RecursiveIteratorIterator(
+                    new \RecursiveDirectoryIterator($realTmpDir, \FilesystemIterator::SKIP_DOTS),
+                    \RecursiveIteratorIterator::SELF_FIRST,
+                );
+                foreach ($iterator as $fileInfo) {
+                    $realPath = realpath($fileInfo->getPathname());
+                    if ($realPath === false || !str_starts_with($realPath, $realTmpDir)) {
+                        File::deleteDirectory($tmpDir);
+                        throw new RuntimeException('Fichier extrait en dehors du répertoire cible.');
+                    }
+                }
+            }
+
+            // Find manifest
+            $manifestPath = $this->findTemplateManifest($tmpDir);
+
+            if ($manifestPath === null) {
+                throw new RuntimeException('Manifeste artisan-template.json introuvable dans l\'archive.');
+            }
+
+            $manifest = json_decode(File::get($manifestPath), true, 512, JSON_THROW_ON_ERROR);
+
+            foreach (['name', 'slug'] as $required) {
+                if (empty($manifest[$required])) {
+                    throw new RuntimeException("Champ obligatoire manquant dans le manifeste : {$required}");
+                }
+            }
+
+            $slug = $manifest['slug'];
+            $templateSourceDir = dirname($manifestPath);
+            $templateDestDir = $templatesPath . '/' . $slug;
+
+            if (File::isDirectory($templateDestDir)) {
+                File::deleteDirectory($templateDestDir);
+            }
+            File::copyDirectory($templateSourceDir, $templateDestDir);
+
+            return $slug;
+        } catch (\JsonException $e) {
+            throw new RuntimeException('Erreur de parsing du manifeste : ' . $e->getMessage());
+        } finally {
+            if (File::isDirectory($tmpDir)) {
+                File::deleteDirectory($tmpDir);
+            }
+        }
+    }
+
+    /**
+     * Delete a template directory.
+     *
+     * @throws RuntimeException
+     */
+    public function deleteTemplate(string $slug): void
+    {
+        $templateDir = base_path('content/templates/' . $slug);
+
+        if (!File::isDirectory($templateDir)) {
+            throw new RuntimeException("Le template « {$slug} » n'existe pas.");
+        }
+
+        File::deleteDirectory($templateDir);
+    }
+
+    private function findTemplateManifest(string $extractDir): ?string
+    {
+        $direct = $extractDir . '/artisan-template.json';
+        if (File::exists($direct)) {
+            return $direct;
+        }
+
+        $subdirs = File::directories($extractDir);
+        if (count($subdirs) === 1) {
+            $nested = $subdirs[0] . '/artisan-template.json';
+            if (File::exists($nested)) {
+                return $nested;
+            }
+        }
+
+        return null;
     }
 }

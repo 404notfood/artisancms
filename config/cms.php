@@ -87,4 +87,15 @@ return [
         'position' => 'bottom', // bottom, top
         'type' => 'opt-in', // opt-in, opt-out, info-only
     ],
+    'registry' => [
+        'url' => env('CMS_REGISTRY_URL', 'https://api.artisancms.dev/api/v1'),
+    ],
+    'updates' => [
+        'auto_update' => env('CMS_AUTO_UPDATE', 'disabled'), // disabled, minor, all
+        'auto_update_plugins' => env('CMS_AUTO_UPDATE_PLUGINS', false),
+        'auto_update_themes' => env('CMS_AUTO_UPDATE_THEMES', false),
+        'notify_admins' => true,
+        'backup_before_update' => true,
+        'temp_dir' => storage_path('app/updates'),
+    ],
 ];
