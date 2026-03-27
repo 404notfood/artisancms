@@ -6,6 +6,7 @@ import RevisionHistory from '@/Components/admin/revision-history';
 import StatusBadge from '@/Components/admin/status-badge';
 import RejectModal from '@/Components/admin/RejectModal';
 import PreviewModal from '@/Components/admin/PreviewModal';
+import SeoPanel from '@/Components/admin/seo-panel';
 import { usePreviewLink } from '@/Components/admin/usePreviewLink';
 import { ArrowLeft, Link as LinkIcon } from 'lucide-react';
 
@@ -31,6 +32,12 @@ export default function PostsEdit({ post, taxonomies }: PostsEditProps) {
         allow_comments: post.allow_comments,
         published_at: post.published_at ? post.published_at.slice(0, 16) : '',
         term_ids: currentTermIds,
+        meta_title: (post as unknown as Record<string, string>).meta_title ?? '',
+        meta_description: (post as unknown as Record<string, string>).meta_description ?? '',
+        og_image: (post as unknown as Record<string, string>).og_image ?? '',
+        meta_robots: (post as unknown as Record<string, string>).meta_robots ?? 'index, follow',
+        canonical_url: (post as unknown as Record<string, string>).canonical_url ?? '',
+        focus_keyword: (post as unknown as Record<string, string>).focus_keyword ?? '',
     });
 
     function toggleTerm(termId: number) {
@@ -221,6 +228,23 @@ export default function PostsEdit({ post, taxonomies }: PostsEditProps) {
                         {errors.term_ids && <p className="mt-1 text-sm text-red-600">{errors.term_ids}</p>}
                     </div>
                 )}
+
+                {/* SEO */}
+                <SeoPanel
+                    data={{
+                        meta_title: data.meta_title,
+                        meta_description: data.meta_description,
+                        og_image: data.og_image,
+                        meta_robots: data.meta_robots,
+                        canonical_url: data.canonical_url,
+                        focus_keyword: data.focus_keyword,
+                    }}
+                    errors={errors}
+                    onChange={(field, value) => setData(field as keyof typeof data, value)}
+                    pageTitle={data.title}
+                    pageSlug={data.slug}
+                    pageUrl={`/blog/${data.slug}`}
+                />
 
                 <RevisionHistory entityType="post" entityId={post.id} />
 

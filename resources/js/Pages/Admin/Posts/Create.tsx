@@ -1,6 +1,7 @@
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, Link, useForm , usePage } from '@inertiajs/react';
 import type { TaxonomyData, SharedProps } from '@/types/cms';
+import SeoPanel from '@/Components/admin/seo-panel';
 import { ArrowLeft } from 'lucide-react';
 
 interface PostsCreateProps {
@@ -19,6 +20,12 @@ export default function PostsCreate({ taxonomies }: PostsCreateProps) {
         allow_comments: true,
         published_at: '',
         term_ids: [] as number[],
+        meta_title: '',
+        meta_description: '',
+        og_image: '',
+        meta_robots: 'index, follow',
+        canonical_url: '',
+        focus_keyword: '',
     });
 
     function generateSlug(title: string): string {
@@ -221,6 +228,23 @@ export default function PostsCreate({ taxonomies }: PostsCreateProps) {
                         {errors.term_ids && <p className="mt-1 text-sm text-red-600">{errors.term_ids}</p>}
                     </div>
                 )}
+
+                {/* SEO */}
+                <SeoPanel
+                    data={{
+                        meta_title: data.meta_title,
+                        meta_description: data.meta_description,
+                        og_image: data.og_image,
+                        meta_robots: data.meta_robots,
+                        canonical_url: data.canonical_url,
+                        focus_keyword: data.focus_keyword,
+                    }}
+                    errors={errors}
+                    onChange={(field, value) => setData(field as keyof typeof data, value)}
+                    pageTitle={data.title}
+                    pageSlug={data.slug}
+                    pageUrl={`/blog/${data.slug}`}
+                />
 
                 {/* Actions */}
                 <div className="flex items-center justify-end gap-3">

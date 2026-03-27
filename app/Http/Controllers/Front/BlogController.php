@@ -56,6 +56,7 @@ class BlogController extends Controller
         return Inertia::render('Front/Blog/Show', [
             ...$this->frontData(),
             'post' => $post,
+            'seo' => $this->buildSeoMeta($post),
             'comments' => $comments,
             'categories' => $this->getCategories(),
             'recentPosts' => $this->getRecentPosts(5, $post->id),

@@ -3,9 +3,11 @@ import type { PageData, MenuData, BlockNode } from '@/types/cms';
 import FrontLayout from '@/Layouts/FrontLayout';
 import SidebarLayout from '@/Layouts/SidebarLayout';
 import BlockRenderer from '@/Components/front/block-renderer';
+import SeoHead, { type SeoData } from '@/Components/front/seo-head';
 
 interface FrontPageProps {
     page: PageData | null;
+    seo?: SeoData;
     menus: Record<string, MenuData>;
     theme: {
         slug?: string;
@@ -20,7 +22,7 @@ const LEGAL_SLUGS = ['mentions-legales', 'politique-de-confidentialite', 'politi
 /** Themes that use the sidebar layout */
 const SIDEBAR_THEMES = ['studio'];
 
-export default function FrontPage({ page, menus, theme }: FrontPageProps) {
+export default function FrontPage({ page, seo, menus, theme }: FrontPageProps) {
     const useSidebar = theme.slug ? SIDEBAR_THEMES.includes(theme.slug) : (theme.supports ?? []).includes('sidebar');
 
     if (!page) {
@@ -47,12 +49,16 @@ export default function FrontPage({ page, menus, theme }: FrontPageProps) {
 
     const content = (
         <>
-            <Head>
-                <title>{page.meta_title || page.title}</title>
-                {page.meta_description && (
-                    <meta name="description" content={page.meta_description} />
-                )}
-            </Head>
+            {seo && Object.keys(seo).length > 0 ? (
+                <SeoHead seo={seo} fallbackTitle={page.title} />
+            ) : (
+                <Head>
+                    <title>{page.meta_title || page.title}</title>
+                    {page.meta_description && (
+                        <meta name="description" content={page.meta_description} />
+                    )}
+                </Head>
+            )}
             <main>
                 {isLegal && (
                     <div className="border-b border-gray-100 bg-gray-50">

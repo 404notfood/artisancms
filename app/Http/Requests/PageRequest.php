@@ -41,7 +41,10 @@ class PageRequest extends FormRequest
             'meta_title' => ['nullable', 'string', 'max:255'],
             'meta_description' => ['nullable', 'string', 'max:500'],
             'meta_keywords' => ['nullable', 'string', 'max:255'],
-            'og_image' => ['nullable', 'string'],
+            'og_image' => ['nullable', 'string', 'max:500'],
+            'meta_robots' => ['nullable', 'string', 'max:50'],
+            'canonical_url' => ['nullable', 'url', 'max:500'],
+            'focus_keyword' => ['nullable', 'string', 'max:100'],
             'parent_id' => ['nullable', 'integer', 'exists:pages,id'],
             'published_at' => ['nullable', 'date'],
         ];

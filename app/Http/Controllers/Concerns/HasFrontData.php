@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Concerns;
 
+use App\CMS\Facades\CMS;
 use App\CMS\Themes\ThemeManager;
 use App\Models\Menu;
+use Illuminate\Database\Eloquent\Model;
 
 trait HasFrontData
 {
@@ -34,5 +36,15 @@ trait HasFrontData
                 'style' => $themeConfig['style'] ?? null,
             ],
         ];
+    }
+
+    /**
+     * Build SEO meta data for a page or post by applying the page.head filter chain.
+     *
+     * @return array<string, mixed>
+     */
+    private function buildSeoMeta(Model $entity): array
+    {
+        return CMS::applyFilter('page.head', [], $entity);
     }
 }

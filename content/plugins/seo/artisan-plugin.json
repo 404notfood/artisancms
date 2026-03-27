@@ -1,8 +1,8 @@
 {
     "name": "SEO",
     "slug": "seo",
-    "version": "1.0.0",
-    "description": "Optimisation SEO - meta tags, sitemap XML, Open Graph",
+    "version": "2.0.0",
+    "description": "SEO complet — Meta tags, Open Graph, Twitter Cards, JSON-LD, Sitemap XML, Robots.txt, Score SEO",
     "author": {
         "name": "ArtisanCMS"
     },
@@ -18,23 +18,63 @@
     "settings": {
         "site_title_separator": {
             "type": "string",
-            "label": "Separateur de titre",
+            "label": "Séparateur de titre",
             "default": " | "
         },
         "default_meta_description": {
+            "type": "textarea",
+            "label": "Meta description par défaut",
+            "default": ""
+        },
+        "default_og_image": {
             "type": "string",
-            "label": "Meta description par defaut",
+            "label": "Image Open Graph par défaut (URL)",
+            "default": ""
+        },
+        "organization_name": {
+            "type": "string",
+            "label": "Nom de l'organisation (Schema.org)",
+            "default": ""
+        },
+        "organization_logo": {
+            "type": "string",
+            "label": "Logo de l'organisation (URL)",
+            "default": ""
+        },
+        "social_twitter_handle": {
+            "type": "string",
+            "label": "Compte Twitter/X (@handle)",
+            "default": ""
+        },
+        "social_facebook_url": {
+            "type": "string",
+            "label": "URL page Facebook",
             "default": ""
         },
         "generate_sitemap": {
             "type": "boolean",
-            "label": "Generer le sitemap XML",
+            "label": "Générer le sitemap XML",
+            "default": true
+        },
+        "sitemap_include_categories": {
+            "type": "boolean",
+            "label": "Inclure les catégories dans le sitemap",
             "default": true
         },
         "robots_txt": {
             "type": "textarea",
             "label": "Contenu robots.txt",
-            "default": "User-agent: *\nAllow: /"
+            "default": "User-agent: *\nAllow: /\n\nDisallow: /admin/\nDisallow: /install/"
+        },
+        "google_site_verification": {
+            "type": "string",
+            "label": "Google Search Console (meta verification)",
+            "default": ""
+        },
+        "bing_site_verification": {
+            "type": "string",
+            "label": "Bing Webmaster (meta verification)",
+            "default": ""
         }
     }
 }

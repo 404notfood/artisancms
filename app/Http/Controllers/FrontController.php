@@ -109,6 +109,7 @@ class FrontController extends Controller
         return Inertia::render('Front/Page', [
             ...$this->frontData(),
             'page' => $page,
+            'seo' => $page ? $this->buildSeoMeta($page) : [],
             'designTokensCss' => $this->designTokenService->generateCssVariables(),
             'announcement' => $announcement,
         ]);

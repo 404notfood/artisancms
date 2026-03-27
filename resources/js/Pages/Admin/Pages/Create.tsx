@@ -1,6 +1,7 @@
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, Link, useForm , usePage } from '@inertiajs/react';
 import type { PageData, SharedProps } from '@/types/cms';
+import SeoPanel from '@/Components/admin/seo-panel';
 import { ArrowLeft } from 'lucide-react';
 
 interface PagesCreateProps {
@@ -18,6 +19,10 @@ export default function PagesCreate({ parentPages }: PagesCreateProps) {
         template: '',
         meta_title: '',
         meta_description: '',
+        og_image: '',
+        meta_robots: 'index, follow',
+        canonical_url: '',
+        focus_keyword: '',
         parent_id: '' as string | number,
         published_at: '',
     });
@@ -189,41 +194,21 @@ export default function PagesCreate({ parentPages }: PagesCreateProps) {
                 </div>
 
                 {/* SEO */}
-                <div className="rounded-lg border border-gray-200 bg-white p-6 space-y-4">
-                    <h2 className="text-lg font-medium text-gray-900">SEO</h2>
-
-                    <div>
-                        <label htmlFor="meta_title" className="block text-sm font-medium text-gray-700">
-                            Meta titre
-                        </label>
-                        <input
-                            id="meta_title"
-                            type="text"
-                            value={data.meta_title}
-                            onChange={(e) => setData('meta_title', e.target.value)}
-                            className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                            maxLength={60}
-                        />
-                        <p className="mt-1 text-xs text-gray-500">{data.meta_title.length}/60 caractères</p>
-                        {errors.meta_title && <p className="mt-1 text-sm text-red-600">{errors.meta_title}</p>}
-                    </div>
-
-                    <div>
-                        <label htmlFor="meta_description" className="block text-sm font-medium text-gray-700">
-                            Meta description
-                        </label>
-                        <textarea
-                            id="meta_description"
-                            value={data.meta_description}
-                            onChange={(e) => setData('meta_description', e.target.value)}
-                            rows={3}
-                            className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                            maxLength={160}
-                        />
-                        <p className="mt-1 text-xs text-gray-500">{data.meta_description.length}/160 caractères</p>
-                        {errors.meta_description && <p className="mt-1 text-sm text-red-600">{errors.meta_description}</p>}
-                    </div>
-                </div>
+                <SeoPanel
+                    data={{
+                        meta_title: data.meta_title,
+                        meta_description: data.meta_description,
+                        og_image: data.og_image,
+                        meta_robots: data.meta_robots,
+                        canonical_url: data.canonical_url,
+                        focus_keyword: data.focus_keyword,
+                    }}
+                    errors={errors}
+                    onChange={(field, value) => setData(field as keyof typeof data, value)}
+                    pageTitle={data.title}
+                    pageSlug={data.slug}
+                    pageUrl={`/${data.slug}`}
+                />
 
                 {/* Actions */}
                 <div className="flex items-center justify-end gap-3">

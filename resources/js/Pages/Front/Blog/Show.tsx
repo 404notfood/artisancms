@@ -3,6 +3,7 @@ import type { PostData, TaxonomyTermData, MenuData, FlashMessages } from '@/type
 import FrontLayout from '@/Layouts/FrontLayout';
 import BlockRenderer from '@/Components/front/block-renderer';
 import Breadcrumbs from '@/Components/front/breadcrumbs';
+import SeoHead, { type SeoData } from '@/Components/front/seo-head';
 import type { FormEvent } from 'react';
 
 interface CommentData {
@@ -22,6 +23,7 @@ interface BlogShowProps {
         layouts: Array<{ slug: string; name: string }>;
     };
     post: PostData;
+    seo?: SeoData;
     comments: CommentData[];
     categories: Array<TaxonomyTermData & { posts_count: number }>;
     recentPosts: Array<{ id: number; title: string; slug: string; featured_image: string | null; published_at: string }>;
@@ -149,7 +151,7 @@ function CommentForm({ postSlug }: { postSlug: string }) {
     );
 }
 
-export default function BlogShow({ post, comments, categories, recentPosts, menus, theme }: BlogShowProps) {
+export default function BlogShow({ post, seo, comments, categories, recentPosts, menus, theme }: BlogShowProps) {
     const postCategories = post.terms?.filter((t) => t.taxonomy_id !== undefined) || [];
     const postTags = post.terms?.filter(() => true) || [];
 
@@ -161,10 +163,14 @@ export default function BlogShow({ post, comments, categories, recentPosts, menu
 
     return (
         <FrontLayout menus={menus} theme={theme}>
-            <Head>
-                <title>{post.title}</title>
-                {post.excerpt && <meta name="description" content={post.excerpt} />}
-            </Head>
+            {seo && Object.keys(seo).length > 0 ? (
+                <SeoHead seo={seo} fallbackTitle={post.title} fallbackDescription={post.excerpt ?? undefined} />
+            ) : (
+                <Head>
+                    <title>{post.title}</title>
+                    {post.excerpt && <meta name="description" content={post.excerpt} />}
+                </Head>
+            )}
             <div className="container py-10">
                 <Breadcrumbs items={breadcrumbItems} />
                 <div className="grid gap-10 lg:grid-cols-[1fr_320px]">

@@ -6,6 +6,7 @@ import RevisionHistory from '@/Components/admin/revision-history';
 import StatusBadge from '@/Components/admin/status-badge';
 import RejectModal from '@/Components/admin/RejectModal';
 import PreviewModal from '@/Components/admin/PreviewModal';
+import SeoPanel from '@/Components/admin/seo-panel';
 import { usePreviewLink } from '@/Components/admin/usePreviewLink';
 import { ArrowLeft, Link as LinkIcon, LayoutGrid } from 'lucide-react';
 
@@ -28,6 +29,10 @@ export default function PagesEdit({ page, parentPages }: PagesEditProps) {
         template: page.template ?? '',
         meta_title: page.meta_title ?? '',
         meta_description: page.meta_description ?? '',
+        og_image: (page as unknown as Record<string, string>).og_image ?? '',
+        meta_robots: (page as unknown as Record<string, string>).meta_robots ?? 'index, follow',
+        canonical_url: (page as unknown as Record<string, string>).canonical_url ?? '',
+        focus_keyword: (page as unknown as Record<string, string>).focus_keyword ?? '',
         parent_id: page.parent_id ?? ('' as string | number),
         published_at: page.published_at ? page.published_at.slice(0, 16) : '',
     });
@@ -192,21 +197,21 @@ export default function PagesEdit({ page, parentPages }: PagesEditProps) {
                 )}
 
                 {/* SEO */}
-                <div className="rounded-lg border border-gray-200 bg-white p-6 space-y-4">
-                    <h2 className="text-lg font-medium text-gray-900">SEO</h2>
-                    <div>
-                        <label htmlFor="meta_title" className="block text-sm font-medium text-gray-700">Meta titre</label>
-                        <input id="meta_title" type="text" value={data.meta_title} onChange={(e) => setData('meta_title', e.target.value)} className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" maxLength={60} />
-                        <p className="mt-1 text-xs text-gray-500">{data.meta_title.length}/60 caracteres</p>
-                        {errors.meta_title && <p className="mt-1 text-sm text-red-600">{errors.meta_title}</p>}
-                    </div>
-                    <div>
-                        <label htmlFor="meta_description" className="block text-sm font-medium text-gray-700">Meta description</label>
-                        <textarea id="meta_description" value={data.meta_description} onChange={(e) => setData('meta_description', e.target.value)} rows={3} className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" maxLength={160} />
-                        <p className="mt-1 text-xs text-gray-500">{data.meta_description.length}/160 caracteres</p>
-                        {errors.meta_description && <p className="mt-1 text-sm text-red-600">{errors.meta_description}</p>}
-                    </div>
-                </div>
+                <SeoPanel
+                    data={{
+                        meta_title: data.meta_title,
+                        meta_description: data.meta_description,
+                        og_image: data.og_image,
+                        meta_robots: data.meta_robots,
+                        canonical_url: data.canonical_url,
+                        focus_keyword: data.focus_keyword,
+                    }}
+                    errors={errors}
+                    onChange={(field, value) => setData(field as keyof typeof data, value)}
+                    pageTitle={data.title}
+                    pageSlug={data.slug}
+                    pageUrl={`/${data.slug}`}
+                />
 
                 <RevisionHistory entityType="page" entityId={page.id} />
 
