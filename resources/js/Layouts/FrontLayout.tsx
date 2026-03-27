@@ -2,6 +2,7 @@ import { Head, usePage } from '@inertiajs/react';
 import { useMemo, type ReactNode } from 'react';
 import { AnnouncementBar } from '@/Components/front/announcement-bar';
 import { AnimationConfigContext, type AnimationConfigMap } from '@/Components/front/block-renderer';
+import GoogleAnalytics from '@/Components/front/google-analytics';
 import FrontHeader from './Front/FrontHeader';
 import FrontFooter from './Front/FrontFooter';
 import { c, buildCssVariables, getGoogleFontsUrl, type ThemeStyle } from './Front/theme-helpers';
@@ -18,12 +19,17 @@ interface FrontLayoutProps {
 }
 
 export default function FrontLayout({ children, menus, theme }: FrontLayoutProps) {
-    const { branding, designTokensCss, announcement } = usePage().props as {
+    const { branding, designTokensCss, announcement, ga4 } = usePage().props as {
         branding?: { logo?: string; favicon?: string; name?: string };
         designTokensCss?: string;
         announcement?: {
             id: number; message: string; link_text?: string; link_url?: string;
             bg_color: string; text_color: string; position: 'top' | 'bottom'; dismissible: boolean;
+        } | null;
+        ga4?: {
+            measurement_id: string;
+            anonymize_ip?: boolean;
+            respect_dnt?: boolean;
         } | null;
         [key: string]: unknown;
     };
@@ -91,6 +97,13 @@ export default function FrontLayout({ children, menus, theme }: FrontLayoutProps
                         </>
                     )}
                 </Head>
+                {ga4?.measurement_id && (
+                    <GoogleAnalytics
+                        measurementId={ga4.measurement_id}
+                        anonymizeIp={ga4.anonymize_ip}
+                        respectDnt={ga4.respect_dnt}
+                    />
+                )}
                 {announcement && announcement.position === 'top' && (
                     <AnnouncementBar announcement={announcement} />
                 )}

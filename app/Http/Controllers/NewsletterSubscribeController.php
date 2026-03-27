@@ -7,6 +7,8 @@ namespace App\Http\Controllers;
 use App\Services\NewsletterService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class NewsletterSubscribeController extends Controller
 {
@@ -15,51 +17,45 @@ class NewsletterSubscribeController extends Controller
     ) {}
 
     /**
-     * Subscribe an email to the newsletter.
+     * Subscribe an email to the newsletter (double opt-in: sends confirmation email).
      */
     public function subscribe(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'email' => 'required|email|max:255',
-            'name' => 'nullable|string|max:255',
+            'name'  => 'nullable|string|max:255',
         ]);
 
         $result = $this->newsletterService->subscribe(
             $validated['email'],
             $validated['name'] ?? null,
-            $request->ip()
+            $request->ip(),
         );
 
         return response()->json($result, $result['success'] ? 200 : 422);
     }
 
     /**
-     * Unsubscribe via token (hashed email).
+     * Confirm subscription via token from email.
      */
-    public function unsubscribe(Request $request, string $token): JsonResponse
+    public function confirm(string $token): Response
     {
-        // Decode the token (base64-encoded email)
-        $email = base64_decode($token);
+        $confirmed = $this->newsletterService->confirmSubscription($token);
 
-        if (!$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            return response()->json([
-                'success' => false,
-                'message' => __('cms.newsletter.invalid_token'),
-            ], 400);
-        }
+        return Inertia::render('Front/NewsletterConfirm', [
+            'confirmed' => $confirmed,
+        ]);
+    }
 
-        $result = $this->newsletterService->unsubscribe($email);
+    /**
+     * Unsubscribe via HMAC-signed token (not the raw email).
+     */
+    public function unsubscribe(string $token): Response
+    {
+        $result = $this->newsletterService->unsubscribe($token);
 
-        if ($result) {
-            return response()->json([
-                'success' => true,
-                'message' => __('cms.newsletter.unsubscribed'),
-            ]);
-        }
-
-        return response()->json([
-            'success' => false,
-            'message' => __('cms.newsletter.not_found'),
-        ], 404);
+        return Inertia::render('Front/NewsletterUnsubscribe', [
+            'success' => $result,
+        ]);
     }
 }

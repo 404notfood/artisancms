@@ -1,0 +1,127 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Read version from VERSION file
+        id: version
+        run: echo "version=$(cat VERSION | tr -d '[:space:]')" >> $GITHUB_OUTPUT
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, xml, zip, json
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install Composer dependencies (no dev)
+        run: composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Build frontend assets
+        run: npm run build
+
+      - name: Remove dev files from release
+        run: |
+          rm -rf node_modules
+          rm -rf tests
+          rm -rf .github
+          rm -rf blueprints
+          rm -rf .claude
+          rm -f .env.example.backup
+          rm -f phpunit.xml
+          rm -f vite.config.ts
+          rm -f tsconfig*.json
+          rm -f tailwind.config.*
+          rm -f postcss.config.*
+          rm -f eslint.config.*
+          rm -f components.json
+
+      - name: Create release archive
+        run: |
+          cd ..
+          tar -czf artisancms-${{ steps.version.outputs.version }}.tar.gz \
+            --exclude='.git' \
+            -C ${{ github.workspace }} .
+          mv artisancms-${{ steps.version.outputs.version }}.tar.gz ${{ github.workspace }}/
+
+      - name: Generate SHA-256 checksum
+        id: checksum
+        run: |
+          sha256sum artisancms-${{ steps.version.outputs.version }}.tar.gz > artisancms-${{ steps.version.outputs.version }}.sha256
+          echo "checksum=$(cat artisancms-${{ steps.version.outputs.version }}.sha256 | awk '{print $1}')" >> $GITHUB_OUTPUT
+
+      - name: Generate changelog from commits
+        id: changelog
+        run: |
+          # Get commits since last tag
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+          if [ -z "$PREV_TAG" ]; then
+            CHANGELOG=$(git log --oneline --no-merges HEAD)
+          else
+            CHANGELOG=$(git log --oneline --no-merges ${PREV_TAG}..HEAD)
+          fi
+          # Write to file for the release body
+          echo "$CHANGELOG" > CHANGELOG_BODY.md
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ArtisanCMS v${{ steps.version.outputs.version }}
+          body_path: CHANGELOG_BODY.md
+          files: |
+            artisancms-${{ steps.version.outputs.version }}.tar.gz
+            artisancms-${{ steps.version.outputs.version }}.sha256
+          draft: false
+          prerelease: ${{ contains(github.ref, '-beta') || contains(github.ref, '-rc') || contains(github.ref, '-alpha') }}
+
+  # Update the registry API with the new version
+  notify-registry:
+    name: Notify Registry
+    needs: release
+    runs-on: ubuntu-latest
+    if: ${{ !contains(github.ref, '-beta') && !contains(github.ref, '-rc') && !contains(github.ref, '-alpha') }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Read version
+        id: version
+        run: echo "version=$(cat VERSION | tr -d '[:space:]')" >> $GITHUB_OUTPUT
+
+      - name: Notify registry of new release
+        continue-on-error: true
+        run: |
+          curl -s -X POST \
+            -H "Authorization: Bearer ${{ secrets.REGISTRY_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "type": "cms",
+              "version": "${{ steps.version.outputs.version }}",
+              "tag": "${{ github.ref_name }}",
+              "download_url": "https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/artisancms-${{ steps.version.outputs.version }}.tar.gz",
+              "checksum_url": "https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/artisancms-${{ steps.version.outputs.version }}.sha256"
+            }' \
+            "${{ secrets.REGISTRY_URL }}/api/internal/releases" || echo "Registry notification skipped (not configured)"

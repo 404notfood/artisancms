@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\CMS\Blocks\BlockTextExtractor;
 use App\CMS\Traits\HasContentFeatures;
+use App\CMS\Traits\HasSiteScope;
 use App\CMS\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,7 +20,7 @@ use Laravel\Scout\Searchable;
 
 class Post extends Model
 {
-    use HasContentFeatures, HasFactory, LogsActivity, Searchable, SoftDeletes;
+    use HasContentFeatures, HasFactory, HasSiteScope, LogsActivity, Searchable, SoftDeletes;
 
     /**
      * Attributs exclus du log d'activite.
@@ -191,16 +193,21 @@ class Post extends Model
     public function toSearchableArray(): array
     {
         return [
-            'id'      => $this->id,
-            'title'   => $this->title,
-            'slug'    => $this->slug,
-            'excerpt' => $this->excerpt,
-            'status'  => $this->status,
+            'id'            => $this->id,
+            'title'         => $this->title,
+            'slug'          => $this->slug,
+            'excerpt'       => $this->excerpt,
+            'content_text'  => Str::limit(BlockTextExtractor::extract($this->content), 5000),
+            'meta_title'    => $this->meta_title,
+            'meta_keywords' => $this->meta_keywords,
+            'published_at'  => $this->published_at?->toIso8601String(),
         ];
     }
 
     public function shouldBeSearchable(): bool
     {
-        return $this->status === 'published';
+        return $this->status === 'published'
+            && $this->published_at !== null
+            && $this->published_at->lte(now());
     }
 }

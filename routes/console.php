@@ -11,3 +11,4 @@ Artisan::command('inspire', function () {
 Schedule::command('cms:publish-scheduled')->everyMinute();
 Schedule::command('cms:check-updates --notify')->dailyAt('03:00');
 Schedule::command('cms:auto-update')->dailyAt('04:00');
+Schedule::command('cms:revisions:cleanup')->monthly();

@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Front\BlogController;
 use App\Http\Controllers\Front\ErrorController;
-use App\Http\Controllers\Front\RssController;
+use App\Http\Controllers\Front\RssFeedController;
 use App\Http\Controllers\Front\SearchController as FrontSearchController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\Front\MemberController;
@@ -87,8 +87,8 @@ Route::get('/api/search', [SearchController::class, 'search'])
 |--------------------------------------------------------------------------
 */
 
-Route::get('feed', [RssController::class, 'feed'])->name('feed.rss');
-Route::get('feed/category/{term:slug}', [RssController::class, 'categoryFeed'])->name('feed.category');
+Route::get('feed', [RssFeedController::class, 'posts'])->name('feed.posts');
+Route::get('feed/category/{term:slug}', [RssFeedController::class, 'category'])->name('feed.category');
 
 /*
 |--------------------------------------------------------------------------

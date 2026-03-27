@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\CMS\Traits\HasSiteScope;
 use App\CMS\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,7 +14,7 @@ use Illuminate\Support\Facades\Storage;
 
 class Media extends Model
 {
-    use HasFactory, LogsActivity;
+    use HasFactory, HasSiteScope, LogsActivity;
 
     /**
      * Attributs exclus du log d'activite.

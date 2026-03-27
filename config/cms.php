@@ -72,6 +72,10 @@ return [
         'respect_dnt' => true,
         'exclude_admins' => true,
         'raw_data_days' => 90,
+        'ga4_measurement_id' => env('CMS_GA4_ID', null),
+        'ga4_enabled' => env('CMS_GA4_ENABLED', false),
+        'ga4_anonymize_ip' => true,
+        'ga4_respect_dnt' => true,
     ],
     'multisite' => [
         'enabled' => env('CMS_MULTISITE_ENABLED', false),
@@ -89,6 +93,8 @@ return [
     ],
     'registry' => [
         'url' => env('CMS_REGISTRY_URL', 'https://api.artisancms.dev/api/v1'),
+        'github_repo' => env('CMS_GITHUB_REPO', 'artisancms/artisancms'),
+        'api_key' => env('CMS_REGISTRY_API_KEY'),
     ],
     'updates' => [
         'auto_update' => env('CMS_AUTO_UPDATE', 'disabled'), // disabled, minor, all

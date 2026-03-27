@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\CMS\Traits\HasSiteScope;
 use App\CMS\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Menu extends Model
 {
-    use HasFactory, LogsActivity;
+    use HasFactory, HasSiteScope, LogsActivity;
 
     /**
      * Attributs exclus du log d'activite.

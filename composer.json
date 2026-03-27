@@ -1,10 +1,16 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/laravel",
+    "name": "artisancms/artisancms",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "description": "ArtisanCMS — CMS moderne, léger et performant. Alternative à WordPress avec page builder drag & drop, système de thèmes et plugins extensible.",
+    "keywords": ["cms", "artisancms", "laravel", "page-builder", "inertia", "react", "drag-and-drop", "no-code"],
     "license": "MIT",
+    "homepage": "https://artisancms.dev",
+    "support": {
+        "issues": "https://github.com/artisancms/artisancms/issues",
+        "source": "https://github.com/artisancms/artisancms",
+        "docs": "https://docs.artisancms.dev"
+    },
     "require": {
         "php": "^8.3",
         "inertiajs/inertia-laravel": "^2.0",
@@ -73,8 +79,17 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi",
-            "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
-            "@php artisan migrate --graceful --ansi"
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
+            "@echo \"\"",
+            "@echo \"============================================\"",
+            "@echo \"  ArtisanCMS installed successfully!\"",
+            "@echo \"============================================\"",
+            "@echo \"\"",
+            "@echo \"Next steps:\"",
+            "@echo \"  1. Configure your database in .env\"",
+            "@echo \"  2. Run: npm install && npm run build\"",
+            "@echo \"  3. Open http://your-site.test/install\"",
+            "@echo \"\""
         ],
         "pre-package-uninstall": [
             "Illuminate\\Foundation\\ComposerScripts::prePackageUninstall"

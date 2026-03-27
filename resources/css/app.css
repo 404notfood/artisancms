@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "../js/Components/builder/blocks/shared/animation-styles.css";
 
 /* TipTap editor styles */
 .tiptap-editor .ProseMirror {

@@ -1,7 +1,7 @@
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, useForm, router, usePage } from '@inertiajs/react';
 import { useState, useRef } from 'react';
-import { Settings, Search, Mail, FileText, ImageIcon, Construction, Paintbrush, Upload, Check, Shield } from 'lucide-react';
+import { Settings, Search, Mail, FileText, ImageIcon, Construction, Paintbrush, Upload, Check, Shield, BarChart3 } from 'lucide-react';
 import type { SettingData, SharedProps } from '@/types/cms';
 import { DASHBOARD_THEMES, type DashboardTheme } from '@/Layouts/admin/dashboard-themes';
 import { ADMIN_INPUT_FOCUS, adminBtnPrimary, adminTabActive, adminSelectedBorder, ADMIN_PRIMARY_BG } from '@/lib/admin-theme';
@@ -19,12 +19,13 @@ const tabConfig: { key: string; label: string; icon: React.ReactNode }[] = [
     { key: 'maintenance', label: 'Maintenance', icon: <Construction className="h-4 w-4" /> },
     { key: 'dashboard', label: 'Dashboard', icon: <Paintbrush className="h-4 w-4" /> },
     { key: 'security', label: 'Securite', icon: <Shield className="h-4 w-4" /> },
+    { key: 'analytics', label: 'Analytics', icon: <BarChart3 className="h-4 w-4" /> },
 ];
 
 export default function SettingsIndex({ settings }: SettingsIndexProps) {
     const { cms } = usePage<SharedProps>().props;
     const prefix = cms?.adminPrefix ?? 'admin';
-    const availableTabs = tabConfig.filter((tab) => tab.key === 'dashboard' || tab.key === 'security' || (settings[tab.key] && settings[tab.key].length > 0));
+    const availableTabs = tabConfig.filter((tab) => tab.key === 'dashboard' || tab.key === 'security' || tab.key === 'analytics' || (settings[tab.key] && settings[tab.key].length > 0));
     const [activeTab, setActiveTab] = useState(availableTabs[0]?.key ?? 'general');
     const [dashboardTheme, setDashboardTheme] = useState<string>(
         () => settings['dashboard']?.find((s) => s.key === 'theme')?.value as string ?? 'indigo'
@@ -226,6 +227,8 @@ export default function SettingsIndex({ settings }: SettingsIndexProps) {
                             />
                         ) : activeTab === 'security' ? (
                             <SecuritySettings settings={settings['security'] ?? []} />
+                        ) : activeTab === 'analytics' ? (
+                            <AnalyticsSettings settings={settings['analytics'] ?? []} />
                         ) : currentSettings.length === 0 ? (
                             <p className="py-8 text-center text-sm text-gray-500">
                                 Aucun paramètre dans cette section.

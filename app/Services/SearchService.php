@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\CMS\Blocks\BlockTextExtractor;
 use App\Models\Page;
 use App\Models\Post;
 use Illuminate\Support\Collection;
@@ -51,13 +52,95 @@ class SearchService
     }
 
     /**
-     * Search pages using LIKE queries (database driver).
+     * Search across all content types and merge results sorted by relevance.
+     *
+     * @return array{results: array<int, array<string, mixed>>, total: int, query: string}
+     */
+    public function searchAll(string $query, int $limit = 20): array
+    {
+        $minLength = (int) config('cms.search.min_query_length', 2);
+
+        if (mb_strlen($query) < $minLength) {
+            return ['results' => [], 'total' => 0, 'query' => $query];
+        }
+
+        $pages = $this->searchPages($query, $limit);
+        $posts = $this->searchPosts($query, $limit);
+
+        $merged = $pages->concat($posts)
+            ->sortByDesc(fn (array $item): int => $this->computeRelevance($item, $query))
+            ->take($limit)
+            ->values();
+
+        return [
+            'results' => $merged->toArray(),
+            'total' => $pages->count() + $posts->count(),
+            'query' => $query,
+        ];
+    }
+
+    /**
+     * Search pages using Scout when available, LIKE fallback otherwise.
      *
      * @return Collection<int, array<string, mixed>>
      */
     private function searchPages(string $query, int $limit): Collection
     {
-        $term = '%' . $query . '%';
+        if ($this->useScoutDriver()) {
+            return $this->searchPagesWithScout($query, $limit);
+        }
+
+        return $this->searchPagesWithLike($query, $limit);
+    }
+
+    /**
+     * Search posts using Scout when available, LIKE fallback otherwise.
+     *
+     * @return Collection<int, array<string, mixed>>
+     */
+    private function searchPosts(string $query, int $limit): Collection
+    {
+        if ($this->useScoutDriver()) {
+            return $this->searchPostsWithScout($query, $limit);
+        }
+
+        return $this->searchPostsWithLike($query, $limit);
+    }
+
+    // ---- Scout implementations ----
+
+    /**
+     * @return Collection<int, array<string, mixed>>
+     */
+    private function searchPagesWithScout(string $query, int $limit): Collection
+    {
+        return Page::search($query)
+            ->where('status', 'published')
+            ->take($limit)
+            ->get()
+            ->map(fn (Page $p): array => $this->formatPage($p));
+    }
+
+    /**
+     * @return Collection<int, array<string, mixed>>
+     */
+    private function searchPostsWithScout(string $query, int $limit): Collection
+    {
+        return Post::search($query)
+            ->where('status', 'published')
+            ->take($limit)
+            ->get()
+            ->map(fn (Post $p): array => $this->formatPost($p));
+    }
+
+    // ---- LIKE fallback implementations ----
+
+    /**
+     * @return Collection<int, array<string, mixed>>
+     */
+    private function searchPagesWithLike(string $query, int $limit): Collection
+    {
+        $term = '%' . $this->escapeLike($query) . '%';
 
         return Page::where('status', 'published')
             ->where(function ($q) use ($term): void {
@@ -69,81 +152,115 @@ class SearchService
             ->orderByRaw("CASE WHEN title LIKE ? THEN 0 ELSE 1 END", [$term])
             ->limit($limit)
             ->get()
-            ->map(fn (Page $p): array => [
-                'type' => 'page',
-                'id' => $p->id,
-                'title' => $p->title,
-                'slug' => $p->slug,
-                'excerpt' => $p->meta_description ?? Str::limit($this->extractTextFromBlocks($p->content), 160),
-                'url' => "/{$p->slug}",
-                'published_at' => $p->published_at?->toIso8601String(),
-            ]);
+            ->map(fn (Page $p): array => $this->formatPage($p));
     }
 
     /**
-     * Search posts using LIKE queries (database driver).
-     *
      * @return Collection<int, array<string, mixed>>
      */
-    private function searchPosts(string $query, int $limit): Collection
+    private function searchPostsWithLike(string $query, int $limit): Collection
     {
-        $term = '%' . $query . '%';
+        $term = '%' . $this->escapeLike($query) . '%';
 
         return Post::where('status', 'published')
             ->where(function ($q) use ($term): void {
                 $q->where('title', 'like', $term)
                     ->orWhere('slug', 'like', $term)
-                    ->orWhere('excerpt', 'like', $term);
+                    ->orWhere('excerpt', 'like', $term)
+                    ->orWhere('meta_title', 'like', $term)
+                    ->orWhere('meta_keywords', 'like', $term);
             })
             ->orderByRaw("CASE WHEN title LIKE ? THEN 0 ELSE 1 END", [$term])
             ->limit($limit)
             ->get()
-            ->map(fn (Post $p): array => [
-                'type' => 'post',
-                'id' => $p->id,
-                'title' => $p->title,
-                'slug' => $p->slug,
-                'excerpt' => $p->excerpt ?? Str::limit($this->extractTextFromBlocks($p->content), 160),
-                'url' => "/blog/{$p->slug}",
-                'published_at' => $p->published_at?->toIso8601String(),
-            ]);
+            ->map(fn (Post $p): array => $this->formatPost($p));
+    }
+
+    // ---- Formatting ----
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function formatPage(Page $page): array
+    {
+        return [
+            'type' => 'page',
+            'id' => $page->id,
+            'title' => $page->title,
+            'slug' => $page->slug,
+            'excerpt' => $page->meta_description
+                ?? Str::limit(BlockTextExtractor::extract($page->content), 160),
+            'url' => "/{$page->slug}",
+            'published_at' => $page->published_at?->toIso8601String(),
+        ];
     }
 
     /**
-     * Extract plain text from a page/post block tree.
-     *
-     * @param array<string, mixed>|null $content
+     * @return array<string, mixed>
      */
-    private function extractTextFromBlocks(?array $content): string
+    private function formatPost(Post $post): array
     {
-        if (!$content || !isset($content['blocks'])) {
-            return '';
-        }
+        return [
+            'type' => 'post',
+            'id' => $post->id,
+            'title' => $post->title,
+            'slug' => $post->slug,
+            'excerpt' => $post->excerpt
+                ?? Str::limit(BlockTextExtractor::extract($post->content), 160),
+            'url' => "/blog/{$post->slug}",
+            'published_at' => $post->published_at?->toIso8601String(),
+        ];
+    }
 
-        return trim($this->extractTextRecursive($content['blocks']));
+    // ---- Helpers ----
+
+    /**
+     * Determine whether a real Scout driver (not null/database) is configured.
+     */
+    private function useScoutDriver(): bool
+    {
+        $driver = config('scout.driver');
+
+        return $driver !== null && $driver !== 'null';
     }
 
     /**
-     * Recursively extract text from blocks.
-     *
-     * @param array<int, array<string, mixed>> $blocks
+     * Escape LIKE wildcards to prevent injection via % and _ characters.
      */
-    private function extractTextRecursive(array $blocks): string
+    private function escapeLike(string $value): string
     {
-        $text = '';
+        return str_replace(['%', '_'], ['\\%', '\\_'], $value);
+    }
 
-        foreach ($blocks as $block) {
-            if (isset($block['props']['text'])) {
-                $text .= ' ' . strip_tags((string) $block['props']['text']);
-            }
-            if (isset($block['props']['html'])) {
-                $text .= ' ' . strip_tags((string) $block['props']['html']);
-            }
-            if (!empty($block['children']) && is_array($block['children'])) {
-                $text .= $this->extractTextRecursive($block['children']);
-            }
+    /**
+     * Compute a simple relevance score for merging results from different types.
+     *
+     * @param array<string, mixed> $item
+     */
+    private function computeRelevance(array $item, string $query): int
+    {
+        $score = 0;
+        $lowerQuery = mb_strtolower($query);
+
+        $title = mb_strtolower((string) ($item['title'] ?? ''));
+        if ($title === $lowerQuery) {
+            $score += 100;
+        } elseif (str_starts_with($title, $lowerQuery)) {
+            $score += 75;
+        } elseif (str_contains($title, $lowerQuery)) {
+            $score += 50;
         }
 
-        return $text;
+        $slug = mb_strtolower((string) ($item['slug'] ?? ''));
+        if (str_contains($slug, $lowerQuery)) {
+            $score += 20;
+        }
+
+        $excerpt = mb_strtolower((string) ($item['excerpt'] ?? ''));
+        if (str_contains($excerpt, $lowerQuery)) {
+            $score += 10;
+        }
+
+        return $score;
     }
 }

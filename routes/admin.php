@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\TaxonomyController;
 use App\Http\Controllers\Admin\TemplateController;
 use App\Http\Controllers\Admin\ThemeController;
 use App\Http\Controllers\Admin\AiAssistantController;
+use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\CommentController;
 use App\Http\Controllers\Admin\ContentEntryController;
 use App\Http\Controllers\Admin\NotificationController;
@@ -30,6 +31,7 @@ use App\Http\Controllers\Admin\PopupController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RedirectController;
 use App\Http\Controllers\Admin\WebhookController;
+use App\Http\Controllers\Admin\WordPressImportController;
 use App\Http\Controllers\Admin\BlockPatternController;
 use App\Http\Controllers\Admin\PluginSettingsController;
 use App\Http\Controllers\Admin\DesignTokenController;
@@ -197,6 +199,9 @@ Route::post('comments/{comment}/reject', [CommentController::class, 'reject'])->
 Route::post('comments/{comment}/spam', [CommentController::class, 'spam'])->name('admin.comments.spam');
 Route::delete('comments/{comment}', [CommentController::class, 'destroy'])->name('admin.comments.destroy');
 
+// Activity Log
+Route::get('activity-log', [ActivityLogController::class, 'index'])->name('admin.activity-log.index');
+
 // Custom Fields
 Route::resource('custom-fields', CustomFieldController::class)->names('admin.custom-fields')->except(['show']);
 Route::get('api/custom-fields/values', [CustomFieldController::class, 'apiValues'])->name('admin.custom-fields.values');
@@ -246,6 +251,10 @@ Route::post('posts/{post}/preview', [PostController::class, 'generatePreview'])-
 Route::get('import-export', [ImportExportController::class, 'index'])->name('admin.import-export');
 Route::post('export', [ImportExportController::class, 'export'])->name('admin.export');
 Route::post('import', [ImportExportController::class, 'import'])->name('admin.import');
+
+// WordPress Import
+Route::get('wordpress-import', [WordPressImportController::class, 'index'])->name('admin.wordpress-import');
+Route::post('wordpress-import', [WordPressImportController::class, 'import'])->name('admin.wordpress-import.run');
 
 // Newsletter
 Route::get('newsletter', [NewsletterController::class, 'index'])->name('admin.newsletter');

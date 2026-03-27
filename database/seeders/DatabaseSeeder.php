@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             SettingsSeeder::class,
             BlockSeeder::class,
+            EmailTemplateSeeder::class,
         ]);
 
         // Create default admin user

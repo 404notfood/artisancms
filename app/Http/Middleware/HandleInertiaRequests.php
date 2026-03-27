@@ -112,6 +112,7 @@ class HandleInertiaRequests extends Middleware
                 ],
                 ['enabled' => true, 'position' => 'bottom', 'type' => 'opt-in', 'privacy_url' => '/politique-de-confidentialite'],
             ),
+            'ga4' => fn () => $this->getGa4Config($request),
         ];
     }
 
@@ -168,6 +169,48 @@ class HandleInertiaRequests extends Middleware
         }
 
         return $this->safeQuery(fn () => $counter($class), 0);
+    }
+
+    /**
+     * Get GA4 configuration for front-end pages only.
+     * Returns null for admin routes or when GA4 is not configured.
+     *
+     * @return array{measurement_id: string, anonymize_ip: bool, respect_dnt: bool}|null
+     */
+    private function getGa4Config(Request $request): ?array
+    {
+        // Never inject GA4 on admin routes
+        $adminPrefix = config('cms.admin.resolved_prefix', config('cms.admin.prefix', 'admin'));
+        if ($request->is("{$adminPrefix}", "{$adminPrefix}/*")) {
+            return null;
+        }
+
+        return $this->safeQuery(function () {
+            // Setting from DB takes precedence over config/env
+            $enabled = Setting::get('analytics.ga4_enabled');
+            if ($enabled !== null) {
+                $isEnabled = in_array($enabled, [true, 1, '1', 'true'], true);
+            } else {
+                $isEnabled = (bool) config('cms.analytics.ga4_enabled', false);
+            }
+
+            if (! $isEnabled) {
+                return null;
+            }
+
+            $measurementId = (string) (Setting::get('analytics.ga4_measurement_id')
+                ?? config('cms.analytics.ga4_measurement_id'));
+
+            if ($measurementId === '' || $measurementId === 'null') {
+                return null;
+            }
+
+            return [
+                'measurement_id' => $measurementId,
+                'anonymize_ip' => (bool) config('cms.analytics.ga4_anonymize_ip', true),
+                'respect_dnt' => (bool) config('cms.analytics.ga4_respect_dnt', true),
+            ];
+        }, null);
     }
 
     private function flattenTranslations(array $array, string $prefix, array &$result): void

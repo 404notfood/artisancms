@@ -17,11 +17,21 @@ use ZipArchive;
 
 class UpdateService
 {
+    /**
+     * GitHub repository for fallback update checks when registry is unavailable.
+     */
+    private const GITHUB_REPO = 'artisancms/artisancms';
+
     // ─── Check for updates ───────────────────────────────
 
     private function registryUrl(): ?string
     {
         return config('cms.registry.url');
+    }
+
+    private function githubRepo(): string
+    {
+        return config('cms.registry.github_repo', self::GITHUB_REPO);
     }
 
     /**
@@ -31,76 +41,137 @@ class UpdateService
      */
     public function checkForUpdates(): array
     {
-        $registryUrl = $this->registryUrl();
-
-        if (!$registryUrl) {
-            return [
-                'cms' => $this->localCmsInfo(),
-                'plugins' => $this->localPluginsList(),
-                'themes' => $this->localThemesList(),
-                'checked_at' => null,
-            ];
-        }
-
         $cached = Cache::get('cms.update_check');
         if ($cached) {
             return $cached;
         }
 
-        try {
-            $response = Http::timeout(15)
-                ->post($registryUrl . '/check-updates', $this->buildCheckPayload());
+        // 1. Try the dedicated registry
+        $registryUrl = $this->registryUrl();
+        if ($registryUrl) {
+            try {
+                $response = Http::timeout(15)
+                    ->post($registryUrl . '/check-updates', $this->buildCheckPayload());
 
-            if ($response->successful()) {
-                $data = $response->json();
-                $result = [
-                    'cms' => $this->parseCmsUpdate($data['cms'] ?? null),
-                    'plugins' => $this->parsePluginUpdates($data['plugins'] ?? []),
-                    'themes' => $this->parseThemeUpdates($data['themes'] ?? []),
-                    'checked_at' => $data['checked_at'] ?? now()->toIso8601String(),
-                ];
+                if ($response->successful()) {
+                    $data = $response->json();
+                    $result = [
+                        'cms' => $this->parseCmsUpdate($data['cms'] ?? null),
+                        'plugins' => $this->parsePluginUpdates($data['plugins'] ?? []),
+                        'themes' => $this->parseThemeUpdates($data['themes'] ?? []),
+                        'checked_at' => $data['checked_at'] ?? now()->toIso8601String(),
+                    ];
 
-                Cache::put('cms.update_check', $result, 300);
+                    Cache::put('cms.update_check', $result, 300);
 
-                return $result;
+                    return $result;
+                }
+            } catch (\Throwable $e) {
+                Log::warning('Registry update check failed, trying GitHub fallback: ' . $e->getMessage());
             }
-        } catch (\Throwable $e) {
-            Log::warning('Update check failed: ' . $e->getMessage());
         }
 
-        return [
-            'cms' => $this->localCmsInfo(),
+        // 2. Fallback: check CMS updates via GitHub, plugins/themes stay local
+        $currentVersion = config('cms.version', '1.0.0');
+        $cmsUpdate = $this->checkCmsUpdateViaGitHub($currentVersion);
+
+        $result = [
+            'cms' => $cmsUpdate,
             'plugins' => $this->localPluginsList(),
             'themes' => $this->localThemesList(),
-            'checked_at' => null,
+            'checked_at' => now()->toIso8601String(),
         ];
+
+        // Cache even GitHub results (shorter TTL)
+        Cache::put('cms.update_check', $result, 180);
+
+        return $result;
     }
 
     public function checkCmsUpdate(): array
     {
         $currentVersion = config('cms.version', '1.0.0');
-        $registryUrl = $this->registryUrl();
 
-        if (!$registryUrl) {
-            return $this->localCmsInfo();
+        // 1. Try the dedicated registry first
+        $registryUrl = $this->registryUrl();
+        if ($registryUrl) {
+            try {
+                $response = Http::timeout(10)->get($registryUrl . '/version');
+                if ($response->successful()) {
+                    $data = $response->json();
+
+                    return [
+                        'current' => $currentVersion,
+                        'latest' => $data['version'] ?? null,
+                        'available' => version_compare($data['version'] ?? $currentVersion, $currentVersion, '>'),
+                        'download_url' => $data['download_url'] ?? null,
+                        'changelog' => $data['changelog'] ?? null,
+                        'checksum' => $data['checksum_sha256'] ?? null,
+                    ];
+                }
+            } catch (\Throwable) {
+                // Fall through to GitHub fallback
+            }
         }
 
+        // 2. Fallback: check GitHub Releases API
+        return $this->checkCmsUpdateViaGitHub($currentVersion);
+    }
+
+    /**
+     * Fallback: check for CMS updates via GitHub Releases API.
+     * Works without any dedicated registry — uses public GitHub API.
+     */
+    private function checkCmsUpdateViaGitHub(string $currentVersion): array
+    {
         try {
-            $response = Http::timeout(10)->get($registryUrl . '/version');
+            $response = Http::timeout(10)
+                ->withHeaders(['Accept' => 'application/vnd.github+json'])
+                ->get("https://api.github.com/repos/{$this->githubRepo()}/releases/latest");
+
             if ($response->successful()) {
-                $data = $response->json();
+                $release = $response->json();
+                $tagName = $release['tag_name'] ?? '';
+                $latestVersion = ltrim($tagName, 'v');
+
+                // Find the .tar.gz asset
+                $downloadUrl = null;
+                $checksumUrl = null;
+                foreach ($release['assets'] ?? [] as $asset) {
+                    $name = $asset['name'] ?? '';
+                    if (str_ends_with($name, '.tar.gz') && !str_ends_with($name, '.sha256')) {
+                        $downloadUrl = $asset['browser_download_url'] ?? null;
+                    }
+                    if (str_ends_with($name, '.sha256')) {
+                        $checksumUrl = $asset['browser_download_url'] ?? null;
+                    }
+                }
+
+                // Fetch checksum if available
+                $checksum = null;
+                if ($checksumUrl) {
+                    try {
+                        $checksumResponse = Http::timeout(5)->get($checksumUrl);
+                        if ($checksumResponse->successful()) {
+                            $checksum = trim(explode(' ', $checksumResponse->body())[0]);
+                        }
+                    } catch (\Throwable) {
+                        // not critical
+                    }
+                }
 
                 return [
                     'current' => $currentVersion,
-                    'latest' => $data['version'] ?? null,
-                    'available' => version_compare($data['version'] ?? $currentVersion, $currentVersion, '>'),
-                    'download_url' => $data['download_url'] ?? null,
-                    'changelog' => $data['changelog'] ?? null,
-                    'checksum' => $data['checksum_sha256'] ?? null,
+                    'latest' => $latestVersion ?: null,
+                    'available' => $latestVersion && version_compare($latestVersion, $currentVersion, '>'),
+                    'download_url' => $downloadUrl,
+                    'changelog' => $release['body'] ?? null,
+                    'checksum' => $checksum,
+                    'source' => 'github',
                 ];
             }
-        } catch (\Throwable) {
-            // silent
+        } catch (\Throwable $e) {
+            Log::debug('GitHub update check failed: ' . $e->getMessage());
         }
 
         return $this->localCmsInfo();

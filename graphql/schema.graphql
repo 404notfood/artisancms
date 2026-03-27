@@ -1,0 +1,279 @@
+"ArtisanCMS GraphQL API — Public read-only schema."
+
+# -----------------------------------------------------------------------------
+# Enums
+# -----------------------------------------------------------------------------
+
+"Statut de publication du contenu."
+enum ContentStatus {
+    PUBLISHED @enum(value: "published")
+    DRAFT     @enum(value: "draft")
+}
+
+# -----------------------------------------------------------------------------
+# Types
+# -----------------------------------------------------------------------------
+
+"Utilisateur (auteur de pages, posts, commentaires)."
+type User {
+    id: ID!
+    name: String!
+    email: String!
+    avatar_url: String
+    bio: String
+    created_at: DateTime!
+}
+
+"Page du site (arbre de blocs JSON)."
+type Page {
+    id: ID!
+    title: String!
+    slug: String!
+    content: JSON
+    status: String!
+    template: String
+    meta_title: String
+    meta_description: String
+    meta_keywords: String
+    og_image: String
+    canonical_url: String
+    focus_keyword: String
+    parent_id: ID
+    order: Int
+    locale: String
+    created_at: DateTime!
+    updated_at: DateTime!
+    published_at: DateTime
+
+    "Page parente (hiérarchie)."
+    parent: Page @belongsTo
+    "Pages enfants."
+    children: [Page!]! @hasMany
+    "Auteur de la page."
+    author: User @belongsTo(relation: "author")
+    "Termes de taxonomie associés."
+    terms: [TaxonomyTerm!]! @morphToMany(relation: "terms")
+}
+
+"Article de blog."
+type Post {
+    id: ID!
+    title: String!
+    slug: String!
+    excerpt: String
+    content: JSON
+    status: String!
+    featured_image: String
+    meta_title: String
+    meta_description: String
+    meta_keywords: String
+    og_image: String
+    canonical_url: String
+    focus_keyword: String
+    allow_comments: Boolean
+    locale: String
+    created_at: DateTime!
+    updated_at: DateTime!
+    published_at: DateTime
+
+    "Auteur de l'article."
+    author: User @belongsTo(relation: "author")
+    "Commentaires approuvés."
+    comments: [Comment!]! @hasMany
+    "Nombre de commentaires."
+    comments_count: Int @count(relation: "comments")
+    "Termes de taxonomie (catégories, tags...)."
+    terms: [TaxonomyTerm!]! @morphToMany(relation: "terms")
+}
+
+"Fichier media (image, document, video...)."
+type Media {
+    id: ID!
+    filename: String!
+    original_filename: String
+    path: String!
+    mime_type: String!
+    size: Int!
+    alt_text: String
+    title: String
+    caption: String
+    folder: String
+    url: String!
+    metadata: JSON
+    created_at: DateTime!
+    updated_at: DateTime!
+
+    "Utilisateur ayant uploadé le fichier."
+    uploader: User @belongsTo(relation: "uploader")
+}
+
+"Taxonomie (catégorie, tag, ou type personnalisé)."
+type Taxonomy {
+    id: ID!
+    name: String!
+    slug: String!
+    type: String
+    description: String
+    hierarchical: Boolean
+
+    "Termes appartenant à cette taxonomie."
+    terms: [TaxonomyTerm!]! @hasMany
+}
+
+"Terme de taxonomie (ex: une catégorie, un tag)."
+type TaxonomyTerm {
+    id: ID!
+    name: String!
+    slug: String!
+    description: String
+    parent_id: ID
+    order: Int
+
+    "Taxonomie parente."
+    taxonomy: Taxonomy! @belongsTo
+    "Terme parent (hiérarchie)."
+    parent: TaxonomyTerm @belongsTo
+    "Termes enfants."
+    children: [TaxonomyTerm!]! @hasMany
+    "Posts associés à ce terme."
+    posts: [Post!]! @morphToMany(relation: "posts")
+}
+
+"Menu de navigation."
+type Menu {
+    id: ID!
+    name: String!
+    slug: String!
+    location: String
+    created_at: DateTime!
+
+    "Tous les éléments du menu."
+    items: [MenuItem!]! @hasMany
+    "Éléments racine (sans parent), triés par ordre."
+    rootItems: [MenuItem!]! @hasMany(relation: "rootItems")
+}
+
+"Élément de menu."
+type MenuItem {
+    id: ID!
+    label: String!
+    url: String
+    target: String
+    type: String
+    css_class: String
+    icon: String
+    parent_id: ID
+    order: Int
+    is_mega: Boolean
+    badge_text: String
+    badge_color: String
+
+    "Menu auquel appartient cet élément."
+    menu: Menu! @belongsTo
+    "Élément parent."
+    parent: MenuItem @belongsTo
+    "Sous-éléments, triés par ordre."
+    children: [MenuItem!]! @hasMany
+}
+
+"Commentaire sur un article."
+type Comment {
+    id: ID!
+    author_name: String
+    content: String!
+    status: String!
+    created_at: DateTime!
+    updated_at: DateTime!
+    parent_id: ID
+
+    "Article commenté."
+    post: Post! @belongsTo
+    "Utilisateur auteur (si connecté)."
+    user: User @belongsTo
+    "Commentaire parent (thread)."
+    parent: Comment @belongsTo
+    "Réponses à ce commentaire."
+    replies: [Comment!]! @hasMany
+}
+
+# -----------------------------------------------------------------------------
+# Queries
+# -----------------------------------------------------------------------------
+
+type Query {
+    "Récupérer une page par son slug."
+    page(
+        slug: String! @eq
+    ): Page @find @softDeletes
+
+    "Lister les pages publiées (paginées)."
+    pages(
+        status: String @eq
+        template: String @eq
+        parent_id: ID @eq
+        orderBy: _ @orderBy(columns: ["order", "title", "created_at", "published_at"])
+    ): [Page!]! @paginate(scopes: ["published"]) @softDeletes
+
+    "Récupérer un article par son slug."
+    post(
+        slug: String! @eq
+    ): Post @find @softDeletes
+
+    "Lister les articles publiés (paginés)."
+    posts(
+        status: String @eq
+        orderBy: _ @orderBy(columns: ["title", "created_at", "published_at"])
+    ): [Post!]! @paginate(scopes: ["published"]) @softDeletes
+
+    "Récupérer un media par son ID."
+    media(
+        id: ID! @eq
+    ): Media @find
+
+    "Lister les medias (paginés)."
+    mediaList(
+        mime_type: String @eq
+        folder: String @eq
+        orderBy: _ @orderBy(columns: ["created_at", "size", "original_filename"])
+    ): [Media!]! @paginate(model: "App\\Models\\Media")
+
+    "Lister toutes les taxonomies."
+    taxonomies: [Taxonomy!]! @all
+
+    "Récupérer une taxonomie par son slug."
+    taxonomy(
+        slug: String! @eq
+    ): Taxonomy @find
+
+    "Récupérer un terme de taxonomie par son slug."
+    taxonomyTerm(
+        slug: String! @eq
+    ): TaxonomyTerm @find
+
+    "Lister les termes d'une taxonomie."
+    taxonomyTerms(
+        taxonomy_id: ID! @eq
+        orderBy: _ @orderBy(columns: ["name", "order"])
+    ): [TaxonomyTerm!]! @paginate
+
+    "Récupérer un menu par son slug."
+    menu(
+        slug: String! @eq
+    ): Menu @find
+
+    "Lister tous les menus."
+    menus: [Menu!]! @all
+
+    "Lister les commentaires approuvés d'un article (paginés)."
+    comments(
+        post_id: ID! @eq
+        orderBy: _ @orderBy(columns: ["created_at"])
+    ): [Comment!]! @paginate(scopes: ["approved"])
+
+    "Lister les articles publiés par terme de taxonomie (catégorie, tag...)."
+    postsByTerm(
+        term_slug: String!
+        taxonomy_slug: String
+        orderBy: _ @orderBy(columns: ["title", "created_at", "published_at"])
+    ): [Post!]! @paginate(builder: "App\\GraphQL\\Queries\\PostsByTerm")
+}
