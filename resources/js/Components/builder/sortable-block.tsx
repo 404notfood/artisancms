@@ -8,6 +8,7 @@ import type { BlockNode } from '@/types/cms';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { GripVertical, ChevronUp, ChevronDown, Copy, CopyPlus, Trash2 } from 'lucide-react';
 import BlockContextMenu from './block-context-menu';
+import { getSpacingStyle } from './blocks/shared/spacing-utils';
 
 interface SortableBlockProps {
     block: BlockNode;
@@ -24,10 +25,13 @@ export default function SortableBlock({ block }: SortableBlockProps) {
         data: { type: 'block', block },
     });
 
+    const spacingStyle = getSpacingStyle(block.props, { skipPadding: block.type === 'section' });
+
     const style = {
         transform: CSS.Transform.toString(transform),
         transition,
         opacity: isDragging ? 0.4 : 1,
+        ...spacingStyle,
     };
 
     const entry = getBlock(block.type);

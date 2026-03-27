@@ -14,22 +14,38 @@
   },
   "preview": "assets/images/preview.png",
   "category": "creative",
-  "tags": ["dark", "sidebar", "studio", "portfolio", "creative", "freelance", "premium"],
+  "tags": [
+    "dark",
+    "sidebar",
+    "studio",
+    "portfolio",
+    "creative",
+    "freelance",
+    "premium"
+  ],
   "layouts": [
     {
       "slug": "sidebar",
       "name": "Sidebar navigation",
-      "regions": ["sidebar", "content"]
+      "regions": [
+        "sidebar",
+        "content"
+      ]
     },
     {
       "slug": "default",
       "name": "Par défaut (sidebar)",
-      "regions": ["sidebar", "content"]
+      "regions": [
+        "sidebar",
+        "content"
+      ]
     },
     {
       "slug": "full",
       "name": "Pleine largeur",
-      "regions": ["content"]
+      "regions": [
+        "content"
+      ]
     }
   ],
   "menu_locations": [
@@ -53,13 +69,22 @@
         "label": "Hauteur du header",
         "type": "select",
         "default": "64px",
-        "options": ["56px", "64px", "72px", "80px"]
+        "options": [
+          "56px",
+          "64px",
+          "72px",
+          "80px"
+        ]
       },
       "style": {
         "label": "Style",
         "type": "select",
         "default": "transparent",
-        "options": ["solid", "transparent", "blur"]
+        "options": [
+          "solid",
+          "transparent",
+          "blur"
+        ]
       },
       "sticky": {
         "label": "Header fixe",
@@ -80,19 +105,33 @@
         "label": "Alignement du menu",
         "type": "select",
         "default": "right",
-        "options": ["left", "center", "right"]
+        "options": [
+          "left",
+          "center",
+          "right"
+        ]
       },
       "variant": {
         "label": "Style du header",
         "type": "select",
         "default": "minimal",
-        "options": ["classic", "centered", "split", "stacked", "minimal"]
+        "options": [
+          "classic",
+          "centered",
+          "split",
+          "stacked",
+          "minimal"
+        ]
       },
       "mobile_menu_style": {
         "label": "Menu mobile",
         "type": "select",
         "default": "slide",
-        "options": ["hamburger", "slide", "fullscreen"]
+        "options": [
+          "hamburger",
+          "slide",
+          "fullscreen"
+        ]
       },
       "cta_text": {
         "label": "Texte du bouton CTA",
@@ -108,7 +147,11 @@
         "label": "Style du CTA",
         "type": "select",
         "default": "primary",
-        "options": ["primary", "outline", "glow"]
+        "options": [
+          "primary",
+          "outline",
+          "glow"
+        ]
       }
     },
     "footer": {
@@ -116,13 +159,23 @@
         "label": "Disposition du footer",
         "type": "select",
         "default": "minimal",
-        "options": ["simple", "columns", "minimal", "centered", "magazine"]
+        "options": [
+          "simple",
+          "columns",
+          "minimal",
+          "centered",
+          "magazine"
+        ]
       },
       "columns": {
         "label": "Nombre de colonnes",
         "type": "select",
         "default": "3",
-        "options": ["2", "3", "4"]
+        "options": [
+          "2",
+          "3",
+          "4"
+        ]
       },
       "background_color": {
         "label": "Couleur de fond",
@@ -149,11 +202,31 @@
         "type": "boolean",
         "default": true
       },
-      "social_twitter": { "label": "Twitter / X URL", "type": "text", "default": "" },
-      "social_instagram": { "label": "Instagram URL", "type": "text", "default": "" },
-      "social_linkedin": { "label": "LinkedIn URL", "type": "text", "default": "" },
-      "social_github": { "label": "GitHub URL", "type": "text", "default": "" },
-      "social_dribbble": { "label": "Dribbble URL", "type": "text", "default": "" },
+      "social_twitter": {
+        "label": "Twitter / X URL",
+        "type": "text",
+        "default": ""
+      },
+      "social_instagram": {
+        "label": "Instagram URL",
+        "type": "text",
+        "default": ""
+      },
+      "social_linkedin": {
+        "label": "LinkedIn URL",
+        "type": "text",
+        "default": ""
+      },
+      "social_github": {
+        "label": "GitHub URL",
+        "type": "text",
+        "default": ""
+      },
+      "social_dribbble": {
+        "label": "Dribbble URL",
+        "type": "text",
+        "default": ""
+      },
       "show_powered_by": {
         "label": "Afficher Propulsé par ArtisanCMS",
         "type": "boolean",
@@ -165,7 +238,12 @@
         "label": "Largeur sidebar",
         "type": "select",
         "default": "260px",
-        "options": ["220px", "260px", "300px", "320px"]
+        "options": [
+          "220px",
+          "260px",
+          "300px",
+          "320px"
+        ]
       },
       "background_color": {
         "label": "Fond sidebar",
@@ -212,11 +290,31 @@
         "type": "boolean",
         "default": true
       },
-      "social_twitter": { "label": "Twitter/X", "type": "text", "default": "" },
-      "social_instagram": { "label": "Instagram", "type": "text", "default": "" },
-      "social_linkedin": { "label": "LinkedIn", "type": "text", "default": "" },
-      "social_github": { "label": "GitHub", "type": "text", "default": "" },
-      "social_dribbble": { "label": "Dribbble", "type": "text", "default": "" },
+      "social_twitter": {
+        "label": "Twitter/X",
+        "type": "text",
+        "default": ""
+      },
+      "social_instagram": {
+        "label": "Instagram",
+        "type": "text",
+        "default": ""
+      },
+      "social_linkedin": {
+        "label": "LinkedIn",
+        "type": "text",
+        "default": ""
+      },
+      "social_github": {
+        "label": "GitHub",
+        "type": "text",
+        "default": ""
+      },
+      "social_dribbble": {
+        "label": "Dribbble",
+        "type": "text",
+        "default": ""
+      },
       "border_color": {
         "label": "Bordure séparatrice",
         "type": "color",
@@ -305,7 +403,12 @@
         "label": "Taille de base",
         "type": "select",
         "default": "15px",
-        "options": ["14px", "15px", "16px", "17px"]
+        "options": [
+          "14px",
+          "15px",
+          "16px",
+          "17px"
+        ]
       },
       "h1_size": {
         "label": "Taille H1",
@@ -341,19 +444,34 @@
         "label": "Graisse titres",
         "type": "select",
         "default": "700",
-        "options": ["500", "600", "700", "800"]
+        "options": [
+          "500",
+          "600",
+          "700",
+          "800"
+        ]
       },
       "line_height": {
         "label": "Interligne",
         "type": "select",
         "default": "1.7",
-        "options": ["1.5", "1.6", "1.7", "1.8"]
+        "options": [
+          "1.5",
+          "1.6",
+          "1.7",
+          "1.8"
+        ]
       },
       "letter_spacing": {
         "label": "Espacement lettres",
         "type": "select",
         "default": "-0.01em",
-        "options": ["-0.03em", "-0.01em", "0", "0.025em"]
+        "options": [
+          "-0.03em",
+          "-0.01em",
+          "0",
+          "0.025em"
+        ]
       }
     },
     "layout": {
@@ -361,31 +479,58 @@
         "label": "Largeur max contenu",
         "type": "select",
         "default": "900px",
-        "options": ["720px", "800px", "900px", "1080px", "100%"]
+        "options": [
+          "720px",
+          "800px",
+          "900px",
+          "1080px",
+          "100%"
+        ]
       },
       "border_radius": {
         "label": "Arrondi",
         "type": "select",
         "default": "0.5rem",
-        "options": ["0", "0.25rem", "0.5rem", "0.75rem", "1rem"]
+        "options": [
+          "0",
+          "0.25rem",
+          "0.5rem",
+          "0.75rem",
+          "1rem"
+        ]
       },
       "section_spacing": {
         "label": "Espacement sections",
         "type": "select",
         "default": "large",
-        "options": ["compact", "normal", "large", "xlarge"]
+        "options": [
+          "compact",
+          "normal",
+          "large",
+          "xlarge"
+        ]
       },
       "sidebar_position": {
         "label": "Position sidebar",
         "type": "select",
         "default": "none",
-        "options": ["left", "right", "none"]
+        "options": [
+          "left",
+          "right",
+          "none"
+        ]
       },
       "content_width": {
         "label": "Largeur contenu texte",
         "type": "select",
         "default": "65ch",
-        "options": ["55ch", "60ch", "65ch", "70ch", "100%"]
+        "options": [
+          "55ch",
+          "60ch",
+          "65ch",
+          "70ch",
+          "100%"
+        ]
       }
     },
     "global_styles": {
@@ -393,24 +538,51 @@
         "label": "Style des boutons",
         "type": "select",
         "default": "rounded",
-        "options": ["square", "rounded", "pill"]
+        "options": [
+          "square",
+          "rounded",
+          "pill"
+        ]
       },
       "card_style": {
         "label": "Style des cartes",
         "type": "select",
         "default": "bordered-dark",
-        "options": ["flat", "shadow", "bordered-dark", "glass"]
+        "options": [
+          "flat",
+          "shadow",
+          "bordered-dark",
+          "glass"
+        ]
       },
       "shadow_intensity": {
         "label": "Intensité des ombres",
         "type": "select",
         "default": "medium",
-        "options": ["none", "light", "medium", "strong"]
+        "options": [
+          "none",
+          "light",
+          "medium",
+          "strong"
+        ]
       },
       "enable_animations": {
         "label": "Activer les animations",
         "type": "boolean",
         "default": true
+      }
+    },
+    "spacing": {
+      "block_spacing": {
+        "label": "Espacement entre blocs",
+        "type": "select",
+        "default": "normal",
+        "options": [
+          "compact",
+          "normal",
+          "relaxed",
+          "spacious"
+        ]
       }
     }
   },
@@ -434,6 +606,10 @@
   "font_imports": [
     "https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
   ],
-  "supports": ["dark_mode", "responsive", "sidebar"],
+  "supports": [
+    "dark_mode",
+    "responsive",
+    "sidebar"
+  ],
   "default_template": "studio-portfolio"
 }

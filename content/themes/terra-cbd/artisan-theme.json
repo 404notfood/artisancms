@@ -28,28 +28,52 @@
     {
       "slug": "default",
       "name": "Par défaut",
-      "regions": ["header", "content", "footer"]
+      "regions": [
+        "header",
+        "content",
+        "footer"
+      ]
     },
     {
       "slug": "full-width",
       "name": "Pleine largeur",
-      "regions": ["header", "content", "footer"]
+      "regions": [
+        "header",
+        "content",
+        "footer"
+      ]
     },
     {
       "slug": "landing",
       "name": "Landing page",
-      "regions": ["content"]
+      "regions": [
+        "content"
+      ]
     },
     {
       "slug": "shop",
       "name": "Boutique",
-      "regions": ["header", "content", "sidebar", "footer"]
+      "regions": [
+        "header",
+        "content",
+        "sidebar",
+        "footer"
+      ]
     }
   ],
   "menu_locations": [
-    { "slug": "header", "name": "Navigation principale" },
-    { "slug": "footer", "name": "Navigation pied de page" },
-    { "slug": "footer_legal", "name": "Mentions légales (footer)" }
+    {
+      "slug": "header",
+      "name": "Navigation principale"
+    },
+    {
+      "slug": "footer",
+      "name": "Navigation pied de page"
+    },
+    {
+      "slug": "footer_legal",
+      "name": "Mentions légales (footer)"
+    }
   ],
   "customization": {
     "header": {
@@ -62,13 +86,22 @@
         "label": "Hauteur du header",
         "type": "select",
         "default": "72px",
-        "options": ["56px", "64px", "72px", "80px"]
+        "options": [
+          "56px",
+          "64px",
+          "72px",
+          "80px"
+        ]
       },
       "style": {
         "label": "Style",
         "type": "select",
         "default": "solid",
-        "options": ["solid", "transparent", "dark"]
+        "options": [
+          "solid",
+          "transparent",
+          "dark"
+        ]
       },
       "sticky": {
         "label": "Header fixe",
@@ -94,19 +127,33 @@
         "label": "Alignement du menu",
         "type": "select",
         "default": "center",
-        "options": ["left", "center", "right"]
+        "options": [
+          "left",
+          "center",
+          "right"
+        ]
       },
       "variant": {
         "label": "Style du header",
         "type": "select",
         "default": "classic",
-        "options": ["classic", "centered", "split", "stacked", "minimal"]
+        "options": [
+          "classic",
+          "centered",
+          "split",
+          "stacked",
+          "minimal"
+        ]
       },
       "mobile_menu_style": {
         "label": "Menu mobile",
         "type": "select",
         "default": "slide",
-        "options": ["hamburger", "slide", "fullscreen"]
+        "options": [
+          "hamburger",
+          "slide",
+          "fullscreen"
+        ]
       },
       "show_cart_icon": {
         "label": "Afficher l'icône panier",
@@ -132,7 +179,11 @@
         "label": "Style du CTA",
         "type": "select",
         "default": "gold",
-        "options": ["primary", "gold", "outline"]
+        "options": [
+          "primary",
+          "gold",
+          "outline"
+        ]
       },
       "announcement_bar": {
         "label": "Barre d'annonce",
@@ -150,13 +201,23 @@
         "label": "Disposition du footer",
         "type": "select",
         "default": "magazine",
-        "options": ["simple", "columns", "minimal", "centered", "magazine"]
+        "options": [
+          "simple",
+          "columns",
+          "minimal",
+          "centered",
+          "magazine"
+        ]
       },
       "columns": {
         "label": "Nombre de colonnes",
         "type": "select",
         "default": "4",
-        "options": ["2", "3", "4"]
+        "options": [
+          "2",
+          "3",
+          "4"
+        ]
       },
       "background_color": {
         "label": "Couleur de fond",
@@ -316,7 +377,12 @@
         "label": "Taille de base",
         "type": "select",
         "default": "16px",
-        "options": ["15px", "16px", "17px", "18px"]
+        "options": [
+          "15px",
+          "16px",
+          "17px",
+          "18px"
+        ]
       },
       "h1_size": {
         "label": "Taille H1",
@@ -352,7 +418,12 @@
         "label": "Graisse titres",
         "type": "select",
         "default": "600",
-        "options": ["400", "500", "600", "700"]
+        "options": [
+          "400",
+          "500",
+          "600",
+          "700"
+        ]
       },
       "heading_italic": {
         "label": "Titres en italique",
@@ -363,13 +434,24 @@
         "label": "Interligne",
         "type": "select",
         "default": "1.7",
-        "options": ["1.5", "1.6", "1.7", "1.75", "1.8"]
+        "options": [
+          "1.5",
+          "1.6",
+          "1.7",
+          "1.75",
+          "1.8"
+        ]
       },
       "letter_spacing": {
         "label": "Espacement lettres",
         "type": "select",
         "default": "0.025em",
-        "options": ["-0.025em", "0", "0.025em", "0.05em"]
+        "options": [
+          "-0.025em",
+          "0",
+          "0.025em",
+          "0.05em"
+        ]
       }
     },
     "layout": {
@@ -377,31 +459,56 @@
         "label": "Largeur max",
         "type": "select",
         "default": "1280px",
-        "options": ["1080px", "1200px", "1280px", "1400px"]
+        "options": [
+          "1080px",
+          "1200px",
+          "1280px",
+          "1400px"
+        ]
       },
       "border_radius": {
         "label": "Arrondi cartes/boutons",
         "type": "select",
         "default": "0.5rem",
-        "options": ["0", "0.25rem", "0.5rem", "0.75rem", "1rem"]
+        "options": [
+          "0",
+          "0.25rem",
+          "0.5rem",
+          "0.75rem",
+          "1rem"
+        ]
       },
       "section_spacing": {
         "label": "Espacement sections",
         "type": "select",
         "default": "large",
-        "options": ["compact", "normal", "large", "xlarge"]
+        "options": [
+          "compact",
+          "normal",
+          "large",
+          "xlarge"
+        ]
       },
       "sidebar_position": {
         "label": "Position sidebar (boutique)",
         "type": "select",
         "default": "left",
-        "options": ["left", "right", "none"]
+        "options": [
+          "left",
+          "right",
+          "none"
+        ]
       },
       "content_width": {
         "label": "Largeur contenu texte",
         "type": "select",
         "default": "65ch",
-        "options": ["55ch", "60ch", "65ch", "72ch"]
+        "options": [
+          "55ch",
+          "60ch",
+          "65ch",
+          "72ch"
+        ]
       }
     },
     "ecommerce": {
@@ -409,19 +516,32 @@
         "label": "Style des cartes produit",
         "type": "select",
         "default": "premium",
-        "options": ["minimal", "standard", "premium", "dark"]
+        "options": [
+          "minimal",
+          "standard",
+          "premium",
+          "dark"
+        ]
       },
       "products_per_row": {
         "label": "Produits par ligne",
         "type": "select",
         "default": "3",
-        "options": ["2", "3", "4"]
+        "options": [
+          "2",
+          "3",
+          "4"
+        ]
       },
       "image_aspect_ratio": {
         "label": "Format des images produit",
         "type": "select",
         "default": "1/1",
-        "options": ["1/1", "3/4", "4/5"]
+        "options": [
+          "1/1",
+          "3/4",
+          "4/5"
+        ]
       },
       "show_quick_view": {
         "label": "Aperçu rapide au survol",
@@ -437,7 +557,11 @@
         "label": "Affichage prix",
         "type": "select",
         "default": "prominent",
-        "options": ["minimal", "standard", "prominent"]
+        "options": [
+          "minimal",
+          "standard",
+          "prominent"
+        ]
       },
       "show_cbd_badge": {
         "label": "Badge % CBD sur les produits",
@@ -455,19 +579,33 @@
         "label": "Style des boutons",
         "type": "select",
         "default": "rounded",
-        "options": ["square", "rounded", "pill"]
+        "options": [
+          "square",
+          "rounded",
+          "pill"
+        ]
       },
       "card_style": {
         "label": "Style des cartes",
         "type": "select",
         "default": "shadow",
-        "options": ["flat", "shadow", "bordered", "premium"]
+        "options": [
+          "flat",
+          "shadow",
+          "bordered",
+          "premium"
+        ]
       },
       "shadow_intensity": {
         "label": "Intensité des ombres",
         "type": "select",
         "default": "medium",
-        "options": ["none", "light", "medium", "strong"]
+        "options": [
+          "none",
+          "light",
+          "medium",
+          "strong"
+        ]
       },
       "enable_animations": {
         "label": "Activer les animations",
@@ -478,7 +616,25 @@
         "label": "Effet de survol",
         "type": "select",
         "default": "lift",
-        "options": ["none", "lift", "scale", "gold-border"]
+        "options": [
+          "none",
+          "lift",
+          "scale",
+          "gold-border"
+        ]
+      }
+    },
+    "spacing": {
+      "block_spacing": {
+        "label": "Espacement entre blocs",
+        "type": "select",
+        "default": "normal",
+        "options": [
+          "compact",
+          "normal",
+          "relaxed",
+          "spacious"
+        ]
       }
     }
   },
@@ -506,6 +662,9 @@
     "--container-width": "1280px",
     "--section-padding": "96px"
   },
-  "supports": ["dark_mode", "responsive"],
+  "supports": [
+    "dark_mode",
+    "responsive"
+  ],
   "default_template": "terra-cbd"
 }

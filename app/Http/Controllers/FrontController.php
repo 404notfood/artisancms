@@ -26,12 +26,21 @@ class FrontController extends Controller
 
     public function home(): Response
     {
-        $homepageId = $this->settingService->get('content.homepage_id');
+        // Try both setting keys (content.homepage_id and homepage_id)
+        $homepageId = $this->settingService->get('content.homepage_id')
+            ?? $this->settingService->get('homepage_id');
 
         $page = null;
 
         if ($homepageId) {
             $page = Page::where('id', (int) $homepageId)
+                ->where('status', 'published')
+                ->first();
+        }
+
+        // Fallback: look for a page flagged as homepage by slug
+        if (! $page) {
+            $page = Page::where('slug', 'accueil')
                 ->where('status', 'published')
                 ->first();
         }

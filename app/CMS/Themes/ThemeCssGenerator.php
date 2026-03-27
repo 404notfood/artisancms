@@ -19,6 +19,7 @@ class ThemeCssGenerator
         'footer' => '--footer-',
         'ecommerce' => '--ecommerce-',
         'global_styles' => '--global-',
+        'spacing' => '--spacing-',
     ];
 
     /**

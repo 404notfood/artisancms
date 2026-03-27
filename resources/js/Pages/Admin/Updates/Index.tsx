@@ -6,13 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import { Button } from '@/Components/ui/button';
 import { Switch } from '@/Components/ui/switch';
 import { Label } from '@/Components/ui/label';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/Components/ui/select';
+import { Select } from '@/Components/ui/select';
 import {
     Download,
     RefreshCw,
@@ -548,15 +542,14 @@ export default function UpdatesIndex({ updates, history, health, settings }: Upd
                     <CardContent className="space-y-5">
                         <div className="space-y-1.5">
                             <Label>Mise à jour automatique du CMS</Label>
-                            <Select value={autoUpdate} onValueChange={(v: 'disabled' | 'minor' | 'all') => setAutoUpdate(v)}>
-                                <SelectTrigger className="w-64">
-                                    <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="disabled">Désactivé</SelectItem>
-                                    <SelectItem value="minor">Mineures uniquement (recommandé)</SelectItem>
-                                    <SelectItem value="all">Toutes les versions</SelectItem>
-                                </SelectContent>
+                            <Select
+                                value={autoUpdate}
+                                onChange={(e) => setAutoUpdate(e.target.value as 'disabled' | 'minor' | 'all')}
+                                className="w-64"
+                            >
+                                <option value="disabled">Désactivé</option>
+                                <option value="minor">Mineures uniquement (recommandé)</option>
+                                <option value="all">Toutes les versions</option>
                             </Select>
                             <p className="text-xs text-gray-500">Les mises à jour majeures ne sont jamais automatiques.</p>
                         </div>

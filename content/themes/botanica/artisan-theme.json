@@ -595,6 +595,19 @@
           "scale"
         ]
       }
+    },
+    "spacing": {
+      "block_spacing": {
+        "label": "Espacement entre blocs",
+        "type": "select",
+        "default": "normal",
+        "options": [
+          "compact",
+          "normal",
+          "relaxed",
+          "spacious"
+        ]
+      }
     }
   },
   "font_imports": [

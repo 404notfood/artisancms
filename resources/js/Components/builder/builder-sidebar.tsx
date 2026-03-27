@@ -5,6 +5,7 @@ import DraggableBlockItem from './draggable-block-item';
 import BlockBreadcrumb from './block-breadcrumb';
 import BlockTree from './block-tree';
 import PatternLibrary from './pattern-library';
+import SpacingSection from './blocks/shared/spacing-control';
 
 type TabId = 'blocks' | 'structure' | 'settings' | 'patterns';
 
@@ -109,6 +110,11 @@ export default function BuilderSidebar() {
                                 <BlockBreadcrumb />
                                 <h3 className="text-sm font-semibold text-gray-800 mb-3">{registryEntry?.label || selectedBlock.type}</h3>
                                 <SettingsComponent block={selectedBlock} onUpdate={(props) => updateBlock(selectedBlock.id, props)} />
+                                <SpacingSection
+                                    block={selectedBlock}
+                                    onUpdate={(props) => updateBlock(selectedBlock.id, props)}
+                                    hidePadding={selectedBlock.type === 'section'}
+                                />
                             </div>
                         ) : (
                             <div className="text-center text-gray-400 text-sm mt-12">

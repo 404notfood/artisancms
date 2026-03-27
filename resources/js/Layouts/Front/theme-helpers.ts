@@ -77,6 +77,7 @@ const SECTION_PREFIXES: Record<string, string> = {
     footer: '--footer-',
     ecommerce: '--ecommerce-',
     global_styles: '--global-',
+    spacing: '--spacing-',
 };
 
 const SEMANTIC_MAPPINGS: Record<string, Record<string, string>> = {

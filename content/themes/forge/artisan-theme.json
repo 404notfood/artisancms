@@ -14,22 +14,41 @@
   },
   "preview": "assets/images/preview.png",
   "category": "business",
-  "tags": ["dark", "industry", "btp", "artisan", "plombier", "electricien", "construction", "orange"],
+  "tags": [
+    "dark",
+    "industry",
+    "btp",
+    "artisan",
+    "plombier",
+    "electricien",
+    "construction",
+    "orange"
+  ],
   "layouts": [
     {
       "slug": "default",
       "name": "Par défaut",
-      "regions": ["header", "content", "footer"]
+      "regions": [
+        "header",
+        "content",
+        "footer"
+      ]
     },
     {
       "slug": "full-width",
       "name": "Pleine largeur",
-      "regions": ["header", "content", "footer"]
+      "regions": [
+        "header",
+        "content",
+        "footer"
+      ]
     },
     {
       "slug": "landing",
       "name": "Landing page",
-      "regions": ["content"]
+      "regions": [
+        "content"
+      ]
     }
   ],
   "menu_locations": [
@@ -53,13 +72,21 @@
         "label": "Hauteur du header",
         "type": "select",
         "default": "64px",
-        "options": ["56px", "64px", "72px", "80px"]
+        "options": [
+          "56px",
+          "64px",
+          "72px",
+          "80px"
+        ]
       },
       "style": {
         "label": "Style",
         "type": "select",
         "default": "solid",
-        "options": ["solid", "transparent"]
+        "options": [
+          "solid",
+          "transparent"
+        ]
       },
       "background_color": {
         "label": "Fond header",
@@ -95,19 +122,33 @@
         "label": "Alignement du menu",
         "type": "select",
         "default": "right",
-        "options": ["left", "center", "right"]
+        "options": [
+          "left",
+          "center",
+          "right"
+        ]
       },
       "variant": {
         "label": "Style du header",
         "type": "select",
         "default": "stacked",
-        "options": ["classic", "centered", "split", "stacked", "minimal"]
+        "options": [
+          "classic",
+          "centered",
+          "split",
+          "stacked",
+          "minimal"
+        ]
       },
       "mobile_menu_style": {
         "label": "Menu mobile",
         "type": "select",
         "default": "hamburger",
-        "options": ["hamburger", "slide", "fullscreen"]
+        "options": [
+          "hamburger",
+          "slide",
+          "fullscreen"
+        ]
       },
       "cta_text": {
         "label": "Texte du bouton CTA",
@@ -123,7 +164,11 @@
         "label": "Style du CTA",
         "type": "select",
         "default": "primary",
-        "options": ["primary", "secondary", "outline"]
+        "options": [
+          "primary",
+          "secondary",
+          "outline"
+        ]
       }
     },
     "footer": {
@@ -131,13 +176,23 @@
         "label": "Disposition du footer",
         "type": "select",
         "default": "columns",
-        "options": ["simple", "columns", "minimal", "centered", "magazine"]
+        "options": [
+          "simple",
+          "columns",
+          "minimal",
+          "centered",
+          "magazine"
+        ]
       },
       "columns": {
         "label": "Nombre de colonnes",
         "type": "select",
         "default": "3",
-        "options": ["2", "3", "4"]
+        "options": [
+          "2",
+          "3",
+          "4"
+        ]
       },
       "background_color": {
         "label": "Couleur de fond",
@@ -267,7 +322,12 @@
         "label": "Taille de base",
         "type": "select",
         "default": "16px",
-        "options": ["15px", "16px", "17px", "18px"]
+        "options": [
+          "15px",
+          "16px",
+          "17px",
+          "18px"
+        ]
       },
       "h1_size": {
         "label": "Taille H1",
@@ -303,19 +363,35 @@
         "label": "Graisse titres",
         "type": "select",
         "default": "400",
-        "options": ["400", "500", "600", "700"]
+        "options": [
+          "400",
+          "500",
+          "600",
+          "700"
+        ]
       },
       "line_height": {
         "label": "Interligne",
         "type": "select",
         "default": "1.6",
-        "options": ["1.4", "1.5", "1.6", "1.7", "1.8"]
+        "options": [
+          "1.4",
+          "1.5",
+          "1.6",
+          "1.7",
+          "1.8"
+        ]
       },
       "letter_spacing": {
         "label": "Espacement lettres",
         "type": "select",
         "default": "0",
-        "options": ["-0.025em", "0", "0.025em", "0.05em"]
+        "options": [
+          "-0.025em",
+          "0",
+          "0.025em",
+          "0.05em"
+        ]
       }
     },
     "layout": {
@@ -323,31 +399,56 @@
         "label": "Largeur max contenu",
         "type": "select",
         "default": "1200px",
-        "options": ["1100px", "1200px", "1300px", "1400px"]
+        "options": [
+          "1100px",
+          "1200px",
+          "1300px",
+          "1400px"
+        ]
       },
       "border_radius": {
         "label": "Arrondi",
         "type": "select",
         "default": "0.25rem",
-        "options": ["0", "0.25rem", "0.5rem", "0.75rem"]
+        "options": [
+          "0",
+          "0.25rem",
+          "0.5rem",
+          "0.75rem"
+        ]
       },
       "section_spacing": {
         "label": "Espacement sections",
         "type": "select",
         "default": "large",
-        "options": ["compact", "normal", "large", "xlarge"]
+        "options": [
+          "compact",
+          "normal",
+          "large",
+          "xlarge"
+        ]
       },
       "sidebar_position": {
         "label": "Position sidebar",
         "type": "select",
         "default": "none",
-        "options": ["left", "right", "none"]
+        "options": [
+          "left",
+          "right",
+          "none"
+        ]
       },
       "content_width": {
         "label": "Largeur contenu",
         "type": "select",
         "default": "65ch",
-        "options": ["55ch", "60ch", "65ch", "70ch", "75ch"]
+        "options": [
+          "55ch",
+          "60ch",
+          "65ch",
+          "70ch",
+          "75ch"
+        ]
       }
     },
     "global_styles": {
@@ -355,24 +456,50 @@
         "label": "Style des boutons",
         "type": "select",
         "default": "square",
-        "options": ["square", "rounded", "pill"]
+        "options": [
+          "square",
+          "rounded",
+          "pill"
+        ]
       },
       "card_style": {
         "label": "Style des cartes",
         "type": "select",
         "default": "bordered",
-        "options": ["flat", "shadow", "bordered"]
+        "options": [
+          "flat",
+          "shadow",
+          "bordered"
+        ]
       },
       "shadow_intensity": {
         "label": "Intensité des ombres",
         "type": "select",
         "default": "medium",
-        "options": ["none", "light", "medium", "strong"]
+        "options": [
+          "none",
+          "light",
+          "medium",
+          "strong"
+        ]
       },
       "enable_animations": {
         "label": "Activer les animations",
         "type": "boolean",
         "default": true
+      }
+    },
+    "spacing": {
+      "block_spacing": {
+        "label": "Espacement entre blocs",
+        "type": "select",
+        "default": "normal",
+        "options": [
+          "compact",
+          "normal",
+          "relaxed",
+          "spacious"
+        ]
       }
     }
   },
@@ -396,6 +523,9 @@
   "font_imports": [
     "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap"
   ],
-  "supports": ["dark_mode", "responsive"],
+  "supports": [
+    "dark_mode",
+    "responsive"
+  ],
   "default_template": "forge-btp"
 }

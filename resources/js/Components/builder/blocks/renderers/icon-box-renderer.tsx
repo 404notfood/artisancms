@@ -1,4 +1,40 @@
+import { type ElementType } from 'react';
 import type { BlockRendererProps } from '../block-registry';
+import {
+    LayoutTemplate, Palette, Plug, Zap, Globe, Shield,
+    ClipboardList, HardDrive, Brain, ImagePlus,
+    Star, Heart, Mail, Phone, MapPin, Calendar,
+    Users, Clock, Search, Settings, Home, FileText,
+    ShoppingCart, CreditCard, Lock, Unlock, Eye, EyeOff,
+    Check, X, Plus, Minus, ChevronRight, ChevronDown,
+    ArrowRight, ArrowLeft, ExternalLink, Link, Code,
+    Database, Server, Cloud, Wifi, Monitor, Smartphone,
+    Camera, Image, Video, Music, Headphones, Mic,
+    BookOpen, GraduationCap, Award, Trophy, Target,
+    Lightbulb, Rocket, Flame, Sparkles, Wand2,
+    PenTool, Layers, Box, Package, Puzzle,
+    BarChart, BarChart3, PieChart, TrendingUp, Activity,
+    Bell, MessageSquare, Share2, ThumbsUp, Bookmark,
+    Briefcase, Building2, Store, UtensilsCrossed, Cpu,
+} from 'lucide-react';
+
+const ICON_MAP: Record<string, ElementType> = {
+    LayoutTemplate, Palette, Plug, Zap, Globe, Shield,
+    ClipboardList, HardDrive, Brain, ImagePlus,
+    Star, Heart, Mail, Phone, MapPin, Calendar,
+    Users, Clock, Search, Settings, Home, FileText,
+    ShoppingCart, CreditCard, Lock, Unlock, Eye, EyeOff,
+    Check, X, Plus, Minus, ChevronRight, ChevronDown,
+    ArrowRight, ArrowLeft, ExternalLink, Link, Code,
+    Database, Server, Cloud, Wifi, Monitor, Smartphone,
+    Camera, Image, Video, Music, Headphones, Mic,
+    BookOpen, GraduationCap, Award, Trophy, Target,
+    Lightbulb, Rocket, Flame, Sparkles, Wand2,
+    PenTool, Layers, Box, Package, Puzzle,
+    BarChart, BarChart3, PieChart, TrendingUp, Activity,
+    Bell, MessageSquare, Share2, ThumbsUp, Bookmark,
+    Briefcase, Building2, Store, UtensilsCrossed, Cpu,
+};
 
 interface IconBoxItem {
     icon: string;
@@ -38,6 +74,7 @@ export default function IconBoxRenderer({ block }: BlockRendererProps) {
     const renderItem = (item: IconBoxItem, index: number) => {
         const isLine = style === 'line';
         const isMinimal = style === 'minimal';
+        const IconComponent = item.icon ? ICON_MAP[item.icon] : null;
 
         const cardContent = (
             <div
@@ -80,14 +117,17 @@ export default function IconBoxRenderer({ block }: BlockRendererProps) {
                             width: '3rem',
                             height: '3rem',
                             borderRadius: isLine ? '0.375rem' : `var(--border-radius, 0.5rem)`,
-                            backgroundColor: 'var(--color-primary, #6366f1)15',
+                            backgroundColor: 'color-mix(in srgb, var(--color-primary, #6366f1) 12%, transparent)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            fontSize: '1.5rem',
                             color: 'var(--color-primary, #6366f1)',
                         }}>
-                            {item.icon}
+                            {IconComponent ? (
+                                <IconComponent size={24} strokeWidth={1.75} />
+                            ) : (
+                                <Box size={24} strokeWidth={1.75} />
+                            )}
                         </div>
                     </div>
                 )}

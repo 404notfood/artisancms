@@ -42,6 +42,7 @@ import TocRenderer from '@/Components/builder/blocks/renderers/toc-renderer';
 import ShapeDividerRenderer from '@/Components/builder/blocks/renderers/shape-divider-renderer';
 import CustomHtmlRenderer from '@/Components/builder/blocks/renderers/custom-html-renderer';
 import AnimateOnScroll from './animate-on-scroll';
+import { getSpacingStyle } from '@/Components/builder/blocks/shared/spacing-utils';
 import type { BlockRendererProps } from '@/Components/builder/blocks/block-registry';
 import type { ComponentType } from 'react';
 
@@ -200,8 +201,15 @@ export default function BlockRenderer({ block }: BlockRendererComponentProps) {
         </Renderer>
     );
 
+    // Universal spacing (margin/padding) — skip padding for sections (they manage their own)
+    const spacingStyle = getSpacingStyle(block.props, { skipPadding: block.type === 'section' });
+
     const needsWrapper = (finalAnimation && finalAnimation.type && finalAnimation.type !== 'none')
         || hoverConfig || textEffectConfig || continuousConfig;
+
+    const spaced = spacingStyle
+        ? <div style={spacingStyle}>{rendered}</div>
+        : rendered;
 
     if (needsWrapper) {
         return (
@@ -211,10 +219,10 @@ export default function BlockRenderer({ block }: BlockRendererComponentProps) {
                 textEffect={textEffectConfig}
                 continuous={continuousConfig}
             >
-                {rendered}
+                {spaced}
             </AnimateOnScroll>
         );
     }
 
-    return rendered;
+    return spaced;
 }

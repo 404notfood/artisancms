@@ -11,6 +11,7 @@ import {
     Columns3,
     ShoppingBag,
     Sparkles,
+    Space,
     ChevronRight,
     RotateCcw,
 } from 'lucide-react';
@@ -33,6 +34,7 @@ const SECTION_META: Record<string, { label: string; icon: typeof Layout }> = {
     layout: { label: 'Mise en page', icon: Columns3 },
     ecommerce: { label: 'E-commerce', icon: ShoppingBag },
     global_styles: { label: 'Styles globaux', icon: Sparkles },
+    spacing: { label: 'Espacement', icon: Space },
 };
 
 export default function Customize({ theme, schema, values }: CustomizeProps) {

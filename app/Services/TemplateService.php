@@ -703,7 +703,9 @@ class TemplateService
             }
 
             if ($pageData['is_homepage'] ?? false) {
-                Setting::set('homepage_id', (string) Page::where('slug', $pageIdMap[$templateId])->value('id'));
+                $homepageId = (string) Page::where('slug', $pageIdMap[$templateId])->value('id');
+                Setting::set('homepage_id', $homepageId);
+                Setting::set('content.homepage_id', $homepageId);
             }
 
             $report['pages_created']++;

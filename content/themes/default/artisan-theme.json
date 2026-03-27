@@ -102,6 +102,9 @@
       "card_style": { "label": "Style des cartes", "type": "select", "default": "shadow", "options": ["flat", "shadow", "bordered"] },
       "shadow_intensity": { "label": "Intensité des ombres", "type": "select", "default": "medium", "options": ["none", "light", "medium", "strong"] },
       "enable_animations": { "label": "Activer les animations", "type": "boolean", "default": true }
+    },
+    "spacing": {
+      "block_spacing": { "label": "Espacement entre blocs", "type": "select", "default": "normal", "options": ["compact", "normal", "relaxed", "spacious"] }
     }
   },
   "font_imports": [
