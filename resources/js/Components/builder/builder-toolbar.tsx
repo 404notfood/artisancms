@@ -1,6 +1,7 @@
 import { Link, usePage } from '@inertiajs/react';
 import { useBuilderStore } from '@/stores/builder-store';
 import { ArrowLeft, Monitor, Tablet, Smartphone, Undo2, Redo2, Save, Globe } from 'lucide-react';
+import FullscreenToggle from '@/Components/builder/fullscreen-toggle';
 import type { SharedProps } from '@/types/cms';
 
 interface BuilderToolbarProps {
@@ -52,6 +53,7 @@ export default function BuilderToolbar({ title, onSave, onPublish, isSaving }: B
                 <button onClick={redo} disabled={!canRedo()} className="p-2 text-gray-500 hover:text-gray-700 rounded-md hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed">
                     <Redo2 className="w-4 h-4" />
                 </button>
+                <FullscreenToggle />
                 <div className="h-6 w-px bg-gray-200" />
                 <button onClick={onSave} disabled={isSaving} className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border rounded-md hover:bg-gray-50 disabled:opacity-50">
                     <Save className="w-4 h-4" />

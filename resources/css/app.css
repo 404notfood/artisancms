@@ -1,5 +1,10 @@
 @import "tailwindcss";
+@import "./admin-dark.css";
 @import "../js/Components/builder/blocks/shared/animation-styles.css";
+@import "../js/Components/builder/blocks/renderers/gallery-layouts/gallery-layouts.css";
+
+/* Dark mode: class strategy for Tailwind v4 */
+@custom-variant dark (&:where(.dark, .dark *));
 
 /* TipTap editor styles */
 .tiptap-editor .ProseMirror {

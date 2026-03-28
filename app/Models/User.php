@@ -44,7 +44,7 @@ class User extends Authenticatable
         'email_verified_at',
     ];
 
-    protected $appends = ['avatar_url'];
+    protected $appends = ['avatar_url', 'avatar_display_url'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -170,6 +170,25 @@ class User extends Authenticatable
         }
 
         return Storage::url($this->avatar);
+    }
+
+    /**
+     * Get the Gravatar URL based on the user's email.
+     */
+    public function getGravatarUrlAttribute(): string
+    {
+        $hash = md5(strtolower(trim($this->email ?? '')));
+
+        return "https://www.gravatar.com/avatar/{$hash}?s=80&d=mp";
+    }
+
+    /**
+     * Get the display avatar URL with Gravatar fallback.
+     * Uses the uploaded avatar if available, otherwise falls back to Gravatar.
+     */
+    public function getAvatarDisplayUrlAttribute(): string
+    {
+        return $this->avatar_url ?? $this->gravatar_url;
     }
 
     /**

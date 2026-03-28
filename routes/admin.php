@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AccountController;
 use App\Http\Controllers\Admin\AnalyticsController;
 use App\Http\Controllers\Admin\BrandingController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\EditorialCalendarController;
 use App\Http\Controllers\Admin\EmailTemplateController;
 use App\Http\Controllers\Admin\MediaController;
 use App\Http\Controllers\Admin\MenuController;
@@ -20,6 +21,7 @@ use App\Http\Controllers\Admin\ThemeController;
 use App\Http\Controllers\Admin\AiAssistantController;
 use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\CommentController;
+use App\Http\Controllers\Admin\ConfigController;
 use App\Http\Controllers\Admin\ContentEntryController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\ContentTypeController;
@@ -33,10 +35,12 @@ use App\Http\Controllers\Admin\RedirectController;
 use App\Http\Controllers\Admin\WebhookController;
 use App\Http\Controllers\Admin\WordPressImportController;
 use App\Http\Controllers\Admin\BlockPatternController;
+use App\Http\Controllers\Admin\BookmarkController;
 use App\Http\Controllers\Admin\PluginSettingsController;
 use App\Http\Controllers\Admin\DesignTokenController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SystemController;
+use App\Http\Controllers\Admin\SystemMonitorController;
 use App\Http\Controllers\Admin\UpdateController;
 use App\Http\Controllers\Admin\WidgetController;
 use Illuminate\Support\Facades\Route;
@@ -99,6 +103,9 @@ Route::get('posts/{post}/revisions', [PostController::class, 'revisions'])->name
 Route::get('posts/{post}/revisions/{revision}/compare/{compare}', [PostController::class, 'compareRevisions'])->name('admin.posts.revisions.compare');
 Route::post('posts/{post}/revisions/{revision}/restore', [PostController::class, 'restoreRevision'])->name('admin.posts.revisions.restore');
 
+// Editorial Calendar
+Route::get('editorial-calendar', [EditorialCalendarController::class, 'index'])->name('admin.editorial-calendar');
+
 // Users
 Route::resource('users', UserController::class)->names('admin.users');
 Route::post('users/{user}/avatar', [UserController::class, 'uploadAvatar'])->name('admin.users.avatar.upload');
@@ -147,6 +154,8 @@ Route::post('themes/{slug}/activate', [ThemeController::class, 'activate'])->nam
 Route::delete('themes/{slug}', [ThemeController::class, 'destroy'])->name('admin.themes.destroy');
 Route::get('themes/{slug}/customize', [ThemeController::class, 'customizePage'])->name('admin.themes.customize.page');
 Route::put('themes/{slug}/customize', [ThemeController::class, 'customize'])->name('admin.themes.customize');
+Route::get('themes/{slug}/custom-code', [ThemeController::class, 'customCode'])->name('admin.themes.custom-code');
+Route::put('themes/{slug}/custom-code', [ThemeController::class, 'saveCustomCode'])->name('admin.themes.custom-code.save');
 
 // Plugins
 Route::get('plugins', [PluginController::class, 'index'])->name('admin.plugins.index');
@@ -245,6 +254,7 @@ Route::post('notifications/read-all', [NotificationController::class, 'markAllRe
 
 // Preview Links
 Route::post('pages/{page}/preview', [PageController::class, 'generatePreview'])->name('admin.pages.preview');
+Route::post('pages/{page}/preview-at', [PageController::class, 'generateTemporalPreview'])->name('admin.pages.preview-at');
 Route::post('posts/{post}/preview', [PostController::class, 'generatePreview'])->name('admin.posts.preview');
 
 // Import/Export
@@ -278,6 +288,15 @@ Route::delete('system/sessions/{session}', [SystemController::class, 'destroySes
 Route::post('system/sessions/logout-all', [SystemController::class, 'logoutAllSessions'])->name('admin.system.sessions.logout-all');
 Route::get('system/health', [SystemController::class, 'healthCheck'])->name('admin.system.health');
 
+// System Monitor (Scheduler, Queues, Performance)
+Route::get('system/scheduler', [SystemMonitorController::class, 'scheduler'])->name('admin.system.scheduler');
+Route::get('system/queues', [SystemMonitorController::class, 'queues'])->name('admin.system.queues');
+Route::post('system/queues/retry/{id}', [SystemMonitorController::class, 'retryJob'])->name('admin.system.queues.retry');
+Route::delete('system/queues/delete/{id}', [SystemMonitorController::class, 'deleteJob'])->name('admin.system.queues.delete');
+Route::post('system/queues/retry-all', [SystemMonitorController::class, 'retryAll'])->name('admin.system.queues.retry-all');
+Route::post('system/queues/flush', [SystemMonitorController::class, 'flushFailed'])->name('admin.system.queues.flush');
+Route::get('system/performance', [SystemMonitorController::class, 'performance'])->name('admin.system.performance');
+
 // Updates & Error Recovery
 Route::get('updates', [UpdateController::class, 'index'])->name('admin.updates.index');
 Route::get('updates/check', [UpdateController::class, 'check'])->name('admin.updates.check');
@@ -303,3 +322,12 @@ Route::get('block-patterns', [BlockPatternController::class, 'index'])->name('ad
 Route::post('block-patterns', [BlockPatternController::class, 'store'])->name('admin.block-patterns.store');
 Route::put('block-patterns/{blockPattern}', [BlockPatternController::class, 'update'])->name('admin.block-patterns.update');
 Route::delete('block-patterns/{blockPattern}', [BlockPatternController::class, 'destroy'])->name('admin.block-patterns.destroy');
+
+// Config Export/Import
+Route::get('config/export', [ConfigController::class, 'export'])->name('admin.config.export');
+Route::post('config/import', [ConfigController::class, 'import'])->name('admin.config.import');
+
+// Bookmarks (Favoris admin)
+Route::get('bookmarks', [BookmarkController::class, 'index'])->name('admin.bookmarks.index');
+Route::post('bookmarks', [BookmarkController::class, 'store'])->name('admin.bookmarks.store');
+Route::delete('bookmarks/{bookmark}', [BookmarkController::class, 'destroy'])->name('admin.bookmarks.destroy');

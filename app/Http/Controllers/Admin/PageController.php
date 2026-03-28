@@ -346,4 +346,29 @@ class PageController extends Controller
             'expires_at' => $token->expires_at->toISOString(),
         ]);
     }
+
+    /**
+     * Generate a temporal preview link for a page at a specific date.
+     *
+     * POST admin/pages/{page}/preview-at
+     * Body: { "date": "2026-06-15" }
+     *
+     * Returns a preview URL with ?at=YYYY-MM-DD that shows the site
+     * as it would appear at that date (pages published before that date visible).
+     */
+    public function generateTemporalPreview(Request $request, Page $page): JsonResponse
+    {
+        $validated = $request->validate([
+            'date' => ['required', 'date', 'after_or_equal:today', 'before_or_equal:' . now()->addYears(2)->toDateString()],
+        ]);
+
+        $token = $this->pageService->generatePreviewToken($page, (int) auth()->id());
+        $previewUrl = route('preview', $token->token) . '?at=' . $validated['date'];
+
+        return response()->json([
+            'url' => $previewUrl,
+            'date' => $validated['date'],
+            'expires_at' => $token->expires_at->toISOString(),
+        ]);
+    }
 }

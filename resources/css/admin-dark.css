@@ -1,0 +1,264 @@
+/* ─── Admin Dark Mode ──────────────────────────────────────────────────────
+   Applied via .dark class on <html>. Uses elegant gray 800-950 backgrounds
+   (no pure black). Compatible with shadcn/ui dark: variants.
+   ────────────────────────────────────────────────────────────────────────── */
+
+/* ─── Dark CSS Variables ───────────────────────────────────────────────── */
+.dark {
+    --admin-dark-bg: #0f1117;
+    --admin-dark-bg-secondary: #161821;
+    --admin-dark-bg-tertiary: #1c1e2a;
+    --admin-dark-surface: #1e2030;
+    --admin-dark-surface-hover: #252738;
+    --admin-dark-border: #2a2d3e;
+    --admin-dark-border-light: #232635;
+    --admin-dark-text: #e4e5eb;
+    --admin-dark-text-secondary: #9b9db0;
+    --admin-dark-text-muted: #6b6d82;
+    --admin-dark-ring: rgba(99, 102, 241, 0.4);
+    color-scheme: dark;
+}
+
+/* ─── Main Layout ──────────────────────────────────────────────────────── */
+.dark .min-h-screen.bg-gray-50\/80 {
+    background-color: var(--admin-dark-bg);
+}
+
+/* ─── Header ───────────────────────────────────────────────────────────── */
+.dark header.border-b.border-gray-200.bg-white\/80 {
+    background-color: color-mix(in srgb, var(--admin-dark-bg-secondary) 85%, transparent);
+    border-color: var(--admin-dark-border);
+    backdrop-filter: blur(12px);
+}
+.dark header .text-gray-500 {
+    color: var(--admin-dark-text-muted);
+}
+.dark header .text-gray-400 {
+    color: var(--admin-dark-text-muted);
+}
+.dark header .text-gray-700 {
+    color: var(--admin-dark-text);
+}
+.dark header .hover\:bg-gray-100:hover {
+    background-color: var(--admin-dark-surface-hover);
+}
+
+/* ─── Notification Dropdown ────────────────────────────────────────────── */
+.dark .border-gray-200.bg-white.shadow-xl {
+    background-color: var(--admin-dark-surface);
+    border-color: var(--admin-dark-border);
+}
+.dark .border-gray-100 {
+    border-color: var(--admin-dark-border-light);
+}
+.dark .divide-gray-50 > :not(:last-child) {
+    border-color: var(--admin-dark-border-light);
+}
+.dark .text-gray-900 {
+    color: var(--admin-dark-text);
+}
+.dark .text-gray-500 {
+    color: var(--admin-dark-text-secondary);
+}
+.dark .text-gray-400 {
+    color: var(--admin-dark-text-muted);
+}
+.dark .text-gray-700 {
+    color: var(--admin-dark-text);
+}
+.dark .text-gray-600 {
+    color: var(--admin-dark-text-secondary);
+}
+.dark .text-gray-300 {
+    color: #c5c7d4;
+}
+.dark .hover\:bg-gray-50:hover {
+    background-color: var(--admin-dark-surface-hover);
+}
+.dark .bg-blue-50\/40 {
+    background-color: rgba(99, 102, 241, 0.08);
+}
+
+/* ─── Cards ────────────────────────────────────────────────────────────── */
+.dark .rounded-xl.border.border-gray-200.bg-white,
+.dark .rounded-lg.border.border-gray-200.bg-white {
+    background-color: var(--admin-dark-surface);
+    border-color: var(--admin-dark-border);
+    color: var(--admin-dark-text);
+}
+.dark .bg-white {
+    background-color: var(--admin-dark-surface);
+}
+.dark .bg-gray-50 {
+    background-color: var(--admin-dark-bg-secondary);
+}
+.dark .bg-gray-100 {
+    background-color: var(--admin-dark-bg-tertiary);
+}
+
+/* ─── Tables ───────────────────────────────────────────────────────────── */
+.dark table th {
+    background-color: var(--admin-dark-bg-secondary);
+    color: var(--admin-dark-text-secondary);
+    border-color: var(--admin-dark-border);
+}
+.dark table td {
+    border-color: var(--admin-dark-border-light);
+    color: var(--admin-dark-text);
+}
+.dark table tr:hover td {
+    background-color: var(--admin-dark-surface-hover);
+}
+.dark table tbody tr {
+    border-color: var(--admin-dark-border-light);
+}
+
+/* ─── Forms ────────────────────────────────────────────────────────────── */
+.dark input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+.dark textarea,
+.dark select {
+    background-color: var(--admin-dark-bg-secondary);
+    border-color: var(--admin-dark-border);
+    color: var(--admin-dark-text);
+}
+.dark input:focus,
+.dark textarea:focus,
+.dark select:focus {
+    border-color: rgba(99, 102, 241, 0.5);
+    box-shadow: 0 0 0 2px var(--admin-dark-ring);
+}
+.dark input::placeholder,
+.dark textarea::placeholder {
+    color: var(--admin-dark-text-muted);
+}
+.dark label {
+    color: var(--admin-dark-text);
+}
+
+/* ─── Buttons ──────────────────────────────────────────────────────────── */
+.dark .border.border-gray-300.bg-white {
+    background-color: var(--admin-dark-surface);
+    border-color: var(--admin-dark-border);
+    color: var(--admin-dark-text);
+}
+.dark .border.border-gray-300.bg-white:hover {
+    background-color: var(--admin-dark-surface-hover);
+}
+.dark .bg-gray-100.text-gray-900 {
+    background-color: var(--admin-dark-bg-tertiary);
+    color: var(--admin-dark-text);
+}
+.dark .bg-gray-100.text-gray-900:hover {
+    background-color: var(--admin-dark-surface-hover);
+}
+
+/* ─── Badges ───────────────────────────────────────────────────────────── */
+.dark .bg-gray-50.text-gray-600 {
+    background-color: var(--admin-dark-bg-tertiary);
+    color: var(--admin-dark-text-secondary);
+}
+.dark .bg-green-50 {
+    background-color: rgba(34, 197, 94, 0.1);
+}
+.dark .bg-red-50 {
+    background-color: rgba(239, 68, 68, 0.1);
+}
+.dark .bg-yellow-50 {
+    background-color: rgba(234, 179, 8, 0.1);
+}
+.dark .bg-blue-50 {
+    background-color: rgba(59, 130, 246, 0.1);
+}
+
+/* ─── Borders & Dividers ───────────────────────────────────────────────── */
+.dark .border-gray-200 {
+    border-color: var(--admin-dark-border);
+}
+.dark .border-gray-300 {
+    border-color: var(--admin-dark-border);
+}
+.dark .divide-gray-200 > :not(:last-child) {
+    border-color: var(--admin-dark-border);
+}
+
+/* ─── Shadows ──────────────────────────────────────────────────────────── */
+.dark .shadow-sm,
+.dark .shadow {
+    --tw-shadow-color: rgba(0, 0, 0, 0.3);
+}
+.dark .shadow-lg,
+.dark .shadow-xl {
+    --tw-shadow-color: rgba(0, 0, 0, 0.5);
+}
+
+/* ─── Scrollbar ────────────────────────────────────────────────────────── */
+.dark ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+.dark ::-webkit-scrollbar-track {
+    background: var(--admin-dark-bg);
+}
+.dark ::-webkit-scrollbar-thumb {
+    background: var(--admin-dark-border);
+    border-radius: 4px;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+    background: #3a3d52;
+}
+
+/* ─── Ring / Focus ─────────────────────────────────────────────────────── */
+.dark .ring-gray-200 {
+    --tw-ring-color: var(--admin-dark-border);
+}
+
+/* ─── Legal page content ───────────────────────────────────────────────── */
+.dark .legal-page-content h2 {
+    color: var(--admin-dark-text);
+    border-color: var(--admin-dark-border);
+}
+.dark .legal-page-content .prose p,
+.dark .legal-page-content .prose li {
+    color: var(--admin-dark-text-secondary);
+}
+.dark .legal-page-content .prose strong {
+    color: var(--admin-dark-text);
+}
+
+/* ─── Misc Overrides ───────────────────────────────────────────────────── */
+.dark .bg-white\/80 {
+    background-color: color-mix(in srgb, var(--admin-dark-bg-secondary) 85%, transparent);
+}
+.dark .bg-gray-50\/80 {
+    background-color: var(--admin-dark-bg);
+}
+.dark hr {
+    border-color: var(--admin-dark-border);
+}
+
+/* ─── Dark mode toggle button ──────────────────────────────────────────── */
+.dark-mode-toggle {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 0.5rem;
+    transition: background-color 150ms ease, color 150ms ease;
+    color: #6b7280;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+}
+.dark-mode-toggle:hover {
+    background-color: #f3f4f6;
+    color: #374151;
+}
+.dark .dark-mode-toggle {
+    color: var(--admin-dark-text-muted);
+}
+.dark .dark-mode-toggle:hover {
+    background-color: var(--admin-dark-surface-hover);
+    color: var(--admin-dark-text);
+}

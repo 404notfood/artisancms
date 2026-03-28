@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\CMS\Themes\ThemeManager;
 use App\Models\CmsTheme;
+use App\Services\SettingService;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -15,7 +16,10 @@ use RuntimeException;
 
 class ThemeController extends Controller
 {
-    public function __construct(private readonly ThemeManager $themeManager) {}
+    public function __construct(
+        private readonly ThemeManager $themeManager,
+        private readonly SettingService $settings,
+    ) {}
 
     public function index(): Response
     {
@@ -124,6 +128,39 @@ class ThemeController extends Controller
         return redirect()
             ->route('admin.themes.customize.page', $slug)
             ->with('success', __('cms.themes.customized'));
+    }
+
+    public function customCode(string $slug): Response
+    {
+        $theme = CmsTheme::where('slug', $slug)->firstOrFail();
+
+        return Inertia::render('Admin/Themes/CustomCode', [
+            'theme' => [
+                'slug' => $theme->slug,
+                'name' => $theme->name,
+            ],
+            'customCss' => (string) $this->settings->get("theme.{$slug}_custom_css", ''),
+            'customJs' => (string) $this->settings->get("theme.{$slug}_custom_js", ''),
+        ]);
+    }
+
+    public function saveCustomCode(Request $request, string $slug): RedirectResponse
+    {
+        CmsTheme::where('slug', $slug)->firstOrFail();
+
+        $request->validate([
+            'custom_css' => ['nullable', 'string', 'max:65535'],
+            'custom_js' => ['nullable', 'string', 'max:65535'],
+        ]);
+
+        $this->settings->setMany([
+            "theme.{$slug}_custom_css" => $request->input('custom_css', ''),
+            "theme.{$slug}_custom_js" => $request->input('custom_js', ''),
+        ]);
+
+        return redirect()
+            ->route('admin.themes.custom-code', $slug)
+            ->with('success', __('cms.themes.custom_code_saved'));
     }
 
     /**

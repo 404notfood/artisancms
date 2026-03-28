@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tests\Feature\Services;
 
 use App\Models\Page;
-use App\Models\Revision;
 use App\Services\PageService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;

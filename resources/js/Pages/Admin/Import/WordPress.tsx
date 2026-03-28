@@ -134,9 +134,9 @@ export default function WordPressImport() {
                                     <p className="text-xs text-gray-400 mt-1">ou cliquez pour sélectionner (max 50 Mo)</p>
                                 </div>
                             )}
-                            <input ref={fileInputRef} type="file" accept=".xml,text/xml" className="hidden" onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                            <input ref={fileInputRef} type="file" accept=".xml,text/xml,application/xml" className="hidden" onChange={(e: ChangeEvent<HTMLInputElement>) => {
                                 const f = e.target.files?.[0];
-                                if (f && f.type === 'text/xml') setFile(f);
+                                if (f && (f.type === 'text/xml' || f.type === 'application/xml' || f.name.endsWith('.xml'))) setFile(f);
                             }} />
                         </div>
 

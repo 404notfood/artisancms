@@ -31,6 +31,9 @@ class MenuItem extends Model
         'is_mega',
         'mega_columns',
         'mega_content',
+        'mega_image',
+        'mega_html',
+        'mega_width',
         'badge_text',
         'badge_color',
         'order',
@@ -46,6 +49,7 @@ class MenuItem extends Model
             'is_mega' => 'boolean',
             'mega_columns' => 'integer',
             'mega_content' => 'array',
+            'mega_width' => 'string',
         ];
     }
 

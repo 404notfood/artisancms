@@ -86,6 +86,9 @@ export interface MenuItemData {
     is_mega: boolean;
     mega_columns: number;
     mega_content: MegaMenuContent | null;
+    mega_image: string | null;
+    mega_html: string | null;
+    mega_width: 'auto' | 'full' | 'fixed';
     badge_text: string | null;
     badge_color: string | null;
     order: number;

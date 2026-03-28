@@ -204,7 +204,7 @@ type Query {
     "Récupérer une page par son slug."
     page(
         slug: String! @eq
-    ): Page @find @softDeletes
+    ): Page @first @softDeletes
 
     "Lister les pages publiées (paginées)."
     pages(
@@ -217,7 +217,7 @@ type Query {
     "Récupérer un article par son slug."
     post(
         slug: String! @eq
-    ): Post @find @softDeletes
+    ): Post @first @softDeletes
 
     "Lister les articles publiés (paginés)."
     posts(
@@ -243,12 +243,12 @@ type Query {
     "Récupérer une taxonomie par son slug."
     taxonomy(
         slug: String! @eq
-    ): Taxonomy @find
+    ): Taxonomy @first
 
     "Récupérer un terme de taxonomie par son slug."
     taxonomyTerm(
         slug: String! @eq
-    ): TaxonomyTerm @find
+    ): TaxonomyTerm @first
 
     "Lister les termes d'une taxonomie."
     taxonomyTerms(
@@ -259,7 +259,7 @@ type Query {
     "Récupérer un menu par son slug."
     menu(
         slug: String! @eq
-    ): Menu @find
+    ): Menu @first
 
     "Lister tous les menus."
     menus: [Menu!]! @all

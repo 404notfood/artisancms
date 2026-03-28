@@ -16,6 +16,16 @@
         @viteReactRefresh
         @vite(['resources/js/app.tsx', "resources/js/Pages/{$page['component']}.tsx"])
         @inertiaHead
+
+        <!-- Dark mode: apply class before render to prevent flash -->
+        <script>
+            (function(){
+                var t=localStorage.getItem('artisan-theme');
+                if(t==='dark'||(t!=='light'&&matchMedia('(prefers-color-scheme:dark)').matches)){
+                    document.documentElement.classList.add('dark');
+                }
+            })();
+        </script>
     </head>
     <body class="font-sans antialiased">
         @inertia

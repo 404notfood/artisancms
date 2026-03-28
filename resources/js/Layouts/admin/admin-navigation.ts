@@ -1,4 +1,5 @@
 import {
+    CalendarDays,
     LayoutDashboard,
     LayoutGrid,
     LayoutTemplate,
@@ -77,6 +78,7 @@ const RAW_NAV_DEFS: RawNavGroup[] = [
             { label: 'Articles', path: 'posts', icon: Newspaper },
             { label: 'Medias', path: 'media', icon: Image },
             { label: 'Commentaires', path: 'comments', icon: MessageSquare, badgeKey: 'unread_comments' },
+            { label: 'Calendrier', path: 'editorial-calendar', icon: CalendarDays },
         ],
     },
     {

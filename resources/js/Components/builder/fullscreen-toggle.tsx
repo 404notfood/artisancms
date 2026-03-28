@@ -1,49 +1,52 @@
-import { useEffect, useState } from 'react';
-import { Maximize, Minimize } from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
+import { Maximize2, Minimize2 } from 'lucide-react';
+import { Tooltip } from '@/Components/ui/tooltip';
 
 interface FullscreenToggleProps {
     className?: string;
 }
 
 export default function FullscreenToggle({ className }: FullscreenToggleProps) {
-    const [isFullscreen, setIsFullscreen] = useState(false);
+    const [isFullscreen, setIsFullscreen] = useState(!!document.fullscreenElement);
 
     useEffect(() => {
-        const handler = () => {
-            setIsFullscreen(!!document.fullscreenElement);
-        };
-        document.addEventListener('fullscreenchange', handler);
-        return () => document.removeEventListener('fullscreenchange', handler);
+        const onChange = () => setIsFullscreen(!!document.fullscreenElement);
+        document.addEventListener('fullscreenchange', onChange);
+        return () => document.removeEventListener('fullscreenchange', onChange);
     }, []);
 
-    const toggle = () => {
-        if (isFullscreen) {
+    const toggle = useCallback(() => {
+        if (document.fullscreenElement) {
             document.exitFullscreen().catch(() => {});
         } else {
             document.documentElement.requestFullscreen().catch(() => {});
         }
-    };
+    }, []);
 
-    // Keyboard shortcut F11
     useEffect(() => {
-        const handler = (e: KeyboardEvent) => {
-            if (e.key === 'F11') {
+        const onKeyDown = (e: KeyboardEvent) => {
+            if (e.ctrlKey && e.shiftKey && e.key === 'F') {
                 e.preventDefault();
                 toggle();
             }
         };
-        window.addEventListener('keydown', handler);
-        return () => window.removeEventListener('keydown', handler);
-    }, [isFullscreen]);
+        window.addEventListener('keydown', onKeyDown);
+        return () => window.removeEventListener('keydown', onKeyDown);
+    }, [toggle]);
+
+    const Icon = isFullscreen ? Minimize2 : Maximize2;
+    const label = isFullscreen ? 'Quitter le plein écran' : 'Plein écran (Ctrl+Shift+F)';
 
     return (
-        <button
-            type="button"
-            onClick={toggle}
-            className={`p-2 rounded-md text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-colors ${className ?? ''}`}
-            title={isFullscreen ? 'Quitter le plein ecran' : 'Plein ecran'}
-        >
-            {isFullscreen ? <Minimize className="h-4 w-4" /> : <Maximize className="h-4 w-4" />}
-        </button>
+        <Tooltip content={label} side="bottom">
+            <button
+                type="button"
+                onClick={toggle}
+                className={`p-2 rounded-md text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-colors ${className ?? ''}`}
+                aria-label={label}
+            >
+                <Icon className="h-4 w-4" />
+            </button>
+        </Tooltip>
     );
 }

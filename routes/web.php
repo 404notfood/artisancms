@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Front\BlogController;
 use App\Http\Controllers\Front\ErrorController;
+use App\Http\Controllers\Front\ManifestController;
 use App\Http\Controllers\Front\RssFeedController;
 use App\Http\Controllers\Front\SearchController as FrontSearchController;
 use App\Http\Controllers\FrontController;
@@ -83,6 +84,14 @@ Route::get('/api/search', [SearchController::class, 'search'])
 
 /*
 |--------------------------------------------------------------------------
+| PWA Manifest
+|--------------------------------------------------------------------------
+*/
+
+Route::get('manifest.json', ManifestController::class)->name('manifest');
+
+/*
+|--------------------------------------------------------------------------
 | RSS Feed Routes
 |--------------------------------------------------------------------------
 */
@@ -152,7 +161,9 @@ Route::get('newsletter/unsubscribe/{token}', [NewsletterSubscribeController::cla
 |--------------------------------------------------------------------------
 */
 
-Route::get('/preview/{token}', [FrontController::class, 'preview'])->name('preview');
+Route::get('/preview/{token}', [FrontController::class, 'preview'])
+    ->middleware('cms.preview')
+    ->name('preview');
 
 /*
 |--------------------------------------------------------------------------

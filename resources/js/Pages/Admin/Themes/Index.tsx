@@ -1,7 +1,7 @@
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { useRef, useState } from 'react';
-import { Upload, Trash2, X, FileArchive, Loader2, Paintbrush } from 'lucide-react';
+import { Upload, Trash2, X, FileArchive, Loader2, Paintbrush, Code2 } from 'lucide-react';
 import type { FlashMessages, SharedProps } from '@/types/cms';
 
 interface ThemeItem {
@@ -147,12 +147,21 @@ function ThemeCard({
 
                 <div className="mt-4 flex items-center gap-2">
                     {theme.active ? (
-                        <Link
-                            href={`/admin/themes/${theme.slug}/customize`}
-                            className="flex-1 rounded-lg border border-gray-300 px-3 py-1.5 text-center text-xs font-medium text-gray-700 transition-colors hover:bg-gray-50"
-                        >
-                            Personnaliser
-                        </Link>
+                        <>
+                            <Link
+                                href={`/admin/themes/${theme.slug}/customize`}
+                                className="flex-1 rounded-lg border border-gray-300 px-3 py-1.5 text-center text-xs font-medium text-gray-700 transition-colors hover:bg-gray-50"
+                            >
+                                Personnaliser
+                            </Link>
+                            <Link
+                                href={`/admin/themes/${theme.slug}/custom-code`}
+                                title="CSS / JS personnalise"
+                                className="rounded-lg border border-gray-200 p-1.5 text-gray-400 transition-colors hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-500"
+                            >
+                                <Code2 className="h-4 w-4" />
+                            </Link>
+                        </>
                     ) : (
                         <>
                             <button

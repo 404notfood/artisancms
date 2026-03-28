@@ -20,7 +20,10 @@ export default function GallerySettings({ block, onUpdate }: BlockSettingsProps)
                 options={[
                     { value: 'grid', label: 'Grille' },
                     { value: 'masonry', label: 'Maconnerie' },
-                    { value: 'carousel', label: 'Carrousel' },
+                    { value: 'slider', label: 'Carrousel' },
+                    { value: 'justified', label: 'Justifie' },
+                    { value: 'collage', label: 'Collage' },
+                    { value: 'filmstrip', label: 'Pellicule' },
                 ]}
             />
             <NumberInput

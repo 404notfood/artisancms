@@ -162,8 +162,12 @@ class Page extends Model
      */
     public function scopePublished(Builder $query): Builder
     {
+        $referenceDate = app()->bound('cms.preview_at')
+            ? app('cms.preview_at')
+            : now();
+
         return $query->where('status', 'published')
-            ->where('published_at', '<=', now());
+            ->where('published_at', '<=', $referenceDate);
     }
 
     /**

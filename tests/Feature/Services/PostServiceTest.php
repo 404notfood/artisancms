@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tests\Feature\Services;
 
 use App\Models\Post;
-use App\Models\Revision;
 use App\Services\PostService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;

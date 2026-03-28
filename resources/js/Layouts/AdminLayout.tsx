@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { formatTimeAgo } from '@/lib/format';
 import type { SharedProps } from '@/types/cms';
 import CommandPalette from '@/Components/admin/command-palette';
+import DarkModeToggle from '@/Components/admin/dark-mode-toggle';
 import { ErrorBoundary } from '@/Components/error-boundary';
 import FlashToasts from '@/Layouts/admin/FlashToasts';
 import SidebarNavItem from '@/Layouts/admin/SidebarNavItem';
@@ -239,7 +240,7 @@ export default function AdminLayout({ header, children }: AdminLayoutProps) {
                         <div ref={notifRef} className="relative">
                             <button type="button" onClick={toggleNotifications} className="relative rounded-lg p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-colors">
                                 <Bell className="h-5 w-5" />
-                                {unreadCount > 0 && <span className="absolute top-1 right-1 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] font-bold text-white ring-2 ring-white" style={{ backgroundColor: 'var(--admin-primary, #6366f1)' }}>{unreadCount > 99 ? '99+' : unreadCount}</span>}
+                                {unreadCount > 0 && <span className="absolute top-1 right-1 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] font-bold text-white ring-2 ring-white dark:ring-[var(--admin-dark-bg-secondary)]" style={{ backgroundColor: 'var(--admin-primary, #6366f1)' }}>{unreadCount > 99 ? '99+' : unreadCount}</span>}
                             </button>
                             {notifOpen && (
                                 <div className="absolute right-0 top-full mt-2 w-96 rounded-xl border border-gray-200 bg-white shadow-xl z-50 overflow-hidden">
@@ -273,7 +274,8 @@ export default function AdminLayout({ header, children }: AdminLayoutProps) {
                                 </div>
                             )}
                         </div>
-                        <Link href={`/${adminPrefix}/account`} className="flex items-center gap-2 rounded-lg p-1.5 hover:bg-gray-100 transition-colors">
+                        <DarkModeToggle />
+                        <Link href={`/${adminPrefix}/account`} className="flex items-center gap-2 rounded-lg p-1.5 hover:bg-gray-100 dark:hover:bg-[var(--admin-dark-surface-hover)] transition-colors">
                             {auth.user?.avatar_url ? <img src={auth.user.avatar_url} alt={auth.user.name} className="h-8 w-8 rounded-full object-cover" /> : (
                                 <div className="flex h-8 w-8 items-center justify-center rounded-full text-white" style={{ backgroundColor: 'var(--admin-primary, #6366f1)' }}><span className="text-xs font-semibold">{userInitials}</span></div>
                             )}

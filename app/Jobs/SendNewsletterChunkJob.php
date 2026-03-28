@@ -76,18 +76,21 @@ class SendNewsletterChunkJob implements ShouldQueue
 
         $campaign->increment('sent_count', $sentCount);
 
-        $this->markCampaignSentIfComplete($campaign);
+        $this->markCampaignSentIfComplete($campaign, $newsletterService);
     }
 
-    private function markCampaignSentIfComplete(NewsletterCampaign $campaign): void
-    {
+    private function markCampaignSentIfComplete(
+        NewsletterCampaign $campaign,
+        NewsletterService $newsletterService,
+    ): void {
         $campaign->refresh();
 
-        // If no more jobs pending on the newsletter queue for this campaign, mark as sent
-        // Simple heuristic: check if sent_count matches expected total
-        $totalConfirmed = NewsletterSubscriber::confirmed()->count();
+        $expectedRecipients = $newsletterService->getConfirmedSubscribers(
+            $campaign->segment ?? 'all',
+            $campaign->recipient_filter,
+        )->count();
 
-        if ($campaign->sent_count >= $totalConfirmed) {
+        if ($campaign->sent_count >= $expectedRecipients) {
             $campaign->update([
                 'status'  => 'sent',
                 'sent_at' => now(),

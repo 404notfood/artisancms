@@ -39,6 +39,10 @@ final class BlockTextExtractor
                 continue;
             }
 
+            if (isset($block['props']['content'])) {
+                $text .= ' ' . strip_tags((string) $block['props']['content']);
+            }
+
             if (isset($block['props']['text'])) {
                 $text .= ' ' . strip_tags((string) $block['props']['text']);
             }

@@ -30,12 +30,13 @@ class AiThemeGeneratorService
      */
     public function generate(string $prompt, array $options = []): array
     {
-        $systemPrompt = $this->buildSystemPrompt($options);
         $userMessage = $this->buildUserMessage($prompt, $options);
 
         $result = $this->aiService->generateText($userMessage, [
             'page_title' => 'AI Theme Generator',
             'block_type' => 'theme-generation',
+            'industry' => $options['industry'] ?? null,
+            'style' => $options['style'] ?? null,
         ], 2048);
 
         $parsed = $this->parseJsonResponse($result['text']);
@@ -116,27 +117,6 @@ class AiThemeGeneratorService
         $parsed = $this->parseJsonResponse($result['text']);
 
         return $parsed['blocks'] ?? $parsed['content'] ?? [];
-    }
-
-    /**
-     * Build the system-level context for theme generation.
-     */
-    private function buildSystemPrompt(array $options): string
-    {
-        $parts = [
-            'Tu es un designer web expert. Tu generes des themes pour un CMS.',
-            'Tu dois repondre UNIQUEMENT en JSON valide, sans commentaire ni texte avant/apres.',
-        ];
-
-        if (!empty($options['industry'])) {
-            $parts[] = "Le site est dans le secteur : {$options['industry']}.";
-        }
-
-        if (!empty($options['style'])) {
-            $parts[] = "Le style souhaite est : {$options['style']}.";
-        }
-
-        return implode(' ', $parts);
     }
 
     /**

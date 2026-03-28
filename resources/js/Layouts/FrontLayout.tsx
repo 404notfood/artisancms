@@ -1,5 +1,5 @@
 import { Head, usePage } from '@inertiajs/react';
-import { useMemo, type ReactNode } from 'react';
+import { useEffect, useMemo, type ReactNode } from 'react';
 import { AnnouncementBar } from '@/Components/front/announcement-bar';
 import { AnimationConfigContext, type AnimationConfigMap } from '@/Components/front/block-renderer';
 import GoogleAnalytics from '@/Components/front/google-analytics';
@@ -15,6 +15,8 @@ interface FrontLayoutProps {
         customizations: Record<string, string | boolean>;
         layouts: Array<{ slug: string; name: string }>;
         style?: ThemeStyle;
+        custom_css?: string;
+        custom_js?: string;
     };
 }
 
@@ -57,6 +59,18 @@ export default function FrontLayout({ children, menus, theme }: FrontLayoutProps
         }
     }, [customizations]);
 
+    // Inject custom JS
+    useEffect(() => {
+        if (!theme.custom_js) return;
+        const script = document.createElement('script');
+        script.textContent = theme.custom_js;
+        script.setAttribute('data-artisan-custom-js', '');
+        document.body.appendChild(script);
+        return () => {
+            script.remove();
+        };
+    }, [theme.custom_js]);
+
     const allVars: Record<string, string> = { ...cssVariables };
     // Use serif fallback for known serif fonts, sans-serif otherwise
     const serifFonts = ['Cormorant Garamond', 'Lora', 'Playfair Display', 'Merriweather', 'Libre Baskerville', 'Crimson Text', 'EB Garamond', 'Noto Serif', 'Source Serif Pro', 'Bitter'];
@@ -86,8 +100,10 @@ export default function FrontLayout({ children, menus, theme }: FrontLayoutProps
             <div className="artisan-theme flex min-h-screen flex-col" style={rootStyle}>
                 <Head>
                     {favicon && <link rel="icon" href={favicon} />}
+                    <link rel="manifest" href="/manifest.json" />
                     <style>{themeStyleTag}</style>
                     {designTokensCss && <style>{designTokensCss}</style>}
+                    {theme.custom_css && <style>{theme.custom_css}</style>}
                     <link rel="alternate" type="application/rss+xml" title="Flux RSS" href="/feed" />
                     {googleFontsUrl && (
                         <>

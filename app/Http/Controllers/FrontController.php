@@ -11,6 +11,8 @@ use App\Models\Post;
 use App\Models\PreviewToken;
 use App\Services\DesignTokenService;
 use App\Services\SettingService;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -67,7 +69,7 @@ class FrontController extends Controller
         return $this->renderPage($page);
     }
 
-    public function preview(string $token): Response
+    public function preview(Request $request, string $token): Response
     {
         $previewToken = PreviewToken::where('token', $token)
             ->valid()
@@ -79,9 +81,23 @@ class FrontController extends Controller
             abort(404);
         }
 
+        // Handle temporal preview: ?at=YYYY-MM-DD
+        $previewAt = $request->query('at');
+        $previewDate = null;
+        if (is_string($previewAt) && $previewAt !== '') {
+            try {
+                $previewDate = Carbon::parse($previewAt)->endOfDay();
+                // Store in container so scopePublished uses this date
+                app()->instance('cms.preview_at', $previewDate);
+            } catch (\Throwable) {
+                // Invalid date, ignore
+            }
+        }
+
         $data = [
             ...$this->frontData(),
             'isPreview' => true,
+            'previewAt' => $previewDate?->toDateString(),
         ];
 
         if ($previewable instanceof Page) {

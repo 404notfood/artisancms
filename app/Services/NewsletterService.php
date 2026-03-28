@@ -118,7 +118,7 @@ class NewsletterService
      */
     public function sendCampaign(NewsletterCampaign $campaign): void
     {
-        if (!$campaign->isDraft() && !$campaign->status === 'scheduled') {
+        if (!$campaign->isDraft() && $campaign->status !== 'scheduled') {
             return;
         }
 

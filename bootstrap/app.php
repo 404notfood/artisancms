@@ -33,6 +33,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'cms.admin' => \App\Http\Middleware\EnsureAdmin::class,
             'cms.content.access' => \App\Http\Middleware\CheckContentAccess::class,
             'cms.content.lock' => \App\Http\Middleware\CheckContentLock::class,
+            'cms.preview' => \App\Http\Middleware\PreviewMode::class,
         ]);
 
         $middleware->preventRequestForgery(except: [
