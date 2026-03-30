@@ -1,4 +1,4 @@
-import { type ElementType } from 'react';
+import { type ElementType, useRef, useState, useEffect } from 'react';
 import type { BlockRendererProps } from '../block-registry';
 import {
     LayoutTemplate, Palette, Plug, Zap, Globe, Shield,
@@ -48,6 +48,44 @@ export default function IconBoxRenderer({ block }: BlockRendererProps) {
     const columns = (block.props.columns as number) || 3;
     const align = (block.props.align as string) || 'center';
     const style = (block.props.style as string) || 'card';
+    const cardBg = (block.props.cardBackgroundColor as string) || '';
+    const cardText = (block.props.cardTextColor as string) || '';
+    const cardBorder = (block.props.cardBorderColor as string) || '';
+
+    // Auto-detect dark parent background
+    const gridRef = useRef<HTMLDivElement>(null);
+    const [parentIsDark, setParentIsDark] = useState(false);
+
+    useEffect(() => {
+        if (cardBg || cardText) return; // Skip detection if explicit colors set
+        const el = gridRef.current;
+        if (!el) return;
+        // Walk up to find the closest parent with a background
+        let parent: HTMLElement | null = el.parentElement;
+        while (parent) {
+            const bg = window.getComputedStyle(parent).backgroundColor;
+            // Skip fully transparent backgrounds
+            const alphaMatch = bg.match(/rgba\(\d+,\s*\d+,\s*\d+,\s*([\d.]+)\)/);
+            if (alphaMatch && parseFloat(alphaMatch[1]) === 0) {
+                parent = parent.parentElement;
+                continue;
+            }
+            const match = bg.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+            if (match) {
+                const [, r, g, b] = match.map(Number);
+                const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+                if (luminance < 0.35) {
+                    setParentIsDark(true);
+                }
+                break;
+            }
+            parent = parent.parentElement;
+        }
+    }, [cardBg, cardText]);
+
+    const effectiveBg = cardBg || (parentIsDark ? 'rgba(255,255,255,0.04)' : '');
+    const effectiveText = cardText || (parentIsDark ? '#ffffff' : '');
+    const effectiveBorder = cardBorder || (parentIsDark ? 'rgba(255,255,255,0.08)' : '');
 
     if (items.length === 0) {
         return (
@@ -82,9 +120,9 @@ export default function IconBoxRenderer({ block }: BlockRendererProps) {
                 style={{
                     padding: isMinimal ? '1.25rem 0' : '1.75rem',
                     borderRadius: isLine ? '0' : `var(--border-radius, 0.75rem)`,
-                    border: isLine ? 'none' : isMinimal ? 'none' : '1px solid var(--color-border, rgba(255,255,255,0.07))',
+                    border: isLine ? 'none' : isMinimal ? 'none' : `1px solid ${effectiveBorder || 'var(--color-border, rgba(255,255,255,0.07))'}`,
                     borderLeft: isLine ? `3px solid var(--color-primary, #6366f1)` : undefined,
-                    backgroundColor: isLine || isMinimal ? 'transparent' : 'var(--color-surface, rgba(255,255,255,0.03))',
+                    backgroundColor: isLine || isMinimal ? 'transparent' : effectiveBg || 'var(--color-surface, rgba(255,255,255,0.03))',
                     textAlign: align as React.CSSProperties['textAlign'],
                     display: 'flex',
                     flexDirection: 'column',
@@ -136,7 +174,7 @@ export default function IconBoxRenderer({ block }: BlockRendererProps) {
                         fontFamily: 'var(--font-heading, inherit)',
                         fontSize: '1.0625rem',
                         fontWeight: 600,
-                        color: 'var(--color-text, inherit)',
+                        color: effectiveText || 'var(--color-text, inherit)',
                         margin: 0,
                         lineHeight: 1.3,
                     }}>
@@ -147,7 +185,7 @@ export default function IconBoxRenderer({ block }: BlockRendererProps) {
                     <p style={{
                         fontSize: '0.9rem',
                         lineHeight: 1.65,
-                        color: 'var(--color-text, inherit)',
+                        color: effectiveText || 'var(--color-text, inherit)',
                         opacity: 0.65,
                         margin: 0,
                     }}>
@@ -184,7 +222,7 @@ export default function IconBoxRenderer({ block }: BlockRendererProps) {
     };
 
     return (
-        <div style={{ display: 'grid', gridTemplateColumns: gridCols[columns] || gridCols[3], gap: '1.25rem' }}>
+        <div ref={gridRef} style={{ display: 'grid', gridTemplateColumns: gridCols[columns] || gridCols[3], gap: '1.25rem' }}>
             {items.map(renderItem)}
         </div>
     );

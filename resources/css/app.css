@@ -214,6 +214,72 @@
     }
 }
 
+/* ─── ArtisanCMS Hero Effects ──────────────────────────────────────────── */
+.artisancms-hero-orb {
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0;
+    animation: acms-orb-pulse 8s ease-in-out infinite;
+}
+.artisancms-hero-orb-1 {
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.25), transparent 70%);
+    top: -10%;
+    left: -5%;
+    animation-delay: 0s;
+}
+.artisancms-hero-orb-2 {
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.2), transparent 70%);
+    top: 20%;
+    right: -10%;
+    animation-delay: 2.5s;
+}
+.artisancms-hero-orb-3 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(236, 72, 153, 0.15), transparent 70%);
+    bottom: -5%;
+    left: 30%;
+    animation-delay: 5s;
+}
+
+@keyframes acms-orb-pulse {
+    0%, 100% { opacity: 0.4; transform: scale(1) translate(0, 0); }
+    33% { opacity: 0.7; transform: scale(1.1) translate(10px, -10px); }
+    66% { opacity: 0.5; transform: scale(0.95) translate(-5px, 5px); }
+}
+
+.artisancms-hero-grid {
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black 20%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black 20%, transparent 100%);
+}
+
+.artisancms-hero-title {
+    background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 40%, #ffffff 60%, #cbd5e1 100%);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: acms-title-shimmer 6s ease-in-out infinite;
+}
+
+@keyframes acms-title-shimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* Smooth scroll for anchor links */
+html {
+    scroll-behavior: smooth;
+}
+
 /* ─── Legal pages typography ────────────────────────────────────────────── */
 .legal-page-content h2 {
     margin-top: 2.5rem;

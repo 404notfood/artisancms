@@ -6,6 +6,7 @@ export default function TableRenderer({ block }: BlockRendererProps) {
     const striped = (block.props.striped as boolean) ?? true;
     const bordered = (block.props.bordered as boolean) ?? true;
     const caption = (block.props.caption as string) || '';
+    const highlight = (block.props.highlightColumn as number | undefined);
 
     if (headers.length === 0 && rows.length === 0) {
         return (
@@ -16,18 +17,40 @@ export default function TableRenderer({ block }: BlockRendererProps) {
     }
 
     return (
-        <div className="w-full overflow-x-auto">
-            <table className={`w-full text-sm text-left ${bordered ? 'border' : ''}`}>
+        <div className="w-full overflow-x-auto" style={{ borderRadius: 'var(--border-radius, 0.75rem)', overflow: 'hidden' }}>
+            <table
+                className="w-full text-sm text-left"
+                style={{
+                    borderCollapse: 'separate',
+                    borderSpacing: 0,
+                    border: bordered ? '1px solid var(--color-border, #e2e8f0)' : undefined,
+                    borderRadius: 'var(--border-radius, 0.75rem)',
+                    overflow: 'hidden',
+                }}
+            >
                 {caption && (
-                    <caption className="text-sm text-gray-500 mb-2 text-left">{caption}</caption>
+                    <caption className="text-sm mb-2 text-left" style={{ color: 'var(--color-text-muted, #64748b)' }}>{caption}</caption>
                 )}
                 {headers.length > 0 && (
-                    <thead className="bg-gray-50 text-gray-700 font-medium">
-                        <tr>
+                    <thead>
+                        <tr style={{ backgroundColor: 'var(--color-surface, #f8fafc)' }}>
                             {headers.map((header, index) => (
                                 <th
                                     key={index}
-                                    className={`px-4 py-3 ${bordered ? 'border' : 'border-b'}`}
+                                    style={{
+                                        padding: '0.875rem 1.25rem',
+                                        fontWeight: 600,
+                                        fontSize: '0.8125rem',
+                                        textTransform: 'uppercase',
+                                        letterSpacing: '0.05em',
+                                        color: 'var(--color-text-muted, #64748b)',
+                                        borderBottom: '2px solid var(--color-border, #e2e8f0)',
+                                        ...(index > 0 && bordered ? { borderLeft: '1px solid var(--color-border, #e2e8f0)' } : {}),
+                                        ...(highlight !== undefined && index === highlight ? {
+                                            color: 'var(--color-primary, #3b82f6)',
+                                            backgroundColor: 'color-mix(in srgb, var(--color-primary, #3b82f6) 5%, var(--color-surface, #f8fafc))',
+                                        } : {}),
+                                    }}
                                 >
                                     {header}
                                 </th>
@@ -39,12 +62,32 @@ export default function TableRenderer({ block }: BlockRendererProps) {
                     {rows.map((row, rowIndex) => (
                         <tr
                             key={rowIndex}
-                            className={striped && rowIndex % 2 === 1 ? 'bg-gray-50' : ''}
+                            style={{
+                                backgroundColor: striped && rowIndex % 2 === 1 ? 'var(--color-surface, #f8fafc)' : 'transparent',
+                                transition: 'background-color 0.15s ease',
+                            }}
+                            onMouseEnter={(e) => {
+                                (e.currentTarget as HTMLElement).style.backgroundColor = 'color-mix(in srgb, var(--color-primary, #3b82f6) 4%, transparent)';
+                            }}
+                            onMouseLeave={(e) => {
+                                (e.currentTarget as HTMLElement).style.backgroundColor = striped && rowIndex % 2 === 1 ? 'var(--color-surface, #f8fafc)' : 'transparent';
+                            }}
                         >
                             {(row || []).map((cell, cellIndex) => (
                                 <td
                                     key={cellIndex}
-                                    className={`px-4 py-3 text-gray-600 ${bordered ? 'border' : 'border-b'}`}
+                                    style={{
+                                        padding: '0.875rem 1.25rem',
+                                        color: cellIndex === 0 ? 'var(--color-text, #0f172a)' : 'var(--color-text-muted, #64748b)',
+                                        fontWeight: cellIndex === 0 ? 500 : 400,
+                                        borderBottom: rowIndex < rows.length - 1 ? '1px solid var(--color-border, #e2e8f0)' : undefined,
+                                        ...(cellIndex > 0 && bordered ? { borderLeft: '1px solid var(--color-border, #e2e8f0)' } : {}),
+                                        ...(highlight !== undefined && cellIndex === highlight ? {
+                                            color: 'var(--color-text, #0f172a)',
+                                            fontWeight: 500,
+                                            backgroundColor: 'color-mix(in srgb, var(--color-primary, #3b82f6) 3%, transparent)',
+                                        } : {}),
+                                    }}
                                 >
                                     {cell}
                                 </td>
