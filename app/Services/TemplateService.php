@@ -732,6 +732,8 @@ class TemplateService
 
             if ($existingMenu !== null) {
                 // Always replace menu items when install_menus is true
+                // Nullify parent_id first to avoid FK constraint violation
+                $existingMenu->items()->whereNotNull('parent_id')->update(['parent_id' => null]);
                 $existingMenu->items()->delete();
                 $menu = $existingMenu;
                 $menu->update(['name' => $menuData['name']]);
