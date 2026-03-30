@@ -222,7 +222,7 @@ export default function IconBoxRenderer({ block }: BlockRendererProps) {
     };
 
     return (
-        <div ref={gridRef} style={{ display: 'grid', gridTemplateColumns: gridCols[columns] || gridCols[3], gap: '1.25rem' }}>
+        <div ref={gridRef} style={{ display: 'grid', gridTemplateColumns: gridCols[columns] || gridCols[3], gap: '1.5rem' }}>
             {items.map(renderItem)}
         </div>
     );

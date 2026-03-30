@@ -30,7 +30,7 @@ export default function TabsRenderer({ block }: BlockRendererProps) {
         pills: {
             container: 'gap-2',
             active: 'bg-blue-600 text-white rounded-full',
-            inactive: 'text-gray-600 hover:bg-gray-100 rounded-full',
+            inactive: 'text-current opacity-60 hover:opacity-80 hover:bg-white/10 rounded-full',
         },
         boxed: {
             container: 'border rounded-t bg-gray-50',
@@ -56,9 +56,11 @@ export default function TabsRenderer({ block }: BlockRendererProps) {
                     </button>
                 ))}
             </div>
-            <div className={`p-4 text-gray-700 text-sm leading-relaxed ${style === 'boxed' ? 'border border-t-0 rounded-b' : ''}`}>
-                {tabs[safeIndex]?.content || ''}
-            </div>
+            <div
+                className={`p-4 text-sm leading-relaxed ${style === 'boxed' ? 'border border-t-0 rounded-b' : ''}`}
+                style={{ color: 'inherit' }}
+                dangerouslySetInnerHTML={{ __html: tabs[safeIndex]?.content || '' }}
+            />
         </div>
     );
 }
