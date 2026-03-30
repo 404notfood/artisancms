@@ -171,7 +171,10 @@ export default function FrontFooter({ menu, customizations, themeStyle }: Footer
     if (resolvedLayout === 'columns') {
         // Group menu items for columns display (+1 for branding column)
         const columnItems = menuTree.length > 0 ? menuTree : [];
-        const gridCols = Math.min((columnItems.length + 1) || 1, footerColumns);
+        const hasHierarchy = columnItems.some(item => item.children.length > 0);
+        const gridCols = hasHierarchy
+            ? Math.min((columnItems.length + 1) || 1, footerColumns)
+            : Math.min(footerColumns, 4);
 
         return (
             <footer style={{ backgroundColor: bgColor, color: textColor, borderTop: borderStyle }}>
@@ -197,24 +200,42 @@ export default function FrontFooter({ menu, customizations, themeStyle }: Footer
                         </div>
 
                         {/* Menu columns */}
-                        {columnItems.map((item) => (
-                            <div key={item.id}>
-                                {/* Column heading */}
-                                <span className={`text-sm font-semibold mb-3 block ${isDark ? 'text-white/80' : ''}`}
-                                    style={{ color: isDark ? undefined : textColor, opacity: isDark ? undefined : 0.9 }}>
-                                    {item.label}
-                                </span>
-                                {item.children.length > 0 ? (
-                                    <div className="flex flex-col gap-2">
-                                        {item.children.map((child) => (
-                                            <NavItem key={child.id} item={child} style={isDark ? 'dark' : undefined} textColor={textColor} accentColor={accentColor} />
+                        {(() => {
+                            // Check if menu is hierarchical (items have children)
+                            const hasHierarchy = columnItems.some(item => item.children.length > 0);
+
+                            if (hasHierarchy) {
+                                // Hierarchical: each parent is a column title, children are links
+                                return columnItems.map((item) => (
+                                    <div key={item.id}>
+                                        <span className={`text-sm font-semibold mb-3 block ${isDark ? 'text-white/80' : ''}`}
+                                            style={{ color: isDark ? undefined : textColor, opacity: isDark ? undefined : 0.9 }}>
+                                            {item.label}
+                                        </span>
+                                        <div className="flex flex-col gap-2">
+                                            {item.children.map((child) => (
+                                                <NavItem key={child.id} item={child} style={isDark ? 'dark' : undefined} textColor={textColor} accentColor={accentColor} />
+                                            ))}
+                                        </div>
+                                    </div>
+                                ));
+                            }
+
+                            // Flat menu: split items into even columns
+                            const cols = Math.min(footerColumns - 1, 3); // -1 for branding column
+                            const perCol = Math.ceil(columnItems.length / cols);
+                            return Array.from({ length: cols }, (_, colIdx) => {
+                                const colItems = columnItems.slice(colIdx * perCol, (colIdx + 1) * perCol);
+                                if (colItems.length === 0) return null;
+                                return (
+                                    <div key={colIdx} className="flex flex-col gap-2">
+                                        {colItems.map((item) => (
+                                            <NavItem key={item.id} item={item} style={isDark ? 'dark' : undefined} textColor={textColor} accentColor={accentColor} />
                                         ))}
                                     </div>
-                                ) : (
-                                    <NavItem item={item} style={isDark ? 'dark' : undefined} textColor={textColor} accentColor={accentColor} />
-                                )}
-                            </div>
-                        ))}
+                                );
+                            });
+                        })()}
                     </div>
 
                     <NewsletterSection />
