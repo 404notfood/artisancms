@@ -126,7 +126,7 @@ export default function IconBoxRenderer({ block }: BlockRendererProps) {
                     textAlign: align as React.CSSProperties['textAlign'],
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: '0.75rem',
+                    gap: '1rem',
                     paddingLeft: isLine ? '1.25rem' : undefined,
                     transition: 'transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease',
                     cursor: item.link ? 'pointer' : 'default',
