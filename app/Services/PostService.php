@@ -25,7 +25,9 @@ class PostService
     {
         $query = Post::with(['author', 'terms']);
 
-        if (isset($filters['status']) && $filters['status'] !== '') {
+        if (($filters['status'] ?? '') === 'trash') {
+            $query->onlyTrashed();
+        } elseif (isset($filters['status']) && $filters['status'] !== '') {
             $query->where('status', $filters['status']);
         }
 
@@ -250,7 +252,7 @@ class PostService
      */
     public function emptyTrash(): int
     {
-        $trashedPosts = Post::where('status', 'trash')->get();
+        $trashedPosts = Post::onlyTrashed()->get();
         $count = 0;
 
         foreach ($trashedPosts as $post) {

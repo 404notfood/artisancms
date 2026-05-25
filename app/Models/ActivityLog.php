@@ -110,11 +110,12 @@ class ActivityLog extends Model
         $actionsByCategory = [
             'content'  => ['created', 'updated', 'deleted', 'restored', 'published', 'unpublished'],
             'auth'     => ['login', 'logout', 'login_failed', 'password_changed'],
-            'users'    => ['user_created', 'role_changed', 'user_deleted'],
+            'users'    => ['user_created', 'user_updated', 'role_changed', 'user_deleted'],
+            'roles'    => ['role_created', 'role_updated', 'role_deleted'],
             'settings' => ['settings_updated'],
             'plugins'  => ['plugin_installed', 'plugin_activated', 'plugin_deactivated', 'plugin_uninstalled'],
             'themes'   => ['theme_activated', 'theme_customized'],
-            'system'   => ['backup_created', 'backup_restored', 'cache_cleared'],
+            'system'   => ['backup_created', 'backup_downloaded', 'backup_restored', 'backup_deleted', 'cache_cleared'],
         ];
 
         $actions = $actionsByCategory[$category] ?? [];
@@ -185,8 +186,12 @@ class ActivityLog extends Model
             'login_failed'         => __('cms.activity.login_failed'),
             'password_changed'     => __('cms.activity.password_changed'),
             'user_created'         => __('cms.activity.user_created'),
+            'user_updated'         => __('cms.activity.user_updated'),
             'role_changed'         => __('cms.activity.role_changed'),
             'user_deleted'         => __('cms.activity.user_deleted'),
+            'role_created'         => __('cms.activity.role_created'),
+            'role_updated'         => __('cms.activity.role_updated'),
+            'role_deleted'         => __('cms.activity.role_deleted'),
             'settings_updated'     => __('cms.activity.settings_updated'),
             'plugin_installed'     => __('cms.activity.plugin_installed'),
             'plugin_activated'     => __('cms.activity.plugin_activated'),
@@ -195,7 +200,9 @@ class ActivityLog extends Model
             'theme_activated'      => __('cms.activity.theme_activated'),
             'theme_customized'     => __('cms.activity.theme_customized'),
             'backup_created'       => __('cms.activity.backup_created'),
+            'backup_downloaded'    => __('cms.activity.backup_downloaded'),
             'backup_restored'      => __('cms.activity.backup_restored'),
+            'backup_deleted'       => __('cms.activity.backup_deleted'),
             'cache_cleared'        => __('cms.activity.cache_cleared'),
         ];
 

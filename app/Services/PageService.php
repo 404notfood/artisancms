@@ -76,6 +76,7 @@ class PageService
     public function create(array $data): Page
     {
         $data['created_by'] = $data['created_by'] ?? Auth::id();
+        $data['template'] = empty($data['template']) ? 'default' : $data['template'];
 
         $page = Page::create($data);
 
@@ -94,6 +95,8 @@ class PageService
     public function update(Page $page, array $data): Page
     {
         $contentChanged = isset($data['content']) && $data['content'] !== $page->content;
+        $data['template'] = $data['template'] ?? $page->template ?? 'default';
+        $data['template'] = $data['template'] ?: 'default';
 
         $page->update($data);
 
@@ -114,6 +117,7 @@ class PageService
         CMS::fire('page.deleting', $page);
 
         $page->update(['status' => 'trash']);
+        $page->delete();
 
         CMS::fire('page.deleted', $page);
 
@@ -129,6 +133,7 @@ class PageService
         // Restore from SoftDeletes if applicable
         if ($page->trashed()) {
             $page->restore();
+            $page->refresh();
         }
 
         // Reset status from 'trash' to 'draft'
@@ -262,7 +267,7 @@ class PageService
      */
     public function emptyTrash(): int
     {
-        $trashedPages = Page::where('status', 'trash')->get();
+        $trashedPages = Page::withTrashed()->where('status', 'trash')->get();
         $count = 0;
 
         foreach ($trashedPages as $page) {

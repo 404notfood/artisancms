@@ -23,6 +23,8 @@ import {
     RotateCcw,
     Save,
     X,
+    Wrench,
+    HardDrive,
 } from 'lucide-react';
 
 interface UpdateInfo {
@@ -75,6 +77,22 @@ interface AutoUpdateSettings {
     notify_email: boolean;
 }
 
+interface MaintenanceStatus {
+    enabled: boolean;
+    message: string;
+    allowed_ips: string[];
+}
+
+interface PreflightStatus {
+    health_overall: 'healthy' | 'degraded' | 'unhealthy';
+    checks: Array<{ name: string; status: string; message: string; details?: string }>;
+    last_backup: string | null;
+    last_backup_size: number | null;
+    has_recent_backup: boolean;
+    config_cached: boolean;
+    routes_cached: boolean;
+}
+
 interface UpdatesIndexProps {
     updates: {
         cms: UpdateInfo;
@@ -85,6 +103,8 @@ interface UpdatesIndexProps {
     history: HistoryEntry[];
     health: HealthStatus;
     settings: AutoUpdateSettings;
+    maintenance: MaintenanceStatus;
+    preflight: PreflightStatus;
 }
 
 const STATUS_MAP: Record<string, { label: string; color: string }> = {
@@ -96,7 +116,7 @@ const STATUS_MAP: Record<string, { label: string; color: string }> = {
     rolled_back: { label: 'Annulé', color: 'text-amber-600' },
 };
 
-export default function UpdatesIndex({ updates, history, health, settings }: UpdatesIndexProps) {
+export default function UpdatesIndex({ updates, history, health, settings, maintenance, preflight }: UpdatesIndexProps) {
     const { cms } = usePage<SharedProps>().props;
     const prefix = cms?.adminPrefix ?? 'admin';
     const csrfToken = document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]')?.content || '';
@@ -113,6 +133,9 @@ export default function UpdatesIndex({ updates, history, health, settings }: Upd
     const [autoUpdateThemes, setAutoUpdateThemes] = useState(settings.auto_update_themes);
     const [notifyEmail, setNotifyEmail] = useState(settings.notify_email);
     const [savingSettings, setSavingSettings] = useState(false);
+    const [maintenanceEnabled, setMaintenanceEnabled] = useState(maintenance.enabled);
+    const [maintenanceMessage, setMaintenanceMessage] = useState(maintenance.message);
+    const [savingMaintenance, setSavingMaintenance] = useState(false);
 
     // Confirmation dialog
     const [confirmDialog, setConfirmDialog] = useState<{
@@ -280,6 +303,32 @@ export default function UpdatesIndex({ updates, history, health, settings }: Upd
         setRecoveryUrl(data.url);
     }
 
+    async function handleToggleMaintenance(enabled: boolean) {
+        setSavingMaintenance(true);
+        setError(null);
+        try {
+            const res = await fetch(`/${prefix}/updates/maintenance`, {
+                method: 'POST',
+                headers,
+                body: JSON.stringify({
+                    enabled,
+                    message: maintenanceMessage,
+                }),
+            });
+            const data = await res.json();
+            if (data.success) {
+                setMaintenanceEnabled(data.maintenance.enabled);
+                setMaintenanceMessage(data.maintenance.message);
+            } else {
+                setError(data.message || 'Erreur lors du changement de maintenance.');
+            }
+        } catch {
+            setError('Erreur de connexion.');
+        } finally {
+            setSavingMaintenance(false);
+        }
+    }
+
     const pluginUpdates = updates.plugins.filter((p) => p.available);
     const themeUpdates = updates.themes.filter((t) => t.available);
     const totalUpdates = (updates.cms.available ? 1 : 0) + pluginUpdates.length + themeUpdates.length;
@@ -320,6 +369,89 @@ export default function UpdatesIndex({ updates, history, health, settings }: Upd
                         </div>
                     </div>
                 )}
+
+                <div className="grid gap-4 lg:grid-cols-2">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2 text-base">
+                                <Wrench className="h-5 w-5 text-amber-500" />
+                                Maintenance front
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <p className="text-sm font-medium text-gray-900">Mode maintenance</p>
+                                    <p className="text-xs text-gray-500">Bloque le front public sans toucher a l'admin.</p>
+                                </div>
+                                <Switch
+                                    checked={maintenanceEnabled}
+                                    disabled={savingMaintenance}
+                                    onCheckedChange={handleToggleMaintenance}
+                                />
+                            </div>
+                            <textarea
+                                value={maintenanceMessage}
+                                onChange={(e) => setMaintenanceMessage(e.target.value)}
+                                className="min-h-24 w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                            />
+                            <Button
+                                size="sm"
+                                variant="outline"
+                                disabled={savingMaintenance}
+                                onClick={() => handleToggleMaintenance(maintenanceEnabled)}
+                            >
+                                {savingMaintenance ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
+                                Sauvegarder message
+                            </Button>
+                        </CardContent>
+                    </Card>
+
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2 text-base">
+                                <HardDrive className="h-5 w-5 text-emerald-500" />
+                                Checklist avant mise a jour
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-3">
+                            {[
+                                {
+                                    label: 'Sante systeme',
+                                    ok: preflight.health_overall === 'healthy',
+                                    detail: preflight.health_overall,
+                                },
+                                {
+                                    label: 'Backup recent',
+                                    ok: preflight.has_recent_backup,
+                                    detail: preflight.last_backup ? new Date(preflight.last_backup).toLocaleString('fr-FR') : 'Aucun',
+                                },
+                                {
+                                    label: 'Configuration cachee',
+                                    ok: preflight.config_cached,
+                                    detail: preflight.config_cached ? 'OK' : 'A optimiser',
+                                },
+                                {
+                                    label: 'Routes cachees',
+                                    ok: preflight.routes_cached,
+                                    detail: preflight.routes_cached ? 'OK' : 'A optimiser',
+                                },
+                            ].map((item) => (
+                                <div key={item.label} className="flex items-center justify-between rounded-lg border border-gray-100 p-3">
+                                    <div>
+                                        <p className="text-sm font-medium text-gray-900">{item.label}</p>
+                                        <p className="text-xs text-gray-500">{item.detail}</p>
+                                    </div>
+                                    {item.ok ? (
+                                        <CheckCircle className="h-5 w-5 text-emerald-500" />
+                                    ) : (
+                                        <AlertTriangle className="h-5 w-5 text-amber-500" />
+                                    )}
+                                </div>
+                            ))}
+                        </CardContent>
+                    </Card>
+                </div>
 
                 {/* Safe mode */}
                 {safeMode && (

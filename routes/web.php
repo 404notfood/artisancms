@@ -8,8 +8,10 @@ use App\Http\Controllers\Front\SearchController as FrontSearchController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\Front\MemberController;
 use App\Http\Controllers\NewsletterSubscribeController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicCommentController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\SeoController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -58,8 +60,9 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    $prefix = config('cms.admin.resolved_prefix', 'admin');
-    Route::get('/profile', fn () => redirect("/{$prefix}/account"))->name('profile.edit');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 require __DIR__.'/auth.php';
@@ -89,6 +92,8 @@ Route::get('/api/search', [SearchController::class, 'search'])
 */
 
 Route::get('manifest.json', ManifestController::class)->name('manifest');
+Route::get('sitemap.xml', [SeoController::class, 'sitemap'])->name('seo.sitemap');
+Route::get('robots.txt', [SeoController::class, 'robots'])->name('seo.robots');
 
 /*
 |--------------------------------------------------------------------------

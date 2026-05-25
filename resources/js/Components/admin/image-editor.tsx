@@ -1,6 +1,8 @@
 import { useState, useRef, useCallback } from 'react';
+import { usePage } from '@inertiajs/react';
 import { Crop, RotateCw, FlipHorizontal, FlipVertical, X, Check } from 'lucide-react';
 import { Button } from '@/Components/ui/button';
+import type { SharedProps } from '@/types/cms';
 
 interface ImageEditorProps {
     mediaId: number;
@@ -19,6 +21,8 @@ interface CropBox {
 }
 
 export function ImageEditor({ mediaId, imageUrl, onSave, onCancel }: ImageEditorProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const [mode, setMode] = useState<EditMode>(null);
     const [saving, setSaving] = useState(false);
     const [cropBox, setCropBox] = useState<CropBox>({ x: 0, y: 0, width: 100, height: 100 });
@@ -71,7 +75,7 @@ export function ImageEditor({ mediaId, imageUrl, onSave, onCancel }: ImageEditor
 
         const csrfToken = document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]')?.content || '';
         try {
-            const res = await fetch(`/admin/media/${mediaId}/crop`, {
+            const res = await fetch(`/${prefix}/media/${mediaId}/crop`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -103,7 +107,7 @@ export function ImageEditor({ mediaId, imageUrl, onSave, onCancel }: ImageEditor
         formData.append('file', file);
 
         try {
-            const res = await fetch(`/admin/media/${mediaId}/replace`, {
+            const res = await fetch(`/${prefix}/media/${mediaId}/replace`, {
                 method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': csrfToken,

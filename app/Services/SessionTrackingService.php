@@ -8,6 +8,7 @@ use App\Models\UserSession;
 use App\Support\UserAgentParser;
 use Illuminate\Support\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SessionTrackingService
 {
@@ -64,7 +65,19 @@ class SessionTrackingService
      */
     public function forceLogout(int $sessionId): void
     {
-        UserSession::where('id', $sessionId)->delete();
+        $trackedSession = UserSession::find($sessionId);
+
+        if (! $trackedSession) {
+            return;
+        }
+
+        if (config('session.driver') === 'database') {
+            DB::table(config('session.table', 'sessions'))
+                ->where('id', $trackedSession->session_id)
+                ->delete();
+        }
+
+        $trackedSession->delete();
     }
 
     /**
@@ -72,9 +85,17 @@ class SessionTrackingService
      */
     public function logoutOthers(int $userId, string $currentSessionId): void
     {
-        UserSession::where('user_id', $userId)
+        $sessions = UserSession::where('user_id', $userId)
             ->where('session_id', '!=', $currentSessionId)
-            ->delete();
+            ->get();
+
+        if (config('session.driver') === 'database' && $sessions->isNotEmpty()) {
+            DB::table(config('session.table', 'sessions'))
+                ->whereIn('id', $sessions->pluck('session_id')->all())
+                ->delete();
+        }
+
+        UserSession::whereIn('id', $sessions->pluck('id')->all())->delete();
     }
 
 }

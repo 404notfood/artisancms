@@ -19,6 +19,7 @@ import { RecentMedia } from './dashboard/RecentMedia';
 import { RecentComments } from './dashboard/RecentComments';
 import { TopPages } from './dashboard/TopPages';
 import { SystemInfo } from './dashboard/SystemInfo';
+import { MyDraftsPanel, RecentActivityPanel, SecurityPanel, SystemAlerts, WorkloadPanel } from './dashboard/DashboardPanels';
 
 export default function Dashboard({
     stats,
@@ -29,6 +30,11 @@ export default function Dashboard({
     contentStats,
     analytics,
     system,
+    systemAlerts,
+    recentActivity,
+    myDrafts,
+    security,
+    workload,
 }: DashboardProps) {
     const { cms } = usePage<SharedProps>().props;
     const prefix = cms?.adminPrefix ?? 'admin';
@@ -41,6 +47,8 @@ export default function Dashboard({
             <Head title="Tableau de bord" />
 
             <div className="space-y-6">
+                <SystemAlerts alerts={systemAlerts} />
+
                 {/* Stats Cards */}
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     <StatCard
@@ -107,22 +115,28 @@ export default function Dashboard({
                 {/* Quick Actions */}
                 <QuickActions />
 
+                <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+                    <WorkloadPanel workload={workload} />
+                    <SecurityPanel security={security} />
+                    <MyDraftsPanel myDrafts={myDrafts} />
+                </div>
+
                 {/* Recent Content + Content Stats */}
                 <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
                     <div className="lg:col-span-2 grid grid-cols-1 gap-6 md:grid-cols-2">
                         <ContentTable
                             title="Pages recentes"
                             items={recentPages}
-                            viewAllHref="/admin/pages"
+                            viewAllHref={`/${prefix}/pages`}
                             emptyMessage="Aucune page pour le moment."
-                            editHrefPrefix="/admin/pages"
+                            editHrefPrefix={`/${prefix}/pages`}
                         />
                         <ContentTable
                             title="Articles recents"
                             items={recentPosts}
-                            viewAllHref="/admin/posts"
+                            viewAllHref={`/${prefix}/posts`}
                             emptyMessage="Aucun article pour le moment."
-                            editHrefPrefix="/admin/posts"
+                            editHrefPrefix={`/${prefix}/posts`}
                         />
                     </div>
                     <ContentStatsBar contentStats={contentStats} />
@@ -136,6 +150,8 @@ export default function Dashboard({
                     <RecentComments recentComments={recentComments} />
                     <TopPages analytics={analytics} />
                 </div>
+
+                <RecentActivityPanel activity={recentActivity} />
 
                 {/* System Info */}
                 <SystemInfo system={system} />

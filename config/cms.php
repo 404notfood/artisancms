@@ -104,4 +104,13 @@ return [
         'backup_before_update' => true,
         'temp_dir' => storage_path('app/updates'),
     ],
+    'activity_log' => [
+        'enabled' => env('CMS_ACTIVITY_LOG_ENABLED', true),
+        'anonymize_ip' => env('CMS_ACTIVITY_LOG_ANONYMIZE_IP', false),
+        'retention_days' => env('CMS_ACTIVITY_LOG_RETENTION_DAYS', 180),
+        'excluded_actions' => [],
+        'excluded_models' => [
+            \App\Models\ActivityLog::class,
+        ],
+    ],
 ];

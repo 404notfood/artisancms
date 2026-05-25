@@ -26,7 +26,7 @@ export default function PagesEdit({ page, parentPages }: PagesEditProps) {
         slug: page.slug,
         status: page.status,
         access_level: page.access_level ?? 'public',
-        template: page.template ?? '',
+        template: page.template ?? 'default',
         meta_title: page.meta_title ?? '',
         meta_description: page.meta_description ?? '',
         og_image: (page as unknown as Record<string, string>).og_image ?? '',
@@ -83,7 +83,7 @@ export default function PagesEdit({ page, parentPages }: PagesEditProps) {
                     <div className="flex items-center gap-2 flex-wrap">
                         <button type="button" onClick={preview.handleGeneratePreview} disabled={preview.previewLoading} className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 transition-colors">
                             <LinkIcon className="h-4 w-4" />
-                            {preview.previewLoading ? 'Generation...' : 'Generer un lien d\'apercu'}
+                            {preview.previewLoading ? 'Génération...' : 'Générer un lien d\'aperçu'}
                         </button>
                         <Link href={`/admin/pages/${page.id}/builder`} className="inline-flex items-center gap-2 rounded-lg border border-indigo-300 bg-indigo-50 px-4 py-2 text-sm font-medium text-indigo-700 hover:bg-indigo-100 transition-colors">
                             <LayoutGrid className="h-4 w-4" />
@@ -102,7 +102,7 @@ export default function PagesEdit({ page, parentPages }: PagesEditProps) {
                             <button type="button" onClick={handlePublish} className="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 transition-colors">Publier</button>
                         )}
                         {page.status === 'published' && (
-                            <button type="button" onClick={handleUnpublish} className="rounded-lg border border-yellow-300 bg-yellow-50 px-4 py-2 text-sm font-medium text-yellow-700 hover:bg-yellow-100 transition-colors">Depublier</button>
+                            <button type="button" onClick={handleUnpublish} className="rounded-lg border border-yellow-300 bg-yellow-50 px-4 py-2 text-sm font-medium text-yellow-700 hover:bg-yellow-100 transition-colors">D&eacute;publier</button>
                         )}
                     </div>
                 </div>
@@ -130,9 +130,9 @@ export default function PagesEdit({ page, parentPages }: PagesEditProps) {
                             <select id="status" value={data.status} onChange={(e) => setData('status', e.target.value as PageData['status'])} className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
                                 <option value="draft">Brouillon</option>
                                 <option value="pending_review">En revue</option>
-                                <option value="approved">Approuve</option>
-                                <option value="published">Publie</option>
-                                <option value="scheduled">Planifie</option>
+                                <option value="approved">Approuv&eacute;</option>
+                                <option value="published">Publi&eacute;</option>
+                                <option value="scheduled">Planifi&eacute;</option>
                                 <option value="trash">Corbeille</option>
                             </select>
                             {errors.status && <p className="mt-1 text-sm text-red-600">{errors.status}</p>}
@@ -140,9 +140,9 @@ export default function PagesEdit({ page, parentPages }: PagesEditProps) {
                         <div>
                             <label htmlFor="template" className="block text-sm font-medium text-gray-700">Template</label>
                             <select id="template" value={data.template} onChange={(e) => setData('template', e.target.value)} className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
-                                <option value="">Par defaut</option>
+                                <option value="default">Par d&eacute;faut</option>
                                 <option value="full-width">Pleine largeur</option>
-                                <option value="sidebar">Avec barre laterale</option>
+                                <option value="sidebar">Avec barre lat&eacute;rale</option>
                                 <option value="landing">Landing page</option>
                             </select>
                             {errors.template && <p className="mt-1 text-sm text-red-600">{errors.template}</p>}
@@ -169,24 +169,24 @@ export default function PagesEdit({ page, parentPages }: PagesEditProps) {
 
                 {/* Access Level */}
                 <div className="rounded-lg border border-gray-200 bg-white p-6 space-y-4">
-                    <h2 className="text-lg font-medium text-gray-900">Niveau d'acces</h2>
+                    <h2 className="text-lg font-medium text-gray-900">Niveau d&apos;acc&egrave;s</h2>
                     <div>
                         <label htmlFor="access_level" className="block text-sm font-medium text-gray-700">Qui peut voir cette page ?</label>
                         <select id="access_level" value={data.access_level} onChange={(e) => setData('access_level', e.target.value)} className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
                             <option value="public">Public (tout le monde)</option>
-                            <option value="authenticated">Utilisateurs connectes uniquement</option>
+                            <option value="authenticated">Utilisateurs connect&eacute;s uniquement</option>
                             <option value="role:admin">Administrateurs uniquement</option>
-                            <option value="role:editor">Editeurs et administrateurs</option>
+                            <option value="role:editor">&Eacute;diteurs et administrateurs</option>
                         </select>
                         {errors.access_level && <p className="mt-1 text-sm text-red-600">{errors.access_level}</p>}
-                        <p className="mt-1 text-xs text-gray-500">Controle qui peut voir cette page sur le site public.</p>
+                        <p className="mt-1 text-xs text-gray-500">Contr&ocirc;le qui peut voir cette page sur le site public.</p>
                     </div>
                 </div>
 
                 {/* Rejection notice */}
                 {page.rejection_reason && (
                     <div className="rounded-lg border border-red-200 bg-red-50 p-4">
-                        <h3 className="text-sm font-medium text-red-800">Page rejetee</h3>
+                        <h3 className="text-sm font-medium text-red-800">Page rejet&eacute;e</h3>
                         <p className="mt-1 text-sm text-red-700">{page.rejection_reason}</p>
                         {page.reviewed_at && (
                             <p className="mt-1 text-xs text-red-500">

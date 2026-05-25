@@ -78,19 +78,14 @@ class SettingControllerTest extends TestCase
         $response->assertRedirect();
     }
 
-    public function test_non_admin_authenticated_user_can_access_settings(): void
+    public function test_non_admin_authenticated_user_cannot_access_settings_without_permission(): void
     {
-        // The SettingController does not have explicit admin-only middleware in routes;
-        // it only requires 'auth'. However, authorization should be handled by policies
-        // or middleware. The route requires authentication at minimum.
         $editorRole = Role::factory()->editor()->create();
         $editor = User::factory()->create(['role_id' => $editorRole->id]);
 
         $response = $this->actingAs($editor)->get(route('admin.settings.index'));
 
-        // Since admin routes require 'auth' middleware, an authenticated user gets through.
-        // The response depends on whether there is an admin-only gate check.
-        $response->assertStatus(200);
+        $response->assertForbidden();
     }
 
     public function test_unauthenticated_user_cannot_access_settings(): void

@@ -6,6 +6,15 @@
 /* Dark mode: class strategy for Tailwind v4 */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Override Tailwind's container to ensure centering + padding */
+.container {
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    max-width: var(--container-width, 1280px);
+}
+
 /* TipTap editor styles */
 .tiptap-editor .ProseMirror {
     outline: none;

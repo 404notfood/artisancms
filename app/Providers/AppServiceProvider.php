@@ -27,6 +27,7 @@ use App\Models\Taxonomy;
 use App\Models\Webhook;
 use App\Models\Widget;
 use App\Models\WidgetArea;
+use App\Listeners\LogAuthenticationActivity;
 use App\Observers\BlockObserver;
 use App\Observers\CommentObserver;
 use App\Observers\GlobalSectionObserver;
@@ -59,6 +60,10 @@ use App\Policies\WebhookPolicy;
 use App\Policies\WidgetAreaPolicy;
 use App\Policies\WidgetPolicy;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Auth\Events\Failed;
+use Illuminate\Auth\Events\Login;
+use Illuminate\Auth\Events\Logout;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Vite;
@@ -123,5 +128,9 @@ class AppServiceProvider extends ServiceProvider
         CmsTheme::observe(ThemeObserver::class);
         CmsPlugin::observe(PluginObserver::class);
         Block::observe(BlockObserver::class);
+
+        Event::listen(Login::class, LogAuthenticationActivity::class);
+        Event::listen(Logout::class, LogAuthenticationActivity::class);
+        Event::listen(Failed::class, LogAuthenticationActivity::class);
     }
 }

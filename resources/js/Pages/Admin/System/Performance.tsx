@@ -1,11 +1,12 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
+import type { SharedProps } from '@/types/cms';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import { Badge } from '@/Components/ui/badge';
-import { Progress } from '@/Components/ui/progress';
+import { Button } from '@/Components/ui/button';
 import {
     Cpu, HardDrive, Database, FileText, Image, Users, Clock,
-    Server, Layers, Archive,
+    Server, Layers, Archive, RefreshCw, Rocket, Trash2, ListChecks, CalendarDays,
 } from 'lucide-react';
 
 interface PerformanceMetrics {
@@ -28,6 +29,17 @@ interface PerformanceMetrics {
         users: number;
     };
     last_backup: string | null;
+    cache_status: {
+        config_cached: boolean;
+        routes_cached: boolean;
+        views_cached: boolean;
+        opcache_enabled: boolean;
+    };
+    recommendations: Array<{
+        level: 'info' | 'warning' | 'danger';
+        title: string;
+        message: string;
+    }>;
 }
 
 interface PerformanceProps {
@@ -57,15 +69,89 @@ function memoryStatusVariant(limit: string): 'success' | 'warning' | 'destructiv
 }
 
 export default function Performance({ metrics }: PerformanceProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const diskColor = diskStatusColor(metrics.disk_used_percent);
+    const action = (path: string, message: string) => {
+        if (!confirm(message)) return;
+        router.post(`/${prefix}/system/performance/${path}`);
+    };
 
     return (
         <AdminLayout
-            header={<h1 className="text-xl font-semibold text-gray-900">Performance</h1>}
+            header={
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <h1 className="text-xl font-semibold text-gray-900">Performance</h1>
+                    <div className="flex flex-wrap gap-2">
+                        <Button size="sm" variant="outline" onClick={() => action('clear-cache', 'Vider les caches applicatifs ?')}>
+                            <RefreshCw className="mr-2 h-4 w-4" />
+                            Vider cache
+                        </Button>
+                        <Button size="sm" variant="outline" onClick={() => action('clear-compiled', 'Supprimer les caches compiles ?')}>
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            Nettoyer
+                        </Button>
+                        <Button size="sm" onClick={() => action('optimize', 'Optimiser Laravel ? A eviter pendant une modification de routes/config.')}>
+                            <Rocket className="mr-2 h-4 w-4" />
+                            Optimiser
+                        </Button>
+                    </div>
+                </div>
+            }
         >
             <Head title="Performance" />
 
             <div className="space-y-6">
+                <div className="grid gap-3 md:grid-cols-3">
+                    <Link href={`/${prefix}/system/queues`} className="rounded-lg border border-gray-200 bg-white p-4 transition hover:border-indigo-200 hover:bg-indigo-50/40">
+                        <div className="flex items-center gap-3">
+                            <ListChecks className="h-5 w-5 text-indigo-600" />
+                            <div>
+                                <p className="text-sm font-medium text-gray-900">Files d'attente</p>
+                                <p className="text-xs text-gray-500">Jobs en attente et erreurs</p>
+                            </div>
+                        </div>
+                    </Link>
+                    <Link href={`/${prefix}/system/scheduler`} className="rounded-lg border border-gray-200 bg-white p-4 transition hover:border-indigo-200 hover:bg-indigo-50/40">
+                        <div className="flex items-center gap-3">
+                            <CalendarDays className="h-5 w-5 text-emerald-600" />
+                            <div>
+                                <p className="text-sm font-medium text-gray-900">Scheduler</p>
+                                <p className="text-xs text-gray-500">Taches planifiees Laravel</p>
+                            </div>
+                        </div>
+                    </Link>
+                    <Link href={`/${prefix}/backups`} className="rounded-lg border border-gray-200 bg-white p-4 transition hover:border-indigo-200 hover:bg-indigo-50/40">
+                        <div className="flex items-center gap-3">
+                            <HardDrive className="h-5 w-5 text-amber-600" />
+                            <div>
+                                <p className="text-sm font-medium text-gray-900">Sauvegardes</p>
+                                <p className="text-xs text-gray-500">Historique et restauration</p>
+                            </div>
+                        </div>
+                    </Link>
+                </div>
+
+                {metrics.recommendations.length > 0 && (
+                    <div className="grid gap-3 lg:grid-cols-2">
+                        {metrics.recommendations.map((item) => (
+                            <div
+                                key={item.title}
+                                className={`rounded-lg border p-4 ${
+                                    item.level === 'danger'
+                                        ? 'border-red-200 bg-red-50'
+                                        : item.level === 'warning'
+                                            ? 'border-amber-200 bg-amber-50'
+                                            : 'border-blue-200 bg-blue-50'
+                                }`}
+                            >
+                                <p className="text-sm font-semibold text-gray-900">{item.title}</p>
+                                <p className="mt-1 text-sm text-gray-600">{item.message}</p>
+                            </div>
+                        ))}
+                    </div>
+                )}
+
                 {/* Server info cards */}
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     <Card>
@@ -203,6 +289,32 @@ export default function Performance({ metrics }: PerformanceProps) {
                         </CardContent>
                     </Card>
                 </div>
+
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2 text-base">
+                            <Rocket className="h-5 w-5 text-gray-400" />
+                            Optimisation Laravel
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                            {[
+                                { label: 'Config cachee', value: metrics.cache_status.config_cached },
+                                { label: 'Routes cachees', value: metrics.cache_status.routes_cached },
+                                { label: 'Vues compilees', value: metrics.cache_status.views_cached },
+                                { label: 'OPcache', value: metrics.cache_status.opcache_enabled },
+                            ].map((item) => (
+                                <div key={item.label} className="flex items-center justify-between rounded-lg border border-gray-100 p-3">
+                                    <span className="text-sm text-gray-600">{item.label}</span>
+                                    <Badge variant={item.value ? 'success' : 'secondary'}>
+                                        {item.value ? 'Actif' : 'Inactif'}
+                                    </Badge>
+                                </div>
+                            ))}
+                        </div>
+                    </CardContent>
+                </Card>
 
                 {/* Content counts */}
                 <Card>

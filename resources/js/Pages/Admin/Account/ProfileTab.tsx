@@ -7,7 +7,7 @@ interface ProfileTabProps {
     user: {
         name: string;
         email: string;
-        bio?: string;
+        bio?: string | null;
         profile_visibility?: string;
         social_links?: Record<string, string> | null;
     };

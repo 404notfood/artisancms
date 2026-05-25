@@ -67,6 +67,34 @@ export interface DashboardProps {
         active_plugins: number;
         active_theme: string;
     };
+    systemAlerts: Array<{ type: 'info' | 'warning' | 'error'; message: string }>;
+    recentActivity: Array<{
+        id: number;
+        action: string;
+        created_at: string;
+        ip_address?: string | null;
+        user?: { name: string } | null;
+    }>;
+    myDrafts: {
+        pages: Array<{ id: number; title: string; updated_at: string }>;
+        posts: Array<{ id: number; title: string; updated_at: string }>;
+    };
+    security: {
+        active_sessions: number;
+        failed_logins_24h: number;
+        admin_prefix: string;
+        admin_prefix_custom: boolean;
+        force_https: boolean;
+        session_lifetime: number;
+        alerts: string[];
+    };
+    workload: {
+        pages_pending_review: number;
+        posts_pending_review: number;
+        scheduled_pages: number;
+        scheduled_posts: number;
+        pending_comments: number;
+    };
 }
 
 export interface StatCardProps {

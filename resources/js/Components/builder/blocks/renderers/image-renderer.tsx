@@ -1,10 +1,21 @@
 import type { BlockRendererProps } from '../block-registry';
+import { useBuilderStore } from '@/stores/builder-store';
+
+function responsiveProps(props: Record<string, unknown>, viewport: string) {
+    return {
+        ...props,
+        ...((props.responsive as Record<string, Record<string, unknown>> | undefined)?.[viewport] ?? {}),
+    };
+}
 
 export default function ImageRenderer({ block }: BlockRendererProps) {
-    const src = block.props.src as string;
-    const alt = (block.props.alt as string) || '';
-    const width = (block.props.width as string) || '100%';
-    const objectFit = (block.props.objectFit as string) || 'cover';
+    const viewport = useBuilderStore((state) => state.viewport);
+    const props = responsiveProps(block.props ?? {}, viewport);
+    const src = props.src as string;
+    const alt = (props.alt as string) || '';
+    const width = (props.width as string) || '100%';
+    const height = props.height ? `${props.height}px` : undefined;
+    const objectFit = (props.objectFit as string) || 'cover';
 
     if (!src) {
         return (
@@ -19,5 +30,5 @@ export default function ImageRenderer({ block }: BlockRendererProps) {
         );
     }
 
-    return <img src={src} alt={alt} style={{ width, objectFit: objectFit as React.CSSProperties['objectFit'] }} className="rounded" />;
+    return <img src={src} alt={alt} style={{ width, height, objectFit: objectFit as React.CSSProperties['objectFit'] }} className="rounded" />;
 }

@@ -114,7 +114,7 @@ function runChecks(props: PrePublishChecklistProps): CheckResult[] {
         severity: 'optional',
         hint: hasOgImage
             ? 'Image OG definie'
-            : 'Ajoutez une image OG pour un apercu social optimise',
+            : 'Ajoutez une image OG pour un aperçu social optimisé',
     });
 
     // 7. Word count >= 300 (optional)

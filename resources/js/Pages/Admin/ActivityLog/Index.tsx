@@ -22,11 +22,13 @@ interface ActivityLogEntry {
 interface Props {
     logs: PaginatedResponse<ActivityLogEntry>;
     filters: {
+        category?: string;
         action?: string;
         user_id?: string;
         date_from?: string;
         date_to?: string;
     };
+    categories: Record<string, string>;
     actions: string[];
     users: Array<{ id: number; name: string }>;
 }
@@ -52,10 +54,11 @@ function actionBadgeClass(action: string): string {
     return ACTION_COLORS[action] ?? 'bg-gray-100 text-gray-700';
 }
 
-export default function ActivityLogIndex({ logs, filters, actions, users }: Props) {
+export default function ActivityLogIndex({ logs, filters, categories, actions, users }: Props) {
     const { cms } = usePage<SharedProps>().props;
     const prefix = cms?.adminPrefix ?? 'admin';
 
+    const [category, setCategory] = useState(filters.category ?? '');
     const [action, setAction] = useState(filters.action ?? '');
     const [userId, setUserId] = useState(filters.user_id ?? '');
     const [dateFrom, setDateFrom] = useState(filters.date_from ?? '');
@@ -63,6 +66,7 @@ export default function ActivityLogIndex({ logs, filters, actions, users }: Prop
 
     function applyFilters() {
         router.get(`/${prefix}/activity-log`, {
+            category: category || undefined,
             action: action || undefined,
             user_id: userId || undefined,
             date_from: dateFrom || undefined,
@@ -71,6 +75,7 @@ export default function ActivityLogIndex({ logs, filters, actions, users }: Prop
     }
 
     function resetFilters() {
+        setCategory('');
         setAction('');
         setUserId('');
         setDateFrom('');
@@ -81,6 +86,7 @@ export default function ActivityLogIndex({ logs, filters, actions, users }: Prop
     function goToPage(page: number) {
         router.get(`/${prefix}/activity-log`, {
             page,
+            category: filters.category,
             action: filters.action,
             user_id: filters.user_id,
             date_from: filters.date_from,
@@ -88,7 +94,7 @@ export default function ActivityLogIndex({ logs, filters, actions, users }: Prop
         }, { preserveState: true });
     }
 
-    const hasFilters = !!(filters.action || filters.user_id || filters.date_from || filters.date_to);
+    const hasFilters = !!(filters.category || filters.action || filters.user_id || filters.date_from || filters.date_to);
 
     return (
         <AdminLayout
@@ -104,6 +110,20 @@ export default function ActivityLogIndex({ logs, filters, actions, users }: Prop
             <div className="rounded-lg border border-gray-200 bg-white">
                 {/* Filters */}
                 <div className="flex flex-col gap-3 border-b border-gray-200 p-4 lg:flex-row lg:items-end">
+                    <div className="flex flex-col gap-1">
+                        <label className="text-xs font-medium text-gray-600">Catégorie</label>
+                        <select
+                            value={category}
+                            onChange={(e) => setCategory(e.target.value)}
+                            className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                        >
+                            <option value="">Toutes</option>
+                            {Object.entries(categories).map(([value, label]) => (
+                                <option key={value} value={value}>{label}</option>
+                            ))}
+                        </select>
+                    </div>
+
                     <div className="flex flex-col gap-1">
                         <label className="text-xs font-medium text-gray-600">Action</label>
                         <select

@@ -31,7 +31,7 @@ export default function Sessions({ sessions }: SessionsProps) {
     const prefix = cms?.adminPrefix ?? 'admin';
     function handleForceLogout(sessionId: number) {
         if (!confirm('Forcer la déconnexion de cette session ?')) return;
-        router.delete(`/admin/system/sessions/${sessionId}`);
+        router.delete(`/${prefix}/system/sessions/${sessionId}`);
     }
 
     function handleLogoutAll() {

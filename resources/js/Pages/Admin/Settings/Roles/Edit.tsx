@@ -55,7 +55,7 @@ export default function RolesEdit({ role, isNew }: RolesEditProps) {
                 onFinish: () => setSaving(false),
             });
         } else {
-            router.put(`/admin/settings/roles/${role.id}`, data, {
+            router.put(`/${prefix}/settings/roles/${role.id}`, data, {
                 onFinish: () => setSaving(false),
             });
         }

@@ -16,6 +16,55 @@ class SettingService
     private const CACHE_KEY = 'cms.settings';
 
     /**
+     * @var array<int, array{group: string, key: string, value: mixed, type: string, is_public: bool}>
+     */
+    private const DEFAULT_SETTINGS = [
+        ['group' => 'general', 'key' => 'site_name', 'value' => 'ArtisanCMS', 'type' => 'string', 'is_public' => true],
+        ['group' => 'general', 'key' => 'site_description', 'value' => '', 'type' => 'string', 'is_public' => true],
+        ['group' => 'general', 'key' => 'site_url', 'value' => '', 'type' => 'string', 'is_public' => true],
+        ['group' => 'general', 'key' => 'locale', 'value' => 'fr', 'type' => 'string', 'is_public' => false],
+        ['group' => 'general', 'key' => 'timezone', 'value' => 'Europe/Paris', 'type' => 'string', 'is_public' => false],
+        ['group' => 'general', 'key' => 'site_logo', 'value' => null, 'type' => 'image', 'is_public' => true],
+        ['group' => 'general', 'key' => 'site_favicon', 'value' => null, 'type' => 'image', 'is_public' => true],
+        ['group' => 'seo', 'key' => 'meta_title_suffix', 'value' => ' | ArtisanCMS', 'type' => 'string', 'is_public' => false],
+        ['group' => 'seo', 'key' => 'meta_description', 'value' => '', 'type' => 'textarea', 'is_public' => false],
+        ['group' => 'seo', 'key' => 'robots_index', 'value' => true, 'type' => 'boolean', 'is_public' => false],
+        ['group' => 'seo', 'key' => 'sitemap_enabled', 'value' => true, 'type' => 'boolean', 'is_public' => false],
+        ['group' => 'seo', 'key' => 'canonical_enabled', 'value' => true, 'type' => 'boolean', 'is_public' => false],
+        ['group' => 'seo', 'key' => 'google_site_verification', 'value' => '', 'type' => 'string', 'is_public' => false],
+        ['group' => 'seo', 'key' => 'bing_site_verification', 'value' => '', 'type' => 'string', 'is_public' => false],
+        ['group' => 'mail', 'key' => 'from_name', 'value' => 'ArtisanCMS', 'type' => 'string', 'is_public' => false],
+        ['group' => 'mail', 'key' => 'from_email', 'value' => 'noreply@example.com', 'type' => 'email', 'is_public' => false],
+        ['group' => 'mail', 'key' => 'reply_to_email', 'value' => '', 'type' => 'email', 'is_public' => false],
+        ['group' => 'mail', 'key' => 'mailer', 'value' => 'smtp', 'type' => 'string', 'is_public' => false],
+        ['group' => 'mail', 'key' => 'host', 'value' => '127.0.0.1', 'type' => 'string', 'is_public' => false],
+        ['group' => 'mail', 'key' => 'port', 'value' => 1025, 'type' => 'number', 'is_public' => false],
+        ['group' => 'mail', 'key' => 'username', 'value' => '', 'type' => 'string', 'is_public' => false],
+        ['group' => 'mail', 'key' => 'password', 'value' => '', 'type' => 'password', 'is_public' => false],
+        ['group' => 'mail', 'key' => 'encryption', 'value' => '', 'type' => 'string', 'is_public' => false],
+        ['group' => 'content', 'key' => 'posts_per_page', 'value' => 10, 'type' => 'number', 'is_public' => false],
+        ['group' => 'content', 'key' => 'allow_comments', 'value' => true, 'type' => 'boolean', 'is_public' => false],
+        ['group' => 'content', 'key' => 'homepage_type', 'value' => 'page', 'type' => 'string', 'is_public' => false],
+        ['group' => 'content', 'key' => 'homepage_id', 'value' => null, 'type' => 'number', 'is_public' => false],
+        ['group' => 'content', 'key' => 'excerpt_length', 'value' => 160, 'type' => 'number', 'is_public' => false],
+        ['group' => 'media', 'key' => 'max_upload_size', 'value' => 10240, 'type' => 'number', 'is_public' => false],
+        ['group' => 'media', 'key' => 'allowed_types', 'value' => ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml', 'application/pdf'], 'type' => 'json', 'is_public' => false],
+        ['group' => 'media', 'key' => 'image_sizes', 'value' => ['thumbnail' => [150, 150], 'medium' => [300, 300], 'large' => [1024, 1024]], 'type' => 'json', 'is_public' => false],
+        ['group' => 'media', 'key' => 'optimize_uploads', 'value' => true, 'type' => 'boolean', 'is_public' => false],
+        ['group' => 'maintenance', 'key' => 'enabled', 'value' => false, 'type' => 'boolean', 'is_public' => true],
+        ['group' => 'maintenance', 'key' => 'message', 'value' => 'Site en maintenance. Nous revenons bientot.', 'type' => 'textarea', 'is_public' => true],
+        ['group' => 'maintenance', 'key' => 'allowed_ips', 'value' => [], 'type' => 'json', 'is_public' => false],
+        ['group' => 'security', 'key' => 'login_path', 'value' => 'login', 'type' => 'string', 'is_public' => false],
+        ['group' => 'security', 'key' => 'register_path', 'value' => 'register', 'type' => 'string', 'is_public' => false],
+        ['group' => 'security', 'key' => 'admin_prefix', 'value' => 'admin', 'type' => 'string', 'is_public' => false],
+        ['group' => 'security', 'key' => 'force_https', 'value' => false, 'type' => 'boolean', 'is_public' => false],
+        ['group' => 'security', 'key' => 'session_lifetime', 'value' => 120, 'type' => 'number', 'is_public' => false],
+        ['group' => 'analytics', 'key' => 'enabled', 'value' => true, 'type' => 'boolean', 'is_public' => false],
+        ['group' => 'analytics', 'key' => 'respect_dnt', 'value' => true, 'type' => 'boolean', 'is_public' => false],
+        ['group' => 'analytics', 'key' => 'ga4_measurement_id', 'value' => '', 'type' => 'string', 'is_public' => false],
+    ];
+
+    /**
      * Get a setting value by key.
      *
      * Supports 'group.key' format (e.g., 'site.name').
@@ -61,7 +110,7 @@ class SettingService
             $updateData['type'] = $type;
         }
 
-        $setting = Setting::updateOrCreate(
+        $setting = Setting::withoutGlobalScope('site')->updateOrCreate(
             ['group' => $group, 'key' => $settingKey],
             $updateData,
         );
@@ -84,6 +133,35 @@ class SettingService
     }
 
     /**
+     * Ensure the core settings UI always has editable fields.
+     */
+    public function ensureDefaultSettings(): void
+    {
+        $changed = false;
+
+        foreach (self::DEFAULT_SETTINGS as $setting) {
+            $existing = Setting::withoutGlobalScope('site')->updateOrCreate(
+                ['group' => $setting['group'], 'key' => $setting['key']],
+                [
+                    'type' => $setting['type'],
+                    'is_public' => $setting['is_public'],
+                ],
+            );
+
+            if ($existing->wasRecentlyCreated) {
+                $existing->update(['value' => $setting['value']]);
+                $changed = true;
+            } elseif ($existing->wasChanged()) {
+                $changed = true;
+            }
+        }
+
+        if ($changed) {
+            $this->clearCache();
+        }
+    }
+
+    /**
      * Set many settings at once. Clears cache only once after all writes.
      *
      * @param array<string, mixed> $settings Associative array of key => value pairs
@@ -100,7 +178,7 @@ class SettingService
 
             $updateData = ['value' => $value];
 
-            Setting::updateOrCreate(
+            Setting::withoutGlobalScope('site')->updateOrCreate(
                 ['group' => $group, 'key' => $settingKey],
                 $updateData,
             );
@@ -125,7 +203,7 @@ class SettingService
     private function getAllCached(): Collection
     {
         return Cache::rememberForever(self::CACHE_KEY, function (): Collection {
-            return Setting::all();
+            return Setting::withoutGlobalScope('site')->get();
         });
     }
 }

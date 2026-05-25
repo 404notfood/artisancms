@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Services\ActivityLogService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schema;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -140,11 +143,59 @@ class SystemMonitorController extends Controller
                 'users' => $this->safeCount('users'),
             ],
             'last_backup' => $this->getLastBackup(),
+            'cache_status' => [
+                'config_cached' => app()->configurationIsCached(),
+                'routes_cached' => app()->routesAreCached(),
+                'views_cached' => count(File::glob(storage_path('framework/views/*.php')) ?: []) > 0,
+                'opcache_enabled' => function_exists('opcache_get_status') && (bool) (opcache_get_status(false)['opcache_enabled'] ?? false),
+            ],
+            'recommendations' => $this->getPerformanceRecommendations($diskFree, $diskTotal),
         ];
 
         return Inertia::render('Admin/System/Performance', [
             'metrics' => $metrics,
         ]);
+    }
+
+    public function clearCache(): RedirectResponse
+    {
+        try {
+            Cache::flush();
+            Artisan::call('cache:clear');
+            Artisan::call('view:clear');
+        } catch (\Throwable $e) {
+            return redirect()->back()->with('error', 'Nettoyage impossible : ' . $e->getMessage());
+        }
+
+        app(ActivityLogService::class)->log(action: 'cache_cleared', properties: ['source' => 'performance']);
+
+        return redirect()->back()->with('success', 'Caches vides.');
+    }
+
+    public function optimize(): RedirectResponse
+    {
+        try {
+            Artisan::call('config:cache');
+            Artisan::call('route:cache');
+            Artisan::call('view:cache');
+        } catch (\Throwable $e) {
+            Artisan::call('optimize:clear');
+
+            return redirect()->back()->with('error', 'Optimisation impossible : ' . $e->getMessage());
+        }
+
+        return redirect()->back()->with('success', 'Application optimisee.');
+    }
+
+    public function clearCompiled(): RedirectResponse
+    {
+        try {
+            Artisan::call('optimize:clear');
+        } catch (\Throwable $e) {
+            return redirect()->back()->with('error', 'Nettoyage impossible : ' . $e->getMessage());
+        }
+
+        return redirect()->back()->with('success', 'Caches compiles supprimes.');
     }
 
     /**
@@ -253,5 +304,48 @@ class SystemMonitorController extends Controller
         } catch (\Throwable) {
             return null;
         }
+    }
+
+    /**
+     * @return list<array{level: string, title: string, message: string}>
+     */
+    private function getPerformanceRecommendations(float|int $diskFree, float|int $diskTotal): array
+    {
+        $recommendations = [];
+        $diskUsedPercent = $diskTotal > 0 ? (1 - $diskFree / $diskTotal) * 100 : 0;
+
+        if (!app()->configurationIsCached()) {
+            $recommendations[] = [
+                'level' => 'warning',
+                'title' => 'Configuration non cachee',
+                'message' => 'Activez le cache de configuration en production pour reduire le bootstrap Laravel.',
+            ];
+        }
+
+        if (!app()->routesAreCached()) {
+            $recommendations[] = [
+                'level' => 'warning',
+                'title' => 'Routes non cachees',
+                'message' => 'Le cache des routes accelere le chargement admin et front.',
+            ];
+        }
+
+        if ($diskUsedPercent >= 85) {
+            $recommendations[] = [
+                'level' => 'danger',
+                'title' => 'Espace disque faible',
+                'message' => 'Nettoyez les anciennes sauvegardes et les fichiers temporaires.',
+            ];
+        }
+
+        if (config('cache.default') === 'file' && app()->environment('production')) {
+            $recommendations[] = [
+                'level' => 'info',
+                'title' => 'Cache fichier en production',
+                'message' => 'Redis ou Memcached seront plus solides pour un site a trafic regulier.',
+            ];
+        }
+
+        return $recommendations;
     }
 }

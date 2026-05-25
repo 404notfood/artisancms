@@ -1,7 +1,7 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, router, usePage } from '@inertiajs/react';
+import { Head, router, useForm, usePage } from '@inertiajs/react';
 import { useState, useRef } from 'react';
-import { CloudUpload, FileText, Video, ImageIcon, X } from 'lucide-react';
+import { CloudUpload, FileText, Video, ImageIcon, X, Copy, Check, AlertTriangle, Grid2X2, List, Search } from 'lucide-react';
 import type { MediaData, PaginatedResponse, SharedProps } from '@/types/cms';
 import { MediaFolderTree } from '@/Components/admin/media-folder-tree';
 import { ImageEditor } from '@/Components/admin/image-editor';
@@ -33,7 +33,12 @@ export default function MediaIndex({ media, filters }: MediaIndexProps) {
     const [isDragging, setIsDragging] = useState(false);
     const [currentFolder, setCurrentFolder] = useState(filters.folder ?? '');
     const [sidePanel, setSidePanel] = useState<SidePanel>('details');
+    const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+    const [uploadProgress, setUploadProgress] = useState<string | null>(null);
+    const [copiedUrl, setCopiedUrl] = useState(false);
+    const [orphanCount, setOrphanCount] = useState<number | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const mediaStats = buildMediaStats(media.data);
 
     function handleSearch(e: React.FormEvent) {
         e.preventDefault();
@@ -55,6 +60,7 @@ export default function MediaIndex({ media, filters }: MediaIndexProps) {
         const csrfToken = document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]')?.content || '';
         let completed = 0;
         const total = files.length;
+        setUploadProgress(`0/${total} fichier envoye`);
 
         Array.from(files).forEach((file) => {
             const formData = new FormData();
@@ -75,14 +81,18 @@ export default function MediaIndex({ media, filters }: MediaIndexProps) {
                 })
                 .then(() => {
                     completed++;
+                    setUploadProgress(`${completed}/${total} fichier${total > 1 ? 's' : ''} envoye${completed > 1 ? 's' : ''}`);
                     if (completed === total) {
+                        setTimeout(() => setUploadProgress(null), 1600);
                         router.reload({ only: ['media'] });
                     }
                 })
                 .catch((err) => {
                     console.error('Upload error:', err);
                     completed++;
+                    setUploadProgress(`${completed}/${total} traite${completed > 1 ? 's' : ''}`);
                     if (completed === total) {
+                        setTimeout(() => setUploadProgress(null), 1600);
                         router.reload({ only: ['media'] });
                     }
                 });
@@ -107,7 +117,7 @@ export default function MediaIndex({ media, filters }: MediaIndexProps) {
 
     function handleDelete(mediaItem: MediaData) {
         if (!confirm(`Êtes-vous sûr de vouloir supprimer "${mediaItem.original_filename}" ?`)) return;
-        router.delete(`/admin/media/${mediaItem.id}`, {
+        router.delete(`/${prefix}/media/${mediaItem.id}`, {
             preserveState: true,
             onSuccess: () => {
                 if (selectedMedia?.id === mediaItem.id) {
@@ -115,6 +125,18 @@ export default function MediaIndex({ media, filters }: MediaIndexProps) {
                 }
             },
         });
+    }
+
+    async function scanOrphans() {
+        const response = await fetch(`/${prefix}/media/orphans`, { headers: { Accept: 'application/json' } });
+        const result = await response.json();
+        setOrphanCount(Number(result.count ?? 0));
+    }
+
+    async function copyUrl(url: string) {
+        await navigator.clipboard.writeText(url);
+        setCopiedUrl(true);
+        window.setTimeout(() => setCopiedUrl(false), 1400);
     }
 
     function isImage(mimeType: string): boolean {
@@ -163,6 +185,18 @@ export default function MediaIndex({ media, filters }: MediaIndexProps) {
                         className="hidden"
                         accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.zip"
                     />
+                    {uploadProgress && (
+                        <p className="mt-3 rounded-full bg-gray-900 px-3 py-1 text-xs font-medium text-white">
+                            {uploadProgress}
+                        </p>
+                    )}
+                </div>
+
+                <div className="grid gap-3 sm:grid-cols-4">
+                    <MediaStat label="Total affiche" value={media.data.length.toString()} />
+                    <MediaStat label="Images" value={mediaStats.images.toString()} />
+                    <MediaStat label="Documents" value={mediaStats.documents.toString()} />
+                    <MediaStat label="Poids affiche" value={formatFileSize(mediaStats.size)} />
                 </div>
 
                 {/* Filters + Search + Stock Photos toggle */}
@@ -195,6 +229,28 @@ export default function MediaIndex({ media, filters }: MediaIndexProps) {
                         >
                             Stock Photos
                         </button>
+                        <button
+                            onClick={scanOrphans}
+                            className="inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100"
+                        >
+                            <AlertTriangle className="h-4 w-4" />
+                            Orphelins{orphanCount !== null ? ` (${orphanCount})` : ''}
+                        </button>
+                        <div className="mx-2 hidden w-px bg-gray-200 sm:block" />
+                        <button
+                            onClick={() => setViewMode('grid')}
+                            className={`rounded-lg p-2 transition-colors ${viewMode === 'grid' ? 'bg-indigo-100 text-indigo-700' : 'text-gray-500 hover:bg-gray-100'}`}
+                            title="Vue grille"
+                        >
+                            <Grid2X2 className="h-4 w-4" />
+                        </button>
+                        <button
+                            onClick={() => setViewMode('list')}
+                            className={`rounded-lg p-2 transition-colors ${viewMode === 'list' ? 'bg-indigo-100 text-indigo-700' : 'text-gray-500 hover:bg-gray-100'}`}
+                            title="Vue liste"
+                        >
+                            <List className="h-4 w-4" />
+                        </button>
                     </div>
 
                     <form onSubmit={handleSearch} className="flex gap-2">
@@ -207,8 +263,9 @@ export default function MediaIndex({ media, filters }: MediaIndexProps) {
                         />
                         <button
                             type="submit"
-                            className="rounded-lg bg-gray-100 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-200 transition-colors"
+                            className="inline-flex items-center gap-2 rounded-lg bg-gray-100 px-3 py-1.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200"
                         >
+                            <Search className="h-4 w-4" />
                             Rechercher
                         </button>
                     </form>
@@ -229,7 +286,10 @@ export default function MediaIndex({ media, filters }: MediaIndexProps) {
                                 <p className="mt-2 text-sm text-gray-500">Aucun média trouvé.</p>
                             </div>
                         ) : (
-                            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+                            <div className={viewMode === 'grid'
+                                ? 'grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5'
+                                : 'grid gap-2'
+                            }>
                                 {media.data.map((item) => (
                                     <button
                                         key={item.id}
@@ -237,13 +297,13 @@ export default function MediaIndex({ media, filters }: MediaIndexProps) {
                                             setSelectedMedia(item);
                                             setSidePanel('details');
                                         }}
-                                        className={`group relative overflow-hidden rounded-lg border bg-white transition-all hover:shadow-md ${
+                                        className={`group relative overflow-hidden rounded-lg border bg-white text-left transition-all hover:shadow-md ${
                                             selectedMedia?.id === item.id
                                                 ? 'border-indigo-500 ring-2 ring-indigo-200'
                                                 : 'border-gray-200'
                                         }`}
                                     >
-                                        <div className="aspect-square bg-gray-100">
+                                        <div className={viewMode === 'grid' ? 'aspect-square bg-gray-100' : 'float-left mr-3 h-16 w-16 bg-gray-100'}>
                                             {isImage(item.mime_type) ? (
                                                 <img
                                                     src={item.url}
@@ -260,13 +320,16 @@ export default function MediaIndex({ media, filters }: MediaIndexProps) {
                                                 </div>
                                             )}
                                         </div>
-                                        <div className="p-2">
+                                        <div className={viewMode === 'grid' ? 'p-2' : 'min-h-16 p-2'}>
                                             <p className="truncate text-xs font-medium text-gray-700">
                                                 {item.original_filename}
                                             </p>
                                             <p className="text-xs text-gray-400">
                                                 {formatFileSize(item.size)}
                                             </p>
+                                            {viewMode === 'list' && (
+                                                <p className="mt-1 truncate text-xs text-gray-500">{item.mime_type}</p>
+                                            )}
                                         </div>
                                     </button>
                                 ))}
@@ -389,13 +452,23 @@ export default function MediaIndex({ media, filters }: MediaIndexProps) {
                                 )}
                                 <div>
                                     <p className="text-gray-500">URL</p>
-                                    <input
-                                        type="text"
-                                        readOnly
-                                        value={selectedMedia.url}
-                                        className="mt-1 w-full rounded border border-gray-200 bg-gray-50 px-2 py-1 text-xs text-gray-600"
-                                        onClick={(e) => (e.target as HTMLInputElement).select()}
-                                    />
+                                    <div className="mt-1 flex gap-2">
+                                        <input
+                                            type="text"
+                                            readOnly
+                                            value={selectedMedia.url}
+                                            className="min-w-0 flex-1 rounded border border-gray-200 bg-gray-50 px-2 py-1 text-xs text-gray-600"
+                                            onClick={(e) => (e.target as HTMLInputElement).select()}
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => copyUrl(selectedMedia.url)}
+                                            className="rounded border border-gray-200 px-2 text-gray-500 hover:bg-gray-50"
+                                            title="Copier l'URL"
+                                        >
+                                            {copiedUrl ? <Check className="h-4 w-4 text-emerald-600" /> : <Copy className="h-4 w-4" />}
+                                        </button>
+                                    </div>
                                 </div>
                                 <div>
                                     <p className="text-gray-500">Date d'ajout</p>
@@ -408,6 +481,13 @@ export default function MediaIndex({ media, filters }: MediaIndexProps) {
                                     </p>
                                 </div>
                             </div>
+
+                            <MediaMetadataForm
+                                key={selectedMedia.id}
+                                media={selectedMedia}
+                                prefix={prefix}
+                                onSaved={(updated) => setSelectedMedia(updated)}
+                            />
 
                             {/* Actions */}
                             <div className="mt-4 space-y-2">
@@ -434,3 +514,109 @@ export default function MediaIndex({ media, filters }: MediaIndexProps) {
     );
 }
 
+function MediaStat({ label, value }: { label: string; value: string }) {
+    return (
+        <div className="rounded-lg border border-gray-200 bg-white px-4 py-3">
+            <p className="text-xs font-medium uppercase tracking-wide text-gray-500">{label}</p>
+            <p className="mt-1 text-lg font-semibold text-gray-900">{value}</p>
+        </div>
+    );
+}
+
+function MediaMetadataForm({
+    media,
+    prefix,
+    onSaved,
+}: {
+    media: MediaData;
+    prefix: string;
+    onSaved: (media: MediaData) => void;
+}) {
+    const { data, setData, put, processing, recentlySuccessful } = useForm({
+        title: media.title ?? '',
+        alt_text: media.alt_text ?? '',
+        caption: media.caption ?? '',
+        folder: media.folder ?? '',
+    });
+
+    function submit(e: React.FormEvent) {
+        e.preventDefault();
+        put(`/${prefix}/media/${media.id}`, {
+            preserveScroll: true,
+            onSuccess: () => {
+                onSaved({
+                    ...media,
+                    title: data.title,
+                    alt_text: data.alt_text,
+                    caption: data.caption,
+                    folder: data.folder,
+                });
+                router.reload({ only: ['media'] });
+            },
+        });
+    }
+
+    return (
+        <form onSubmit={submit} className="mt-4 space-y-3 border-t border-gray-100 pt-4">
+            <div>
+                <label className="text-xs font-medium text-gray-600" htmlFor="media-title">Titre</label>
+                <input
+                    id="media-title"
+                    value={data.title}
+                    onChange={(e) => setData('title', e.target.value)}
+                    className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                />
+            </div>
+            <div>
+                <label className="text-xs font-medium text-gray-600" htmlFor="media-alt">Texte alternatif</label>
+                <input
+                    id="media-alt"
+                    value={data.alt_text}
+                    onChange={(e) => setData('alt_text', e.target.value)}
+                    className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    placeholder="Description utile pour accessibilite et SEO"
+                />
+            </div>
+            <div>
+                <label className="text-xs font-medium text-gray-600" htmlFor="media-caption">Legende</label>
+                <textarea
+                    id="media-caption"
+                    value={data.caption}
+                    onChange={(e) => setData('caption', e.target.value)}
+                    rows={2}
+                    className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                />
+            </div>
+            <div>
+                <label className="text-xs font-medium text-gray-600" htmlFor="media-folder">Dossier</label>
+                <input
+                    id="media-folder"
+                    value={data.folder}
+                    onChange={(e) => setData('folder', e.target.value)}
+                    className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    placeholder="media/2026/05"
+                />
+            </div>
+            <button
+                type="submit"
+                disabled={processing}
+                className="w-full rounded-lg bg-indigo-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-700 disabled:opacity-50"
+            >
+                {processing ? 'Enregistrement...' : recentlySuccessful ? 'Enregistre' : 'Enregistrer les metas'}
+            </button>
+        </form>
+    );
+}
+
+function buildMediaStats(items: MediaData[]) {
+    return items.reduce(
+        (stats, item) => {
+            if (item.mime_type.startsWith('image/')) stats.images++;
+            else if (item.mime_type.startsWith('video/')) stats.videos++;
+            else stats.documents++;
+            stats.size += item.size;
+            return stats;
+        },
+        { images: 0, videos: 0, documents: 0, size: 0 },
+    );
+}
