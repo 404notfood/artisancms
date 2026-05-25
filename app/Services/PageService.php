@@ -76,6 +76,7 @@ class PageService
     public function create(array $data): Page
     {
         $data['created_by'] = $data['created_by'] ?? Auth::id();
+        $data['template'] = empty($data['template']) ? 'default' : $data['template'];
 
         $page = Page::create($data);
 
@@ -94,6 +95,8 @@ class PageService
     public function update(Page $page, array $data): Page
     {
         $contentChanged = isset($data['content']) && $data['content'] !== $page->content;
+        $data['template'] = $data['template'] ?? $page->template ?? 'default';
+        $data['template'] = $data['template'] ?: 'default';
 
         $page->update($data);
 

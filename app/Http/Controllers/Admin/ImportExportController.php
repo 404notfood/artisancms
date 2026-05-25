@@ -5,6 +5,12 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Media;
+use App\Models\Menu;
+use App\Models\Page;
+use App\Models\Post;
+use App\Models\Setting;
+use App\Models\Taxonomy;
 use App\Services\ImportExportService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -23,7 +29,20 @@ class ImportExportController extends Controller
      */
     public function index(): Response
     {
-        return Inertia::render('Admin/ImportExport/Index');
+        return Inertia::render('Admin/ImportExport/Index', [
+            'stats' => [
+                'pages' => Page::count(),
+                'posts' => Post::count(),
+                'menus' => Menu::count(),
+                'settings' => Setting::count(),
+                'taxonomies' => Taxonomy::count(),
+                'media' => Media::count(),
+            ],
+            'limits' => [
+                'content_import_mb' => 50,
+                'config_import_mb' => 10,
+            ],
+        ]);
     }
 
     /**

@@ -30,6 +30,11 @@ class DashboardController extends Controller
             'contentStats' => $this->dashboardService->getContentStats(),
             'analytics' => $this->dashboardService->getAnalytics(),
             'system' => $this->dashboardService->getSystemInfo(),
+            'systemAlerts' => $this->dashboardService->getSystemAlerts(),
+            'recentActivity' => $this->dashboardService->getRecentActivity(8),
+            'myDrafts' => $this->dashboardService->getMyDrafts((int) auth()->id()),
+            'security' => $this->dashboardService->getSecuritySummary(),
+            'workload' => $this->dashboardService->getWorkload(),
         ]);
     }
 }

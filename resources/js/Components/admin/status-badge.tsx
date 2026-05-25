@@ -6,9 +6,9 @@ interface StatusConfig {
 }
 
 const STATUS_STYLES: Record<string, StatusConfig> = {
-    published: { label: 'Publie', className: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
+    published: { label: 'Publié', className: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
     draft: { label: 'Brouillon', className: 'bg-amber-50 text-amber-700 border-amber-200' },
-    scheduled: { label: 'Planifie', className: 'bg-blue-50 text-blue-700 border-blue-200' },
+    scheduled: { label: 'Planifié', className: 'bg-blue-50 text-blue-700 border-blue-200' },
     trash: { label: 'Corbeille', className: 'bg-red-50 text-red-700 border-red-200' },
     pending: { label: 'En attente', className: 'bg-orange-50 text-orange-700 border-orange-200' },
     pending_review: { label: 'En revue', className: 'bg-orange-50 text-orange-700 border-orange-200' },

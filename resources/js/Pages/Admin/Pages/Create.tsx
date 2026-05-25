@@ -16,7 +16,7 @@ export default function PagesCreate({ parentPages }: PagesCreateProps) {
         slug: '',
         status: 'draft' as string,
         access_level: 'public',
-        template: '',
+        template: 'default',
         meta_title: '',
         meta_description: '',
         og_image: '',
@@ -109,8 +109,8 @@ export default function PagesCreate({ parentPages }: PagesCreateProps) {
                                 className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                             >
                                 <option value="draft">Brouillon</option>
-                                <option value="published">Publie</option>
-                                <option value="scheduled">Planifie</option>
+                                <option value="published">Publi&eacute;</option>
+                                <option value="scheduled">Planifi&eacute;</option>
                             </select>
                             {errors.status && <p className="mt-1 text-sm text-red-600">{errors.status}</p>}
                         </div>
@@ -125,9 +125,9 @@ export default function PagesCreate({ parentPages }: PagesCreateProps) {
                                 onChange={(e) => setData('template', e.target.value)}
                                 className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                             >
-                                <option value="">Par défaut</option>
+                                <option value="default">Par d&eacute;faut</option>
                                 <option value="full-width">Pleine largeur</option>
-                                <option value="sidebar">Avec barre latérale</option>
+                                <option value="sidebar">Avec barre lat&eacute;rale</option>
                                 <option value="landing">Landing page</option>
                             </select>
                             {errors.template && <p className="mt-1 text-sm text-red-600">{errors.template}</p>}
@@ -173,7 +173,7 @@ export default function PagesCreate({ parentPages }: PagesCreateProps) {
 
                 {/* Access Level */}
                 <div className="rounded-lg border border-gray-200 bg-white p-6 space-y-4">
-                    <h2 className="text-lg font-medium text-gray-900">Niveau d'acces</h2>
+                    <h2 className="text-lg font-medium text-gray-900">Niveau d&apos;acc&egrave;s</h2>
                     <div>
                         <label htmlFor="access_level" className="block text-sm font-medium text-gray-700">
                             Qui peut voir cette page ?
@@ -185,9 +185,9 @@ export default function PagesCreate({ parentPages }: PagesCreateProps) {
                             className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                         >
                             <option value="public">Public (tout le monde)</option>
-                            <option value="authenticated">Utilisateurs connectes uniquement</option>
+                            <option value="authenticated">Utilisateurs connect&eacute;s uniquement</option>
                             <option value="role:admin">Administrateurs uniquement</option>
-                            <option value="role:editor">Editeurs et administrateurs</option>
+                            <option value="role:editor">&Eacute;diteurs et administrateurs</option>
                         </select>
                         {errors.access_level && <p className="mt-1 text-sm text-red-600">{errors.access_level}</p>}
                     </div>

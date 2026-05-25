@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Concerns;
 use App\CMS\Facades\CMS;
 use App\CMS\Themes\ThemeManager;
 use App\Models\Menu;
+use App\Services\SeoService;
 use App\Services\SettingService;
 use Illuminate\Database\Eloquent\Model;
 
@@ -52,6 +53,8 @@ trait HasFrontData
      */
     private function buildSeoMeta(Model $entity): array
     {
-        return CMS::applyFilter('page.head', [], $entity);
+        $seo = app(SeoService::class)->metaFor($entity);
+
+        return CMS::applyFilter('page.head', $seo, $entity);
     }
 }

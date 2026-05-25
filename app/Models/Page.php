@@ -85,6 +85,10 @@ class Page extends Model
             if (empty($page->slug) && !empty($page->title)) {
                 $page->slug = Str::slug($page->title);
             }
+
+            if (empty($page->template)) {
+                $page->template = 'default';
+            }
         });
     }
 

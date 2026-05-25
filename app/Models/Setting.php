@@ -58,11 +58,12 @@ class Setting extends Model
         if (str_contains($key, '.')) {
             [$group, $settingKey] = explode('.', $key, 2);
 
-            $setting = static::where('group', $group)
+            $setting = static::withoutGlobalScope('site')
+                ->where('group', $group)
                 ->where('key', $settingKey)
                 ->first();
         } else {
-            $setting = static::where('key', $key)->first();
+            $setting = static::withoutGlobalScope('site')->where('key', $key)->first();
         }
 
         return $setting?->value ?? $default;
@@ -81,7 +82,7 @@ class Setting extends Model
             [$group, $settingKey] = explode('.', $key, 2);
         }
 
-        static::updateOrCreate(
+        static::withoutGlobalScope('site')->updateOrCreate(
             ['group' => $group, 'key' => $settingKey],
             ['value' => $value],
         );

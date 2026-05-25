@@ -4,7 +4,7 @@ import { useState } from 'react';
 import type { PostData, PaginatedResponse, SharedProps } from '@/types/cms';
 import { formatDate } from '@/lib/format';
 import StatusBadge from '@/Components/admin/status-badge';
-import { Plus, Pencil, Copy, Trash2 } from 'lucide-react';
+import { Plus, Pencil, Copy, Trash2, SearchCheck } from 'lucide-react';
 
 interface PostsIndexProps {
     posts: PaginatedResponse<PostData>;
@@ -39,16 +39,16 @@ export default function PostsIndex({ posts, filters }: PostsIndexProps) {
 
     function handleDelete(post: PostData) {
         if (!confirm(`Êtes-vous sûr de vouloir supprimer l'article "${post.title}" ?`)) return;
-        router.delete(`/admin/posts/${post.id}`);
+        router.delete(`/${prefix}/posts/${post.id}`);
     }
 
     function handleRestore(post: PostData) {
-        router.post(`/admin/posts/${post.id}/restore`);
+        router.post(`/${prefix}/posts/${post.id}/restore`);
     }
 
     function handleForceDelete(post: PostData) {
         if (!confirm(`Êtes-vous sûr de vouloir supprimer définitivement l'article "${post.title}" ? Cette action est irréversible.`)) return;
-        router.delete(`/admin/posts/${post.id}/force-delete`);
+        router.delete(`/${prefix}/posts/${post.id}/force-delete`);
     }
 
     function handleEmptyTrash() {
@@ -57,7 +57,7 @@ export default function PostsIndex({ posts, filters }: PostsIndexProps) {
     }
 
     function handleDuplicate(post: PostData) {
-        router.post(`/admin/posts/${post.id}/duplicate`);
+        router.post(`/${prefix}/posts/${post.id}/duplicate`);
     }
 
     const isTrash = (filters.status ?? '') === 'trash';
@@ -131,6 +131,7 @@ export default function PostsIndex({ posts, filters }: PostsIndexProps) {
                                 <th className="px-4 py-3 font-medium text-gray-700">Statut</th>
                                 <th className="hidden px-4 py-3 font-medium text-gray-700 md:table-cell">Auteur</th>
                                 <th className="hidden px-4 py-3 font-medium text-gray-700 lg:table-cell">Catégories</th>
+                                <th className="hidden px-4 py-3 font-medium text-gray-700 md:table-cell">SEO</th>
                                 <th className="hidden px-4 py-3 font-medium text-gray-700 sm:table-cell">Modifié le</th>
                                 <th className="px-4 py-3 font-medium text-gray-700">Actions</th>
                             </tr>
@@ -138,7 +139,7 @@ export default function PostsIndex({ posts, filters }: PostsIndexProps) {
                         <tbody className="divide-y divide-gray-100">
                             {posts.data.length === 0 ? (
                                 <tr>
-                                    <td colSpan={6} className="px-4 py-8 text-center text-gray-500">
+                                    <td colSpan={7} className="px-4 py-8 text-center text-gray-500">
                                         Aucun article trouvé.
                                     </td>
                                 </tr>
@@ -147,7 +148,7 @@ export default function PostsIndex({ posts, filters }: PostsIndexProps) {
                                     <tr key={post.id} className="hover:bg-gray-50">
                                         <td className="px-4 py-3">
                                             <Link
-                                                href={`/admin/posts/${post.id}/edit`}
+                                                href={`/${prefix}/posts/${post.id}/edit`}
                                                 className="font-medium text-gray-900 hover:text-indigo-600"
                                             >
                                                 {post.title}
@@ -176,6 +177,9 @@ export default function PostsIndex({ posts, filters }: PostsIndexProps) {
                                                 )}
                                             </div>
                                         </td>
+                                        <td className="hidden px-4 py-3 md:table-cell">
+                                            <ContentSeoBadge item={post} />
+                                        </td>
                                         <td className="hidden px-4 py-3 text-gray-500 sm:table-cell">
                                             {formatDate(post.updated_at)}
                                         </td>
@@ -201,7 +205,7 @@ export default function PostsIndex({ posts, filters }: PostsIndexProps) {
                                                 ) : (
                                                     <>
                                                         <Link
-                                                            href={`/admin/posts/${post.id}/edit`}
+                                                            href={`/${prefix}/posts/${post.id}/edit`}
                                                             className="text-gray-500 hover:text-indigo-600"
                                                             title="Modifier"
                                                         >
@@ -241,7 +245,7 @@ export default function PostsIndex({ posts, filters }: PostsIndexProps) {
                             {Array.from({ length: posts.last_page }, (_, i) => i + 1).map((p) => (
                                 <Link
                                     key={p}
-                                    href={`/admin/posts?page=${p}&status=${filters.status ?? ''}&search=${filters.search ?? ''}`}
+                                    href={`/${prefix}/posts?page=${p}&status=${filters.status ?? ''}&search=${filters.search ?? ''}`}
                                     className={`rounded px-3 py-1 text-sm ${
                                         p === posts.current_page
                                             ? 'bg-indigo-600 text-white'
@@ -256,6 +260,24 @@ export default function PostsIndex({ posts, filters }: PostsIndexProps) {
                 )}
             </div>
         </AdminLayout>
+    );
+}
+
+function ContentSeoBadge({ item }: { item: PostData }) {
+    const record = item as unknown as Record<string, string | null>;
+    const issues = [
+        !record.meta_title ? 'titre' : null,
+        !record.meta_description ? 'description' : null,
+        !(record.og_image || item.featured_image) ? 'image' : null,
+    ].filter(Boolean);
+    const score = Math.max(0, 100 - issues.length * 25);
+    const tone = score >= 75 ? 'bg-emerald-50 text-emerald-700' : score >= 50 ? 'bg-amber-50 text-amber-700' : 'bg-red-50 text-red-700';
+
+    return (
+        <span className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-medium ${tone}`} title={issues.length ? `Manque: ${issues.join(', ')}` : 'SEO OK'}>
+            <SearchCheck className="h-3.5 w-3.5" />
+            {score}%
+        </span>
     );
 }
 

@@ -95,7 +95,7 @@ export default function RedirectsIndex({ redirects, filters }: Props) {
         e.preventDefault();
         if (!editingRedirect) return;
 
-        editForm.put(`/admin/redirects/${editingRedirect.id}`, {
+        editForm.put(`/${prefix}/redirects/${editingRedirect.id}`, {
             preserveScroll: true,
             onSuccess: () => {
                 setEditingRedirect(null);
@@ -105,12 +105,12 @@ export default function RedirectsIndex({ redirects, filters }: Props) {
 
     const handleDelete = (id: number, sourcePath: string) => {
         if (!confirm(`Supprimer la redirection "${sourcePath}" ?`)) return;
-        router.delete(`/admin/redirects/${id}`, { preserveScroll: true });
+        router.delete(`/${prefix}/redirects/${id}`, { preserveScroll: true });
     };
 
     const handleToggleActive = (redirect: RedirectItem) => {
         router.put(
-            `/admin/redirects/${redirect.id}`,
+            `/${prefix}/redirects/${redirect.id}`,
             {
                 source_path: redirect.source_path,
                 target_url: redirect.target_url,

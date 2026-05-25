@@ -18,11 +18,15 @@ class ActivityLogController extends Controller
      */
     public function index(Request $request): Response
     {
-        $filters = $request->only(['action', 'user_id', 'date_from', 'date_to']);
+        $filters = $request->only(['category', 'action', 'user_id', 'date_from', 'date_to']);
 
         $query = ActivityLog::query()
             ->with(['user:id,name,email', 'subject'])
             ->orderByDesc('created_at');
+
+        if (!empty($filters['category'])) {
+            $query->byActionCategory($filters['category']);
+        }
 
         if (!empty($filters['action'])) {
             $query->byAction($filters['action']);
@@ -61,6 +65,16 @@ class ActivityLogController extends Controller
         return Inertia::render('Admin/ActivityLog/Index', [
             'logs'    => $logs,
             'filters' => $filters,
+            'categories' => [
+                'content' => 'Contenu',
+                'auth' => 'Authentification',
+                'users' => 'Utilisateurs',
+                'roles' => 'Rôles',
+                'settings' => 'Paramètres',
+                'plugins' => 'Extensions',
+                'themes' => 'Thèmes',
+                'system' => 'Système',
+            ],
             'actions' => $actions,
             'users'   => $users,
         ]);

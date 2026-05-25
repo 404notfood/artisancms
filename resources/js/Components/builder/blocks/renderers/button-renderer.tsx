@@ -1,12 +1,23 @@
 import type { BlockRendererProps } from '../block-registry';
+import { useBuilderStore } from '@/stores/builder-store';
+
+function responsiveProps(props: Record<string, unknown>, viewport: string) {
+    return {
+        ...props,
+        ...((props.responsive as Record<string, Record<string, unknown>> | undefined)?.[viewport] ?? {}),
+    };
+}
 
 export default function ButtonRenderer({ block }: BlockRendererProps) {
-    const text = (block.props.text as string) || 'Bouton';
-    const variant = (block.props.variant as string) || 'primary';
-    const size = (block.props.size as string) || 'md';
-    const url = (block.props.url as string) || '';
-    const target = (block.props.target as string) || '_self';
-    const align = (block.props.align as string) || 'left';
+    const viewport = useBuilderStore((state) => state.viewport);
+    const props = responsiveProps(block.props ?? {}, viewport);
+    const text = (props.text as string) || 'Bouton';
+    const variant = (props.variant as string) || 'primary';
+    const size = (props.size as string) || 'md';
+    const url = (props.url as string) || '';
+    const target = (props.target as string) || '_self';
+    const align = (props.align as string) || 'left';
+    const fullWidth = Boolean(props.fullWidth);
 
     const sizeStyles: Record<string, React.CSSProperties> = {
         sm: { padding: '0.4375rem 1rem', fontSize: '0.8125rem' },
@@ -26,6 +37,8 @@ export default function ButtonRenderer({ block }: BlockRendererProps) {
         transition: 'opacity 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease',
         border: 'none',
         lineHeight: 1.4,
+        justifyContent: 'center',
+        width: fullWidth ? '100%' : undefined,
         ...(sizeStyles[size] || sizeStyles.md),
     };
 
@@ -70,6 +83,7 @@ export default function ButtonRenderer({ block }: BlockRendererProps) {
     const wrapperStyle: React.CSSProperties = {
         display: 'flex',
         justifyContent: align === 'center' ? 'center' : align === 'right' ? 'flex-end' : 'flex-start',
+        width: '100%',
     };
 
     const content = (

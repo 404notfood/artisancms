@@ -1,8 +1,11 @@
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import type { BlockNode } from '@/types/cms';
+import { useBuilderStore } from '@/stores/builder-store';
 
 // Reuse existing builder renderers
 import SectionRenderer from '@/Components/builder/blocks/renderers/section-renderer';
+import RowRenderer from '@/Components/builder/blocks/renderers/row-renderer';
+import ColumnRenderer from '@/Components/builder/blocks/renderers/column-renderer';
 import GridRenderer from '@/Components/builder/blocks/renderers/grid-renderer';
 import HeadingRenderer from '@/Components/builder/blocks/renderers/heading-renderer';
 import TextRenderer from '@/Components/builder/blocks/renderers/text-renderer';
@@ -86,6 +89,8 @@ const BLOCK_TYPE_TO_CATEGORY: Record<string, CategoryKey> = {
  */
 const rendererMap: Record<string, ComponentType<BlockRendererProps>> = {
     section: SectionRenderer,
+    row: RowRenderer,
+    column: ColumnRenderer,
     grid: GridRenderer,
     heading: HeadingRenderer,
     text: TextRenderer,
@@ -130,6 +135,33 @@ interface BlockRendererComponentProps {
     block: BlockNode;
 }
 
+type RuntimeViewport = 'desktop' | 'tablet' | 'mobile';
+
+function getRuntimeViewport(): RuntimeViewport {
+    if (typeof window === 'undefined') return 'desktop';
+    if (window.innerWidth < 640) return 'mobile';
+    if (window.innerWidth < 1024) return 'tablet';
+    return 'desktop';
+}
+
+function useRuntimeViewport(): RuntimeViewport {
+    const [viewport, setViewport] = useState<RuntimeViewport>(() => getRuntimeViewport());
+
+    useEffect(() => {
+        const onResize = () => setViewport(getRuntimeViewport());
+        window.addEventListener('resize', onResize);
+        return () => window.removeEventListener('resize', onResize);
+    }, []);
+
+    return viewport;
+}
+
+function getResponsiveValue<T>(block: BlockNode, viewport: RuntimeViewport, key: string, fallback: T): T {
+    const responsive = block.props.responsive as Record<string, Record<string, unknown>> | undefined;
+    const value = responsive?.[viewport]?.[key];
+    return value === undefined || value === null || value === '' ? fallback : value as T;
+}
+
 /**
  * Public-facing block renderer.
  * Renders blocks recursively for the front-end site.
@@ -138,10 +170,19 @@ interface BlockRendererComponentProps {
  */
 export default function BlockRenderer({ block }: BlockRendererComponentProps) {
     const animationConfigMap = useContext(AnimationConfigContext);
+    const runtimeViewport = useRuntimeViewport();
     const Renderer = rendererMap[block.type];
+
+    useEffect(() => {
+        useBuilderStore.getState().setViewport(runtimeViewport);
+    }, [runtimeViewport]);
 
     if (!Renderer) {
         // Unknown block type - skip silently on the public site
+        return null;
+    }
+
+    if (getResponsiveValue(block, runtimeViewport, 'hidden', block.props.hidden)) {
         return null;
     }
 
@@ -207,8 +248,17 @@ export default function BlockRenderer({ block }: BlockRendererComponentProps) {
     const needsWrapper = (finalAnimation && finalAnimation.type && finalAnimation.type !== 'none')
         || hoverConfig || textEffectConfig || continuousConfig;
 
-    const spaced = spacingStyle
-        ? <div style={spacingStyle}>{rendered}</div>
+    const columnSpan = block.type === 'column'
+        ? Math.max(1, Math.min(12, Number(getResponsiveValue(block, runtimeViewport, 'span', block.props.span)) || 12))
+        : null;
+
+    const frontStyle = {
+        ...(spacingStyle ?? {}),
+        ...(columnSpan ? { gridColumn: `span ${columnSpan} / span ${columnSpan}` } : {}),
+    };
+
+    const spaced = Object.keys(frontStyle).length
+        ? <div style={frontStyle}>{rendered}</div>
         : rendered;
 
     if (needsWrapper) {

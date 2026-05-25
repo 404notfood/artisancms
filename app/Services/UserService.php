@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\Hash;
 
 class UserService
 {
+    public function __construct(
+        private readonly ActivityLogService $activityLogService,
+    ) {}
+
     /**
      * @param array<string, mixed> $filters
      */
@@ -47,7 +51,7 @@ class UserService
      */
     public function create(array $data): User
     {
-        return User::create([
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
@@ -56,6 +60,17 @@ class UserService
             'profile_visibility' => $data['profile_visibility'] ?? 'public',
             'social_links' => $data['social_links'] ?? null,
         ]);
+
+        $this->activityLogService->logSecurityEvent('user_created', [
+            'subject_user_id' => $user->id,
+            'new' => [
+                'name' => $user->name,
+                'email' => $user->email,
+                'role_id' => $user->role_id,
+            ],
+        ]);
+
+        return $user;
     }
 
     /**
@@ -63,6 +78,8 @@ class UserService
      */
     public function update(User $user, array $data): User
     {
+        $oldRoleId = $user->role_id;
+        $oldValues = $user->only(['name', 'email', 'role_id', 'profile_visibility']);
         $updateData = [
             'name' => $data['name'],
             'email' => $data['email'],
@@ -78,11 +95,37 @@ class UserService
 
         $user->update($updateData);
 
-        return $user->fresh(['role']) ?? $user;
+        $freshUser = $user->fresh(['role']) ?? $user;
+
+        if ($oldRoleId !== $freshUser->role_id) {
+            $this->activityLogService->logUserRoleChange(
+                (int) $freshUser->id,
+                (string) ($oldRoleId ?? ''),
+                (string) ($freshUser->role_id ?? ''),
+            );
+        }
+
+        $this->activityLogService->logSecurityEvent('user_updated', [
+            'subject_user_id' => $freshUser->id,
+            'old' => $oldValues,
+            'new' => $freshUser->only(['name', 'email', 'role_id', 'profile_visibility']),
+            'password_changed' => !empty($data['password']),
+        ]);
+
+        return $freshUser;
     }
 
     public function delete(User $user): bool
     {
-        return (bool) $user->delete();
+        $oldValues = $user->only(['id', 'name', 'email', 'role_id']);
+        $deleted = (bool) $user->delete();
+
+        if ($deleted) {
+            $this->activityLogService->logSecurityEvent('user_deleted', [
+                'old' => $oldValues,
+            ]);
+        }
+
+        return $deleted;
     }
 }

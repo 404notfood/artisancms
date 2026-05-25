@@ -4,7 +4,7 @@ import type { SharedProps } from '@/types/cms';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import { Button } from '@/Components/ui/button';
 import { Label } from '@/Components/ui/label';
-import { ArrowDownToLine, ArrowUpFromLine, FileJson, FileCode, Upload, CheckCircle2, AlertCircle } from 'lucide-react';
+import { ArrowDownToLine, ArrowUpFromLine, FileJson, FileCode, Upload, Settings2, Database, FileText, Image, Menu, Tags } from 'lucide-react';
 import { FormEvent, useCallback, useRef, useState } from 'react';
 
 type ExportType = 'all' | 'pages' | 'posts' | 'menus' | 'settings';
@@ -17,19 +17,30 @@ const exportTypes: { value: ExportType; label: string }[] = [
     { value: 'settings', label: 'Param\u00e8tres' },
 ];
 
-interface ImportResult {
-    created: number;
-    skipped: number;
-    errors: string[];
+interface Props {
+    stats: {
+        pages: number;
+        posts: number;
+        menus: number;
+        settings: number;
+        taxonomies: number;
+        media: number;
+    };
+    limits: {
+        content_import_mb: number;
+        config_import_mb: number;
+    };
 }
 
-export default function ImportExportIndex() {
+export default function ImportExportIndex({ stats, limits }: Props) {
     const { cms } = usePage<SharedProps>().props;
     const prefix = cms?.adminPrefix ?? 'admin';
     const [exportType, setExportType] = useState<ExportType>('all');
     const [exporting, setExporting] = useState(false);
+    const [configMode, setConfigMode] = useState<'merge' | 'replace'>('merge');
     const [dragOver, setDragOver] = useState(false);
     const fileRef = useRef<HTMLInputElement>(null);
+    const configFileRef = useRef<HTMLInputElement>(null);
 
     const { data, setData, post, processing, reset } = useForm<{
         file: File | null;
@@ -82,6 +93,27 @@ export default function ImportExportIndex() {
         });
     };
 
+    const handleConfigExport = () => {
+        window.location.href = `/${prefix}/config/export`;
+    };
+
+    const handleConfigImport = (e: FormEvent) => {
+        e.preventDefault();
+        const file = configFileRef.current?.files?.[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('mode', configMode);
+
+        router.post(`/${prefix}/config/import`, formData, {
+            forceFormData: true,
+            onSuccess: () => {
+                if (configFileRef.current) configFileRef.current.value = '';
+            },
+        });
+    };
+
     const handleDrop = useCallback((e: React.DragEvent) => {
         e.preventDefault();
         setDragOver(false);
@@ -118,7 +150,32 @@ export default function ImportExportIndex() {
         >
             <Head title="Import / Export" />
 
-            <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+            <div className="space-y-6">
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
+                    {[
+                        { label: 'Pages', value: stats.pages, icon: FileText },
+                        { label: 'Articles', value: stats.posts, icon: FileText },
+                        { label: 'Menus', value: stats.menus, icon: Menu },
+                        { label: 'Parametres', value: stats.settings, icon: Settings2 },
+                        { label: 'Taxonomies', value: stats.taxonomies, icon: Tags },
+                        { label: 'Medias', value: stats.media, icon: Image },
+                    ].map((item) => {
+                        const Icon = item.icon;
+                        return (
+                            <Card key={item.label}>
+                                <CardContent className="flex items-center gap-3 p-4">
+                                    <Icon className="h-5 w-5 text-gray-400" />
+                                    <div>
+                                        <p className="text-lg font-semibold text-gray-900">{item.value}</p>
+                                        <p className="text-xs text-gray-500">{item.label}</p>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        );
+                    })}
+                </div>
+
+                <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
                 {/* Export Section */}
                 <Card>
                     <CardHeader>
@@ -129,7 +186,7 @@ export default function ImportExportIndex() {
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <p className="text-sm text-gray-500">
-                            Exportez le contenu de votre site au format JSON.
+                            Exportez le contenu de votre site au format JSON. Les medias restent references par URL.
                         </p>
 
                         <div className="space-y-2">
@@ -172,7 +229,7 @@ export default function ImportExportIndex() {
                     <CardContent>
                         <form onSubmit={handleImport} className="space-y-4">
                             <p className="text-sm text-gray-500">
-                                Importez du contenu depuis un fichier JSON (ArtisanCMS) ou XML (WordPress).
+                                Importez du contenu depuis un fichier JSON (ArtisanCMS) ou XML (WordPress). Limite : {limits.content_import_mb} Mo.
                             </p>
 
                             {/* Drop zone */}
@@ -259,6 +316,80 @@ export default function ImportExportIndex() {
                         </form>
                     </CardContent>
                 </Card>
+                </div>
+
+                <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="text-base flex items-center gap-2">
+                                <Database className="h-4 w-4" />
+                                Configuration portable
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            <p className="text-sm text-gray-500">
+                                Exporte les reglages, roles, menus, theme actif, plugins actifs, tokens design, emails et widgets. Les secrets sont exclus.
+                            </p>
+                            <Button onClick={handleConfigExport} className="w-full">
+                                <ArrowUpFromLine className="h-4 w-4 mr-2" />
+                                Exporter la configuration
+                            </Button>
+                        </CardContent>
+                    </Card>
+
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="text-base flex items-center gap-2">
+                                <Settings2 className="h-4 w-4" />
+                                Importer une configuration
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <form onSubmit={handleConfigImport} className="space-y-4">
+                                <p className="text-sm text-gray-500">
+                                    Import JSON de configuration. Limite : {limits.config_import_mb} Mo.
+                                </p>
+                                <input
+                                    ref={configFileRef}
+                                    type="file"
+                                    accept=".json,.txt"
+                                    className="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                                />
+                                <div className="space-y-2">
+                                    <Label>Mode</Label>
+                                    <div className="flex gap-4">
+                                        <label className="flex items-center gap-2 cursor-pointer">
+                                            <input
+                                                type="radio"
+                                                name="config_mode"
+                                                value="merge"
+                                                checked={configMode === 'merge'}
+                                                onChange={() => setConfigMode('merge')}
+                                                className="text-indigo-600 focus:ring-indigo-500"
+                                            />
+                                            <span className="text-sm text-gray-700">Fusionner</span>
+                                        </label>
+                                        <label className="flex items-center gap-2 cursor-pointer">
+                                            <input
+                                                type="radio"
+                                                name="config_mode"
+                                                value="replace"
+                                                checked={configMode === 'replace'}
+                                                onChange={() => setConfigMode('replace')}
+                                                className="text-indigo-600 focus:ring-indigo-500"
+                                            />
+                                            <span className="text-sm text-gray-700">Remplacer</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <Button type="submit" variant="outline" className="w-full">
+                                    <ArrowDownToLine className="h-4 w-4 mr-2" />
+                                    Importer la configuration
+                                </Button>
+                            </form>
+                        </CardContent>
+                    </Card>
+                </div>
             </div>
         </AdminLayout>
     );

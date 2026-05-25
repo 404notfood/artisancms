@@ -3,23 +3,38 @@ import { Check, Minus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export const ALL_PERMISSIONS = {
-    pages: ['view', 'create', 'edit', 'delete', 'publish'],
-    posts: ['view', 'create', 'edit', 'delete', 'publish'],
-    media: ['view', 'upload', 'edit', 'delete'],
-    menus: ['view', 'create', 'edit', 'delete'],
-    users: ['view', 'create', 'edit', 'delete'],
-    roles: ['view', 'create', 'edit', 'delete'],
-    comments: ['view', 'moderate', 'delete'],
-    themes: ['view', 'activate', 'customize'],
-    plugins: ['view', 'manage'],
-    settings: ['view', 'edit'],
-    analytics: ['view'],
-    widgets: ['view', 'create', 'edit', 'delete'],
-    redirects: ['view', 'create', 'delete'],
-    newsletters: ['view', 'send'],
-    webhooks: ['view', 'create', 'edit', 'delete'],
-    templates: ['view', 'install'],
-    content_types: ['view', 'create', 'edit', 'delete'],
+    pages: ['read', 'create', 'update', 'update.own', 'delete', 'publish'],
+    posts: ['read', 'create', 'update', 'update.own', 'delete', 'publish'],
+    media: ['read', 'create', 'update', 'delete'],
+    menus: ['read', 'create', 'update', 'delete'],
+    users: ['read', 'create', 'update', 'delete'],
+    roles: ['read', 'create', 'update', 'delete'],
+    comments: ['read', 'moderate', 'delete'],
+    taxonomies: ['read', 'create', 'update', 'delete'],
+    settings: ['read', 'update'],
+    themes: ['read', 'manage'],
+    plugins: ['read', 'manage'],
+    analytics: ['read'],
+    widgets: ['read', 'create', 'update', 'delete'],
+    redirects: ['read', 'create', 'update', 'delete'],
+    webhooks: ['read', 'create', 'update', 'delete'],
+    templates: ['read', 'install', 'delete'],
+    content_types: ['read', 'create', 'update', 'delete'],
+    content_entries: ['read', 'create', 'update', 'update.own', 'delete'],
+    custom_fields: ['read', 'create', 'update', 'delete'],
+    global_sections: ['read', 'create', 'update', 'delete'],
+    email_templates: ['read', 'update'],
+    design_tokens: ['read', 'create', 'update', 'delete'],
+    block_patterns: ['read', 'create', 'update', 'delete'],
+    popups: ['read', 'create', 'update', 'delete'],
+    backups: ['read', 'create', 'download', 'restore', 'delete'],
+    import_export: ['read', 'import', 'export'],
+    config: ['import', 'export'],
+    updates: ['read', 'manage', 'rollback'],
+    system: ['read', 'manage', 'sessions'],
+    activity_log: ['read'],
+    seo: ['read', 'update'],
+    newsletters: ['read', 'send'],
 } as const;
 
 const GROUP_LABELS: Record<string, string> = {
@@ -30,6 +45,7 @@ const GROUP_LABELS: Record<string, string> = {
     users: 'Utilisateurs',
     roles: 'Rôles',
     comments: 'Commentaires',
+    taxonomies: 'Taxonomies',
     themes: 'Thèmes',
     plugins: 'Extensions',
     settings: 'Réglages',
@@ -40,22 +56,59 @@ const GROUP_LABELS: Record<string, string> = {
     webhooks: 'Webhooks',
     templates: 'Templates',
     content_types: 'Types de contenu',
+    content_entries: 'Entrées de contenu',
+    custom_fields: 'Champs personnalisés',
+    global_sections: 'Sections globales',
+    email_templates: 'Emails',
+    design_tokens: 'Design tokens',
+    block_patterns: 'Patterns builder',
+    popups: 'Popups',
+    backups: 'Sauvegardes',
+    import_export: 'Import / export',
+    config: 'Configuration',
+    updates: 'Mises à jour',
+    system: 'Système',
+    activity_log: 'Journal activité',
+    seo: 'SEO',
 };
 
 const ACTION_LABELS: Record<string, string> = {
-    view: 'Voir',
+    read: 'Voir',
     create: 'Créer',
-    edit: 'Modifier',
+    update: 'Modifier',
+    'update.own': 'Modifier ses contenus',
     delete: 'Supprimer',
     publish: 'Publier',
-    upload: 'Upload',
     moderate: 'Modérer',
-    activate: 'Activer',
-    customize: 'Personnaliser',
     manage: 'Gérer',
     send: 'Envoyer',
     install: 'Installer',
+    download: 'Télécharger',
+    restore: 'Restaurer',
+    import: 'Importer',
+    export: 'Exporter',
+    rollback: 'Rollback',
+    sessions: 'Sessions',
 };
+
+const ACTIONS = [
+    'read',
+    'create',
+    'update',
+    'update.own',
+    'delete',
+    'publish',
+    'moderate',
+    'manage',
+    'send',
+    'install',
+    'download',
+    'restore',
+    'import',
+    'export',
+    'rollback',
+    'sessions',
+] as const;
 
 interface PermissionsMatrixProps {
     permissions: string[];
@@ -129,7 +182,7 @@ export function PermissionsMatrix({ permissions, onChange, disabled }: Permissio
                                 <span>Ressource</span>
                             </button>
                         </th>
-                        <th className="px-2 py-2 text-center font-medium text-gray-500" colSpan={6}>
+                        <th className="px-2 py-2 text-center font-medium text-gray-500" colSpan={ACTIONS.length}>
                             Actions
                         </th>
                     </tr>
@@ -156,7 +209,7 @@ export function PermissionsMatrix({ permissions, onChange, disabled }: Permissio
                                         <span>{GROUP_LABELS[group] ?? group}</span>
                                     </button>
                                 </td>
-                                {(['view', 'create', 'edit', 'delete', 'publish', 'upload', 'moderate', 'activate', 'customize', 'manage', 'send', 'install'] as const)
+                                {ACTIONS
                                     .filter((a) => (actions as readonly string[]).includes(a))
                                     .map((action) => (
                                         <td key={action} className="px-2 py-2 text-center">

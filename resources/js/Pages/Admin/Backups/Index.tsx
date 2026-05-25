@@ -60,12 +60,12 @@ export default function BackupsIndex({ backups, stats }: Props) {
 
     const handleDelete = (id: number) => {
         if (!confirm('Supprimer ce backup ?')) return;
-        router.delete(`/admin/backups/${id}`);
+        router.delete(`/${prefix}/backups/${id}`);
     };
 
     const handleRestore = (id: number) => {
         if (!confirm('Restaurer ce backup ? L\'état actuel sera écrasé.')) return;
-        router.post(`/admin/backups/${id}/restore`);
+        router.post(`/${prefix}/backups/${id}/restore`);
     };
 
     return (
@@ -161,7 +161,7 @@ export default function BackupsIndex({ backups, stats }: Props) {
                                                 <div className="flex gap-1">
                                                     {backup.status === 'completed' && (
                                                         <>
-                                                            <a href={`/admin/backups/${backup.id}/download`}>
+                                                            <a href={`/${prefix}/backups/${backup.id}/download`}>
                                                                 <Button variant="outline" size="sm" title="Télécharger">
                                                                     <Download className="h-3.5 w-3.5" />
                                                                 </Button>

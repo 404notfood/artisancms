@@ -10,6 +10,7 @@ use App\Http\Controllers\Front\MemberController;
 use App\Http\Controllers\NewsletterSubscribeController;
 use App\Http\Controllers\PublicCommentController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\SeoController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -89,6 +90,8 @@ Route::get('/api/search', [SearchController::class, 'search'])
 */
 
 Route::get('manifest.json', ManifestController::class)->name('manifest');
+Route::get('sitemap.xml', [SeoController::class, 'sitemap'])->name('seo.sitemap');
+Route::get('robots.txt', [SeoController::class, 'robots'])->name('seo.robots');
 
 /*
 |--------------------------------------------------------------------------

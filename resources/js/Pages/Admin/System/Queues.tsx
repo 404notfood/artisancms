@@ -1,5 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, router } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
+import type { SharedProps } from '@/types/cms';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import { Badge } from '@/Components/ui/badge';
 import { Button } from '@/Components/ui/button';
@@ -32,24 +33,27 @@ interface QueuesProps {
 }
 
 export default function Queues({ driver, is_database, pending, failed_count, failed_jobs }: QueuesProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
+
     function handleRetry(id: number) {
         if (!confirm('Réessayer ce job ?')) return;
-        router.post(`/admin/system/queues/retry/${id}`);
+        router.post(`/${prefix}/system/queues/retry/${id}`);
     }
 
     function handleDelete(id: number) {
         if (!confirm('Supprimer ce job échoué ?')) return;
-        router.delete(`/admin/system/queues/delete/${id}`);
+        router.delete(`/${prefix}/system/queues/delete/${id}`);
     }
 
     function handleRetryAll() {
         if (!confirm('Réessayer tous les jobs échoués ?')) return;
-        router.post('/admin/system/queues/retry-all');
+        router.post(`/${prefix}/system/queues/retry-all`);
     }
 
     function handleFlush() {
         if (!confirm('Supprimer tous les jobs échoués ? Cette action est irréversible.')) return;
-        router.post('/admin/system/queues/flush');
+        router.post(`/${prefix}/system/queues/flush`);
     }
 
     if (!is_database) {

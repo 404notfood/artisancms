@@ -219,6 +219,34 @@ class ActivityLogService
     }
 
     /**
+     * Log une action sur un role.
+     *
+     * @param array<string, mixed> $properties
+     */
+    public function logRoleEvent(string $action, int $roleId, array $properties = []): ActivityLog
+    {
+        return $this->log(
+            action: $action,
+            subjectType: 'role',
+            subjectId: $roleId,
+            properties: $properties,
+        );
+    }
+
+    /**
+     * Log une action systeme sensible.
+     *
+     * @param array<string, mixed> $properties
+     */
+    public function logSecurityEvent(string $action, array $properties = []): ActivityLog
+    {
+        return $this->log(
+            action: $action,
+            properties: $properties,
+        );
+    }
+
+    /**
      * Log un changement de role utilisateur.
      */
     public function logUserRoleChange(int $targetUserId, string $oldRole, string $newRole): ActivityLog

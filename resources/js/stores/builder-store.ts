@@ -89,6 +89,33 @@ function pushSnapshot(
     state.historyIndex = history.length - 1;
 }
 
+function getDefaultPropsForBlock(type: string): Record<string, unknown> {
+    if (type === 'row') {
+        return { gap: 20, verticalAlign: 'stretch' };
+    }
+
+    if (type === 'column') {
+        return { span: 6, padding: 16, minHeight: 120 };
+    }
+
+    return {};
+}
+
+function getDefaultChildrenForBlock(type: string): BlockNode[] {
+    if (type !== 'row') return [];
+
+    return [createColumnBlock(6), createColumnBlock(6)];
+}
+
+function createColumnBlock(span: number): BlockNode {
+    return {
+        id: nanoid(),
+        type: 'column',
+        props: { span, padding: 16, minHeight: 120 },
+        children: [],
+    };
+}
+
 type Viewport = 'desktop' | 'tablet' | 'mobile';
 
 interface BuilderState {
@@ -97,6 +124,7 @@ interface BuilderState {
     selectedBlockId: string | null;
     hoveredBlockId: string | null;
     isDragging: boolean;
+    isPreviewMode: boolean;
     viewport: Viewport;
     history: BlockNode[][];
     historyIndex: number;
@@ -124,6 +152,7 @@ interface BuilderState {
     selectBlock: (id: string | null) => void;
     setHoveredBlock: (id: string | null) => void;
     setIsDragging: (dragging: boolean) => void;
+    setPreviewMode: (enabled: boolean) => void;
     setViewport: (viewport: Viewport) => void;
     undo: () => void;
     redo: () => void;
@@ -145,6 +174,7 @@ export const useBuilderStore = create<BuilderState>()(
         selectedBlockId: null,
         hoveredBlockId: null,
         isDragging: false,
+        isPreviewMode: false,
         viewport: 'desktop' as Viewport,
         history: [[]] as BlockNode[][],
         historyIndex: 0,
@@ -172,8 +202,8 @@ export const useBuilderStore = create<BuilderState>()(
             const newBlock: BlockNode = {
                 id,
                 type,
-                props: defaultProps ?? {},
-                children: [],
+                props: { ...getDefaultPropsForBlock(type), ...(defaultProps ?? {}) },
+                children: getDefaultChildrenForBlock(type),
             };
 
             set((state) => {
@@ -350,6 +380,14 @@ export const useBuilderStore = create<BuilderState>()(
         selectBlock: (id) => set((s) => { s.selectedBlockId = id; }),
         setHoveredBlock: (id) => set((s) => { s.hoveredBlockId = id; }),
         setIsDragging: (dragging) => set((s) => { s.isDragging = dragging; }),
+        setPreviewMode: (enabled) => set((s) => {
+            s.isPreviewMode = enabled;
+            if (enabled) {
+                s.selectedBlockId = null;
+                s.hoveredBlockId = null;
+                s.isDragging = false;
+            }
+        }),
         setViewport: (viewport) => set((s) => { s.viewport = viewport; }),
 
         // ── History ───────────────────────────────

@@ -24,7 +24,7 @@ export default function RolesIndex({ roles }: RolesIndexProps) {
     function handleDelete(role: Role) {
         if (role.is_system) return;
         if (!confirm(`Supprimer le rôle "${role.name}" ? Les utilisateurs seront réaffectés au rôle par défaut.`)) return;
-        router.delete(`/admin/settings/roles/${role.id}`);
+        router.delete(`/${prefix}/settings/roles/${role.id}`);
     }
 
     return (
@@ -83,7 +83,7 @@ export default function RolesIndex({ roles }: RolesIndexProps) {
 
                                 <div className="flex gap-2">
                                     <Button variant="outline" size="sm" className="flex-1" asChild>
-                                        <Link href={`/admin/settings/roles/${role.id}/edit`}>
+                                        <Link href={`/${prefix}/settings/roles/${role.id}/edit`}>
                                             <Pencil className="mr-1 h-3.5 w-3.5" />
                                             Modifier
                                         </Link>

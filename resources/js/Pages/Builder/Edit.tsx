@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Head, router } from '@inertiajs/react';
 import { DndContext, DragOverlay, pointerWithin, DragStartEvent, DragEndEvent, useSensor, useSensors, PointerSensor } from '@dnd-kit/core';
-import { useBuilderStore, findParentInfo } from '@/stores/builder-store';
+import { useBuilderStore, findBlockInTree, findParentInfo } from '@/stores/builder-store';
 import { registerCoreBlocks } from '@/Components/builder/blocks/register-core-blocks';
 import BuilderToolbar from '@/Components/builder/builder-toolbar';
 import BuilderCanvas from '@/Components/builder/builder-canvas';
@@ -9,7 +9,7 @@ import BuilderSidebar from '@/Components/builder/builder-sidebar';
 import DeleteConfirmDialog from '@/Components/builder/delete-confirm-dialog';
 import type { BlockNode, PageData } from '@/types/cms';
 
-const CONTAINER_TYPES = new Set(['section', 'grid', 'column']);
+const CONTAINER_TYPES = new Set(['section', 'grid', 'row', 'column']);
 
 interface BuilderEditProps {
     page: PageData;
@@ -22,6 +22,7 @@ export default function BuilderEdit({ page }: BuilderEditProps) {
     const moveBlock = useBuilderStore((s) => s.moveBlock);
     const setIsDragging = useBuilderStore((s) => s.setIsDragging);
     const isDragging = useBuilderStore((s) => s.isDragging);
+    const isPreviewMode = useBuilderStore((s) => s.isPreviewMode);
 
     useEffect(() => {
         registerCoreBlocks();
@@ -69,18 +70,32 @@ export default function BuilderEdit({ page }: BuilderEditProps) {
 
         const activeData = active.data.current;
         const overData = over.data.current;
+        const dropParentId = overData?.type === 'container-drop-zone' ? overData.parentId as string : null;
+        const insertTarget = overData?.type === 'insert-zone'
+            ? { parentId: overData.parentId as string | null, index: Number(overData.index) || 0 }
+            : null;
 
         if (activeData?.type === 'new-block') {
             const blockType = activeData.blockType as string;
             let parentId: string | undefined;
             let index: number | undefined;
 
-            if (overData?.block) {
+            if (insertTarget) {
+                parentId = insertTarget.parentId ?? undefined;
+                index = insertTarget.index;
+            } else if (dropParentId) {
+                const targetParent = resolveDropParent(blocks, dropParentId, blockType);
+                const parent = targetParent ? findBlockInTree(blocks, targetParent) : null;
+                parentId = targetParent ?? dropParentId;
+                index = parent?.children?.length ?? 0;
+            } else if (overData?.block) {
                 const overBlock = overData.block as { id: string; type: string; children?: unknown[] };
 
                 if (CONTAINER_TYPES.has(overBlock.type)) {
-                    parentId = overBlock.id;
-                    index = overBlock.children?.length ?? 0;
+                    const targetParent = resolveDropParent(blocks, overBlock.id, blockType);
+                    const parent = targetParent ? findBlockInTree(blocks, targetParent) : null;
+                    parentId = targetParent ?? overBlock.id;
+                    index = parent?.children?.length ?? overBlock.children?.length ?? 0;
                 } else {
                     const info = findParentInfo(blocks, overBlock.id);
                     if (info) {
@@ -94,13 +109,29 @@ export default function BuilderEdit({ page }: BuilderEditProps) {
         } else if (activeData?.type === 'block') {
             if (active.id === over.id) return;
 
-            if (over.id === 'canvas-drop-zone') {
+            if (insertTarget) {
+                if (insertTarget.parentId && isDescendantOf(blocks, active.id as string, insertTarget.parentId)) return;
+                moveBlock(active.id as string, insertTarget.parentId, insertTarget.index);
+            } else if (dropParentId) {
+                const activeType = (activeData.block as { type?: string } | undefined)?.type ?? findBlockInTree(blocks, active.id as string)?.type;
+                const targetParent = resolveDropParent(blocks, dropParentId, activeType ?? '');
+                if (!targetParent) return;
+                if (active.id === targetParent || isDescendantOf(blocks, active.id as string, targetParent)) return;
+
+                const parent = findBlockInTree(blocks, targetParent);
+                moveBlock(active.id as string, targetParent, parent?.children?.length ?? 0);
+            } else if (over.id === 'canvas-drop-zone') {
                 moveBlock(active.id as string, null, blocks.length);
             } else if (overData?.block) {
                 const overBlock = overData.block as { id: string; type: string; children?: unknown[] };
 
                 if (CONTAINER_TYPES.has(overBlock.type) && active.id !== over.id) {
-                    moveBlock(active.id as string, overBlock.id, overBlock.children?.length ?? 0);
+                    const activeType = (activeData.block as { type?: string } | undefined)?.type ?? findBlockInTree(blocks, active.id as string)?.type;
+                    const targetParent = resolveDropParent(blocks, overBlock.id, activeType ?? '');
+                    if (!targetParent || isDescendantOf(blocks, active.id as string, targetParent)) return;
+
+                    const parent = findBlockInTree(blocks, targetParent);
+                    moveBlock(active.id as string, targetParent, parent?.children?.length ?? overBlock.children?.length ?? 0);
                 } else {
                     const info = findParentInfo(blocks, overBlock.id);
                     if (info) {
@@ -210,7 +241,7 @@ export default function BuilderEdit({ page }: BuilderEditProps) {
                 onDragEnd={handleDragEnd}
                 onDragCancel={handleDragCancel}
             >
-                <div className="h-screen flex flex-col overflow-hidden">
+                <div className="flex h-screen flex-col overflow-hidden bg-slate-100 text-slate-900">
                     <BuilderToolbar
                         title={page.title}
                         onSave={handleSave}
@@ -219,15 +250,15 @@ export default function BuilderEdit({ page }: BuilderEditProps) {
                     />
 
                     <div className="flex flex-1 overflow-hidden">
-                        <BuilderSidebar />
+                        {!isPreviewMode && <BuilderSidebar />}
                         <BuilderCanvas />
                     </div>
                 </div>
 
                 <DragOverlay dropAnimation={null}>
                     {isDragging && activeDragData ? (
-                        <div className="rounded-lg border-2 border-blue-400 bg-white px-4 py-3 shadow-lg">
-                            <span className="text-sm font-medium text-blue-600">
+                        <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-2xl ring-4 ring-white/60">
+                            <span className="text-sm font-semibold text-slate-900">
                                 {(activeDragData.blockType as string) || (activeDragData.block as { type?: string })?.type || 'Bloc'}
                             </span>
                         </div>
@@ -244,4 +275,26 @@ function isEditableTarget(target: EventTarget | null): boolean {
     if (!target || !(target instanceof HTMLElement)) return false;
     const tag = target.tagName.toLowerCase();
     return tag === 'input' || tag === 'textarea' || tag === 'select' || target.isContentEditable;
+}
+
+function isDescendantOf(blocks: BlockNode[], ancestorId: string, candidateId: string): boolean {
+    const ancestor = findBlockInTree(blocks, ancestorId);
+    if (!ancestor?.children?.length) return false;
+    return hasDescendant(ancestor, candidateId);
+}
+
+function hasDescendant(block: BlockNode, id: string): boolean {
+    return block.children?.some((child) => child.id === id || hasDescendant(child, id)) ?? false;
+}
+
+function resolveDropParent(blocks: BlockNode[], parentId: string, incomingType: string): string | null {
+    const parent = findBlockInTree(blocks, parentId);
+    if (!parent) return parentId;
+
+    if (parent.type === 'row' && incomingType !== 'column') {
+        const firstColumn = parent.children?.find((child) => child.type === 'column');
+        return firstColumn?.id ?? null;
+    }
+
+    return parentId;
 }

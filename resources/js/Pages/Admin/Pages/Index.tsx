@@ -4,7 +4,7 @@ import { useState } from 'react';
 import type { PageData, PaginatedResponse, FlashMessages, SharedProps } from '@/types/cms';
 import { formatDate } from '@/lib/format';
 import StatusBadge from '@/Components/admin/status-badge';
-import { Plus, Pencil, Copy, Trash2 } from 'lucide-react';
+import { Plus, Pencil, Copy, Trash2, SearchCheck } from 'lucide-react';
 
 interface PagesIndexProps {
     pages: PaginatedResponse<PageData>;
@@ -51,8 +51,25 @@ export default function PagesIndex({ pages, filters }: PagesIndexProps) {
     function toggleOne(id: number) {
         setSelected((prev) =>
             prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
-        );
-    }
+    );
+}
+
+function ContentSeoBadge({ item }: { item: PageData }) {
+    const issues = [
+        !item.meta_title ? 'titre' : null,
+        !item.meta_description ? 'description' : null,
+        !item.og_image ? 'image' : null,
+    ].filter(Boolean);
+    const score = Math.max(0, 100 - issues.length * 25);
+    const tone = score >= 75 ? 'bg-emerald-50 text-emerald-700' : score >= 50 ? 'bg-amber-50 text-amber-700' : 'bg-red-50 text-red-700';
+
+    return (
+        <span className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-medium ${tone}`} title={issues.length ? `Manque: ${issues.join(', ')}` : 'SEO OK'}>
+            <SearchCheck className="h-3.5 w-3.5" />
+            {score}%
+        </span>
+    );
+}
 
     function handleSearch(e: React.FormEvent) {
         e.preventDefault();
@@ -67,16 +84,16 @@ export default function PagesIndex({ pages, filters }: PagesIndexProps) {
 
     function handleDelete(page: PageData) {
         if (!confirm(`Supprimer la page "${page.title}" ?`)) return;
-        router.delete(`/admin/pages/${page.id}`);
+        router.delete(`/${prefix}/pages/${page.id}`);
     }
 
     function handleRestore(page: PageData) {
-        router.post(`/admin/pages/${page.id}/restore`);
+        router.post(`/${prefix}/pages/${page.id}/restore`);
     }
 
     function handleForceDelete(page: PageData) {
         if (!confirm(`Supprimer définitivement "${page.title}" ? Irréversible.`)) return;
-        router.delete(`/admin/pages/${page.id}/force-delete`);
+        router.delete(`/${prefix}/pages/${page.id}/force-delete`);
     }
 
     function handleEmptyTrash() {
@@ -85,7 +102,7 @@ export default function PagesIndex({ pages, filters }: PagesIndexProps) {
     }
 
     function handleDuplicate(page: PageData) {
-        router.post(`/admin/pages/${page.id}/duplicate`);
+        router.post(`/${prefix}/pages/${page.id}/duplicate`);
     }
 
     function handleBulkSubmit() {
@@ -232,6 +249,7 @@ export default function PagesIndex({ pages, filters }: PagesIndexProps) {
                                 <th className="px-4 py-3 font-medium text-gray-700">Titre</th>
                                 <th className="px-4 py-3 font-medium text-gray-700">Statut</th>
                                 <th className="hidden px-4 py-3 font-medium text-gray-700 md:table-cell">Auteur</th>
+                                <th className="hidden px-4 py-3 font-medium text-gray-700 md:table-cell">SEO</th>
                                 <th className="hidden px-4 py-3 font-medium text-gray-700 sm:table-cell">Modifié le</th>
                                 <th className="px-4 py-3 font-medium text-gray-700">Actions</th>
                             </tr>
@@ -239,7 +257,7 @@ export default function PagesIndex({ pages, filters }: PagesIndexProps) {
                         <tbody className="divide-y divide-gray-100">
                             {pages.data.length === 0 ? (
                                 <tr>
-                                    <td colSpan={6} className="px-4 py-8 text-center text-gray-500">
+                                    <td colSpan={7} className="px-4 py-8 text-center text-gray-500">
                                         Aucune page trouvée.
                                     </td>
                                 </tr>
@@ -263,7 +281,7 @@ export default function PagesIndex({ pages, filters }: PagesIndexProps) {
                                         </td>
                                         <td className="px-4 py-3">
                                             <Link
-                                                href={`/admin/pages/${page.id}/edit`}
+                                                href={`/${prefix}/pages/${page.id}/edit`}
                                                 className="font-medium text-gray-900 hover:text-indigo-600"
                                             >
                                                 {page.title}
@@ -275,6 +293,9 @@ export default function PagesIndex({ pages, filters }: PagesIndexProps) {
                                         </td>
                                         <td className="hidden px-4 py-3 text-gray-600 md:table-cell">
                                             {page.author?.name ?? '—'}
+                                        </td>
+                                        <td className="hidden px-4 py-3 md:table-cell">
+                                            <ContentSeoBadge item={page} />
                                         </td>
                                         <td className="hidden px-4 py-3 text-gray-500 sm:table-cell">
                                             {formatDate(page.updated_at)}
@@ -299,7 +320,7 @@ export default function PagesIndex({ pages, filters }: PagesIndexProps) {
                                                 ) : (
                                                     <>
                                                         <Link
-                                                            href={`/admin/pages/${page.id}/edit`}
+                                                            href={`/${prefix}/pages/${page.id}/edit`}
                                                             className="text-gray-500 hover:text-indigo-600"
                                                             title="Modifier"
                                                         >
@@ -340,7 +361,7 @@ export default function PagesIndex({ pages, filters }: PagesIndexProps) {
                             {Array.from({ length: pages.last_page }, (_, i) => i + 1).map((p) => (
                                 <Link
                                     key={p}
-                                    href={`/admin/pages?page=${p}&status=${filters.status ?? ''}&search=${filters.search ?? ''}`}
+                                    href={`/${prefix}/pages?page=${p}&status=${filters.status ?? ''}&search=${filters.search ?? ''}`}
                                     className={`rounded px-3 py-1 text-sm ${
                                         p === pages.current_page
                                             ? 'bg-indigo-600 text-white'
@@ -396,4 +417,3 @@ export default function PagesIndex({ pages, filters }: PagesIndexProps) {
         </AdminLayout>
     );
 }
-

@@ -25,14 +25,15 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\ErrorRecoveryMiddleware::class,
             \App\Http\Middleware\InjectBranding::class,
             \App\Http\Middleware\HandleInertiaRequests::class,
+            \App\Http\Middleware\TrackUserSession::class,
             \App\Http\Middleware\TrackPageView::class,
-            \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
         ]);
 
         $middleware->alias([
             'cms.admin' => \App\Http\Middleware\EnsureAdmin::class,
             'cms.content.access' => \App\Http\Middleware\CheckContentAccess::class,
             'cms.content.lock' => \App\Http\Middleware\CheckContentLock::class,
+            'permission' => \App\Http\Middleware\RequirePermission::class,
             'cms.preview' => \App\Http\Middleware\PreviewMode::class,
         ]);
 

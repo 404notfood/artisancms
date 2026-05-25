@@ -14,6 +14,7 @@ use App\Models\PageView;
 use App\Models\PageViewDaily;
 use App\Models\Post;
 use App\Models\User;
+use App\Models\UserSession;
 use Illuminate\Support\Facades\DB;
 
 class DashboardService
@@ -149,6 +150,51 @@ class DashboardService
         }
 
         return $alerts;
+    }
+
+    /**
+     * Get security indicators for the dashboard.
+     *
+     * @return array<string, mixed>
+     */
+    public function getSecuritySummary(): array
+    {
+        $failedLogins = ActivityLog::where('action', 'login_failed')
+            ->where('created_at', '>=', now()->subDay())
+            ->count();
+
+        $adminPrefix = (string) app(SettingService::class)->get('security.admin_prefix', 'admin');
+        $forceHttps = (bool) app(SettingService::class)->get('security.force_https', false);
+
+        return [
+            'active_sessions' => UserSession::active()->count(),
+            'failed_logins_24h' => $failedLogins,
+            'admin_prefix' => $adminPrefix,
+            'admin_prefix_custom' => $adminPrefix !== 'admin',
+            'force_https' => $forceHttps,
+            'session_lifetime' => (int) app(SettingService::class)->get('security.session_lifetime', config('session.lifetime', 120)),
+            'alerts' => array_values(array_filter([
+                $failedLogins > 0 ? "{$failedLogins} tentative(s) de connexion echouee(s) en 24h" : null,
+                $adminPrefix === 'admin' ? 'Prefix admin par defaut' : null,
+                ! $forceHttps && app()->environment('production') ? 'HTTPS force desactive en production' : null,
+            ])),
+        ];
+    }
+
+    /**
+     * Get editorial work that needs attention.
+     *
+     * @return array<string, int>
+     */
+    public function getWorkload(): array
+    {
+        return [
+            'pages_pending_review' => Page::where('status', 'pending_review')->count(),
+            'posts_pending_review' => Post::where('status', 'pending_review')->count(),
+            'scheduled_pages' => Page::where('status', 'scheduled')->count(),
+            'scheduled_posts' => Post::where('status', 'scheduled')->count(),
+            'pending_comments' => Comment::where('status', 'pending')->count(),
+        ];
     }
 
     private function getDiskUsage(): string

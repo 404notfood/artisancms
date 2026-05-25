@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\Admin\AccountController;
 use App\Http\Controllers\Admin\AnalyticsController;
+use App\Http\Controllers\Admin\BackupController;
 use App\Http\Controllers\Admin\BrandingController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EditorialCalendarController;
@@ -14,6 +15,7 @@ use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\PluginController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\SeoController;
 use App\Http\Controllers\Admin\SiteController;
 use App\Http\Controllers\Admin\TaxonomyController;
 use App\Http\Controllers\Admin\TemplateController;
@@ -24,6 +26,7 @@ use App\Http\Controllers\Admin\CommentController;
 use App\Http\Controllers\Admin\ConfigController;
 use App\Http\Controllers\Admin\ContentEntryController;
 use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Admin\OnboardingController;
 use App\Http\Controllers\Admin\ContentTypeController;
 use App\Http\Controllers\Admin\CustomFieldController;
 use App\Http\Controllers\Admin\GlobalSectionController;
@@ -54,6 +57,7 @@ use Illuminate\Support\Facades\Route;
 
 // Dashboard
 Route::get('/', DashboardController::class)->name('admin.dashboard');
+Route::get('onboarding', OnboardingController::class)->name('admin.onboarding');
 
 // Account (Mon compte)
 Route::get('account', [AccountController::class, 'edit'])->name('admin.account.edit');
@@ -93,7 +97,7 @@ Route::post('posts/{post}/submit-review', [PostController::class, 'submitForRevi
 Route::post('posts/{post}/approve', [PostController::class, 'approve'])->name('admin.posts.approve');
 Route::post('posts/{post}/reject', [PostController::class, 'reject'])->name('admin.posts.reject');
 Route::post('posts/{post}/trash', [PostController::class, 'trash'])->name('admin.posts.trash');
-Route::delete('posts/{post}/force-delete', [PostController::class, 'forceDelete'])->name('admin.posts.force-delete');
+Route::delete('posts/{post}/force-delete', [PostController::class, 'forceDelete'])->name('admin.posts.force-delete')->withTrashed();
 Route::post('posts/{post}/duplicate', [PostController::class, 'duplicate'])->name('admin.posts.duplicate');
 Route::post('posts/empty-trash', [PostController::class, 'emptyTrash'])->name('admin.posts.empty-trash');
 Route::post('posts/bulk', [PostController::class, 'bulk'])->name('admin.posts.bulk');
@@ -107,9 +111,12 @@ Route::post('posts/{post}/revisions/{revision}/restore', [PostController::class,
 Route::get('editorial-calendar', [EditorialCalendarController::class, 'index'])->name('admin.editorial-calendar');
 
 // Users
-Route::resource('users', UserController::class)->names('admin.users');
-Route::post('users/{user}/avatar', [UserController::class, 'uploadAvatar'])->name('admin.users.avatar.upload');
-Route::delete('users/{user}/avatar', [UserController::class, 'removeAvatar'])->name('admin.users.avatar.remove');
+Route::resource('users', UserController::class)->only(['index'])->names('admin.users')->middleware('permission:users.read');
+Route::resource('users', UserController::class)->only(['create', 'store'])->names('admin.users')->middleware('permission:users.create');
+Route::resource('users', UserController::class)->only(['edit', 'update'])->names('admin.users')->middleware('permission:users.update');
+Route::resource('users', UserController::class)->only(['destroy'])->names('admin.users')->middleware('permission:users.delete');
+Route::post('users/{user}/avatar', [UserController::class, 'uploadAvatar'])->name('admin.users.avatar.upload')->middleware('permission:users.update');
+Route::delete('users/{user}/avatar', [UserController::class, 'removeAvatar'])->name('admin.users.avatar.remove')->middleware('permission:users.update');
 
 // Media
 Route::get('media', [MediaController::class, 'index'])->name('admin.media.index');
@@ -133,8 +140,10 @@ Route::put('menus/{menu}/items/{item}', [MenuController::class, 'updateItem'])->
 Route::delete('menus/{menu}/items/{item}', [MenuController::class, 'destroyItem'])->name('admin.menus.items.destroy');
 
 // Settings
-Route::get('settings', [SettingController::class, 'index'])->name('admin.settings.index');
-Route::put('settings', [SettingController::class, 'update'])->name('admin.settings.update');
+Route::get('settings', [SettingController::class, 'index'])->name('admin.settings.index')->middleware('permission:settings.read');
+Route::put('settings', [SettingController::class, 'update'])->name('admin.settings.update')->middleware('permission:settings.update');
+Route::post('settings/test-mail', [SettingController::class, 'testMail'])->name('admin.settings.test-mail')->middleware('permission:settings.update');
+Route::post('settings/clear-cache', [SettingController::class, 'clearCache'])->name('admin.settings.clear-cache')->middleware('permission:settings.update');
 
 // Taxonomies
 Route::get('taxonomies', [TaxonomyController::class, 'index'])->name('admin.taxonomies.index');
@@ -148,23 +157,23 @@ Route::put('taxonomy-terms/{taxonomyTerm}', [TaxonomyController::class, 'updateT
 Route::delete('taxonomy-terms/{taxonomyTerm}', [TaxonomyController::class, 'destroyTerm'])->name('admin.taxonomies.terms.destroy');
 
 // Themes
-Route::get('themes', [ThemeController::class, 'index'])->name('admin.themes.index');
-Route::post('themes/upload', [ThemeController::class, 'upload'])->name('admin.themes.upload');
-Route::post('themes/{slug}/activate', [ThemeController::class, 'activate'])->name('admin.themes.activate');
-Route::delete('themes/{slug}', [ThemeController::class, 'destroy'])->name('admin.themes.destroy');
-Route::get('themes/{slug}/customize', [ThemeController::class, 'customizePage'])->name('admin.themes.customize.page');
-Route::put('themes/{slug}/customize', [ThemeController::class, 'customize'])->name('admin.themes.customize');
-Route::get('themes/{slug}/custom-code', [ThemeController::class, 'customCode'])->name('admin.themes.custom-code');
-Route::put('themes/{slug}/custom-code', [ThemeController::class, 'saveCustomCode'])->name('admin.themes.custom-code.save');
+Route::get('themes', [ThemeController::class, 'index'])->name('admin.themes.index')->middleware('permission:themes.read');
+Route::post('themes/upload', [ThemeController::class, 'upload'])->name('admin.themes.upload')->middleware('permission:themes.manage');
+Route::post('themes/{slug}/activate', [ThemeController::class, 'activate'])->name('admin.themes.activate')->middleware('permission:themes.manage');
+Route::delete('themes/{slug}', [ThemeController::class, 'destroy'])->name('admin.themes.destroy')->middleware('permission:themes.manage');
+Route::get('themes/{slug}/customize', [ThemeController::class, 'customizePage'])->name('admin.themes.customize.page')->middleware('permission:themes.read,themes.manage');
+Route::put('themes/{slug}/customize', [ThemeController::class, 'customize'])->name('admin.themes.customize')->middleware('permission:themes.manage');
+Route::get('themes/{slug}/custom-code', [ThemeController::class, 'customCode'])->name('admin.themes.custom-code')->middleware('permission:themes.manage');
+Route::put('themes/{slug}/custom-code', [ThemeController::class, 'saveCustomCode'])->name('admin.themes.custom-code.save')->middleware('permission:themes.manage');
 
 // Plugins
-Route::get('plugins', [PluginController::class, 'index'])->name('admin.plugins.index');
-Route::post('plugins/{slug}/enable', [PluginController::class, 'enable'])->name('admin.plugins.enable');
-Route::post('plugins/{slug}/disable', [PluginController::class, 'disable'])->name('admin.plugins.disable');
-Route::get('plugins/{slug}/settings', [PluginSettingsController::class, 'show'])->name('admin.plugins.settings');
-Route::put('plugins/{slug}/settings', [PluginSettingsController::class, 'update'])->name('admin.plugins.settings.update');
-Route::post('plugins/upload', [PluginController::class, 'upload'])->name('admin.plugins.upload');
-Route::delete('plugins/{slug}', [PluginController::class, 'destroy'])->name('admin.plugins.destroy');
+Route::get('plugins', [PluginController::class, 'index'])->name('admin.plugins.index')->middleware('permission:plugins.read');
+Route::post('plugins/{slug}/enable', [PluginController::class, 'enable'])->name('admin.plugins.enable')->middleware('permission:plugins.manage');
+Route::post('plugins/{slug}/disable', [PluginController::class, 'disable'])->name('admin.plugins.disable')->middleware('permission:plugins.manage');
+Route::get('plugins/{slug}/settings', [PluginSettingsController::class, 'show'])->name('admin.plugins.settings')->middleware('permission:plugins.manage');
+Route::put('plugins/{slug}/settings', [PluginSettingsController::class, 'update'])->name('admin.plugins.settings.update')->middleware('permission:plugins.manage');
+Route::post('plugins/upload', [PluginController::class, 'upload'])->name('admin.plugins.upload')->middleware('permission:plugins.manage');
+Route::delete('plugins/{slug}', [PluginController::class, 'destroy'])->name('admin.plugins.destroy')->middleware('permission:plugins.manage');
 
 // Email Templates
 Route::get('email-templates', [EmailTemplateController::class, 'index'])->name('admin.email-templates.index');
@@ -209,7 +218,7 @@ Route::post('comments/{comment}/spam', [CommentController::class, 'spam'])->name
 Route::delete('comments/{comment}', [CommentController::class, 'destroy'])->name('admin.comments.destroy');
 
 // Activity Log
-Route::get('activity-log', [ActivityLogController::class, 'index'])->name('admin.activity-log.index');
+Route::get('activity-log', [ActivityLogController::class, 'index'])->name('admin.activity-log.index')->middleware('permission:activity_log.read,system.read');
 
 // Custom Fields
 Route::resource('custom-fields', CustomFieldController::class)->names('admin.custom-fields')->except(['show']);
@@ -217,6 +226,9 @@ Route::get('api/custom-fields/values', [CustomFieldController::class, 'apiValues
 
 // Redirects
 Route::resource('redirects', RedirectController::class)->except(['create', 'edit', 'show'])->names('admin.redirects');
+
+// SEO
+Route::get('seo', [SeoController::class, 'index'])->name('admin.seo.index');
 
 // Sites (Multi-site)
 Route::resource('sites', SiteController::class)->names('admin.sites')->except(['show']);
@@ -251,6 +263,8 @@ Route::post('global-sections/{globalSection}/activate', [GlobalSectionController
 Route::get('notifications', [NotificationController::class, 'index'])->name('admin.notifications.index');
 Route::post('notifications/{notification}/read', [NotificationController::class, 'markRead'])->name('admin.notifications.read');
 Route::post('notifications/read-all', [NotificationController::class, 'markAllRead'])->name('admin.notifications.read-all');
+Route::delete('notifications/read', [NotificationController::class, 'clearRead'])->name('admin.notifications.clear-read');
+Route::delete('notifications/{notification}', [NotificationController::class, 'destroy'])->name('admin.notifications.destroy');
 
 // Preview Links
 Route::post('pages/{page}/preview', [PageController::class, 'generatePreview'])->name('admin.pages.preview');
@@ -258,9 +272,16 @@ Route::post('pages/{page}/preview-at', [PageController::class, 'generateTemporal
 Route::post('posts/{post}/preview', [PostController::class, 'generatePreview'])->name('admin.posts.preview');
 
 // Import/Export
-Route::get('import-export', [ImportExportController::class, 'index'])->name('admin.import-export');
-Route::post('export', [ImportExportController::class, 'export'])->name('admin.export');
-Route::post('import', [ImportExportController::class, 'import'])->name('admin.import');
+Route::get('import-export', [ImportExportController::class, 'index'])->name('admin.import-export')->middleware('permission:import_export.read,import_export.export,import_export.import');
+Route::post('export', [ImportExportController::class, 'export'])->name('admin.export')->middleware('permission:import_export.export');
+Route::post('import', [ImportExportController::class, 'import'])->name('admin.import')->middleware('permission:import_export.import');
+
+// Backups
+Route::get('backups', [BackupController::class, 'index'])->name('admin.backups.index')->middleware('permission:backups.read');
+Route::post('backups', [BackupController::class, 'store'])->name('admin.backups.store')->middleware('permission:backups.create');
+Route::get('backups/{backup}/download', [BackupController::class, 'download'])->name('admin.backups.download')->middleware('permission:backups.download,backups.read');
+Route::post('backups/{backup}/restore', [BackupController::class, 'restore'])->name('admin.backups.restore')->middleware('permission:backups.restore');
+Route::delete('backups/{backup}', [BackupController::class, 'destroy'])->name('admin.backups.destroy')->middleware('permission:backups.delete');
 
 // WordPress Import
 Route::get('wordpress-import', [WordPressImportController::class, 'index'])->name('admin.wordpress-import');
@@ -283,39 +304,43 @@ Route::post('design-tokens/seed-defaults', [DesignTokenController::class, 'seedD
 Route::get('design-tokens/css', [DesignTokenController::class, 'css'])->name('admin.design-tokens.css');
 
 // System (Sessions, Health Check)
-Route::get('system/sessions', [SystemController::class, 'sessions'])->name('admin.system.sessions');
-Route::delete('system/sessions/{session}', [SystemController::class, 'destroySession'])->name('admin.system.sessions.destroy');
-Route::post('system/sessions/logout-all', [SystemController::class, 'logoutAllSessions'])->name('admin.system.sessions.logout-all');
-Route::get('system/health', [SystemController::class, 'healthCheck'])->name('admin.system.health');
+Route::get('system/sessions', [SystemController::class, 'sessions'])->name('admin.system.sessions')->middleware('permission:system.read,system.sessions');
+Route::delete('system/sessions/{session}', [SystemController::class, 'destroySession'])->name('admin.system.sessions.destroy')->middleware('permission:system.manage,system.sessions');
+Route::post('system/sessions/logout-all', [SystemController::class, 'logoutAllSessions'])->name('admin.system.sessions.logout-all')->middleware('permission:system.manage,system.sessions');
+Route::get('system/health', [SystemController::class, 'healthCheck'])->name('admin.system.health')->middleware('permission:system.read');
 
 // System Monitor (Scheduler, Queues, Performance)
-Route::get('system/scheduler', [SystemMonitorController::class, 'scheduler'])->name('admin.system.scheduler');
-Route::get('system/queues', [SystemMonitorController::class, 'queues'])->name('admin.system.queues');
-Route::post('system/queues/retry/{id}', [SystemMonitorController::class, 'retryJob'])->name('admin.system.queues.retry');
-Route::delete('system/queues/delete/{id}', [SystemMonitorController::class, 'deleteJob'])->name('admin.system.queues.delete');
-Route::post('system/queues/retry-all', [SystemMonitorController::class, 'retryAll'])->name('admin.system.queues.retry-all');
-Route::post('system/queues/flush', [SystemMonitorController::class, 'flushFailed'])->name('admin.system.queues.flush');
-Route::get('system/performance', [SystemMonitorController::class, 'performance'])->name('admin.system.performance');
+Route::get('system/scheduler', [SystemMonitorController::class, 'scheduler'])->name('admin.system.scheduler')->middleware('permission:system.read');
+Route::get('system/queues', [SystemMonitorController::class, 'queues'])->name('admin.system.queues')->middleware('permission:system.read');
+Route::post('system/queues/retry/{id}', [SystemMonitorController::class, 'retryJob'])->name('admin.system.queues.retry')->middleware('permission:system.manage');
+Route::delete('system/queues/delete/{id}', [SystemMonitorController::class, 'deleteJob'])->name('admin.system.queues.delete')->middleware('permission:system.manage');
+Route::post('system/queues/retry-all', [SystemMonitorController::class, 'retryAll'])->name('admin.system.queues.retry-all')->middleware('permission:system.manage');
+Route::post('system/queues/flush', [SystemMonitorController::class, 'flushFailed'])->name('admin.system.queues.flush')->middleware('permission:system.manage');
+Route::get('system/performance', [SystemMonitorController::class, 'performance'])->name('admin.system.performance')->middleware('permission:system.read');
+Route::post('system/performance/clear-cache', [SystemMonitorController::class, 'clearCache'])->name('admin.system.performance.clear-cache')->middleware('permission:system.manage');
+Route::post('system/performance/optimize', [SystemMonitorController::class, 'optimize'])->name('admin.system.performance.optimize')->middleware('permission:system.manage');
+Route::post('system/performance/clear-compiled', [SystemMonitorController::class, 'clearCompiled'])->name('admin.system.performance.clear-compiled')->middleware('permission:system.manage');
 
 // Updates & Error Recovery
-Route::get('updates', [UpdateController::class, 'index'])->name('admin.updates.index');
-Route::get('updates/check', [UpdateController::class, 'check'])->name('admin.updates.check');
-Route::post('updates/plugin/{slug}', [UpdateController::class, 'updatePlugin'])->name('admin.updates.plugin');
-Route::post('updates/theme/{slug}', [UpdateController::class, 'updateTheme'])->name('admin.updates.theme');
-Route::post('updates/all', [UpdateController::class, 'updateAll'])->name('admin.updates.all');
-Route::post('updates/{updateLog}/rollback', [UpdateController::class, 'rollback'])->name('admin.updates.rollback');
-Route::get('updates/settings', [UpdateController::class, 'settings'])->name('admin.updates.settings');
-Route::post('updates/settings', [UpdateController::class, 'updateSettings'])->name('admin.updates.settings.save');
-Route::post('updates/safe-mode', [UpdateController::class, 'toggleSafeMode'])->name('admin.updates.safe-mode');
-Route::post('updates/recovery-token', [UpdateController::class, 'generateRecoveryToken'])->name('admin.updates.recovery-token');
+Route::get('updates', [UpdateController::class, 'index'])->name('admin.updates.index')->middleware('permission:updates.read,updates.manage');
+Route::get('updates/check', [UpdateController::class, 'check'])->name('admin.updates.check')->middleware('permission:updates.read,updates.manage');
+Route::post('updates/plugin/{slug}', [UpdateController::class, 'updatePlugin'])->name('admin.updates.plugin')->middleware('permission:updates.manage');
+Route::post('updates/theme/{slug}', [UpdateController::class, 'updateTheme'])->name('admin.updates.theme')->middleware('permission:updates.manage');
+Route::post('updates/all', [UpdateController::class, 'updateAll'])->name('admin.updates.all')->middleware('permission:updates.manage');
+Route::post('updates/{updateLog}/rollback', [UpdateController::class, 'rollback'])->name('admin.updates.rollback')->middleware('permission:updates.rollback,updates.manage');
+Route::get('updates/settings', [UpdateController::class, 'settings'])->name('admin.updates.settings')->middleware('permission:updates.read,updates.manage');
+Route::post('updates/settings', [UpdateController::class, 'updateSettings'])->name('admin.updates.settings.save')->middleware('permission:updates.manage');
+Route::post('updates/safe-mode', [UpdateController::class, 'toggleSafeMode'])->name('admin.updates.safe-mode')->middleware('permission:updates.manage,system.manage');
+Route::post('updates/recovery-token', [UpdateController::class, 'generateRecoveryToken'])->name('admin.updates.recovery-token')->middleware('permission:updates.manage,system.manage');
+Route::post('updates/maintenance', [UpdateController::class, 'toggleMaintenance'])->name('admin.updates.maintenance')->middleware('permission:settings.update,updates.manage');
 
 // Roles (Settings)
-Route::get('settings/roles', [RoleController::class, 'index'])->name('admin.roles.index');
-Route::get('settings/roles/create', [RoleController::class, 'create'])->name('admin.roles.create');
-Route::post('settings/roles', [RoleController::class, 'store'])->name('admin.roles.store');
-Route::get('settings/roles/{role}/edit', [RoleController::class, 'edit'])->name('admin.roles.edit');
-Route::put('settings/roles/{role}', [RoleController::class, 'update'])->name('admin.roles.update');
-Route::delete('settings/roles/{role}', [RoleController::class, 'destroy'])->name('admin.roles.destroy');
+Route::get('settings/roles', [RoleController::class, 'index'])->name('admin.roles.index')->middleware('permission:roles.read');
+Route::get('settings/roles/create', [RoleController::class, 'create'])->name('admin.roles.create')->middleware('permission:roles.create');
+Route::post('settings/roles', [RoleController::class, 'store'])->name('admin.roles.store')->middleware('permission:roles.create');
+Route::get('settings/roles/{role}/edit', [RoleController::class, 'edit'])->name('admin.roles.edit')->middleware('permission:roles.update,roles.read');
+Route::put('settings/roles/{role}', [RoleController::class, 'update'])->name('admin.roles.update')->middleware('permission:roles.update');
+Route::delete('settings/roles/{role}', [RoleController::class, 'destroy'])->name('admin.roles.destroy')->middleware('permission:roles.delete');
 
 // Block Patterns (JSON API for builder)
 Route::get('block-patterns', [BlockPatternController::class, 'index'])->name('admin.block-patterns.index');
@@ -324,8 +349,8 @@ Route::put('block-patterns/{blockPattern}', [BlockPatternController::class, 'upd
 Route::delete('block-patterns/{blockPattern}', [BlockPatternController::class, 'destroy'])->name('admin.block-patterns.destroy');
 
 // Config Export/Import
-Route::get('config/export', [ConfigController::class, 'export'])->name('admin.config.export');
-Route::post('config/import', [ConfigController::class, 'import'])->name('admin.config.import');
+Route::get('config/export', [ConfigController::class, 'export'])->name('admin.config.export')->middleware('permission:config.export,settings.read');
+Route::post('config/import', [ConfigController::class, 'import'])->name('admin.config.import')->middleware('permission:config.import,settings.update');
 
 // Bookmarks (Favoris admin)
 Route::get('bookmarks', [BookmarkController::class, 'index'])->name('admin.bookmarks.index');

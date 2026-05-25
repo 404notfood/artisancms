@@ -9,6 +9,10 @@ use Illuminate\Database\Eloquent\Collection;
 
 class RoleService
 {
+    public function __construct(
+        private readonly ActivityLogService $activityLogService,
+    ) {}
+
     /**
      * @return Collection<int, Role>
      */
@@ -38,12 +42,22 @@ class RoleService
      */
     public function create(array $data): Role
     {
-        return Role::create([
+        $role = Role::create([
             'name' => $data['name'],
             'slug' => $data['slug'],
             'permissions' => $data['permissions'] ?? [],
             'is_system' => false,
         ]);
+
+        $this->activityLogService->logRoleEvent('role_created', (int) $role->id, [
+            'new' => [
+                'name' => $role->name,
+                'slug' => $role->slug,
+                'permissions' => $role->permissions,
+            ],
+        ]);
+
+        return $role;
     }
 
     /**
@@ -51,6 +65,7 @@ class RoleService
      */
     public function update(Role $role, array $data): Role
     {
+        $oldValues = $role->only(['name', 'slug', 'permissions']);
         $updateData = ['permissions' => $data['permissions'] ?? []];
 
         if (!$role->is_system) {
@@ -60,7 +75,14 @@ class RoleService
 
         $role->update($updateData);
 
-        return $role->fresh() ?? $role;
+        $freshRole = $role->fresh() ?? $role;
+
+        $this->activityLogService->logRoleEvent('role_updated', (int) $freshRole->id, [
+            'old' => $oldValues,
+            'new' => $freshRole->only(['name', 'slug', 'permissions']),
+        ]);
+
+        return $freshRole;
     }
 
     public function delete(Role $role): bool
@@ -74,6 +96,17 @@ class RoleService
             $role->users()->update(['role_id' => $defaultRole->id]);
         }
 
-        return (bool) $role->delete();
+        $roleId = (int) $role->id;
+        $oldValues = $role->only(['name', 'slug', 'permissions']);
+        $deleted = (bool) $role->delete();
+
+        if ($deleted) {
+            $this->activityLogService->logRoleEvent('role_deleted', $roleId, [
+                'old' => $oldValues,
+                'fallback_role' => $defaultRole?->slug,
+            ]);
+        }
+
+        return $deleted;
     }
 }

@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Backup;
 use App\Models\UpdateLog;
 use App\Services\ErrorRecoveryService;
+use App\Services\HealthCheckService;
+use App\Services\SettingService;
 use App\Services\UpdateService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -18,6 +21,8 @@ class UpdateController extends Controller
     public function __construct(
         private readonly UpdateService $updateService,
         private readonly ErrorRecoveryService $recoveryService,
+        private readonly SettingService $settingService,
+        private readonly HealthCheckService $healthCheckService,
     ) {}
 
     public function index(): Response
@@ -32,6 +37,8 @@ class UpdateController extends Controller
             'history' => $history,
             'health' => $health,
             'settings' => $settings,
+            'maintenance' => $this->maintenancePayload(),
+            'preflight' => $this->preflightPayload(),
         ]);
     }
 
@@ -184,5 +191,56 @@ class UpdateController extends Controller
             'token' => $token,
             'url' => url('/admin?recovery_token=' . $token),
         ]);
+    }
+
+    public function toggleMaintenance(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'enabled' => ['required', 'boolean'],
+            'message' => ['nullable', 'string', 'max:1000'],
+        ]);
+
+        $this->settingService->set('maintenance.enabled', $data['enabled'], 'boolean');
+
+        if (array_key_exists('message', $data) && $data['message'] !== null) {
+            $this->settingService->set('maintenance.message', $data['message'], 'textarea');
+        }
+
+        return response()->json([
+            'success' => true,
+            'maintenance' => $this->maintenancePayload(),
+            'message' => $data['enabled'] ? 'Mode maintenance active.' : 'Mode maintenance desactive.',
+        ]);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function maintenancePayload(): array
+    {
+        return [
+            'enabled' => (bool) $this->settingService->get('maintenance.enabled', false),
+            'message' => (string) $this->settingService->get('maintenance.message', 'Site en maintenance. Nous revenons bientot.'),
+            'allowed_ips' => $this->settingService->get('maintenance.allowed_ips', []),
+        ];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function preflightPayload(): array
+    {
+        $health = $this->healthCheckService->runAll();
+        $lastBackup = Backup::where('status', 'completed')->latest('completed_at')->first();
+
+        return [
+            'health_overall' => $health['overall'],
+            'checks' => $health['checks'],
+            'last_backup' => $lastBackup?->completed_at?->toDateTimeString(),
+            'last_backup_size' => $lastBackup?->size,
+            'has_recent_backup' => $lastBackup?->completed_at?->greaterThan(now()->subDay()) ?? false,
+            'config_cached' => app()->configurationIsCached(),
+            'routes_cached' => app()->routesAreCached(),
+        ];
     }
 }

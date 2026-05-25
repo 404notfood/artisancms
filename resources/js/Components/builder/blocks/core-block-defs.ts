@@ -3,12 +3,16 @@ import type { BlockRendererProps, BlockSettingsProps } from './block-registry';
 
 // ── Layout ──
 import SectionRenderer from './renderers/section-renderer';
+import RowRenderer from './renderers/row-renderer';
+import ColumnRenderer from './renderers/column-renderer';
 import GridRenderer from './renderers/grid-renderer';
 import SpacerRenderer from './renderers/spacer-renderer';
 import DividerRenderer from './renderers/divider-renderer';
 import ShapeDividerRenderer from './renderers/shape-divider-renderer';
 
 import SectionSettings from './settings/section-settings';
+import RowSettings from './settings/row-settings';
+import ColumnSettings from './settings/column-settings';
 import GridSettings from './settings/grid-settings';
 import SpacerSettings from './settings/spacer-settings';
 import DividerSettings from './settings/divider-settings';
@@ -111,6 +115,8 @@ export interface CoreBlockDef {
 export const CORE_BLOCKS: CoreBlockDef[] = [
     // Layout
     { slug: 'section', label: 'Section', icon: 'LayoutTemplate', category: 'layout', renderer: SectionRenderer, settings: SectionSettings },
+    { slug: 'row', label: 'Ligne', icon: 'PanelTopOpen', category: 'layout', renderer: RowRenderer, settings: RowSettings },
+    { slug: 'column', label: 'Colonne', icon: 'Columns3', category: 'layout', renderer: ColumnRenderer, settings: ColumnSettings },
     { slug: 'grid', label: 'Grille', icon: 'Grid3X3', category: 'layout', renderer: GridRenderer, settings: GridSettings },
     { slug: 'spacer', label: 'Espacement', icon: 'ArrowUpDown', category: 'layout', renderer: SpacerRenderer, settings: SpacerSettings },
     { slug: 'divider', label: 'Separateur', icon: 'Minus', category: 'layout', renderer: DividerRenderer, settings: DividerSettings },
