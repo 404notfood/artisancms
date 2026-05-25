@@ -212,6 +212,7 @@ class Page extends Model
             'id'               => $this->id,
             'title'            => $this->title,
             'slug'             => $this->slug,
+            'status'           => $this->status,
             'content_text'     => Str::limit(BlockTextExtractor::extract($this->content), 5000),
             'meta_title'       => $this->meta_title,
             'meta_description' => $this->meta_description,

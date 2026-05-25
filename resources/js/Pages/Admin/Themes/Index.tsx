@@ -190,6 +190,8 @@ function ThemeCard({
 // ─── Upload Modal ─────────────────────────────────────────────────────────────
 
 function UploadModal({ onClose }: { onClose: () => void }) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [dragging, setDragging] = useState(false);
     const [file, setFile] = useState<File | null>(null);
@@ -386,4 +388,3 @@ function EmptyState({ onInstall }: { onInstall: () => void }) {
         </div>
     );
 }
-

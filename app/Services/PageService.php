@@ -117,6 +117,7 @@ class PageService
         CMS::fire('page.deleting', $page);
 
         $page->update(['status' => 'trash']);
+        $page->delete();
 
         CMS::fire('page.deleted', $page);
 
@@ -132,6 +133,7 @@ class PageService
         // Restore from SoftDeletes if applicable
         if ($page->trashed()) {
             $page->restore();
+            $page->refresh();
         }
 
         // Reset status from 'trash' to 'draft'
@@ -265,7 +267,7 @@ class PageService
      */
     public function emptyTrash(): int
     {
-        $trashedPages = Page::where('status', 'trash')->get();
+        $trashedPages = Page::withTrashed()->where('status', 'trash')->get();
         $count = 0;
 
         foreach ($trashedPages as $page) {

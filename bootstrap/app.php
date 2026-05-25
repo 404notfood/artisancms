@@ -15,8 +15,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->web(append: [
+        $middleware->web(prepend: [
             \App\Http\Middleware\EnsureInstalled::class,
+        ]);
+
+        $middleware->web(append: [
             \App\Http\Middleware\CheckMaintenanceMode::class,
             \App\Http\Middleware\HandleRedirects::class,
             \App\Http\Middleware\ResolveSite::class,

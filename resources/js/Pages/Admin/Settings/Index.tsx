@@ -1,5 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, useForm, router, usePage } from '@inertiajs/react';
+import type { FormDataConvertible } from '@inertiajs/core';
 import { useState, useRef } from 'react';
 import { Settings, Search, Mail, FileText, ImageIcon, Construction, Paintbrush, Upload, Check, Shield, BarChart3, Send, Trash2 } from 'lucide-react';
 import type { SettingData, SharedProps } from '@/types/cms';
@@ -329,7 +330,7 @@ function valueToInput(setting: SettingData): string {
     return String(setting.value ?? '');
 }
 
-function parseValueForSubmit(setting: SettingData | undefined, value: string): unknown {
+function parseValueForSubmit(setting: SettingData | undefined, value: string): FormDataConvertible {
     if (!setting) return value;
 
     if (setting.type === 'json') {

@@ -8,6 +8,7 @@ use App\Http\Controllers\Front\SearchController as FrontSearchController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\Front\MemberController;
 use App\Http\Controllers\NewsletterSubscribeController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicCommentController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SeoController;
@@ -59,8 +60,9 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    $prefix = config('cms.admin.resolved_prefix', 'admin');
-    Route::get('/profile', fn () => redirect("/{$prefix}/account"))->name('profile.edit');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 require __DIR__.'/auth.php';

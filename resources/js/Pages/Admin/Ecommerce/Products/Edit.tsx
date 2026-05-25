@@ -3,7 +3,7 @@ import { Head, Link, useForm, router , usePage } from '@inertiajs/react';
 import type { ProductData, ProductCategoryData, SharedProps } from '@/types/cms';
 import StatusBadge from '@/Components/admin/status-badge';
 import { ArrowLeft, Trash2 } from 'lucide-react';
-import type { VariantFormData } from './components/types';
+import type { ProductFormData, VariantFormData } from './components/types';
 import ProductInfoSection from './components/ProductInfoSection';
 import ProductPricingSection from './components/ProductPricingSection';
 import ProductInventorySection from './components/ProductInventorySection';
@@ -19,7 +19,7 @@ interface ProductsEditProps {
 export default function ProductsEdit({ product, categories }: ProductsEditProps) {
     const { cms } = usePage<SharedProps>().props;
     const prefix = cms?.adminPrefix ?? 'admin';
-    const { data, setData, put, processing, errors } = useForm({
+    const { data, setData, put, processing, errors } = useForm<ProductFormData>({
         name: product.name,
         slug: product.slug,
         description: product.description ?? '',
