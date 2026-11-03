@@ -36,8 +36,8 @@ class PostControllerTest extends TestCase
             'status' => 'draft',
         ]);
 
-        $response->assertRedirect();
-        $this->assertDatabaseHas('posts', ['slug' => 'new-blog-post']);
+        $post = Post::where('slug', 'new-blog-post')->firstOrFail();
+        $response->assertRedirect(route('admin.posts.edit', $post));
     }
 
     public function test_admin_can_update_post(): void
@@ -105,5 +105,94 @@ class PostControllerTest extends TestCase
 
         $response->assertRedirect();
         $this->assertNotSoftDeleted($post);
+    }
+
+    public function test_admin_can_open_article_in_shared_builder(): void
+    {
+        $admin = $this->createAdmin();
+        $post = Post::factory()->create(['created_by' => $admin->id]);
+
+        $this->actingAs($admin)->get(route('admin.posts.builder', $post))
+            ->assertOk()
+            ->assertInertia(fn ($page) => $page->component('Builder/Edit')
+                ->where('post.id', $post->id)
+                ->missing('page'));
+    }
+
+    public function test_builder_saves_sanitized_nested_content_with_revision(): void
+    {
+        $admin = $this->createAdmin();
+        $post = Post::factory()->draft()->create(['created_by' => $admin->id]);
+        $content = [[
+            'id' => 'section-1', 'type' => 'section', 'props' => [],
+            'children' => [[
+                'id' => 'text-1', 'type' => 'text',
+                'props' => ['html' => '<p>Article</p><script>alert(1)</script>'],
+                'children' => [],
+            ]],
+        ]];
+
+        $this->actingAs($admin)->put(route('admin.posts.builder.update', $post), ['content' => $content])
+            ->assertRedirect()->assertSessionHasNoErrors();
+
+        $post->refresh();
+        $this->assertSame('<p>Article</p>', $post->content[0]['children'][0]['props']['html']);
+        $this->assertSame('draft', $post->status);
+        $this->assertSame($post->content, $post->revisions()->latest('id')->firstOrFail()->data['content']);
+    }
+
+    public function test_builder_can_save_empty_content(): void
+    {
+        $admin = $this->createAdmin();
+        $post = Post::factory()->create(['created_by' => $admin->id]);
+
+        $this->actingAs($admin)->put(route('admin.posts.builder.update', $post), ['content' => []])
+            ->assertRedirect()->assertSessionHasNoErrors();
+
+        $this->assertSame([], $post->fresh()->content);
+    }
+
+    public function test_saved_builder_content_is_available_on_published_article(): void
+    {
+        $admin = $this->createAdmin();
+        $post = Post::factory()->draft()->create(['created_by' => $admin->id]);
+        $content = [['id' => 'heading-1', 'type' => 'heading', 'props' => ['text' => 'Mon article'], 'children' => []]];
+
+        $this->actingAs($admin)->put(route('admin.posts.builder.update', $post), ['content' => $content])
+            ->assertSessionHasNoErrors();
+        $this->post(route('admin.posts.publish', $post))->assertRedirect();
+
+        $this->get(route('blog.show', $post->slug))->assertOk()
+            ->assertInertia(fn ($page) => $page->component('Front/Blog/Show')
+                ->where('post.content.0.props.text', 'Mon article'));
+    }
+
+    public function test_builder_rejects_invalid_content_without_changing_article(): void
+    {
+        $admin = $this->createAdmin();
+        $post = Post::factory()->create(['created_by' => $admin->id]);
+        $original = $post->content;
+
+        $this->actingAs($admin)->putJson(route('admin.posts.builder.update', $post), ['content' => [['id' => 'invalid']]])
+            ->assertUnprocessable()->assertJsonValidationErrors('content.0.type');
+
+        $this->assertSame($original, $post->fresh()->content);
+    }
+
+    public function test_builder_requires_permission_to_edit_article(): void
+    {
+        $subscriber = $this->createSubscriber();
+        $post = Post::factory()->create();
+
+        $this->actingAs($subscriber)->get(route('admin.posts.builder', $post))->assertForbidden();
+        $this->putJson(route('admin.posts.builder.update', $post), ['content' => []])->assertForbidden();
+    }
+
+    public function test_guest_cannot_open_or_save_builder(): void
+    {
+        $post = Post::factory()->create();
+
+        $this->get(route('admin.posts.builder', $post))->assertRedirect('/login');
+        $this->put(route('admin.posts.builder.update', $post), ['content' => []])->assertRedirect('/login');
     }
 }

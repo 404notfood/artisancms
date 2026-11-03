@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PostRequest;
 use App\Models\Post;
 use App\Models\Revision;
+use App\Services\ContentSanitizer;
 use App\Services\PostService;
 use App\Services\TaxonomyService;
 use Illuminate\Http\JsonResponse;
@@ -55,10 +56,10 @@ class PostController extends Controller
      */
     public function store(PostRequest $request): RedirectResponse
     {
-        $this->postService->create($request->validated());
+        $post = $this->postService->create($request->validated());
 
         return redirect()
-            ->route('admin.posts.index')
+            ->route('admin.posts.edit', $post)
             ->with('success', __('cms.posts.created'));
     }
 
@@ -87,6 +88,33 @@ class PostController extends Controller
         return redirect()
             ->back()
             ->with('success', __('cms.posts.updated'));
+    }
+
+    public function builder(Post $post): Response
+    {
+        $this->authorize('update', $post);
+
+        return Inertia::render('Builder/Edit', ['post' => $post]);
+    }
+
+    public function updateBuilder(Request $request, Post $post, ContentSanitizer $sanitizer): RedirectResponse
+    {
+        $this->authorize('update', $post);
+
+        $validated = $request->validate([
+            'content' => ['present', 'array', 'list'],
+            'content.*' => ['array'],
+            'content.*.id' => ['required', 'string'],
+            'content.*.type' => ['required', 'string'],
+            'content.*.props' => ['sometimes', 'array'],
+            'content.*.children' => ['sometimes', 'array'],
+        ]);
+
+        $this->postService->update($post, [
+            'content' => $sanitizer->sanitizeBlockTree($validated['content'], $request->user()->isAdmin()),
+        ]);
+
+        return redirect()->back()->with('success', __('cms.posts.updated'));
     }
 
     /**

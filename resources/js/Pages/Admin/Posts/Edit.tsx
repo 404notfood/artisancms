@@ -8,7 +8,7 @@ import RejectModal from '@/Components/admin/RejectModal';
 import PreviewModal from '@/Components/admin/PreviewModal';
 import SeoPanel from '@/Components/admin/seo-panel';
 import { usePreviewLink } from '@/Components/admin/usePreviewLink';
-import { ArrowLeft, Link as LinkIcon } from 'lucide-react';
+import { ArrowLeft, Link as LinkIcon, LayoutGrid } from 'lucide-react';
 
 interface PostsEditProps {
     post: PostData;
@@ -89,6 +89,10 @@ export default function PostsEdit({ post, taxonomies }: PostsEditProps) {
                         <StatusBadge status={post.status} />
                     </div>
                     <div className="flex items-center gap-2 flex-wrap">
+                        <Link href={`/${prefix}/posts/${post.id}/builder`} className="inline-flex items-center gap-2 rounded-lg border border-indigo-300 bg-indigo-50 px-4 py-2 text-sm font-medium text-indigo-700 hover:bg-indigo-100 transition-colors">
+                            <LayoutGrid className="h-4 w-4" />
+                            Page Builder
+                        </Link>
                         <button
                             type="button"
                             onClick={preview.handleGeneratePreview}
