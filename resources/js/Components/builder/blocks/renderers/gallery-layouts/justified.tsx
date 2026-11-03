@@ -1,80 +1,40 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { GalleryLayoutProps } from './types';
+import GalleryPhoto from './gallery-photo';
 
-const TARGET_ROW_HEIGHT = 220;
+export function JustifiedLayout({ images, gap, onImageClick, interactive, showCaptions }: GalleryLayoutProps) {
+    const container = useRef<HTMLDivElement>(null);
+    const [measure, setMeasure] = useState({ width: 900, gap: 16 });
+    useEffect(() => {
+        const element = container.current;
+        if (!element) return;
+        const update = () => setMeasure({ width: element.getBoundingClientRect().width, gap: parseFloat(getComputedStyle(element).rowGap) || 16 });
+        update();
+        const observer = new ResizeObserver(update);
+        observer.observe(element);
+        return () => observer.disconnect();
+    }, [gap]);
+    const rows = useMemo(() => {
+        const result: { image: typeof images[number]; index: number; ratio: number }[][] = [];
+        let row: typeof result[number] = [];
+        let width = 0;
+        images.forEach((image, index) => {
+            const ratio = image.width && image.height ? image.width / image.height : 1.5;
+            row.push({ image, index, ratio });
+            width += ratio * 220;
+            if (width + (row.length - 1) * measure.gap >= measure.width) {
+                result.push(row);
+                row = [];
+                width = 0;
+            }
+        });
+        if (row.length) result.push(row);
+        return result;
+    }, [images, measure]);
 
-interface RowItem {
-    image: GalleryLayoutProps['images'][number];
-    index: number;
-    ratio: number;
-}
-
-function buildRows(images: GalleryLayoutProps['images'], containerWidth: number, gapPx: number): RowItem[][] {
-    const items: RowItem[] = images.map((img, i) => ({
-        image: img,
-        index: i,
-        ratio: (img.width && img.height) ? img.width / img.height : 1.5,
-    }));
-
-    const rows: RowItem[][] = [];
-    let currentRow: RowItem[] = [];
-    let rowWidth = 0;
-
-    for (const item of items) {
-        const itemWidth = item.ratio * TARGET_ROW_HEIGHT;
-        currentRow.push(item);
-        rowWidth += itemWidth;
-
-        const totalGap = (currentRow.length - 1) * gapPx;
-        if (rowWidth + totalGap >= containerWidth && currentRow.length > 0) {
-            rows.push([...currentRow]);
-            currentRow = [];
-            rowWidth = 0;
-        }
-    }
-    if (currentRow.length > 0) rows.push(currentRow);
-    return rows;
-}
-
-export function JustifiedLayout({ images, gap, onImageClick }: GalleryLayoutProps) {
-    const gapPx = parseInt(gap, 10) || 8;
-
-    const rows = useMemo(() => buildRows(images, 960, gapPx), [images, gapPx]);
-
-    return (
-        <div className="gallery-justified" style={{ display: 'flex', flexDirection: 'column', gap }}>
-            {rows.map((row, ri) => {
-                return (
-                    <div key={ri} style={{ display: 'flex', gap }}>
-                        {row.map((item) => {
-                            return (
-                                <div
-                                    key={item.index}
-                                    className="group relative overflow-hidden rounded cursor-pointer"
-                                    style={{ flex: `${item.ratio} 1 0%` }}
-                                    onClick={() => onImageClick(item.index)}
-                                    role="button"
-                                    tabIndex={0}
-                                >
-                                    <img
-                                        src={item.image.src}
-                                        alt={item.image.alt || ''}
-                                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                                        loading="lazy"
-                                    />
-                                    {item.image.caption && (
-                                        <div className="absolute inset-0 flex items-end opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                            <div className="w-full bg-black/60 text-white text-sm px-3 py-2">
-                                                {item.image.caption}
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
-                            );
-                        })}
-                    </div>
-                );
-            })}
-        </div>
-    );
+    return <div ref={container} className="gallery-justified">
+        {rows.map((row, index) => <div key={index} className="gallery-justified__row" style={{ maxWidth: row.reduce((sum, item) => sum + item.ratio * 260, 0) + (row.length - 1) * measure.gap }}>
+            {row.map((item) => <GalleryPhoto key={item.index} image={item.image} index={item.index} onImageClick={onImageClick} interactive={interactive} showCaptions={showCaptions} style={{ flex: `${item.ratio} 1 0%` }} />)}
+        </div>)}
+    </div>;
 }
