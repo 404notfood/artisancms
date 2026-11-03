@@ -303,7 +303,7 @@ class PageController extends Controller
     public function updateBuilder(Request $request, Page $page): RedirectResponse
     {
         $validated = $request->validate([
-            'content' => ['required', 'array'],
+            'content' => ['present', 'array'],
         ]);
 
         $content = $validated['content'];
@@ -311,6 +311,8 @@ class PageController extends Controller
 
         if (isset($content['blocks']) && is_array($content['blocks'])) {
             $content['blocks'] = $this->sanitizer->sanitizeBlockTree($content['blocks'], $isAdmin);
+        } elseif (array_is_list($content)) {
+            $content = $this->sanitizer->sanitizeBlockTree($content, $isAdmin);
         }
 
         $this->pageService->update($page, [

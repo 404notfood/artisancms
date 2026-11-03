@@ -90,6 +90,8 @@ Route::post('pages/{page}/checkin', [PageController::class, 'checkin'])->name('a
 
 // Posts
 Route::resource('posts', PostController::class)->names('admin.posts');
+Route::get('posts/{post}/builder', [PostController::class, 'builder'])->name('admin.posts.builder');
+Route::put('posts/{post}/builder', [PostController::class, 'updateBuilder'])->name('admin.posts.builder.update');
 Route::post('posts/{post}/restore', [PostController::class, 'restore'])->name('admin.posts.restore')->withTrashed();
 Route::post('posts/{post}/publish', [PostController::class, 'publish'])->name('admin.posts.publish');
 Route::post('posts/{post}/unpublish', [PostController::class, 'unpublish'])->name('admin.posts.unpublish');

@@ -161,4 +161,29 @@ class PageControllerTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    public function test_page_builder_still_opens_and_sanitizes_flat_blocks(): void
+    {
+        $page = Page::factory()->create(['created_by' => $this->admin->id]);
+
+        $this->actingAs($this->admin)->get(route('admin.pages.builder', $page))
+            ->assertOk()
+            ->assertInertia(fn ($view) => $view->component('Builder/Edit')->where('page.id', $page->id));
+
+        $this->put(route('admin.pages.builder.update', $page), [
+            'content' => [['id' => 'text-1', 'type' => 'text', 'props' => ['html' => '<p>Page</p><script>alert(1)</script>']]],
+        ])->assertSessionHasNoErrors();
+
+        $this->assertSame('<p>Page</p>', $page->fresh()->content[0]['props']['html']);
+    }
+
+    public function test_page_builder_can_save_after_removing_all_blocks(): void
+    {
+        $page = Page::factory()->create(['created_by' => $this->admin->id]);
+
+        $this->actingAs($this->admin)->put(route('admin.pages.builder.update', $page), ['content' => []])
+            ->assertSessionHasNoErrors();
+
+        $this->assertSame([], $page->fresh()->content);
+    }
 }

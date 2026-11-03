@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Head, router } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
+import type { RequestPayload } from '@inertiajs/core';
 import { DndContext, DragOverlay, pointerWithin, DragStartEvent, DragEndEvent, useSensor, useSensors, PointerSensor } from '@dnd-kit/core';
 import { useBuilderStore, findBlockInTree, findParentInfo } from '@/stores/builder-store';
 import { registerCoreBlocks } from '@/Components/builder/blocks/register-core-blocks';
@@ -7,15 +8,18 @@ import BuilderToolbar from '@/Components/builder/builder-toolbar';
 import BuilderCanvas from '@/Components/builder/builder-canvas';
 import BuilderSidebar from '@/Components/builder/builder-sidebar';
 import DeleteConfirmDialog from '@/Components/builder/delete-confirm-dialog';
-import type { BlockNode, PageData } from '@/types/cms';
+import type { BlockNode, PageData, PostData, SharedProps } from '@/types/cms';
 
 const CONTAINER_TYPES = new Set(['section', 'grid', 'row', 'column']);
 
-interface BuilderEditProps {
-    page: PageData;
-}
+type BuilderEditProps = { page: PageData; post?: never } | { post: PostData; page?: never };
 
-export default function BuilderEdit({ page }: BuilderEditProps) {
+export default function BuilderEdit({ page, post }: BuilderEditProps) {
+    const { cms } = usePage<SharedProps>().props;
+    const prefix = cms?.adminPrefix ?? 'admin';
+    const document = post ?? page;
+    const resource = post ? 'posts' : 'pages';
+    const documentUrl = `/${prefix}/${resource}/${document.id}`;
     const setBlocks = useBuilderStore((s) => s.setBlocks);
     const blocks = useBuilderStore((s) => s.blocks);
     const addBlock = useBuilderStore((s) => s.addBlock);
@@ -27,31 +31,48 @@ export default function BuilderEdit({ page }: BuilderEditProps) {
     useEffect(() => {
         registerCoreBlocks();
 
-        const raw = page.content;
+        const raw = document.content;
         const initialBlocks: BlockNode[] = Array.isArray(raw)
             ? raw
             : (raw as Record<string, unknown> | null)?.blocks as BlockNode[] ?? [];
         setBlocks(initialBlocks);
-    }, [page.id, setBlocks]);
+    }, [resource, document.id, setBlocks]);
 
     const [isSaving, setIsSaving] = useState(false);
+    const [saveError, setSaveError] = useState<string | null>(null);
     const [activeDragData, setActiveDragData] = useState<Record<string, unknown> | null>(null);
 
-    const handleSave = useCallback(() => {
+    const persistContent = useCallback((publish = false) => {
         setIsSaving(true);
+        setSaveError(null);
         const currentBlocks = useBuilderStore.getState().blocks;
         router.put(
-            `/admin/pages/${page.id}/builder`,
+            `${documentUrl}/builder`,
             // Inertia's RequestPayload type doesn't support deeply nested objects like BlockNode[],
             // but the data is correctly serialized at runtime.
-            { content: currentBlocks } as any,
-            { preserveState: true, preserveScroll: true, onFinish: () => setIsSaving(false) },
+            { content: currentBlocks } as unknown as RequestPayload,
+            {
+                preserveState: true,
+                preserveScroll: true,
+                onSuccess: () => {
+                    if (useBuilderStore.getState().blocks === currentBlocks) {
+                        useBuilderStore.setState({ isDirty: false });
+                    }
+                    if (publish) {
+                        router.post(`${documentUrl}/publish`, {}, { preserveState: true });
+                    }
+                },
+                onError: () => setSaveError('La sauvegarde a échoué. Vérifiez votre contenu et réessayez.'),
+                onFinish: () => setIsSaving(false),
+            },
         );
-    }, [page.id]);
+    }, [documentUrl]);
+
+    const handleSave = useCallback(() => persistContent(), [persistContent]);
 
     const handlePublish = useCallback(() => {
-        router.post(`/admin/pages/${page.id}/publish`, {}, { preserveState: true });
-    }, [page.id]);
+        persistContent(true);
+    }, [persistContent]);
 
     const sensors = useSensors(
         useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
@@ -232,7 +253,7 @@ export default function BuilderEdit({ page }: BuilderEditProps) {
 
     return (
         <>
-            <Head title={`Builder - ${page.title}`} />
+            <Head title={`Builder - ${document.title}`} />
 
             <DndContext
                 sensors={sensors}
@@ -243,11 +264,15 @@ export default function BuilderEdit({ page }: BuilderEditProps) {
             >
                 <div className="flex h-screen flex-col overflow-hidden bg-slate-100 text-slate-900">
                     <BuilderToolbar
-                        title={page.title}
+                        title={document.title}
+                        backHref={`/${prefix}/${resource}`}
+                        backLabel={post ? 'Retour aux articles' : 'Retour aux pages'}
                         onSave={handleSave}
                         onPublish={handlePublish}
                         isSaving={isSaving}
                     />
+
+                    {saveError && <p role="alert" className="bg-red-50 px-4 py-2 text-sm text-red-700">{saveError}</p>}
 
                     <div className="flex flex-1 overflow-hidden">
                         {!isPreviewMode && <BuilderSidebar />}

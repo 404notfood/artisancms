@@ -1,3 +1,15 @@
+## 1.1.0 — 2026-11-03
+
+### Ajouts
+
+- Page Builder accessible depuis la modification des articles, avec sauvegarde du contenu et revisions automatiques.
+- Navigation du builder adaptee aux articles et au prefixe d'administration configure.
+
+### Corrections
+
+- Le bouton Publier du builder enregistre le contenu avant la publication.
+- L'indicateur de modifications non sauvegardees se reinitialise apres une sauvegarde reussie.
+
 ## 1.0.0 — 2026-03-27
 
 ### Initial Release

@@ -9,9 +9,11 @@ interface BuilderToolbarProps {
     onSave: () => void;
     onPublish: () => void;
     isSaving: boolean;
+    backHref?: string;
+    backLabel?: string;
 }
 
-export default function BuilderToolbar({ title, onSave, onPublish, isSaving }: BuilderToolbarProps) {
+export default function BuilderToolbar({ title, onSave, onPublish, isSaving, backHref, backLabel = 'Retour aux pages' }: BuilderToolbarProps) {
     const { cms } = usePage<SharedProps>().props;
     const prefix = cms?.adminPrefix ?? 'admin';
     const { viewport, setViewport, undo, redo, canUndo, canRedo, isDirty, isPreviewMode, setPreviewMode } = useBuilderStore();
@@ -21,9 +23,9 @@ export default function BuilderToolbar({ title, onSave, onPublish, isSaving }: B
             <div className="flex h-full items-center justify-between gap-4">
                 <div className="flex min-w-0 items-center gap-3">
                     <Link
-                        href={`/${prefix}/pages`}
+                        href={backHref ?? `/${prefix}/pages`}
                         className="grid h-9 w-9 place-items-center rounded-lg border border-slate-200 bg-white text-slate-500 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900"
-                        aria-label="Retour aux pages"
+                        aria-label={backLabel}
                     >
                         <ArrowLeft className="w-5 h-5" />
                     </Link>
@@ -80,7 +82,7 @@ export default function BuilderToolbar({ title, onSave, onPublish, isSaving }: B
                         <Save className="w-4 h-4" />
                         {isSaving ? 'Sauvegarde...' : 'Sauvegarder'}
                     </button>
-                    <button onClick={onPublish} className="inline-flex h-9 items-center gap-2 rounded-lg bg-slate-950 px-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800">
+                    <button onClick={onPublish} disabled={isSaving} className="inline-flex h-9 items-center gap-2 rounded-lg bg-slate-950 px-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800 disabled:opacity-50">
                         <Globe className="w-4 h-4" />
                         Publier
                     </button>

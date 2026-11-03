@@ -247,6 +247,7 @@ export default function PostsCreate({ taxonomies }: PostsCreateProps) {
                 />
 
                 {/* Actions */}
+                <p className="text-sm text-gray-500">Enregistrez l'article pour accéder au Page Builder et composer son contenu.</p>
                 <div className="flex items-center justify-end gap-3">
                     <Link
                         href={`/${prefix}/posts`}
