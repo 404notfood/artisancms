@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Services\ReleaseRegistry;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -22,6 +23,8 @@ use Illuminate\Support\Facades\File;
  */
 class RegistryController extends Controller
 {
+    public function __construct(private readonly ReleaseRegistry $registry) {}
+
     /**
      * GET /api/v1/version
      *
@@ -29,16 +32,15 @@ class RegistryController extends Controller
      */
     public function version(): JsonResponse
     {
-        $version = trim(File::get(base_path('VERSION')));
-        $changelog = $this->getLatestChangelog();
+        $release = $this->registry->latest('cms');
 
         return response()->json([
-            'version' => $version,
-            'download_url' => "https://github.com/artisancms/artisancms/releases/download/v{$version}/artisancms-{$version}.tar.gz",
-            'checksum_sha256' => null, // Populated by CI/CD
-            'changelog' => $changelog,
-            'php_required' => '>=8.3',
-            'urgent' => false,
+            'version' => $release['version'] ?? null,
+            'download_url' => $release['download_url'] ?? null,
+            'checksum_sha256' => $release['checksum_sha256'] ?? null,
+            'changelog' => $release['changelog'] ?? $this->getLatestChangelog(),
+            'php_required' => $release['php_required'] ?? '8.3.0',
+            'urgent' => $release['urgent'] ?? false,
         ]);
     }
 
@@ -57,17 +59,26 @@ class RegistryController extends Controller
      */
     public function checkUpdates(Request $request): JsonResponse
     {
+        $request->validate([
+            'cms_version' => ['sometimes', 'string', 'regex:/^\d+\.\d+\.\d+(?:-[a-zA-Z0-9.-]+)?$/D'],
+            'plugins' => ['sometimes', 'array', 'max:500'],
+            'themes' => ['sometimes', 'array', 'max:500'],
+            'plugins.*' => ['string', 'max:64'],
+            'themes.*' => ['string', 'max:64'],
+        ]);
         $currentCmsVersion = $request->input('cms_version', '0.0.0');
-        $latestCmsVersion = trim(File::get(base_path('VERSION')));
+        $release = $this->registry->latest('cms');
+        $latestCmsVersion = $release['version'] ?? $currentCmsVersion;
 
         // CMS update info
         $cmsUpdate = [
             'latest' => $latestCmsVersion,
             'update_available' => version_compare($latestCmsVersion, $currentCmsVersion, '>'),
-            'download_url' => "https://github.com/artisancms/artisancms/releases/download/v{$latestCmsVersion}/artisancms-{$latestCmsVersion}.tar.gz",
-            'changelog' => $this->getLatestChangelog(),
-            'checksum_sha256' => null,
-            'urgent' => false,
+            'download_url' => $release['download_url'] ?? null,
+            'changelog' => $release['changelog'] ?? null,
+            'checksum_sha256' => $release['checksum_sha256'] ?? null,
+            'php_required' => $release['php_required'] ?? '8.3.0',
+            'urgent' => $release['urgent'] ?? false,
         ];
 
         // Plugin updates (compare against bundled plugin manifests)
@@ -99,8 +110,14 @@ class RegistryController extends Controller
      */
     public function catalog(): JsonResponse
     {
-        $plugins = $this->scanExtensions(base_path('content/plugins'), 'artisan-plugin.json');
-        $themes = $this->scanExtensions(base_path('content/themes'), 'artisan-theme.json');
+        $plugins = collect([
+            ...$this->scanExtensions(base_path('content/plugins'), 'artisan-plugin.json'),
+            ...$this->registry->catalog('plugin'),
+        ])->keyBy('slug')->values()->all();
+        $themes = collect([
+            ...$this->scanExtensions(base_path('content/themes'), 'artisan-theme.json'),
+            ...$this->registry->catalog('theme'),
+        ])->keyBy('slug')->values()->all();
 
         return response()->json([
             'plugins' => $plugins,
@@ -116,23 +133,41 @@ class RegistryController extends Controller
     public function registerRelease(Request $request): JsonResponse
     {
         $apiKey = config('cms.registry.api_key');
-        if (!$apiKey || $request->bearerToken() !== $apiKey) {
+        if (!$apiKey || !hash_equals($apiKey, $request->bearerToken() ?? '')) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
         $validated = $request->validate([
             'type' => 'required|in:cms,plugin,theme',
-            'version' => 'required|string',
-            'tag' => 'required|string',
-            'download_url' => 'required|url',
-            'checksum_url' => 'nullable|url',
+            'slug' => ['required_if:type,plugin,theme', 'nullable', 'string', 'max:100', 'regex:/^[a-z0-9][a-z0-9-]*$/D'],
+            'version' => ['required', 'string', 'max:64', 'regex:/^\d+\.\d+\.\d+$/D'],
+            'tag' => 'required|string|max:100',
+            'download_url' => 'required|url:https|max:2048',
+            'checksum_url' => 'nullable|url:https|max:2048',
+            'checksum_sha256' => ['required', 'string', 'regex:/^[a-f0-9]{64}$/iD'],
+            'changelog' => 'nullable|string|max:100000',
+            'php_required' => ['sometimes', 'string', 'regex:/^\d+\.\d+(?:\.\d+)?$/D'],
+            'urgent' => 'sometimes|boolean',
+            'name' => 'sometimes|string|max:255',
+            'description' => 'sometimes|string|max:2000',
         ]);
 
-        // In a full implementation, this would store in a releases table.
-        // For now, log the release notification.
-        \Illuminate\Support\Facades\Log::info('New release registered', $validated);
+        if ($validated['type'] === 'cms') {
+            $validated['slug'] = 'core';
+        }
+        $validated['checksum_sha256'] = strtolower($validated['checksum_sha256']);
+        $this->registry->register($validated);
 
         return response()->json(['status' => 'ok']);
+    }
+
+    public function download(string $type, string $slug): \Illuminate\Http\RedirectResponse
+    {
+        abort_unless(in_array($type, ['plugins', 'themes'], true), 404);
+        $release = $this->registry->latest($type === 'plugins' ? 'plugin' : 'theme', $slug);
+        abort_unless($release && !empty($release['download_url']), 404);
+
+        return redirect()->away($release['download_url']);
     }
 
     // ─── Private helpers ─────────────────────────────────
@@ -145,24 +180,15 @@ class RegistryController extends Controller
         $updates = [];
 
         foreach ($installed as $slug => $currentVersion) {
-            $manifestPath = $basePath . '/' . $slug . '/' . $manifestFile;
-            if (!file_exists($manifestPath)) {
-                continue;
-            }
-
-            try {
-                $manifest = json_decode(file_get_contents($manifestPath), true, 512, JSON_THROW_ON_ERROR);
-            } catch (\JsonException) {
-                continue;
-            }
-
-            $latestVersion = $manifest['version'] ?? $currentVersion;
+            abort_unless(is_string($slug) && preg_match('/^[a-z0-9][a-z0-9-]*$/D', $slug), 422);
+            $release = $this->registry->latest($manifestFile === 'artisan-plugin.json' ? 'plugin' : 'theme', $slug);
+            $latestVersion = $release['version'] ?? $currentVersion;
             $updates[$slug] = [
                 'latest' => $latestVersion,
                 'update_available' => version_compare($latestVersion, $currentVersion, '>'),
-                'download_url' => null, // Extensions are distributed via registry/marketplace
-                'changelog' => $manifest['changelog'] ?? null,
-                'checksum_sha256' => null,
+                'download_url' => $release['download_url'] ?? null,
+                'changelog' => $release['changelog'] ?? null,
+                'checksum_sha256' => $release['checksum_sha256'] ?? null,
             ];
         }
 

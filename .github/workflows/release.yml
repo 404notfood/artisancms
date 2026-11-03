@@ -12,6 +12,8 @@ jobs:
   release:
     name: Create Release
     runs-on: ubuntu-latest
+    outputs:
+      checksum: ${{ steps.checksum.outputs.checksum }}
 
     steps:
       - name: Checkout code
@@ -19,7 +21,10 @@ jobs:
 
       - name: Read version from VERSION file
         id: version
-        run: echo "version=$(cat VERSION | tr -d '[:space:]')" >> $GITHUB_OUTPUT
+        run: |
+          VERSION=$(cat VERSION | tr -d '[:space:]')
+          test "$GITHUB_REF_NAME" = "v$VERSION" || { echo "Tag and VERSION must match"; exit 1; }
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -60,16 +65,29 @@ jobs:
 
       - name: Create release archive
         run: |
-          cd ..
-          tar -czf artisancms-${{ steps.version.outputs.version }}.tar.gz \
-            --exclude='.git' \
-            -C ${{ github.workspace }} .
-          mv artisancms-${{ steps.version.outputs.version }}.tar.gz ${{ github.workspace }}/
+          python3 - <<'PY'
+          import os, pathlib, shutil, zipfile
+          root = pathlib.Path.cwd()
+          version = (root / 'VERSION').read_text().strip()
+          archive = pathlib.Path(os.environ['RUNNER_TEMP']) / f'artisancms-{version}.zip'
+          with zipfile.ZipFile(archive, 'w', zipfile.ZIP_DEFLATED) as output:
+              for path in sorted(root.rglob('*')):
+                  name = path.relative_to(root).as_posix()
+                  if path.is_symlink() or '.git' in path.parts or path.is_dir():
+                      continue
+                  if (name == '.env' or (name.startswith('.env.') and name != '.env.example')
+                      or name == 'public/hot' or name.startswith('public/storage/')):
+                      continue
+                  if name.startswith(('storage/', 'bootstrap/cache/')) and path.name != '.gitignore':
+                      continue
+                  output.write(path, name)
+          shutil.move(str(archive), str(root / archive.name))
+          PY
 
       - name: Generate SHA-256 checksum
         id: checksum
         run: |
-          sha256sum artisancms-${{ steps.version.outputs.version }}.tar.gz > artisancms-${{ steps.version.outputs.version }}.sha256
+          sha256sum artisancms-${{ steps.version.outputs.version }}.zip > artisancms-${{ steps.version.outputs.version }}.sha256
           echo "checksum=$(cat artisancms-${{ steps.version.outputs.version }}.sha256 | awk '{print $1}')" >> $GITHUB_OUTPUT
 
       - name: Generate changelog from commits
@@ -91,7 +109,7 @@ jobs:
           name: ArtisanCMS v${{ steps.version.outputs.version }}
           body_path: CHANGELOG_BODY.md
           files: |
-            artisancms-${{ steps.version.outputs.version }}.tar.gz
+            artisancms-${{ steps.version.outputs.version }}.zip
             artisancms-${{ steps.version.outputs.version }}.sha256
           draft: false
           prerelease: ${{ contains(github.ref, '-beta') || contains(github.ref, '-rc') || contains(github.ref, '-alpha') }}
@@ -112,16 +130,24 @@ jobs:
         run: echo "version=$(cat VERSION | tr -d '[:space:]')" >> $GITHUB_OUTPUT
 
       - name: Notify registry of new release
-        continue-on-error: true
+        env:
+          REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
+          REGISTRY_API_KEY: ${{ secrets.REGISTRY_API_KEY }}
+          RELEASE_VERSION: ${{ steps.version.outputs.version }}
+          RELEASE_TAG: ${{ github.ref_name }}
+          RELEASE_REPO: ${{ github.repository }}
+          RELEASE_CHECKSUM: ${{ needs.release.outputs.checksum }}
         run: |
-          curl -s -X POST \
-            -H "Authorization: Bearer ${{ secrets.REGISTRY_API_KEY }}" \
+          if [ -z "$REGISTRY_URL" ] || [ -z "$REGISTRY_API_KEY" ]; then
+            echo "Registry notification skipped: REGISTRY_URL or REGISTRY_API_KEY not configured."
+            exit 0
+          fi
+          jq -n --arg version "$RELEASE_VERSION" --arg tag "$RELEASE_TAG" \
+            --arg url "https://github.com/$RELEASE_REPO/releases/download/$RELEASE_TAG/artisancms-$RELEASE_VERSION.zip" \
+            --arg checksum "$RELEASE_CHECKSUM" --rawfile changelog CHANGELOG.md \
+            '{type:"cms",version:$version,tag:$tag,download_url:$url,checksum_sha256:$checksum,changelog:$changelog,php_required:"8.3.0"}' > release.json
+          curl --fail-with-body -sS -X POST \
+            -H "Authorization: Bearer $REGISTRY_API_KEY" \
             -H "Content-Type: application/json" \
-            -d '{
-              "type": "cms",
-              "version": "${{ steps.version.outputs.version }}",
-              "tag": "${{ github.ref_name }}",
-              "download_url": "https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/artisancms-${{ steps.version.outputs.version }}.tar.gz",
-              "checksum_url": "https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/artisancms-${{ steps.version.outputs.version }}.sha256"
-            }' \
-            "${{ secrets.REGISTRY_URL }}/api/internal/releases" || echo "Registry notification skipped (not configured)"
+            --data-binary @release.json \
+            "${REGISTRY_URL%/}/api/internal/releases"

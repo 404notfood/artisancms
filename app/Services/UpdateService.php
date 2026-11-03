@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use RuntimeException;
-use ZipArchive;
 
 class UpdateService
 {
@@ -139,7 +138,7 @@ class UpdateService
                 $checksumUrl = null;
                 foreach ($release['assets'] ?? [] as $asset) {
                     $name = $asset['name'] ?? '';
-                    if (str_ends_with($name, '.tar.gz') && !str_ends_with($name, '.sha256')) {
+                    if (str_ends_with($name, '.zip')) {
                         $downloadUrl = $asset['browser_download_url'] ?? null;
                     }
                     if (str_ends_with($name, '.sha256')) {
@@ -215,11 +214,22 @@ class UpdateService
 
     // ─── Perform updates ─────────────────────────────────
 
+    public function updateCore(): UpdateLog
+    {
+        return app(CoreUpdateService::class)->install($this->forceCheck()['cms']);
+    }
+
     /**
      * Update a plugin: download ZIP, verify checksum, backup, extract, replace.
      */
     public function updatePlugin(string $slug): UpdateLog
     {
+        return app(UpdateLock::class)->run(fn () => $this->performPluginUpdate($slug));
+    }
+
+    private function performPluginUpdate(string $slug): UpdateLog
+    {
+        $this->assertExtensionSlug($slug);
         $plugin = CmsPlugin::where('slug', $slug)->firstOrFail();
         $updates = $this->checkForUpdates();
         $info = collect($updates['plugins'])->firstWhere('slug', $slug);
@@ -229,6 +239,10 @@ class UpdateService
         }
 
         $log = $this->logUpdate('plugin', $slug, $plugin->version ?? '0.0.0', $info['latest']);
+        $stage = storage_path('app/updates/stage_' . bin2hex(random_bytes(12)));
+        $zipPath = null;
+        $replaced = false;
+        $original = $plugin->only(['version', 'name', 'description']);
 
         try {
             // Backup
@@ -237,37 +251,35 @@ class UpdateService
                 $backupPath = $this->createBackup('plugin', $slug);
                 if ($backupPath) {
                     $log->update(['backup_path' => ['path' => $backupPath]]);
+                } else {
+                    throw new RuntimeException('Sauvegarde du plugin impossible. Mise à jour annulée.');
                 }
             }
 
             // Download
             $log->update(['status' => 'downloading']);
             $downloadUrl = $info['download_url'] ?? $this->resolveDownloadUrl('plugins', $slug);
-            $zipPath = $this->downloadFile($downloadUrl);
-
-            // Verify checksum
-            if (!empty($info['checksum'])) {
-                if (!$this->verifyChecksum($zipPath, $info['checksum'])) {
-                    @unlink($zipPath);
-                    throw new RuntimeException('Checksum invalide — le fichier est corrompu ou a été modifié.');
-                }
-            }
+            $zipPath = app(UpdateArchive::class)->download($downloadUrl, $info['checksum'] ?? '');
 
             // Install
             $log->update(['status' => 'installing']);
-            $tmpDir = $this->extractZip($zipPath);
+            $tmpDir = app(UpdateArchive::class)->extract($zipPath, $stage);
             @unlink($zipPath);
 
             $this->validatePluginPackage($tmpDir);
+            $this->validateExtensionIdentity($tmpDir . '/artisan-plugin.json', $slug, $info['latest']);
 
             $pluginDir = config('cms.paths.plugins') . '/' . $slug;
+            $replaced = true;
             $this->replaceDirectory($tmpDir, $pluginDir);
 
             // Run migrations
             $migrationsPath = $pluginDir . '/database/migrations';
             if (File::isDirectory($migrationsPath)) {
                 $relative = str_replace(base_path() . '/', '', str_replace('\\', '/', $migrationsPath));
-                Artisan::call('migrate', ['--path' => $relative, '--force' => true]);
+                if (Artisan::call('migrate', ['--path' => $relative, '--force' => true]) !== 0) {
+                    throw new RuntimeException('Échec des migrations du plugin.');
+                }
             }
 
             // Update DB
@@ -294,11 +306,17 @@ class UpdateService
             Log::error("Échec mise à jour plugin « {$slug} »: {$e->getMessage()}");
 
             // Attempt rollback
-            if (isset($backupPath) && $backupPath) {
+            if ($replaced && isset($backupPath) && $backupPath) {
                 $this->restoreBackup($backupPath, config('cms.paths.plugins') . '/' . $slug);
+                $plugin->update($original);
             }
 
             throw $e;
+        } finally {
+            if ($zipPath) {
+                File::delete($zipPath);
+            }
+            File::deleteDirectory($stage);
         }
     }
 
@@ -307,6 +325,12 @@ class UpdateService
      */
     public function updateTheme(string $slug): UpdateLog
     {
+        return app(UpdateLock::class)->run(fn () => $this->performThemeUpdate($slug));
+    }
+
+    private function performThemeUpdate(string $slug): UpdateLog
+    {
+        $this->assertExtensionSlug($slug);
         $theme = CmsTheme::where('slug', $slug)->firstOrFail();
         $updates = $this->checkForUpdates();
         $info = collect($updates['themes'])->firstWhere('slug', $slug);
@@ -316,6 +340,10 @@ class UpdateService
         }
 
         $log = $this->logUpdate('theme', $slug, $theme->version ?? '0.0.0', $info['latest']);
+        $stage = storage_path('app/updates/stage_' . bin2hex(random_bytes(12)));
+        $zipPath = null;
+        $replaced = false;
+        $original = $theme->only(['version', 'name', 'description']);
 
         try {
             $backupPath = null;
@@ -323,27 +351,24 @@ class UpdateService
                 $backupPath = $this->createBackup('theme', $slug);
                 if ($backupPath) {
                     $log->update(['backup_path' => ['path' => $backupPath]]);
+                } else {
+                    throw new RuntimeException('Sauvegarde du thème impossible. Mise à jour annulée.');
                 }
             }
 
             $log->update(['status' => 'downloading']);
             $downloadUrl = $info['download_url'] ?? $this->resolveDownloadUrl('themes', $slug);
-            $zipPath = $this->downloadFile($downloadUrl);
-
-            if (!empty($info['checksum'])) {
-                if (!$this->verifyChecksum($zipPath, $info['checksum'])) {
-                    @unlink($zipPath);
-                    throw new RuntimeException('Checksum invalide.');
-                }
-            }
+            $zipPath = app(UpdateArchive::class)->download($downloadUrl, $info['checksum'] ?? '');
 
             $log->update(['status' => 'installing']);
-            $tmpDir = $this->extractZip($zipPath);
+            $tmpDir = app(UpdateArchive::class)->extract($zipPath, $stage);
             @unlink($zipPath);
 
             $this->validateThemePackage($tmpDir);
+            $this->validateExtensionIdentity($tmpDir . '/artisan-theme.json', $slug, $info['latest']);
 
             $themeDir = config('cms.paths.themes') . '/' . $slug;
+            $replaced = true;
             $this->replaceDirectory($tmpDir, $themeDir);
 
             $manifest = $this->readManifest($themeDir . '/artisan-theme.json');
@@ -363,11 +388,17 @@ class UpdateService
             $log->markFailed($e->getMessage());
             Log::error("Échec mise à jour thème « {$slug} »: {$e->getMessage()}");
 
-            if (isset($backupPath) && $backupPath) {
+            if ($replaced && isset($backupPath) && $backupPath) {
                 $this->restoreBackup($backupPath, config('cms.paths.themes') . '/' . $slug);
+                $theme->update($original);
             }
 
             throw $e;
+        } finally {
+            if ($zipPath) {
+                File::delete($zipPath);
+            }
+            File::deleteDirectory($stage);
         }
     }
 
@@ -380,9 +411,22 @@ class UpdateService
     {
         $updates = $this->forceCheck();
         $logs = [];
+        $settings = $this->getAutoUpdateSettings();
+        $core = $updates['cms'];
+        if (($core['available'] ?? false) && $settings['auto_update'] !== 'disabled'
+            && ($settings['auto_update'] === 'all' || !$this->isMajorUpdate($core['current'], $core['latest']))) {
+            try {
+                $logs[] = $this->updateCore();
+                // A fresh PHP process must handle extensions after replacing the core and its dependencies.
+                return $logs;
+            } catch (\Throwable $e) {
+                Log::error('Échec de mise à jour automatique du cœur : ' . $e->getMessage());
+                throw $e;
+            }
+        }
 
         // Auto-update plugins
-        if (config('cms.updates.auto_update_plugins', false)) {
+        if ($settings['auto_update_plugins']) {
             foreach ($updates['plugins'] as $plugin) {
                 if (!($plugin['available'] ?? false)) {
                     continue;
@@ -400,7 +444,7 @@ class UpdateService
         }
 
         // Auto-update themes
-        if (config('cms.updates.auto_update_themes', false)) {
+        if ($settings['auto_update_themes']) {
             foreach ($updates['themes'] as $theme) {
                 if (!($theme['available'] ?? false)) {
                     continue;
@@ -431,15 +475,15 @@ class UpdateService
 
     public function createBackup(string $type, ?string $slug = null): ?string
     {
-        $backupDir = 'backups/' . date('Y-m-d_His') . '_' . $type;
+        $backupDir = 'backups/' . date('Y-m-d_His') . '_' . bin2hex(random_bytes(6)) . '_' . $type;
         if ($slug) {
             $backupDir .= '_' . $slug;
         }
 
         try {
             $source = match ($type) {
-                'plugin' => base_path("content/plugins/{$slug}"),
-                'theme' => base_path("content/themes/{$slug}"),
+                'plugin' => config('cms.paths.plugins') . '/' . $slug,
+                'theme' => config('cms.paths.themes') . '/' . $slug,
                 default => null,
             };
 
@@ -466,16 +510,29 @@ class UpdateService
 
     public function rollback(UpdateLog $updateLog): bool
     {
+        if ($updateLog->type === 'cms') {
+            return app(CoreUpdateService::class)->rollback($updateLog);
+        }
+
+        return app(UpdateLock::class)->run(fn () => $this->rollbackExtension($updateLog));
+    }
+
+    private function rollbackExtension(UpdateLog $updateLog): bool
+    {
+        $this->assertExtensionSlug($updateLog->slug ?? '');
         $backupPath = $updateLog->backup_path;
         if (!$backupPath || !is_array($backupPath) || empty($backupPath['path'])) {
+            return false;
+        }
+        if (!preg_match('#^backups/[a-zA-Z0-9_-]+$#D', $backupPath['path'])) {
             return false;
         }
 
         try {
             $storagePath = storage_path('app/' . $backupPath['path']);
             $targetPath = match ($updateLog->type) {
-                'plugin' => base_path("content/plugins/{$updateLog->slug}"),
-                'theme' => base_path("content/themes/{$updateLog->slug}"),
+                'plugin' => config('cms.paths.plugins') . '/' . $updateLog->slug,
+                'theme' => config('cms.paths.themes') . '/' . $updateLog->slug,
                 default => null,
             };
 
@@ -483,7 +540,7 @@ class UpdateService
                 return false;
             }
 
-            $this->copyDirectory($storagePath, $targetPath);
+            $this->restoreBackup($backupPath['path'], $targetPath);
             $updateLog->update(['status' => 'rolled_back']);
 
             // Restore version in DB
@@ -549,60 +606,6 @@ class UpdateService
 
     // ─── Private helpers ─────────────────────────────────
 
-    private function downloadFile(string $url): string
-    {
-        $tmpDir = config('cms.updates.temp_dir', storage_path('app/updates'));
-        if (!File::isDirectory($tmpDir)) {
-            File::makeDirectory($tmpDir, 0755, true);
-        }
-
-        $tmpFile = $tmpDir . '/' . uniqid('update_', true) . '.zip';
-
-        $response = Http::timeout(120)->withOptions(['sink' => $tmpFile])->get($url);
-
-        if (!$response->successful() || !file_exists($tmpFile) || filesize($tmpFile) === 0) {
-            @unlink($tmpFile);
-            throw new RuntimeException("Échec du téléchargement depuis {$url}");
-        }
-
-        return $tmpFile;
-    }
-
-    private function extractZip(string $zipPath): string
-    {
-        $zip = new ZipArchive();
-        if ($zip->open($zipPath) !== true) {
-            throw new RuntimeException('Impossible d\'ouvrir le fichier ZIP.');
-        }
-
-        $tmpDir = sys_get_temp_dir() . '/artisan_update_' . uniqid('', true);
-        File::makeDirectory($tmpDir, 0755, true);
-
-        // Security: validate ZIP entries for path traversal
-        for ($i = 0; $i < $zip->numFiles; $i++) {
-            $name = $zip->getNameIndex($i);
-            if (str_contains($name, '..') || str_starts_with($name, '/')) {
-                $zip->close();
-                File::deleteDirectory($tmpDir);
-                throw new RuntimeException('Archive ZIP suspecte : chemin interdit détecté.');
-            }
-        }
-
-        $zip->extractTo($tmpDir);
-        $zip->close();
-
-        // If ZIP contains a single subdirectory, use that as root
-        $entries = array_diff(scandir($tmpDir), ['.', '..']);
-        if (count($entries) === 1) {
-            $single = $tmpDir . '/' . reset($entries);
-            if (is_dir($single)) {
-                return $single;
-            }
-        }
-
-        return $tmpDir;
-    }
-
     private function validatePluginPackage(string $path): void
     {
         if (!file_exists($path . '/artisan-plugin.json')) {
@@ -627,12 +630,22 @@ class UpdateService
         }
     }
 
+    private function validateExtensionIdentity(string $manifestPath, string $slug, string $version): void
+    {
+        $manifest = $this->readManifest($manifestPath);
+        if (($manifest['slug'] ?? null) !== $slug || ($manifest['version'] ?? null) !== $version) {
+            throw new RuntimeException('Le package ne correspond pas à l’extension et à la version annoncées.');
+        }
+    }
+
     private function replaceDirectory(string $source, string $target): void
     {
         if (File::isDirectory($target)) {
             File::deleteDirectory($target);
         }
-        File::copyDirectory($source, $target);
+        if (!File::copyDirectory($source, $target)) {
+            throw new RuntimeException('Impossible de copier les fichiers de la mise à jour.');
+        }
 
         // Cleanup temp
         if (File::isDirectory($source)) {
@@ -644,7 +657,17 @@ class UpdateService
     {
         $storagePath = storage_path('app/' . $backupDir);
         if (is_dir($storagePath)) {
+            if (is_dir($targetDir) && !File::deleteDirectory($targetDir)) {
+                throw new RuntimeException('Impossible de restaurer les fichiers de l’extension.');
+            }
             $this->copyDirectory($storagePath, $targetDir);
+        }
+    }
+
+    private function assertExtensionSlug(string $slug): void
+    {
+        if (!preg_match('/^[a-z0-9][a-z0-9-]*$/D', $slug)) {
+            throw new RuntimeException('Identifiant d’extension invalide.');
         }
     }
 
@@ -741,6 +764,7 @@ class UpdateService
             'latest' => $themesData[$t->slug]['latest'] ?? $t->version ?? '1.0.0',
             'available' => $themesData[$t->slug]['update_available'] ?? false,
             'download_url' => $themesData[$t->slug]['download_url'] ?? null,
+            'checksum' => $themesData[$t->slug]['checksum_sha256'] ?? null,
         ])->toArray();
     }
 
@@ -799,7 +823,9 @@ class UpdateService
                     mkdir($target, 0755, true);
                 }
             } else {
-                copy($item->getPathname(), $target);
+                if (!copy($item->getPathname(), $target)) {
+                    throw new RuntimeException('Impossible de copier un fichier de l’extension.');
+                }
             }
         }
     }

@@ -49,6 +49,17 @@ class UpdateController extends Controller
         return response()->json($updates);
     }
 
+    public function updateCore(): JsonResponse
+    {
+        try {
+            $log = $this->updateService->updateCore();
+
+            return response()->json(['success' => true, 'message' => 'Le CMS a été mis à jour.', 'log' => $log]);
+        } catch (\Throwable $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
+        }
+    }
+
     /**
      * Update a specific plugin.
      */
@@ -97,6 +108,7 @@ class UpdateController extends Controller
     public function updateAll(): JsonResponse
     {
         $updates = $this->updateService->checkForUpdates();
+        // Core updates run separately: the next request must load the new PHP dependencies.
         $results = ['success' => [], 'failed' => []];
 
         foreach ($updates['plugins'] as $plugin) {
@@ -135,7 +147,11 @@ class UpdateController extends Controller
      */
     public function rollback(UpdateLog $updateLog): JsonResponse
     {
-        $success = $this->updateService->rollback($updateLog);
+        try {
+            $success = $this->updateService->rollback($updateLog);
+        } catch (\Throwable $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
+        }
 
         return response()->json([
             'success' => $success,
