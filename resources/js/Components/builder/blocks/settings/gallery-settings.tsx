@@ -1,6 +1,7 @@
 import type { BlockSettingsProps } from '../block-registry';
 import { SelectField, NumberInput, TextInput, CheckboxToggle } from '../shared/setting-controls';
 import { RepeaterList } from '../shared/repeater-list';
+import MediaPickerButton from './media-picker-button';
 
 interface GalleryImage {
     src: string;
@@ -53,9 +54,19 @@ export default function GallerySettings({ block, onUpdate }: BlockSettingsProps)
                     createItem={() => ({ src: '', alt: '', caption: '' })}
                     itemLabel="Image"
                     addLabel="Ajouter une image"
-                    renderItem={(image, _index, update) => (
+                    renderItem={(image, index, update) => (
                         <>
-                            <input type="text" value={image.src} onChange={(e) => update('src', e.target.value)} className="w-full border rounded px-3 py-1.5 text-sm" placeholder="URL de l'image" />
+                            <MediaPickerButton
+                                label=""
+                                value={image.src}
+                                onChange={(url, alt) => {
+                                    const updated = [...images];
+                                    updated[index] = { ...image, src: url, ...(alt ? { alt } : {}) };
+                                    onUpdate({ images: updated });
+                                }}
+                                placeholder="Choisir dans la médiathèque"
+                            />
+                            <input type="text" value={image.src} onChange={(e) => update('src', e.target.value)} className="w-full border rounded px-3 py-1.5 text-sm" aria-label={`URL de l'image ${index + 1}`} placeholder="ou URL directe" />
                             <input type="text" value={image.alt} onChange={(e) => update('alt', e.target.value)} className="w-full border rounded px-3 py-1.5 text-sm" placeholder="Texte alternatif" />
                             <input type="text" value={image.caption} onChange={(e) => update('caption', e.target.value)} className="w-full border rounded px-3 py-1.5 text-sm" placeholder="Legende" />
                         </>
