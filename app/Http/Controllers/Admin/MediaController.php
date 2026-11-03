@@ -42,6 +42,11 @@ class MediaController extends Controller
 
         // JSON response for media picker (AJAX)
         if ($request->wantsJson() || $request->has('json')) {
+            if ($request->has('picker_page')) {
+                $request->validate(['picker_page' => ['required', 'integer', 'min:1']]);
+
+                return response()->json($this->mediaService->getForPickerPage($filters, $request->integer('picker_page')));
+            }
             return response()->json(
                 $this->mediaService->getForPicker($filters),
             );

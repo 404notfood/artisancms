@@ -6,6 +6,7 @@ namespace App\Services;
 
 use App\CMS\Facades\CMS;
 use App\Models\Media;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\UploadedFile;
@@ -331,12 +332,29 @@ class MediaService
      */
     public function getForPicker(array $filters = []): \Illuminate\Support\Collection
     {
-        $query = Media::query()->orderByDesc('created_at');
+        return $this->pickerQuery($filters)->limit(40)->get()->map($this->formatPickerMedia(...));
+    }
+
+    public function getForPickerPage(array $filters, int $page): array
+    {
+        $media = $this->pickerQuery($filters)->paginate(40, ['*'], 'picker_page', $page);
+
+        return [
+            'data' => $media->getCollection()->map($this->formatPickerMedia(...))->values()->all(),
+            'total' => $media->total(),
+            'next_page' => $media->hasMorePages() ? $media->currentPage() + 1 : null,
+        ];
+    }
+
+    private function pickerQuery(array $filters): Builder
+    {
+        $query = Media::query()->orderByDesc('created_at')->orderByDesc('id');
 
         if (!empty($filters['search'])) {
             $search = $filters['search'];
             $query->where(function ($q) use ($search) {
                 $q->where('filename', 'like', "%{$search}%")
+                  ->orWhere('original_filename', 'like', "%{$search}%")
                   ->orWhere('alt_text', 'like', "%{$search}%");
             });
         }
@@ -345,14 +363,24 @@ class MediaService
             $query->where('mime_type', 'like', "{$filters['mime_type']}/%");
         }
 
-        return $query->limit(40)->get()->map(fn (Media $m) => [
-            'id' => $m->id,
-            'url' => $m->url,
-            'alt' => $m->alt_text ?? '',
-            'filename' => $m->filename,
-            'mime_type' => $m->mime_type,
-            'thumbnail_url' => $m->url,
-        ]);
+        return $query;
+    }
+
+    private function formatPickerMedia(Media $media): array
+    {
+        $thumbnail = $media->thumbnails['thumbnail'] ?? $media->thumbnails['small'] ?? null;
+
+        return [
+            'id' => $media->id,
+            'url' => $media->url,
+            'alt' => $media->alt_text ?? '',
+            'caption' => $media->caption ?? '',
+            'filename' => $media->original_filename ?: $media->filename,
+            'mime_type' => $media->mime_type,
+            'thumbnail_url' => is_string($thumbnail) ? \Illuminate\Support\Facades\Storage::disk($media->disk ?? 'public')->url($thumbnail) : $media->url,
+            'width' => $media->metadata['width'] ?? null,
+            'height' => $media->metadata['height'] ?? null,
+        ];
     }
 
 }

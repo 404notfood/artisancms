@@ -1,3 +1,15 @@
+## 1.3.0 — 2026-11-03
+
+### Galeries photo
+
+- Sept presentations harmonisees avec le theme : mosaique, carrousel a miniatures, reportage, rangees justifiees, grille, composition et pellicule.
+- Couleurs, typographie et arrondis du theme repris automatiquement ; habillages clair et sombre disponibles pour le carrousel.
+- Diaporama plein ecran avec miniatures, zoom, navigation clavier et gestes tactiles.
+- Ajout de plusieurs photos en une fois, selection conservee pendant la recherche et la pagination, protection contre les doublons.
+- Mediatheque paginee au-dela de 40 photos, avec recuperation des legendes, textes alternatifs et dimensions.
+- Reorganisation des photos et modification des informations depuis une liste compacte.
+- Corrections des proportions, espacements, legendes et affichages mobiles des galeries existantes.
+
 ## 1.2.0 — 2026-11-03
 
 ### Ajouts
