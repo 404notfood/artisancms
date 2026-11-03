@@ -87,6 +87,9 @@ Route::prefix('v1')->group(function (): void {
 
     Route::get('catalog', [RegistryController::class, 'catalog'])
         ->name('api.registry.catalog');
+    Route::get('{type}/{slug}/download', [RegistryController::class, 'download'])
+        ->where('type', 'plugins|themes')->where('slug', '[a-z0-9][a-z0-9-]*')
+        ->name('api.registry.download');
 });
 
 // Internal: called by GitHub Actions when a new release is published (protected by API key)

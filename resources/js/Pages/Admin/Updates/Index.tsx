@@ -53,7 +53,7 @@ interface HistoryEntry {
     to_version: string;
     status: string;
     error_message: string | null;
-    backup_path: Record<string, string> | null;
+    backup_path: { path?: string; database_backup_id?: number; schema_changed?: boolean } | null;
     started_at: string;
     completed_at: string | null;
     performer?: { name: string };
@@ -164,12 +164,12 @@ export default function UpdatesIndex({ updates, history, health, settings, maint
         }
     }
 
-    async function doUpdate(type: 'plugin' | 'theme', slug: string) {
+    async function doUpdate(type: 'plugin' | 'theme' | 'core', slug = '') {
         const key = `${type}-${slug}`;
         setUpdating((prev) => ({ ...prev, [key]: true }));
         setError(null);
         try {
-            const res = await fetch(`/${prefix}/updates/${type}/${slug}`, {
+            const res = await fetch(`/${prefix}/updates/${type}${slug ? `/${slug}` : ''}`, {
                 method: 'POST',
                 headers,
             });
@@ -198,6 +198,18 @@ export default function UpdatesIndex({ updates, history, health, settings, maint
         });
     }
 
+    function handleUpdateCore() {
+        setConfirmDialog({
+            open: true,
+            title: `Mettre à jour ArtisanCMS vers ${updates.cms.latest}`,
+            message: 'Le site sera temporairement en maintenance. Les fichiers du cœur et la base de données seront sauvegardés. Vos médias, thèmes, plugins et réglages seront conservés.',
+            onConfirm: () => {
+                setConfirmDialog((prev) => ({ ...prev, open: false }));
+                doUpdate('core');
+            },
+        });
+    }
+
     function handleUpdateTheme(slug: string, name: string, version: string) {
         setConfirmDialog({
             open: true,
@@ -214,7 +226,7 @@ export default function UpdatesIndex({ updates, history, health, settings, maint
         setConfirmDialog({
             open: true,
             title: 'Tout mettre à jour',
-            message: `${totalUpdates} mise(s) à jour vont être installées. Une sauvegarde sera créée pour chaque élément.`,
+            message: `${extensionUpdates} extension(s) vont être mises à jour. Une sauvegarde sera créée pour chaque élément.`,
             onConfirm: async () => {
                 setConfirmDialog((prev) => ({ ...prev, open: false }));
                 setUpdating({ all: true });
@@ -331,7 +343,9 @@ export default function UpdatesIndex({ updates, history, health, settings, maint
 
     const pluginUpdates = updates.plugins.filter((p) => p.available);
     const themeUpdates = updates.themes.filter((t) => t.available);
-    const totalUpdates = (updates.cms.available ? 1 : 0) + pluginUpdates.length + themeUpdates.length;
+    const extensionUpdates = pluginUpdates.length + themeUpdates.length;
+    const totalUpdates = (updates.cms.available ? 1 : 0) + extensionUpdates;
+    const isUpdating = Object.values(updating).some(Boolean);
 
     return (
         <AdminLayout header={<h1 className="text-xl font-semibold text-gray-900">Mises à jour</h1>}>
@@ -501,10 +515,10 @@ export default function UpdatesIndex({ updates, history, health, settings, maint
                         )}
                     </div>
                     <div className="flex gap-2">
-                        {totalUpdates > 1 && (
-                            <Button size="sm" onClick={handleUpdateAll} disabled={!!updating.all}>
+                        {extensionUpdates > 0 && (
+                            <Button size="sm" onClick={handleUpdateAll} disabled={isUpdating}>
                                 {updating.all ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Download className="mr-2 h-4 w-4" />}
-                                Tout mettre à jour
+                                Mettre à jour les extensions
                             </Button>
                         )}
                         <Button variant="outline" size="sm" onClick={handleCheckUpdates} disabled={checking}>
@@ -540,9 +554,9 @@ export default function UpdatesIndex({ updates, history, health, settings, maint
                                 )}
                             </div>
                             {updates.cms.available ? (
-                                <Button size="sm" disabled>
-                                    <Download className="mr-2 h-4 w-4" />
-                                    Bientôt disponible
+                                <Button size="sm" onClick={handleUpdateCore} disabled={isUpdating || !updates.cms.download_url}>
+                                    {updating['core-'] ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Download className="mr-2 h-4 w-4" />}
+                                    {updating['core-'] ? 'Installation…' : 'Mettre à jour le CMS'}
                                 </Button>
                             ) : (
                                 <div className="flex items-center gap-1.5 text-emerald-600">
@@ -788,6 +802,7 @@ export default function UpdatesIndex({ updates, history, health, settings, maint
                                     const status = STATUS_MAP[entry.status] ?? { label: entry.status, color: 'text-gray-500' };
                                     const canRollback =
                                         entry.backup_path &&
+                                        (entry.type !== 'cms' || entry.backup_path.schema_changed === false) &&
                                         (entry.status === 'completed' || entry.status === 'failed');
 
                                     return (

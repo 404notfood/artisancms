@@ -326,6 +326,7 @@ Route::post('system/performance/clear-compiled', [SystemMonitorController::class
 // Updates & Error Recovery
 Route::get('updates', [UpdateController::class, 'index'])->name('admin.updates.index')->middleware('permission:updates.read,updates.manage');
 Route::get('updates/check', [UpdateController::class, 'check'])->name('admin.updates.check')->middleware('permission:updates.read,updates.manage');
+Route::post('updates/core', [UpdateController::class, 'updateCore'])->name('admin.updates.core')->middleware('permission:updates.manage');
 Route::post('updates/plugin/{slug}', [UpdateController::class, 'updatePlugin'])->name('admin.updates.plugin')->middleware('permission:updates.manage');
 Route::post('updates/theme/{slug}', [UpdateController::class, 'updateTheme'])->name('admin.updates.theme')->middleware('permission:updates.manage');
 Route::post('updates/all', [UpdateController::class, 'updateAll'])->name('admin.updates.all')->middleware('permission:updates.manage');

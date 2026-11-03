@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 return [
-    'version' => '1.1.0',
+    'version' => '1.2.0',
     'name' => 'ArtisanCMS',
     'paths' => [
         'plugins' => base_path('content/plugins'),
@@ -103,6 +103,7 @@ return [
         'notify_admins' => true,
         'backup_before_update' => true,
         'temp_dir' => storage_path('app/updates'),
+        'php_binary' => env('CMS_PHP_BINARY', PHP_SAPI === 'cli' ? PHP_BINARY : 'php'),
     ],
     'activity_log' => [
         'enabled' => env('CMS_ACTIVITY_LOG_ENABLED', true),

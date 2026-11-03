@@ -1,3 +1,18 @@
+## 1.2.0 — 2026-11-03
+
+### Ajouts
+
+- Registre persistant des releases CMS, themes et plugins, avec liens de telechargement et empreintes SHA-256.
+- Installation du coeur depuis l'administration ou `php artisan cms:update`, avec maintenance, sauvegarde des fichiers et de la base et restauration automatique en cas d'echec.
+- Mise a jour automatique du coeur selon les preferences enregistrees.
+- Publication GitHub en ZIP, avec dependances PHP, frontend compile et notification authentifiee au registre.
+
+### Corrections
+
+- Verification obligatoire des empreintes et de l'identite des packages, protection contre les archives malveillantes et verrouillage des operations concurrentes.
+- Conservation des medias, themes, plugins, secrets et personnalisations du site lors de la mise a jour du coeur.
+- Prise en compte des preferences de mises a jour des extensions enregistrees en base.
+
 ## 1.1.0 — 2026-11-03
 
 ### Ajouts
